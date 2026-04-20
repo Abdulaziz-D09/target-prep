@@ -1,6 +1,6 @@
 'use client';
 import Link from 'next/link';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { GraduationCap, ClipboardList, ArrowRight, Plus, Users } from 'lucide-react';
 import {
@@ -116,6 +116,7 @@ export default function TeacherHomePage() {
                         </div>
                     </motion.div>
                 </motion.div>
+                    </>
                 )}
             </motion.div>
         </div>

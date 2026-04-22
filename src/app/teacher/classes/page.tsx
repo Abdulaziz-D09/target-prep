@@ -67,7 +67,7 @@ export default function ClassesPage() {
                     variants={itemRevealVariants}
                 >
                     <div>
-                        <div className="inline-flex items-center gap-2 px-3 py-1 bg-indigo-500/10 text-indigo-600 dark:bg-indigo-500/20 dark:text-indigo-400 rounded-full text-xs font-bold uppercase tracking-widest mb-3 border border-indigo-500/20">
+                        <div className="inline-flex items-center gap-2 px-3 py-1 bg-indigo-600 text-white dark:bg-indigo-500/20 dark:text-indigo-400 rounded-full text-xs font-bold uppercase tracking-widest mb-3 shadow-sm border border-transparent dark:border-indigo-500/20">
                             Teacher Portal
                         </div>
                         <h1 className="text-3xl font-black tracking-[-0.03em] site-text-strong">My Classes</h1>

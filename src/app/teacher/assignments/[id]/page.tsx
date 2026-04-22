@@ -69,7 +69,7 @@ export default function TeacherAssignmentDetailPage() {
                 <motion.section className="site-panel rounded-[24px] p-6 mb-6" variants={sectionRevealVariants}>
                     <div className="flex items-start justify-between gap-4 flex-wrap">
                         <div>
-                            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-[0.22em] mb-3 bg-indigo-500/10 dark:bg-white/10 border border-indigo-500/30 dark:border-white/25 text-indigo-700 dark:text-white">
+                            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-[0.22em] mb-3 bg-indigo-600 text-white shadow-sm border border-transparent dark:bg-white/10 dark:border-white/25 dark:text-white">
                                 <ClipboardList className="h-3.5 w-3.5" />
                                 Assignment
                             </div>

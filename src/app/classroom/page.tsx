@@ -13,6 +13,7 @@ import {
     Sparkles,
     ListChecks,
     Play,
+    Users,
 } from 'lucide-react';
 import {
     FloatingPageShapes,
@@ -58,6 +59,7 @@ function initials(name: string) {
 export default function ClassroomPage() {
     const shouldReduceMotion = useReducedMotion();
     const [isJoinModalOpen, setIsJoinModalOpen] = useState(false);
+    const [viewMembersClassroomId, setViewMembersClassroomId] = useState<string | null>(null);
     const [joinCode, setJoinCode] = useState('');
     const [activeTab, setActiveTab] = useState<'pending' | 'completed'>('pending');
     const [studentProgressMap, setStudentProgressMap] = useState<StudentAssignmentProgressMap>({});
@@ -201,7 +203,11 @@ export default function ClassroomPage() {
                             </div>
                         ) : (
                             classroomItems.map(({ classroom, assignmentCount, latestAssignmentTitle, classmates }) => (
-                                <article key={classroom.id} className="site-panel-soft rounded-[26px] p-5 sm:p-6">
+                                <article 
+                                    key={classroom.id} 
+                                    className="site-panel-soft rounded-[26px] p-5 sm:p-6 cursor-pointer hover:scale-[1.015] hover:shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:hover:shadow-[0_8px_30px_rgb(0,0,0,0.2)] transition-all"
+                                    onClick={() => setViewMembersClassroomId(classroom.id)}
+                                >
                                     <div className="flex items-start gap-3">
                                         <div className="site-subpanel rounded-2xl p-3">
                                             <GraduationCap className="h-5 w-5 site-text-strong" />
@@ -409,6 +415,71 @@ export default function ClassroomPage() {
                             >
                                 Join Class
                             </button>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
+
+            {/* Class Members Modal */}
+            <AnimatePresence>
+                {viewMembersClassroomId && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            className="absolute inset-0 bg-slate-900/45 backdrop-blur-sm"
+                            onClick={() => setViewMembersClassroomId(null)}
+                        />
+                        <motion.div
+                            initial={shouldReduceMotion ? undefined : { opacity: 0, scale: 0.95, y: 10 }}
+                            animate={shouldReduceMotion ? undefined : { opacity: 1, scale: 1, y: 0 }}
+                            exit={shouldReduceMotion ? undefined : { opacity: 0, scale: 0.95, y: 10 }}
+                            transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+                            className="relative w-full max-w-sm max-h-[80vh] flex flex-col overflow-hidden rounded-[24px] site-panel shadow-2xl border"
+                        >
+                            <div className="p-6 border-b border-slate-100 dark:border-slate-800/80 shrink-0 relative">
+                                <button
+                                    onClick={() => setViewMembersClassroomId(null)}
+                                    className="absolute right-5 top-5 p-2 rounded-full site-subpanel hover:scale-[1.05] transition"
+                                >
+                                    <X className="w-5 h-5 site-text" />
+                                </button>
+                                
+                                {(() => {
+                                    const activeClass = classroomItems.find(c => c.classroom.id === viewMembersClassroomId);
+                                    if (!activeClass) return null;
+                                    return (
+                                        <>
+                                            <h2 className="text-xl font-black tracking-[-0.03em] site-text-strong mb-1 pr-8">
+                                                {activeClass.classroom.name}
+                                            </h2>
+                                            <p className="text-[13px] site-text-muted font-bold flex items-center gap-1.5 uppercase tracking-wider">
+                                                <Users className="w-3.5 h-3.5" />
+                                                {activeClass.classmates.length} Members
+                                            </p>
+                                        </>
+                                    );
+                                })()}
+                            </div>
+
+                            <div className="p-2 overflow-y-auto">
+                                {(() => {
+                                    const activeClass = classroomItems.find(c => c.classroom.id === viewMembersClassroomId);
+                                    if (!activeClass) return null;
+                                    return activeClass.classmates.map(student => {
+                                        const color = AVATAR_COLORS[student.avatar] || AVATAR_COLORS.blue;
+                                        return (
+                                            <div key={student.id} className="flex items-center gap-3 p-3 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/50 transition">
+                                                <div className={`h-10 w-10 rounded-full flex flex-shrink-0 items-center justify-center text-[13px] font-black ${color.bg} ${color.text}`}>
+                                                    {initials(student.name)}
+                                                </div>
+                                                <p className="font-semibold site-text-strong text-[15px]">{student.name}</p>
+                                            </div>
+                                        );
+                                    });
+                                })()}
+                            </div>
                         </motion.div>
                     </div>
                 )}

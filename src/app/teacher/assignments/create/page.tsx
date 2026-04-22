@@ -41,7 +41,7 @@ const STEPS = [
 function StepIndicator({ current }: { current: WizardStep }) {
     return (
         <div className="relative mb-12 sm:mb-14">
-            <div className="absolute top-[22px] left-[5%] right-[5%] h-1 bg-slate-200 dark:bg-slate-700/50 rounded-full z-0 hidden sm:block">
+            <div className="absolute top-[22px] left-[5%] right-[5%] h-1 bg-slate-200 dark:bg-slate-700 rounded-full z-0 hidden sm:block">
                 <div 
                    className="h-full bg-indigo-500 rounded-full transition-all duration-300"
                    style={{ width: `${((current - 1) / (STEPS.length - 1)) * 100}%` }}
@@ -57,7 +57,7 @@ function StepIndicator({ current }: { current: WizardStep }) {
                             <div className={`h-12 w-12 rounded-[14px] flex items-center justify-center text-[16px] font-black transition-all ${
                                 done   ? 'bg-indigo-600 text-white shadow-md border-2 border-indigo-600'
                                        : active ? 'bg-indigo-600 text-white shadow-[0_4px_14px_rgba(99,102,241,0.35)] border-2 border-indigo-600 scale-[1.05]'
-                                       : 'bg-slate-50 dark:bg-slate-800/80 border-2 border-slate-200 dark:border-slate-700 site-text-muted'
+                                       : 'bg-white dark:bg-slate-800 border-2 border-slate-300 dark:border-slate-600 text-slate-500 dark:text-slate-300'
                             }`}>
                                 {done ? <Check className="h-6 w-6 stroke-[3]" /> : n}
                             </div>
@@ -89,7 +89,7 @@ function OptionCard({ letter, text, selected, onSelect }: {
             <span className={`flex-shrink-0 h-9 w-9 rounded-full border-2 flex items-center justify-center text-sm font-black transition-all ${
                 selected
                     ? 'bg-indigo-600 border-indigo-600 text-white'
-                    : 'border-slate-300 dark:border-slate-600 site-text-muted'
+                    : 'border-slate-400 dark:border-slate-600 text-slate-700 dark:text-slate-400'
             }`}>
                 {letter}
             </span>
@@ -266,7 +266,7 @@ export default function CreateAssignmentPage() {
 
                 {/* Header */}
                 <motion.div className="mb-6" variants={itemRevealVariants}>
-                    <div className="inline-flex items-center gap-2 px-3 py-1 bg-indigo-500/10 text-indigo-600 dark:bg-indigo-500/20 dark:text-indigo-400 rounded-full text-xs font-bold uppercase tracking-widest mb-3 border border-indigo-500/20">
+                    <div className="inline-flex items-center gap-2 px-3 py-1 bg-indigo-600 text-white dark:bg-indigo-500/20 dark:text-indigo-400 rounded-full text-xs font-bold uppercase tracking-widest mb-3 shadow-sm border border-transparent dark:border-indigo-500/20">
                         Assignment Builder
                     </div>
                     <h1 className="text-3xl font-black tracking-[-0.03em] site-text-strong">New Assignment</h1>

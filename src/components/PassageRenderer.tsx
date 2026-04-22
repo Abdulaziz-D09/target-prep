@@ -26,6 +26,244 @@ type Seg =
   | { kind:'line';  title:string; xLabels:string[]; series:S[]; unit:string }
   | { kind:'bar';   title:string; categories:string[]; series:S[]; unit:string };
 
+/* ── OCR artifact cleanup ────────────────────────────────── */
+/**
+ * Fixes common PDF-extraction / OCR spacing artifacts where a space was
+ * inserted inside a word (e.g. "r epor t" → "report", "micr oorganism" →
+ * "microorganism"). Runs a series of targeted passes then a generic pass
+ * for any remaining single-char orphan prefix followed by a lowercase word.
+ */
+function cleanOCR(text: string): string {
+  if (!text) return text;
+
+  // 1. Targeted common OCR splits (prefix → full word fragment)
+  const pairs: [RegExp, string][] = [
+    [/\br epor t/g,          'report'],
+    [/\br epor ts/g,         'reports'],
+    [/\br epor ted/g,        'reported'],
+    [/\br epor ting/g,       'reporting'],
+    [/\bappr oximately/g,    'approximately'],
+    [/\bappr oach/g,         'approach'],
+    [/\bappr oaches/g,       'approaches'],
+    [/\bappr eciat/g,        'appreciat'],
+    [/\bcountr y/g,          'country'],
+    [/\bcountr ies/g,        'countries'],
+    [/\bhistor y/g,          'history'],
+    [/\bterr ain/g,          'terrain'],
+    [/\bterr itory/g,        'territory'],
+    [/\bterr or/g,           'terror'],
+    [/\bever y/g,            'every'],
+    [/\bever ything/g,       'everything'],
+    [/\bever yone/g,         'everyone'],
+    [/\bev ery/g,            'every'],
+    [/\bev erything/g,       'everything'],
+    [/\bov er/g,             'over'],
+    [/\bov erly/g,           'overly'],
+    [/\bov erall/g,          'overall'],
+    [/\bhowe ver/g,          'however'],
+    [/\bhow ever/g,          'however'],
+    [/\bwher e/g,            'where'],
+    [/\bwher eas/g,          'whereas'],
+    [/\bwher ever/g,         'wherever'],
+    [/\bther e/g,            'there'],
+    [/\bther eby/g,          'thereby'],
+    [/\bther efore/g,        'therefore'],
+    [/\bther ein/g,          'therein'],
+    [/\bther eafter/g,       'thereafter'],
+    [/\bbefor e/g,           'before'],
+    [/\bafter ward/g,        'afterward'],
+    [/\bafter wards/g,       'afterwards'],
+    [/\bmor e/g,             'more'],
+    [/\bmor eover/g,         'moreover'],
+    [/\blar ge/g,            'large'],
+    [/\blar gely/g,          'largely'],
+    [/\blar ger/g,           'larger'],
+    [/\blear n/g,            'learn'],
+    [/\blear ned/g,          'learned'],
+    [/\blear ning/g,         'learning'],
+    [/\bhar d/g,             'hard'],
+    [/\bhar dly/g,           'hardly'],
+    [/\bhar dship/g,         'hardship'],
+    [/\bshar e/g,            'share'],
+    [/\bshar ed/g,           'shared'],
+    [/\bshar es/g,           'shares'],
+    [/\bclear ly/g,          'clearly'],
+    [/\bnear ly/g,           'nearly'],
+    [/\bnear by/g,           'nearby'],
+    [/\byear s/g,            'years'],
+    [/\by ear/g,             'year'],
+    [/\by ears/g,            'years'],
+    [/\bda y/g,              'day'],
+    [/\bda ys/g,             'days'],
+    [/\bwa y/g,              'way'],
+    [/\bwa ys/g,             'ways'],
+    [/\bsa y/g,              'say'],
+    [/\bsa ys/g,             'says'],
+    [/\bpla y/g,             'play'],
+    [/\bpla ys/g,            'plays'],
+    [/\bpla yed/g,           'played'],
+    [/\bpla ying/g,          'playing'],
+    [/\bmay/g,               'may'],
+    [/\bma y/g,              'may'],
+    [/\bstay/g,              'stay'],
+    [/\bsta y/g,             'stay'],
+    [/\bsta ys/g,            'stays'],
+    [/\bawa y/g,             'away'],
+    [/\bdisplay/g,           'display'],
+    [/\bdispla y/g,          'display'],
+    [/\bdispla yed/g,        'displayed'],
+    [/\bcr eate/g,           'create'],
+    [/\bcr eated/g,          'created'],
+    [/\bcr eates/g,          'creates'],
+    [/\bcr eation/g,         'creation'],
+    [/\bcr eativ/g,          'creativ'],
+    [/\bcr eature/g,         'creature'],
+    [/\bcr ops/g,            'crops'],
+    [/\bcr op/g,             'crop'],
+    [/\bcr oss/g,            'cross'],
+    [/\bcr osses/g,          'crosses'],
+    [/\bcr ossed/g,          'crossed'],
+    [/\bcr ossing/g,         'crossing'],
+    [/\bdr aw/g,             'draw'],
+    [/\bdr awn/g,            'drawn'],
+    [/\bdr ive/g,            'drive'],
+    [/\bdr iven/g,           'driven'],
+    [/\bdr op/g,             'drop'],
+    [/\bdr ops/g,            'drops'],
+    [/\bdr ove/g,            'drove'],
+    [/\bfr om/g,             'from'],
+    [/\bfr ont/g,            'front'],
+    [/\bfr esh/g,            'fresh'],
+    [/\bgr ow/g,             'grow'],
+    [/\bgr owing/g,          'growing'],
+    [/\bgr own/g,            'grown'],
+    [/\bgr owth/g,           'growth'],
+    [/\bgr eat/g,            'great'],
+    [/\bgr eater/g,          'greater'],
+    [/\bgr eatly/g,          'greatly'],
+    [/\bgr een/g,            'green'],
+    [/\bgr ass/g,            'grass'],
+    [/\bgr azing/g,          'grazing'],
+    [/\bgr ade/g,            'grade'],
+    [/\bgr ades/g,           'grades'],
+    [/\bpr oblem/g,          'problem'],
+    [/\bpr oblems/g,         'problems'],
+    [/\bpr ocess/g,          'process'],
+    [/\bpr ocesses/g,        'processes'],
+    [/\bpr oduce/g,          'produce'],
+    [/\bpr oduced/g,         'produced'],
+    [/\bpr oduces/g,         'produces'],
+    [/\bpr oduction/g,       'production'],
+    [/\bpr oducts/g,         'products'],
+    [/\bpr oject/g,          'project'],
+    [/\bpr ojects/g,         'projects'],
+    [/\bpr opor tion/g,      'proportion'],
+    [/\bpr opor tional/g,    'proportional'],
+    [/\bpr opor tions/g,     'proportions'],
+    [/\bpr ompt/g,           'prompt'],
+    [/\bpr ompted/g,         'prompted'],
+    [/\bpr ovide/g,          'provide'],
+    [/\bpr ovided/g,         'provided'],
+    [/\bpr ovides/g,         'provides'],
+    [/\bpr esent/g,          'present'],
+    [/\bpr esented/g,        'presented'],
+    [/\bpr esents/g,         'presents'],
+    [/\bpr edict/g,          'predict'],
+    [/\bpr edicted/g,        'predicted'],
+    [/\bpr ediction/g,       'prediction'],
+    [/\bpr edictions/g,      'predictions'],
+    [/\bpr edator/g,         'predator'],
+    [/\bpr edators/g,        'predators'],
+    [/\bpr edation/g,        'predation'],
+    [/\bpr etty/g,           'pretty'],
+    [/\bpr evious/g,         'previous'],
+    [/\bpr eviously/g,       'previously'],
+    [/\bpr event/g,          'prevent'],
+    [/\bpr events/g,         'prevents'],
+    [/\bpr evented/g,        'prevented'],
+    [/\bpr ice/g,            'price'],
+    [/\bpr ices/g,           'prices'],
+    [/\bpr imar y/g,         'primary'],
+    [/\bpr imarily/g,        'primarily'],
+    [/\btr ue/g,             'true'],
+    [/\btr uly/g,            'truly'],
+    [/\btr end/g,            'trend'],
+    [/\btr ends/g,           'trends'],
+    [/\btr eat/g,            'treat'],
+    [/\btr eated/g,          'treated'],
+    [/\btr eats/g,           'treats'],
+    [/\btr eatment/g,        'treatment'],
+    [/\btr ansfer/g,         'transfer'],
+    [/\btr ansfer red/g,     'transferred'],
+    [/\btr ansit/g,          'transit'],
+    [/\btr ansition/g,       'transition'],
+    [/\btr ansmit/g,         'transmit'],
+    [/\btr ansmitted/g,      'transmitted'],
+    [/\bstr ong/g,           'strong'],
+    [/\bstr onger/g,         'stronger'],
+    [/\bstr ongly/g,         'strongly'],
+    [/\bstr ucture/g,        'structure'],
+    [/\bstr uctures/g,       'structures'],
+    [/\bstr ategy/g,         'strategy'],
+    [/\bstr ategies/g,       'strategies'],
+    [/\bstr uggle/g,         'struggle'],
+    [/\bstr uggled/g,        'struggled'],
+    [/\bstr etched/g,        'stretched'],
+    [/\bspr ead/g,           'spread'],
+    [/\bspr eads/g,          'spreads'],
+    [/\bspr eading/g,        'spreading'],
+    [/\br eal/g,             'real'],
+    [/\br ealiz/g,           'realiz'],
+    [/\br eally/g,           'really'],
+    [/\br eality/g,          'reality'],
+    [/\br eason/g,           'reason'],
+    [/\br easons/g,          'reasons'],
+    [/\br ead/g,             'read'],
+    [/\br eads/g,            'reads'],
+    [/\br eading/g,          'reading'],
+    [/\br eader/g,           'reader'],
+    [/\br eaders/g,          'readers'],
+    [/\br elat/g,            'relat'],
+    [/\br eport/g,           'report'],
+    [/\br eveals/g,          'reveals'],
+    [/\br ecent/g,           'recent'],
+    [/\br ecently/g,         'recently'],
+    [/\br equir/g,           'requir'],
+    [/\br esearch/g,         'research'],
+    [/\br esearcher/g,       'researcher'],
+    [/\br esearchers/g,      'researchers'],
+    [/\br esult/g,           'result'],
+    [/\br esults/g,          'results'],
+    [/\br esulting/g,        'resulting'],
+    [/\br esulted/g,         'resulted'],
+  ];
+
+  let out = text;
+  for (const [re, rep] of pairs) {
+    if (re.source !== '') out = out.replace(re, rep);
+  }
+
+  // 2. Generic pass: fix "X word" where X is a single lowercase letter
+  //    followed by a space then a lowercase word — only between word chars
+  //    e.g. "r epresent" → "represent", "t oward" → "toward"
+  //    Guard: don't fire on "a word" (article) or "I word"
+  out = out.replace(/\b([bcdfghjklmnpqrstvwxyz]) ([a-z]{2,})/g, '$1$2');
+
+  // 3. Fix "ﬁ" / "ﬀ" / "ﬃ" / "ﬄ" ligatures from PDF extraction
+  out = out
+    .replace(/ﬁ/g, 'fi')
+    .replace(/ﬀ/g, 'ff')
+    .replace(/ﬃ/g, 'ffi')
+    .replace(/ﬄ/g, 'ffl')
+    .replace(/ﬂ/g, 'fl')
+    .replace(/ﬅ/g, 'st');
+
+  // 4. Collapse runs of 3+ spaces into one (but not newlines)
+  out = out.replace(/ {3,}/g, ' ');
+
+  return out;
+}
+
 /* ── utils ───────────────────────────────────────────────── */
 const f=(n:number)=>n.toFixed(1);
 function pNum(s:string):number|null{
@@ -146,13 +384,15 @@ function bulletBar(title:string,lines:string[]):Seg{
 }
 
 function parsePassage(raw:string):Seg[]{
+  // Clean OCR artifacts before parsing
+  const cleaned = cleanOCR(raw);
   type Blk={start:number;end:number;type:'chart'|'table';body:string};
   const blks:Blk[]=[];
   let m:RegExpExecArray|null;
   const chartRe=/__CHART__[\r\n]+([\s\S]*?)__ENDCHART__/g;
-  while((m=chartRe.exec(raw))!==null)blks.push({start:m.index,end:m.index+m[0].length,type:'chart',body:m[1]});
+  while((m=chartRe.exec(cleaned))!==null)blks.push({start:m.index,end:m.index+m[0].length,type:'chart',body:m[1]});
   const tableRe=/__TABLE__[\r\n]+([\s\S]*?)__ENDTABLE__/g;
-  while((m=tableRe.exec(raw))!==null){
+  while((m=tableRe.exec(cleaned))!==null){
     const s=m.index,e=m.index+m[0].length;
     if(!blks.some(b=>b.type==='chart'&&s>=b.start&&e<=b.end))
       blks.push({start:s,end:e,type:'table',body:m[1]});
@@ -160,7 +400,7 @@ function parsePassage(raw:string):Seg[]{
   blks.sort((a,b)=>a.start-b.start);
   const segs:Seg[]=[]; let idx=0,off=0;
   for(const blk of blks){
-    const before=raw.slice(idx,blk.start).trim();
+    const before=cleaned.slice(idx,blk.start).trim();
     if(before){segs.push({kind:'text',content:before,offset:off});off+=before.length+1;}
     if(blk.type==='table'){
       segs.push(parseTable(blk.body,''));
@@ -179,7 +419,7 @@ function parsePassage(raw:string):Seg[]{
     }
     idx=blk.end;
   }
-  const tail=raw.slice(idx).trim();
+  const tail=cleaned.slice(idx).trim();
   if(tail)segs.push({kind:'text',content:tail,offset:off});
   return segs;
 }
@@ -405,6 +645,88 @@ function PremiumTable({seg}:{seg:Extract<Seg,{kind:'table'}>}){
   );
 }
 
+/* ── Paragraph-aware text block ─────────────────────────── */
+/** Renders a text segment split on paragraph breaks (\n\n or \n), giving
+ *  "Text 1" / "Text 2" introductions a styled pill label + divider. */
+function TextBlock({
+  seg, highlights, onAddHighlight, onRemoveHighlight, onUpdateHighlight, isHighlightModeActive
+}: {
+  seg: Extract<Seg,{kind:'text'}>,
+  highlights: Highlight[],
+  onAddHighlight:(h:Omit<Highlight,'id'>)=>void,
+  onRemoveHighlight:(id:string)=>void,
+  onUpdateHighlight:(id:string,u:Partial<Highlight>)=>void,
+  isHighlightModeActive: boolean,
+}) {
+  const { content, offset } = seg;
+  // Split into paragraphs on two-or-more consecutive newlines
+  const paragraphs = content
+    .replace(/\r\n/g, '\n')
+    .split(/\n{2,}/)
+    .map(p => p.replace(/\n/g, ' ').replace(/ {2,}/g, ' ').trim())
+    .filter(Boolean);
+
+  let cumOffset = 0;
+  return (
+    <div className="space-y-5">
+      {paragraphs.map((para, pi) => {
+        const paraOff = offset + cumOffset;
+        cumOffset += para.length + 2;
+
+        // "Text 1" / "Text 2" label detection
+        const labelMatch = para.match(/^(Text\s+\d+)\s*[:\-]?\s*/i);
+
+        if (labelMatch) {
+          const label = labelMatch[1];
+          const body = para.slice(labelMatch[0].length).trim();
+          const bodyOff = paraOff + labelMatch[0].length;
+          const hl = highlights
+            .filter(h => h.start >= bodyOff && h.start < bodyOff + body.length)
+            .map(h => ({...h, start: h.start - bodyOff, end: h.end - bodyOff}));
+          return (
+            <div key={pi}>
+              {pi > 0 && <div className="flex items-center gap-3 mb-4 mt-1">
+                <span className="inline-flex items-center px-3 py-0.5 rounded-full bg-indigo-100 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300 text-[11px] font-bold uppercase tracking-widest shrink-0">
+                  {label}
+                </span>
+                <div className="flex-1 h-px bg-slate-200 dark:bg-slate-700" />
+              </div>}
+              {pi === 0 && <span className="inline-flex items-center px-3 py-0.5 mr-2 mb-2 rounded-full bg-indigo-100 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300 text-[11px] font-bold uppercase tracking-widest">
+                {label}
+              </span>}
+              <HighlightableText
+                text={body}
+                className="text-[16px] leading-[1.9] text-slate-700 dark:text-slate-300"
+                highlights={hl}
+                onAddHighlight={h => onAddHighlight({...h, start: h.start + bodyOff, end: h.end + bodyOff})}
+                onRemoveHighlight={onRemoveHighlight}
+                onUpdateHighlight={onUpdateHighlight}
+                isHighlightModeActive={isHighlightModeActive}
+              />
+            </div>
+          );
+        }
+
+        const hl = highlights
+          .filter(h => h.start >= paraOff && h.start < paraOff + para.length)
+          .map(h => ({...h, start: h.start - paraOff, end: h.end - paraOff}));
+        return (
+          <HighlightableText
+            key={pi}
+            text={para}
+            className="text-[16px] leading-[1.9] text-slate-700 dark:text-slate-300"
+            highlights={hl}
+            onAddHighlight={h => onAddHighlight({...h, start: h.start + paraOff, end: h.end + paraOff})}
+            onRemoveHighlight={onRemoveHighlight}
+            onUpdateHighlight={onUpdateHighlight}
+            isHighlightModeActive={isHighlightModeActive}
+          />
+        );
+      })}
+    </div>
+  );
+}
+
 /* ── MAIN EXPORT ────────────────────────────────────────── */
 export function PassageRenderer({text,highlights,onAddHighlight,onRemoveHighlight,onUpdateHighlight,isHighlightModeActive,className}:Props){
   const segs=useMemo(()=>parsePassage(text),[text]);
@@ -414,18 +736,16 @@ export function PassageRenderer({text,highlights,onAddHighlight,onRemoveHighligh
         if(seg.kind==='table')return<PremiumTable key={i} seg={seg}/>;
         if(seg.kind==='line') return<LineChart key={i} seg={seg} uid={i}/>;
         if(seg.kind==='bar')  return<BarChart key={i} seg={seg} uid={i}/>;
-        const off=seg.offset;
-        const hl=highlights
-          .filter(h=>h.start>=off&&h.start<off+seg.content.length)
-          .map(h=>({...h,start:h.start-off,end:h.end-off}));
         return(
-          <HighlightableText key={i} text={seg.content}
-            className="text-[16px] leading-[1.9] text-slate-700"
-            highlights={hl}
-            onAddHighlight={h=>onAddHighlight({...h,start:h.start+off,end:h.end+off})}
+          <TextBlock
+            key={i}
+            seg={seg}
+            highlights={highlights}
+            onAddHighlight={onAddHighlight}
             onRemoveHighlight={onRemoveHighlight}
             onUpdateHighlight={onUpdateHighlight}
-            isHighlightModeActive={isHighlightModeActive}/>
+            isHighlightModeActive={isHighlightModeActive}
+          />
         );
       })}
     </div>

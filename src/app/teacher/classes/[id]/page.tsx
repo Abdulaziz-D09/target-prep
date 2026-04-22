@@ -14,11 +14,11 @@ import { useClassroomStore } from '@/store/classroomStore';
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
 const AVATAR_COLORS: Record<string, { bg: string; text: string }> = {
-    blue:    { bg: 'bg-blue-100 dark:bg-blue-900/30',    text: 'text-blue-600 dark:text-blue-400' },
-    indigo:  { bg: 'bg-indigo-100 dark:bg-indigo-900/30', text: 'text-indigo-600 dark:text-indigo-400' },
-    rose:    { bg: 'bg-rose-100 dark:bg-rose-900/30',    text: 'text-rose-600 dark:text-rose-400' },
-    emerald: { bg: 'bg-emerald-100 dark:bg-emerald-900/30', text: 'text-emerald-600 dark:text-emerald-400' },
-    amber:   { bg: 'bg-amber-100 dark:bg-amber-900/30',  text: 'text-amber-600 dark:text-amber-400' },
+    blue:    { bg: 'bg-blue-100 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-800',    text: 'text-blue-800 dark:text-blue-400' },
+    indigo:  { bg: 'bg-indigo-100 dark:bg-indigo-900/30 border border-indigo-200 dark:border-indigo-800', text: 'text-indigo-800 dark:text-indigo-400' },
+    rose:    { bg: 'bg-rose-100 dark:bg-rose-900/30 border border-rose-200 dark:border-rose-800',    text: 'text-rose-800 dark:text-rose-400' },
+    emerald: { bg: 'bg-emerald-100 dark:bg-emerald-900/30 border border-emerald-200 dark:border-emerald-800', text: 'text-emerald-800 dark:text-emerald-400' },
+    amber:   { bg: 'bg-amber-100 dark:bg-amber-900/30 border border-amber-200 dark:border-amber-800',  text: 'text-amber-800 dark:text-amber-400' },
 };
 
 function initials(name: string) {
@@ -270,11 +270,11 @@ export default function ClassDetailPage() {
                                                         </td>
                                                         <td className="px-6 py-4 text-center">
                                                             {allDone ? (
-                                                                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 text-[11px] font-bold">
+                                                                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-100/80 dark:bg-emerald-900/30 text-emerald-800 dark:text-emerald-400 border border-emerald-300 dark:border-emerald-800/50 text-[11px] font-bold">
                                                                     <CheckCircle2 className="h-3 w-3" /> Done
                                                                 </span>
                                                             ) : (
-                                                                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 text-[11px] font-bold">
+                                                                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-100/80 dark:bg-amber-900/30 text-amber-800 dark:text-amber-400 border border-amber-300 dark:border-amber-800/50 text-[11px] font-bold">
                                                                     <Clock className="h-3 w-3" /> In Progress
                                                                 </span>
                                                             )}

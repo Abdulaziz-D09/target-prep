@@ -5,10 +5,11 @@ import { useParams, useRouter } from 'next/navigation';
 import {
     X, Clock, ArrowRight, Check, CheckCircle,
     Bookmark, Calculator, BookOpen, ChevronDown, ChevronUp,
-    LayoutGrid, Home,
+    LayoutGrid, Home, Maximize2, FileText,
 } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
-import { useClassroomStore } from '@/store/classroomStore';
+import { useClassroomStore, seedOnce } from '@/store/classroomStore';
 import {
     readStudentAssignmentProgress,
     StudentAssignmentOption,
@@ -16,6 +17,9 @@ import {
 } from '@/lib/studentAssignmentProgress';
 import DesmosCalculator from '@/components/DesmosCalculator';
 import { ReferenceSheet } from '@/components/ReferenceSheet';
+
+// Seed synchronously — prevents blank page on first open
+seedOnce();
 
 const OPTION_LABELS: StudentAssignmentOption[] = ['A', 'B', 'C', 'D'];
 
@@ -47,6 +51,9 @@ export default function ClassroomAssignmentDetailPage() {
     const [leftPanelWidth, setLeftPanelWidth] = useState(50);
     const [isDragging, setIsDragging] = useState(false);
     const [isNavPanelOpen, setIsNavPanelOpen] = useState(false);
+    const [isExitModalOpen, setIsExitModalOpen] = useState(false);
+    const [isEliminationMode, setIsEliminationMode] = useState(false);
+    const [calcMode, setCalcMode] = useState<'graphing' | 'scientific'>('graphing');
 
     const totalQuestions = assignment?.questions.length ?? 0;
     const totalTimeSeconds = Math.max(5, assignment?.timeLimitMinutes ?? 60) * 60;
@@ -106,7 +113,7 @@ export default function ClassroomAssignmentDetailPage() {
         });
     }, [assignment, hasHydrated, totalQuestions, answers, currentIdx, mode, timeRemaining]);
 
-    // ── Drag divider (for split-pane) ────────────────────────────────────────
+    // ── Drag divider ─────────────────────────────────────────────────────────
 
     useEffect(() => {
         const handleMouseMove = (e: MouseEvent) => {
@@ -154,6 +161,14 @@ export default function ClassroomAssignmentDetailPage() {
         });
     };
 
+    const toggleFullscreen = () => {
+        if (!document.fullscreenElement) {
+            document.documentElement.requestFullscreen().catch(() => {});
+        } else {
+            document.exitFullscreen?.();
+        }
+    };
+
     const formatTime = (seconds: number) => {
         const m = Math.floor(seconds / 60);
         const s = seconds % 60;
@@ -162,16 +177,42 @@ export default function ClassroomAssignmentDetailPage() {
 
     // ── Guards ────────────────────────────────────────────────────────────────
 
-    if (!hasHydrated || !assignment) return null;
+    // Show loading while hydrating — but never return null permanently
+    if (!hasHydrated) {
+        if (!assignment) {
+            // Still waiting for store to populate — show spinner
+            return (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-white">
+                    <div className="w-8 h-8 rounded-full border-[3px] border-slate-200 border-t-slate-800 animate-spin" />
+                </div>
+            );
+        }
+    }
+
+    if (!assignment) {
+        return (
+            <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-white gap-4">
+                <p className="text-slate-600 font-medium">Assignment not found.</p>
+                <button
+                    onClick={() => router.push('/classroom')}
+                    className="bg-indigo-600 text-white px-6 py-2.5 rounded-full font-bold hover:bg-indigo-700 transition"
+                >
+                    Back to Classroom
+                </button>
+            </div>
+        );
+    }
 
     // ── Intro screen ─────────────────────────────────────────────────────────
 
     if (mode === 'intro') {
+        const sectionLabel = isMath ? 'Section 2: Math' : 'Section 1: English (Reading and Writing)';
+
         return (
             <div className="flex items-center justify-center bg-white p-8 fixed inset-0 z-50 fade-in">
                 <div className="max-w-3xl w-full">
                     <h1 className="text-[2.15rem] font-bold text-slate-900 mb-8 pb-4 border-b border-slate-200">
-                        {isMath ? 'Section 2: Math' : 'Section 1: English (Reading and Writing)'}
+                        {sectionLabel}
                         <span className="block text-[1.1rem] font-medium text-slate-500 mt-1">{assignment.title}</span>
                     </h1>
 
@@ -235,21 +276,19 @@ export default function ClassroomAssignmentDetailPage() {
                     <p className="text-slate-500 mb-8 leading-relaxed text-[16px]">
                         Your answers have been saved and logged into the classroom.
                     </p>
-                    <div className="space-y-3">
-                        <div className="grid grid-cols-2 gap-3">
-                            <button
-                                onClick={() => router.push('/classroom')}
-                                className="bg-white border-2 border-slate-200 text-slate-700 py-3.5 rounded-xl font-bold hover:bg-slate-50 hover:border-slate-300 transition-all flex items-center justify-center gap-2"
-                            >
-                                <Home className="w-4 h-4" /> Classroom
-                            </button>
-                            <button
-                                onClick={() => { setCurrentIdx(0); setMode('review'); }}
-                                className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white py-3.5 rounded-xl font-bold transition-all shadow-md shadow-blue-500/20 flex items-center justify-center gap-2"
-                            >
-                                <BookOpen className="w-4 h-4" /> Review Answers
-                            </button>
-                        </div>
+                    <div className="grid grid-cols-2 gap-3">
+                        <button
+                            onClick={() => router.push('/classroom')}
+                            className="bg-white border-2 border-slate-200 text-slate-700 py-3.5 rounded-xl font-bold hover:bg-slate-50 hover:border-slate-300 transition-all flex items-center justify-center gap-2"
+                        >
+                            <Home className="w-4 h-4" /> Classroom
+                        </button>
+                        <button
+                            onClick={() => { setCurrentIdx(0); setMode('review'); }}
+                            className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white py-3.5 rounded-xl font-bold transition-all shadow-md shadow-blue-500/20 flex items-center justify-center gap-2"
+                        >
+                            <BookOpen className="w-4 h-4" /> Review Answers
+                        </button>
                     </div>
                 </div>
             </div>
@@ -261,11 +300,13 @@ export default function ClassroomAssignmentDetailPage() {
     const currentQuestion = assignment.questions[currentIdx];
     const isLastQuestion = currentIdx === totalQuestions - 1;
     const currentEliminations = eliminatedAnswers[currentIdx] || [];
+    const hasPassage = !isMath && !!currentQuestion?.passage;
+    const showLeftPane = hasPassage || (isMath && isDesmosOpen);
 
     return (
         <div className="h-[100dvh] flex flex-col bg-slate-50 font-[system-ui,-apple-system,BlinkMacSystemFont,'Segoe_UI',Roboto,sans-serif] overflow-hidden fixed inset-0 z-50">
 
-            {/* ── Header — identical to practice test ── */}
+            {/* ── Header — matches practice test exactly ── */}
             <header className="bg-white/90 backdrop-blur-xl border-b border-slate-200/80 px-6 py-3 flex items-center justify-between z-30 shrink-0 relative shadow-[0_2px_10px_rgba(0,0,0,0.02)]">
                 {/* Left: section label + directions */}
                 <div className="flex-1">
@@ -275,7 +316,7 @@ export default function ClassroomAssignmentDetailPage() {
                         </span>
                         <button
                             onClick={() => setIsDirectionsOpen(!isDirectionsOpen)}
-                            className="flex items-center gap-1.5 text-[#374151] font-bold text-[13px] hover:bg-black/5 py-1 rounded transition-colors -ml-1 pl-1"
+                            className="flex items-center gap-1.5 text-[#374151] font-bold text-[13px] hover:bg-black/5 py-1 rounded transition-colors -ml-1 pl-1 w-fit pr-2"
                         >
                             Directions
                             <ChevronDown className={`w-[14px] h-[14px] transition-transform ${isDirectionsOpen ? 'rotate-180' : ''}`} />
@@ -319,7 +360,7 @@ export default function ClassroomAssignmentDetailPage() {
                             onClick={() => setIsTimerHidden(!isTimerHidden)}
                             className="text-[11px] font-bold tracking-widest uppercase text-slate-500 hover:text-indigo-600 bg-transparent px-4 py-1.5 rounded-full transition-colors mt-0.5"
                         >
-                            {isTimerHidden ? 'Show' : 'Hide'}
+                            {isTimerHidden ? 'Show Timer' : 'Hide Timer'}
                         </button>
                     )}
                     {mode === 'review' && (
@@ -327,12 +368,12 @@ export default function ClassroomAssignmentDetailPage() {
                     )}
                 </div>
 
-                {/* Right: tool buttons */}
-                <div className="flex items-center justify-end flex-1 gap-2">
+                {/* Right: tool buttons — identical to practice test */}
+                <div className="flex items-center justify-end flex-1 gap-1">
                     {mode === 'review' && (
                         <button
                             onClick={() => setMode('complete')}
-                            className="text-sm font-bold text-white bg-slate-900 hover:bg-black px-4 py-2 rounded-full mr-2"
+                            className="text-sm font-bold text-white bg-slate-900 hover:bg-black px-4 py-2 rounded-full mr-1"
                         >
                             Exit Review
                         </button>
@@ -350,105 +391,125 @@ export default function ClassroomAssignmentDetailPage() {
                                 onClick={() => setIsReferenceOpen(true)}
                                 className="flex flex-col items-center justify-center gap-1.5 w-[80px] h-[64px] rounded-lg hover:bg-black/5 text-slate-700 transition-colors"
                             >
-                                <BookOpen className="w-[24px] h-[24px]" />
+                                <FileText className="w-[24px] h-[24px]" />
                                 <span className="font-bold text-[12px] leading-none text-slate-500">Reference</span>
                             </button>
                         </>
                     )}
+                    <button
+                        onClick={toggleFullscreen}
+                        className="flex flex-col items-center justify-center gap-1.5 w-[80px] h-[64px] rounded-lg hover:bg-black/5 text-slate-700 transition-colors"
+                    >
+                        <Maximize2 className="w-[24px] h-[24px]" />
+                        <span className="font-bold text-[12px] leading-none">Fullscreen</span>
+                    </button>
+                    <button
+                        onClick={() => setIsExitModalOpen(true)}
+                        className="flex flex-col items-center justify-center gap-1.5 w-[80px] h-[64px] rounded-lg hover:bg-black/5 text-slate-700 transition-colors"
+                    >
+                        <div className="flex items-center justify-center w-6 h-6 bg-slate-800 rounded text-white">
+                            <X className="w-3.5 h-3.5" />
+                        </div>
+                        <span className="font-bold text-[12px] leading-none">Save & Exit</span>
+                    </button>
                 </div>
             </header>
 
             {/* ── Body ── */}
             <div className="flex-1 flex overflow-hidden relative">
 
-                {/* ── English: passage left pane ── */}
-                {!isMath && currentQuestion?.passage && (
-                    <>
-                        <div
-                            className="h-full overflow-y-auto border-r border-slate-200/80 bg-white flex flex-col shrink-0"
-                            style={{ width: `${leftPanelWidth}%` }}
-                        >
-                            <div className="p-8 lg:p-10 flex-1">
+                
+                {/* ── Left Pane (Passage or Desmos) ── */}
+                {isMath ? (
+                    <div className={`overflow-hidden bg-[#FAFAFA] border-r border-[#E5E7EB] flex flex-col ${!isDragging ? 'transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]' : ''} ${isDesmosOpen ? '' : 'pointer-events-none'}`} style={{ width: isDesmosOpen ? `${leftPanelWidth}%` : '0%', opacity: isDesmosOpen ? 1 : 0 }}>
+                        {/* Custom Calculator Header */}
+                        <div className="h-[46px] bg-[#F9FAFB] border-b border-[#D1D5DB] flex items-center justify-between px-4 shrink-0 relative z-20">
+                            <div className="w-[80px]">
+                                <span className="font-bold text-[15px] text-[#111827]">Calculator</span>
+                            </div>
+                            <div className="flex bg-[#F3F4F6] rounded-[6px] p-[2px] border border-[#E5E7EB]">
+                                <button
+                                    onClick={() => setCalcMode('graphing')}
+                                    className={`px-5 py-1 text-[13px] font-bold rounded-[4px] transition-colors ${calcMode === 'graphing' ? 'bg-[#111827] text-white shadow-sm' : 'text-[#6B7280] hover:text-[#374151]'}`}
+                                >Graphing</button>
+                                <button
+                                    onClick={() => setCalcMode('scientific')}
+                                    className={`px-5 py-1 text-[13px] font-bold rounded-[4px] transition-colors ${calcMode === 'scientific' ? 'bg-[#111827] text-white shadow-sm' : 'text-[#6B7280] hover:text-[#374151]'}`}
+                                >Scientific</button>
+                            </div>
+                            <div className="w-[80px]"></div>
+                        </div>
+                        <DesmosCalculator mode={calcMode} isDragging={isDragging} />
+                    </div>
+                ) : (
+                    <div className="overflow-y-auto p-4 lg:p-10 pr-4 lg:pr-6 flex justify-center bg-white border-r border-[#E5E7EB]" style={{ width: `${leftPanelWidth}%` }}>
+                        <div className="w-full max-w-[800px] relative mt-2">
+                            {currentQuestion?.passage ? (
                                 <p className="text-[17px] leading-[1.85] text-[#111827] font-normal tracking-[-0.01em] select-text">
                                     {currentQuestion.passage}
                                 </p>
-                            </div>
+                            ) : (
+                                <div className="text-[17px] text-[#6B7280] leading-[1.8] font-serif italic text-center mt-20">
+                                    No passage for this question.
+                                </div>
+                            )}
                         </div>
-
-                        {/* Drag divider */}
-                        <div
-                            className="w-2 cursor-col-resize hover:bg-blue-400 bg-slate-200 flex flex-col justify-center items-center h-full active:bg-blue-600 flex-shrink-0 shadow-inner"
-                            onMouseDown={() => {
-                                setIsDragging(true);
-                                document.body.style.cursor = 'col-resize';
-                                document.body.style.userSelect = 'none';
-                            }}
-                        >
-                            <div className="h-8 w-1 bg-white/60 rounded-full mb-1" />
-                            <div className="h-8 w-1 bg-white/60 rounded-full" />
-                        </div>
-                    </>
+                    </div>
                 )}
 
-                {/* ── Math: Desmos left pane ── */}
-                {isMath && isDesmosOpen && (
-                    <>
-                        <div
-                            className="bg-[#F9FAFB] border-r border-[#E5E7EB] overflow-hidden flex flex-col h-full relative shrink-0"
-                            style={{ width: `${leftPanelWidth}%` }}
-                        >
-                            <div className="p-3 border-b flex justify-between items-center bg-white">
-                                <span className="font-bold text-sm text-slate-700 uppercase tracking-widest pl-2">Calculator</span>
-                            </div>
-                            <div className="flex-1 overflow-hidden relative"><DesmosCalculator mode="graphing" /></div>
+                {/* ── Resizable Divider ── */}
+                {((isMath && isDesmosOpen) || !isMath) && (
+                    <div
+                        onMouseDown={() => setIsDragging(true)}
+                        className="w-[3px] bg-[#E5E7EB] hover:bg-[#D1D5DB] cursor-col-resize flex items-center justify-center flex-shrink-0 transition-colors z-20 relative group"
+                    >
+                        {/* The handle with triangles */}
+                        <div className="h-[36px] w-[16px] bg-[#111827] rounded-[4px] flex items-center justify-center absolute left-1/2 -translate-x-1/2 pointer-events-none shadow-sm gap-[2px]">
+                            <div className="w-0 h-0 border-t-[4px] border-t-transparent border-b-[4px] border-b-transparent border-r-[4px] border-r-white"></div>
+                            <div className="w-0 h-0 border-t-[4px] border-t-transparent border-b-[4px] border-b-transparent border-l-[4px] border-l-white"></div>
                         </div>
-
-                        <div
-                            className="w-2 cursor-col-resize hover:bg-blue-400 bg-slate-200 flex flex-col justify-center items-center h-full active:bg-blue-600 flex-shrink-0 shadow-inner"
-                            onMouseDown={() => {
-                                setIsDragging(true);
-                                document.body.style.cursor = 'col-resize';
-                                document.body.style.userSelect = 'none';
-                            }}
-                        >
-                            <div className="h-8 w-1 bg-white/60 rounded-full mb-1" />
-                            <div className="h-8 w-1 bg-white/60 rounded-full" />
-                        </div>
-                    </>
+                    </div>
                 )}
-
-                {/* ── Right pane: question + answers ── */}
+{/* ── Right pane: question + answers ── */}
                 <div
-                    className="overflow-y-auto bg-[#fafafa] flex justify-center"
-                    style={{ width: (!isMath && currentQuestion?.passage) || (isMath && isDesmosOpen) ? `${100 - leftPanelWidth}%` : '100%' }}
+                    className={`overflow-y-auto p-4 lg:p-10 pl-4 lg:pl-8 flex justify-center bg-white ${!isDragging && isMath ? 'transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]' : ''}`}
+                    style={{ width: (isMath && !isDesmosOpen) ? '100%' : `${100 - leftPanelWidth}%` }}
                 >
-                    <div className="max-w-2xl w-full px-8 lg:px-12 py-8 pb-28 text-[#111827]">
-                        {/* Question number + flag */}
-                        <div className="flex items-center gap-3 mb-6 bg-white py-1.5 px-3 rounded-md w-max border border-slate-200 shadow-sm">
-                            <span className="bg-[#111827] text-white text-sm font-bold w-6 h-6 flex items-center justify-center rounded-sm shadow-sm">
+                    <div className="w-full max-w-[800px] flex flex-col">
+                        {/* Header: Connected Question Number & Mark for Review & ABC */}
+                        <div className="flex mb-6 mt-4 shadow-sm w-full">
+                            {/* Number */}
+                            <div className="bg-[#111827] text-white font-bold text-[15px] w-[50px] flex flex-shrink-0 items-center justify-center">
                                 {currentIdx + 1}
-                            </span>
+                            </div>
+
+                            {/* Mark for Review (Middle) */}
                             <button
                                 onClick={() => setFlaggedQuestions(s => ({ ...s, [currentIdx]: !s[currentIdx] }))}
-                                className="focus:outline-none transition-transform hover:scale-110 flex items-center gap-1.5"
+                                className="flex flex-1 items-center gap-2 px-4 py-2.5 bg-white border-b border-[#E5E7EB] group/mfr text-[#4B5563] text-[15px] transition-colors justify-start"
                             >
-                                <Bookmark className={`w-4 h-4 ${flaggedQuestions[currentIdx] ? 'fill-red-500 text-red-500' : 'text-slate-400 fill-transparent'}`} />
-                                <span className={`text-[12px] font-bold ${flaggedQuestions[currentIdx] ? 'text-red-500' : 'text-slate-500'}`}>
-                                    Mark for Review
-                                </span>
+                                <Bookmark className={`w-[14px] h-[14px] transition-colors ${flaggedQuestions[currentIdx] ? 'fill-slate-600 text-slate-600' : 'text-slate-400 group-hover/mfr:text-slate-600'}`} />
+                                <span className={flaggedQuestions[currentIdx] ? 'font-bold' : 'font-medium group-hover/mfr:font-bold'}>Mark for Review</span>
                             </button>
+
+                            {/* ABC Elimination (Right) */}
+                            <div className="bg-[#F3F4F6] flex items-center pr-2">
+                                <button
+                                    onClick={() => setIsEliminationMode(!isEliminationMode)}
+                                    className={`flex items-center justify-center px-3 py-1 ml-2 font-bold text-[14px] transition-colors rounded ${isEliminationMode ? 'bg-[#111827] text-white' : 'bg-transparent text-slate-700 hover:bg-slate-200'}`}
+                                >
+                                    <span className="line-through decoration-[#ef4444] decoration-[2px]">ABC</span>
+                                </button>
+                            </div>
                         </div>
 
-                        {/* Passage inline for Math or when no left pane */}
-                        {(!isMath && !currentQuestion?.passage && currentQuestion?.passage !== undefined) && null}
-
-                        {/* Question stem */}
-                        <div className="text-[19px] leading-[1.8] font-normal tracking-[-0.01em] opacity-90 pl-1 mb-10">
-                            <p>{currentQuestion?.stem}</p>
+                        {/* Question Content */}
+                        <div className="text-[18px] text-[#111827] mb-6 leading-relaxed">
+                            <p className="font-bluebook break-words whitespace-pre-wrap [text-wrap:pretty]">{currentQuestion?.stem}</p>
                         </div>
 
-                        {/* Answer options */}
-                        <div className="space-y-3.5 isolate max-w-xl">
+                        {/* Answer Options */}
+                        <div className="space-y-4 w-full relative pl-[2px] pt-[2px]">
                             {OPTION_LABELS.map((letter) => {
                                 const optText = currentQuestion?.options[letter];
                                 if (!optText) return null;
@@ -458,59 +519,76 @@ export default function ClassroomAssignmentDetailPage() {
                                 const isCorrectAnswer = mode === 'review' && currentQuestion.answer === letter;
                                 const isWrongSelection = mode === 'review' && isSelected && !isCorrectAnswer;
 
-                                let borderClass = isSelected
-                                    ? 'border-[#3b82f6] shadow-[0_0_0_1px_rgba(59,130,246,0.35)]'
-                                    : 'border-[#D1D5DB] hover:border-blue-400';
-                                if (isEliminated) borderClass = 'border-[#E5E7EB] border-dashed opacity-50 bg-[#F9FAFB]';
-                                if (isCorrectAnswer) borderClass = 'border-emerald-500 bg-emerald-50/50';
-                                if (isWrongSelection) borderClass = 'border-red-400 bg-red-50/50';
-
-                                let textClass = 'text-[#111827]';
-                                if (isEliminated) textClass = 'text-[#9ca3af] line-through';
-                                else if (isCorrectAnswer) textClass = 'text-emerald-900 font-medium';
-                                else if (isWrongSelection) textClass = 'text-red-900 font-medium';
-
-                                let numClass = isSelected
-                                    ? 'bg-[#3b82f6] text-white border-[#3b82f6]'
-                                    : 'border-[#9CA3AF] text-[#4B5563]';
-                                if (isEliminated) numClass = 'border-[#D1D5DB] text-[#9CA3AF] line-through';
-                                if (isCorrectAnswer) numClass = 'bg-emerald-500 text-white border-emerald-500';
-                                if (isWrongSelection) numClass = 'bg-red-500 text-white border-red-500';
+                                // If review is allowed to show correct/wrong
+                                let overrideBox = '';
+                                if (isCorrectAnswer) overrideBox = 'border-emerald-500 bg-emerald-50/50';
+                                if (isWrongSelection) overrideBox = 'border-red-400 bg-red-50/50';
 
                                 return (
-                                    <div key={letter} className="flex items-center group relative z-10">
-                                        <button
-                                            onClick={() => handleSelectAnswer(letter)}
-                                            className={`flex items-center gap-4 py-[13px] px-5 border rounded-xl w-full text-left transition-all bg-white relative overflow-hidden group-hover:shadow-[0_2px_8px_rgba(0,0,0,0.04)] ${borderClass}`}
+                                    <div key={letter} className="flex items-center gap-4 relative w-full group">
+                                        <label
+                                            onClick={(e) => {
+                                                if (isEliminationMode) {
+                                                    e.preventDefault();
+                                                    toggleElimination(e, letter);
+                                                }
+                                            }}
+                                            htmlFor={`opt-${letter}`}
+                                            className={`relative flex-1 p-3 px-4 border min-h-[58px] rounded-[10px] flex items-center cursor-pointer transition-all duration-200 overflow-hidden ${isSelected ? 'border-indigo-600 shadow-[inset_0_0_0_1px_#4f46e5,0_2px_8px_rgba(79,70,229,0.15)] bg-indigo-50/30' : 'border-slate-300 hover:border-slate-400 bg-white hover:bg-slate-50 hover:shadow-sm'} ${overrideBox}`}
                                         >
-                                            <div className={`w-[26px] h-[26px] flex items-center justify-center rounded-full border border-b-[2px] font-bold text-[13px] flex-shrink-0 transition-all z-10 ${numClass}`}>
+                                            <input
+                                                type="radio"
+                                                name="answer"
+                                                id={`opt-${letter}`}
+                                                className="sr-only"
+                                                checked={isSelected}
+                                                onChange={() => {
+                                                    if (!isEliminated) handleSelectAnswer(letter);
+                                                }}
+                                            />
+
+                                            <div className={`w-[28px] h-[28px] rounded-full border-[1.5px] flex-shrink-0 flex items-center justify-center font-bold text-[13px] mr-4 transition-colors ${isSelected ? 'border-indigo-600 text-white bg-indigo-600 shadow-sm' : 'border-slate-400 text-slate-700'}`}>
                                                 {letter}
                                             </div>
-                                            <span className={`text-[17px] leading-snug relative z-10 font-[400] tracking-[-0.01em] opacity-95 ${textClass}`}>
+
+                                            <span className={`text-[17px] font-sans flex-1 ${isEliminated ? 'text-slate-400' : 'text-[#111827]'}`}>
                                                 {optText}
                                             </span>
-                                            {isCorrectAnswer && <Check className="ml-auto text-emerald-600 w-5 h-5 shrink-0" />}
-                                            {isWrongSelection && <X className="ml-auto text-red-500 w-5 h-5 shrink-0" />}
-                                        </button>
-                                        {mode !== 'review' && (
-                                            <button
-                                                onClick={(e) => toggleElimination(e, letter)}
-                                                className="pl-4 pr-2 text-slate-400 hover:text-red-500 transition-colors"
-                                                aria-label="Eliminate answer"
-                                            >
-                                                <div className="w-7 h-7 flex items-center justify-center rounded-full border-2 border-dashed border-current opacity-0 group-hover:opacity-100 font-mono text-[14px] font-bold">
-                                                    {letter}
-                                                </div>
-                                            </button>
-                                        )}
+
+                                            {isEliminated && (
+                                                <div className="absolute top-1/2 left-0 w-full h-[1.5px] bg-slate-500 pointer-events-none -translate-y-[50%]"></div>
+                                            )}
+                                        </label>
+
+                                        <div className="w-[50px] flex items-center justify-start flex-shrink-0">
+                                            {isEliminationMode && (
+                                                <button
+                                                    onClick={(e) => {
+                                                        e.preventDefault();
+                                                        e.stopPropagation();
+                                                        toggleElimination(e, letter);
+                                                    }}
+                                                    className="flex items-center justify-center transition-colors z-20 group/btn"
+                                                    title={isEliminated ? "Undo Elimination" : "Eliminate Option"}
+                                                >
+                                                    {isEliminated ? (
+                                                        <span className="font-bluebook text-[14px] font-bold text-[#111827] underline decoration-[#111827] decoration-[1.5px] underline-offset-[3px] hover:text-slate-700">Undo</span>
+                                                    ) : (
+                                                        <div className="w-[28px] h-[28px] rounded-full border-[1px] border-slate-900 flex items-center justify-center relative bg-white transition-colors group-hover/btn:bg-slate-100 opacity-50 hover:opacity-100">
+                                                            <span className="font-bold text-slate-900 text-[12px]">{letter}</span>
+                                                            <div className="absolute w-[38px] h-[1.5px] bg-slate-900 rotate-0"></div>
+                                                        </div>
+                                                    )}
+                                                </button>
+                                            )}
+                                        </div>
                                     </div>
                                 );
                             })}
                         </div>
                     </div>
                 </div>
-
-                {/* ── Nav panel (bottom-right overlay) ── */}
+{/* ── Nav panel (bottom-right overlay) ── */}
                 {isNavPanelOpen && (
                     <div className="absolute bottom-0 right-0 w-full md:w-96 bg-white border-l border-[#E5E7EB] shadow-2xl z-30 flex flex-col transform transition-transform border-t h-[350px]">
                         <div className="border-b border-[#E5E7EB] p-6 flex justify-between items-center bg-[#F9FAFB]">
@@ -542,55 +620,93 @@ export default function ClassroomAssignmentDetailPage() {
                 )}
             </div>
 
-            {/* ── Footer — identical to practice test ── */}
-            <footer className="bg-[#111827] text-[#D1D5DB] px-6 py-[14px] flex items-center justify-between border-t flex-shrink-0 z-40 relative">
-                <div className="flex-1 flex gap-2 w-full">
-                    <h1 className="font-bold text-[16px] text-white tracking-wide">Target Prep</h1>
+            
+            {/* Premium Bottom Navigation Bar */}
+            <footer className="bg-white/80 backdrop-blur-lg border-t border-slate-200/80 px-8 h-[76px] flex items-center justify-between shrink-0 absolute bottom-0 left-0 right-0 z-40 shadow-[0_-2px_15px_rgba(0,0,0,0.03)]">
+                <div className="w-48"></div>
+
+                <div className="absolute left-1/2 -translate-x-1/2">
+                    <button
+                        onClick={() => setIsNavPanelOpen(true)}
+                        className="flex items-center justify-center gap-2 px-6 h-[44px] rounded-[6px] font-bold text-white bg-[#222222] hover:bg-[#333333] transition-colors shadow-sm"
+                    >
+                        <span className="text-[15px] tracking-wide">Question {currentIdx + 1} of {totalQuestions}</span>
+                        <ChevronUp className="w-[18px] h-[18px]" />
+                    </button>
                 </div>
 
-                <div className="flex gap-4 items-center flex-1 justify-center relative">
-                    <span className="text-[13px] font-bold px-3 py-1 bg-white/10 rounded-full tracking-wide">
-                        Question {currentIdx + 1} of {totalQuestions}
-                    </span>
-                </div>
-
-                <div className="flex-1 flex justify-end gap-3 w-full">
+                <div className="flex gap-4 w-48 justify-end">
                     <button
                         onClick={() => setCurrentIdx(p => Math.max(0, p - 1))}
                         disabled={currentIdx === 0}
-                        className="w-[85px] py-1.5 md:py-2.5 rounded-full border border-white/20 font-bold text-white text-sm hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed transition-all shadow-inner tracking-wide flex items-center justify-center"
+                        className="bg-white border-2 border-slate-200 hover:border-slate-300 text-slate-700 px-8 py-2.5 rounded-full font-bold text-[15px] transition-all disabled:opacity-40 disabled:hover:border-slate-200 disabled:cursor-not-allowed shadow-sm hover:shadow-md hover:bg-slate-50"
                     >
                         Back
-                    </button>
-                    <button
-                        onClick={() => setIsNavPanelOpen(!isNavPanelOpen)}
-                        className="w-[85px] py-1.5 md:py-2.5 rounded-full border border-white/20 font-bold text-white text-sm hover:bg-white/10 transition-all shadow-inner relative flex flex-col items-center justify-center mt-[-6px]"
-                    >
-                        <LayoutGrid className="w-[18px] h-[18px] mb-[-2px] opacity-80" />
-                        <span className="text-[9px] tracking-widest uppercase opacity-60 font-bold mt-1 absolute bottom-1.5">Nav</span>
                     </button>
                     {isLastQuestion ? (
                         <button
                             onClick={() => setMode('complete')}
-                            className="w-[85px] py-1.5 md:py-2.5 rounded-full bg-[linear-gradient(135deg,#ef4444,#dc2626)] hover:brightness-110 font-bold text-white text-sm shadow-inner tracking-wide flex items-center justify-center"
+                            className="bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white px-9 py-2.5 rounded-full font-bold text-[15px] transition-all shadow-md shadow-emerald-500/20 hover:shadow-lg hover:shadow-emerald-500/30 hover:scale-[1.02]"
                         >
-                            End
+                            Submit
                         </button>
                     ) : (
                         <button
                             onClick={() => setCurrentIdx(p => Math.min(totalQuestions - 1, p + 1))}
-                            className="w-[85px] py-1.5 md:py-2.5 rounded-full bg-[linear-gradient(135deg,#2563eb,#3b82f6)] hover:brightness-110 font-bold text-white text-sm shadow-inner tracking-wide flex items-center justify-center"
+                            className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-9 py-2.5 rounded-full font-bold text-[15px] transition-all shadow-md shadow-blue-500/20 hover:shadow-lg hover:shadow-blue-500/30 hover:scale-[1.02]"
                         >
                             Next
                         </button>
                     )}
                 </div>
             </footer>
-
-            {/* Reference sheet (Math only) */}
+{/* Reference sheet (Math only) */}
             {isReferenceOpen && (
                 <ReferenceSheet isOpen={isReferenceOpen} onClose={() => setIsReferenceOpen(false)} />
             )}
+
+            {/* Custom Exit Modal */}
+            <AnimatePresence>
+                {isExitModalOpen && (
+                    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm"
+                            onClick={() => setIsExitModalOpen(false)}
+                        />
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.95, y: 10 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.95, y: 10 }}
+                            className="relative w-full max-w-[420px] overflow-hidden rounded-[24px] bg-white shadow-[0_24px_50px_rgba(0,0,0,0.2)] p-7"
+                        >
+                            <h2 className="text-2xl font-black tracking-tight text-slate-800 mb-2">Save & Exit?</h2>
+                            <p className="text-[14px] text-slate-500 mb-8 leading-6">
+                                Your progress is automatically saved to your device. You can resume this session later from the dashboard.
+                            </p>
+                            <div className="flex items-center gap-3 justify-end">
+                                <button
+                                    onClick={() => setIsExitModalOpen(false)}
+                                    className="px-5 py-2.5 rounded-full text-sm font-bold text-slate-600 hover:bg-slate-100 transition"
+                                >
+                                    Continue Testing
+                                </button>
+                                <button
+                                    onClick={() => {
+                                        setIsExitModalOpen(false);
+                                        router.push('/classroom');
+                                    }}
+                                    className="px-6 py-2.5 rounded-full text-sm font-bold bg-[#111827] text-white hover:bg-slate-800 shadow-md transition"
+                                >
+                                    Save & Exit
+                                </button>
+                            </div>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
         </div>
     );
 }

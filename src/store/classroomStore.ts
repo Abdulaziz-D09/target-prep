@@ -143,6 +143,7 @@ function normalizeAssignmentTimeLimit(assignment: Assignment): Assignment {
   };
 }
 
+
 export const useClassroomStore = create<State & Actions>()(
   persist(
     (set, get) => ({
@@ -209,3 +210,11 @@ export const useClassroomStore = create<State & Actions>()(
     }
   )
 );
+
+/**
+ * Call this at the module level (outside React) to eagerly seed data before
+ * the first render, preventing blank-page flashes caused by async useEffect.
+ */
+export function seedOnce() {
+  useClassroomStore.getState().seed();
+}

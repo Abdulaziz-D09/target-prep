@@ -819,9 +819,11 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
                     </button>
                     <button
                         onClick={() => setIsExitModalOpen(true)}
-                        className="flex flex-col items-center justify-center gap-1.5 w-[80px] h-[64px] rounded-lg hover:bg-black/5 text-slate-700 transition-colors mr-2 ml-2"
+                        className="flex flex-col items-center justify-center gap-1.5 w-[80px] h-[64px] rounded-lg hover:bg-black/5 text-slate-700 transition-colors"
                     >
-                        <span className="bg-[#111827] text-white rounded-[4px] text-[15px] px-[10px] py-[1px] font-bold leading-none flex items-center justify-center text-center">X</span>
+                        <div className="flex items-center justify-center w-6 h-6 bg-slate-800 rounded text-white">
+                            <X className="w-3.5 h-3.5" />
+                        </div>
                         <span className="font-bold text-[12px] leading-none">Save & Exit</span>
                     </button>
                 </div>
@@ -1016,7 +1018,7 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
                                                     </div>
 
                                                     {/* Answer Text */}
-                                                    <span className={`text-[17px] font-serif flex-1 ${isEliminated ? 'text-slate-400' : 'text-[#111827]'}`}>
+                                                    <span className={`text-[17px] font-sans flex-1 ${isEliminated ? 'text-slate-400' : 'text-[#111827]'}`}>
                                                         {opt}
                                                     </span>
 

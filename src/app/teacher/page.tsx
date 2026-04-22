@@ -6,14 +6,15 @@ import { GraduationCap, ClipboardList, ArrowRight, Plus, Users } from 'lucide-re
 import {
     FloatingPageShapes, itemRevealVariants, pageRevealVariants, staggerContainerVariants,
 } from '@/components/SiteMotion';
-import { useClassroomStore } from '@/store/classroomStore';
+import { useClassroomStore, seedOnce } from '@/store/classroomStore';
+
+// Seed data synchronously before first render to avoid blank flash
+seedOnce();
 
 export default function TeacherHomePage() {
     const shouldReduceMotion = useReducedMotion();
     const { classrooms, students, assignments, seed } = useClassroomStore();
-    const [mounted, setMounted] = useState(false);
 
-    useEffect(() => setMounted(true), []);
     useEffect(() => { seed(); }, [seed]);
 
     const totalStudents    = students.length;
@@ -41,9 +42,7 @@ export default function TeacherHomePage() {
                     </p>
                 </motion.div>
 
-                {!mounted ? null : (
-                    <>
-                        {/* Stats strip */}
+                {/* Stats strip */}
                 <motion.div className="grid gap-4 grid-cols-3 mb-8" variants={staggerContainerVariants}>
                     {[
                         { label: 'Classes', value: classrooms.length, icon: GraduationCap, color: 'text-indigo-500' },
@@ -116,8 +115,6 @@ export default function TeacherHomePage() {
                         </div>
                     </motion.div>
                 </motion.div>
-                    </>
-                )}
             </motion.div>
         </div>
     );

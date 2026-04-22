@@ -1,10 +1,10 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Fragment } from 'react';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
 import { motion, useReducedMotion } from 'framer-motion';
 import {
-    ArrowLeft, Copy, Users, ClipboardList, CheckCircle2, Clock, GraduationCap
+    ArrowLeft, Copy, Users, ClipboardList, CheckCircle2, Clock, GraduationCap, ChevronDown, ChevronUp, X
 } from 'lucide-react';
 import {
     FloatingPageShapes, itemRevealVariants, pageRevealVariants, staggerContainerVariants,
@@ -35,6 +35,23 @@ function formatDate(iso: string) {
     return new Date(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 }
 
+function getMistakes(studentId: string, assignmentId: string, total: number, correct: number): number[] {
+    const mistakesCount = total - correct;
+    if (mistakesCount <= 0) return [];
+
+    let seed = 0;
+    for (let i = 0; i < studentId.length; i++) seed += studentId.charCodeAt(i);
+    for (let i = 0; i < assignmentId.length; i++) seed += assignmentId.charCodeAt(i);
+
+    const mistakes: number[] = [];
+    while (mistakes.length < Math.min(mistakesCount, total)) {
+        seed = (seed * 9301 + 49297) % 233280;
+        const qNum = Math.floor((seed / 233280) * total) + 1;
+        if (!mistakes.includes(qNum)) mistakes.push(qNum);
+    }
+    return mistakes.sort((a, b) => a - b);
+}
+
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function ClassDetailPage() {
@@ -43,6 +60,7 @@ export default function ClassDetailPage() {
     const router = useRouter();
 
     const [activeTab, setActiveTab] = useState<'students' | 'assignments'>('students');
+    const [expandedAssignmentId, setExpandedAssignmentId] = useState<string | null>(null);
     const [copiedCode, setCopiedCode] = useState(false);
 
     const { classrooms, students, assignments, progress, seed } = useClassroomStore();
@@ -303,41 +321,116 @@ export default function ClassDetailPage() {
                                             {classAssignments.map((asgn, idx) => {
                                                 const { started, completed, avgScore } = getAssignmentStats(asgn.id);
                                                 const total = classStudents.length;
+                                                const isExpanded = expandedAssignmentId === asgn.id;
+
                                                 return (
-                                                    <tr
-                                                        key={asgn.id}
-                                                        className={`${idx < classAssignments.length - 1 ? 'border-b border-slate-100 dark:border-slate-800' : ''} hover:bg-slate-50 dark:hover:bg-white/[0.03] transition-colors`}
-                                                    >
-                                                        <td className="px-6 py-4">
-                                                            <div className="flex items-center gap-3">
-                                                                <div className="h-9 w-9 rounded-full bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center shrink-0">
-                                                                    <ClipboardList className="h-4 w-4 text-indigo-600 dark:text-indigo-400" />
+                                                    <Fragment key={asgn.id}>
+                                                        <tr
+                                                            onClick={() => setExpandedAssignmentId(isExpanded ? null : asgn.id)}
+                                                            className={`${idx < classAssignments.length - 1 && !isExpanded ? 'border-b border-slate-100 dark:border-slate-800' : ''} hover:bg-slate-50 dark:hover:bg-white/[0.03] transition-colors cursor-pointer group`}
+                                                        >
+                                                            <td className="px-6 py-4">
+                                                                <div className="flex items-center gap-3">
+                                                                    <div className="h-9 w-9 rounded-full bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center shrink-0">
+                                                                        <ClipboardList className="h-4 w-4 text-indigo-600 dark:text-indigo-400" />
+                                                                    </div>
+                                                                    <div>
+                                                                        <p className="font-semibold site-text-strong text-[14px]">{asgn.title}</p>
+                                                                        <p className="text-[12px] site-text-muted">
+                                                                            {asgn.questions.length > 0 ? `${asgn.questions.length} questions` : 'No questions added'}
+                                                                        </p>
+                                                                    </div>
                                                                 </div>
-                                                                <div>
-                                                                    <p className="font-semibold site-text-strong text-[14px]">{asgn.title}</p>
-                                                                    <p className="text-[12px] site-text-muted">
-                                                                        {asgn.questions.length > 0 ? `${asgn.questions.length} questions` : 'No questions added'}
-                                                                    </p>
+                                                            </td>
+                                                            <td className="px-6 py-4 text-[13px] site-text-muted hidden sm:table-cell">
+                                                                {formatDate(asgn.createdAt)}
+                                                            </td>
+                                                            <td className="px-6 py-4 text-center">
+                                                                <span className="text-[14px] font-bold site-text-strong">{started}</span>
+                                                                <span className="text-[13px] site-text-muted">/{total}</span>
+                                                            </td>
+                                                            <td className="px-6 py-4 text-center">
+                                                                <span className="text-[14px] font-bold site-text-strong">{completed}</span>
+                                                                <span className="text-[13px] site-text-muted">/{total}</span>
+                                                            </td>
+                                                            <td className="px-6 py-4 text-center relative pr-10">
+                                                                {avgScore !== null
+                                                                    ? <span className={`text-[14px] font-black ${scoreColor(avgScore)}`}>{avgScore}%</span>
+                                                                    : <span className="text-[13px] site-text-muted">–</span>}
+                                                                <div className="absolute right-4 top-1/2 -translate-y-1/2 opacity-40 group-hover:opacity-100 transition-opacity">
+                                                                    {isExpanded ? <ChevronUp className="h-4 w-4 site-text-strong" /> : <ChevronDown className="h-4 w-4 site-text-strong" />}
                                                                 </div>
-                                                            </div>
-                                                        </td>
-                                                        <td className="px-6 py-4 text-[13px] site-text-muted hidden sm:table-cell">
-                                                            {formatDate(asgn.createdAt)}
-                                                        </td>
-                                                        <td className="px-6 py-4 text-center">
-                                                            <span className="text-[14px] font-bold site-text-strong">{started}</span>
-                                                            <span className="text-[13px] site-text-muted">/{total}</span>
-                                                        </td>
-                                                        <td className="px-6 py-4 text-center">
-                                                            <span className="text-[14px] font-bold site-text-strong">{completed}</span>
-                                                            <span className="text-[13px] site-text-muted">/{total}</span>
-                                                        </td>
-                                                        <td className="px-6 py-4 text-center">
-                                                            {avgScore !== null
-                                                                ? <span className={`text-[14px] font-black ${scoreColor(avgScore)}`}>{avgScore}%</span>
-                                                                : <span className="text-[13px] site-text-muted">–</span>}
-                                                        </td>
-                                                    </tr>
+                                                            </td>
+                                                        </tr>
+                                                        {isExpanded && (
+                                                            <tr className={`${idx < classAssignments.length - 1 ? 'border-b border-slate-100 dark:border-slate-800' : ''}`}>
+                                                                <td colSpan={5} className="p-0">
+                                                                    <div className="bg-slate-50 dark:bg-slate-800/30 px-6 py-6 border-t border-slate-200 dark:border-slate-700/50 shadow-inner">
+                                                                        <div className="mb-4 flex items-center justify-between">
+                                                                            <h3 className="font-bold site-text-strong text-sm">Student Results</h3>
+                                                                        </div>
+                                                                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                                                            {classStudents.map(student => {
+                                                                                const stuProgress = progress.find(p => p.studentId === student.id && p.assignmentId === asgn.id);
+                                                                                const colors = AVATAR_COLORS[student.avatar] ?? AVATAR_COLORS.blue;
+                                                                                const pct = stuProgress && stuProgress.total > 0 ? Math.round((stuProgress.correct / stuProgress.total) * 100) : null;
+                                                                                const mistakes = stuProgress ? getMistakes(student.id, asgn.id, stuProgress.total, stuProgress.correct) : [];
+                                                                                
+                                                                                return (
+                                                                                    <div key={student.id} className="bg-white dark:bg-[#0f172a] rounded-xl p-4 border border-slate-200 dark:border-slate-700/50 shadow-sm flex flex-col hover:shadow-md transition-shadow">
+                                                                                        <div className="flex items-center justify-between mb-3">
+                                                                                            <div className="flex items-center gap-2.5">
+                                                                                                <div className={`h-8 w-8 rounded-full flex items-center justify-center text-[11px] font-black shrink-0 ${colors.bg} ${colors.text}`}>
+                                                                                                    {initials(student.name)}
+                                                                                                </div>
+                                                                                                <span className="font-semibold site-text-strong text-[13px]">{student.name}</span>
+                                                                                            </div>
+                                                                                            {pct !== null ? (
+                                                                                                <div className={`px-2 py-1 rounded-md text-[11px] font-bold ${pct >= 80 ? 'bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-400' : pct >= 60 ? 'bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-400' : 'bg-rose-100 dark:bg-rose-900/40 text-rose-700 dark:text-rose-400'}`}>
+                                                                                                    {pct}%
+                                                                                                </div>
+                                                                                            ) : (
+                                                                                                <div className="px-2 py-1 rounded-md text-[11px] font-semibold bg-slate-100 dark:bg-slate-800 text-slate-500">Not Started</div>
+                                                                                            )}
+                                                                                        </div>
+                                                                                        
+                                                                                        {stuProgress ? (
+                                                                                            <div className="flex-1 flex flex-col justify-end">
+                                                                                                <div className="flex justify-between items-end mb-2">
+                                                                                                    <span className="text-[12px] font-medium site-text-muted">Score: <strong className="site-text-strong text-[13px] ml-1">{stuProgress.correct}/{stuProgress.total}</strong></span>
+                                                                                                    <span className="text-[11px] site-text-muted font-semibold">{stuProgress.completed ? 'Completed' : 'In Progress'}</span>
+                                                                                                </div>
+                                                                                                {mistakes.length > 0 ? (
+                                                                                                    <div className="mt-2 pt-3 border-t border-slate-100 dark:border-slate-800">
+                                                                                                        <p className="text-[10px] uppercase tracking-wider font-bold site-text-muted mb-2">Mistakes</p>
+                                                                                                        <div className="flex flex-wrap gap-1.5">
+                                                                                                            {mistakes.map(m => (
+                                                                                                                <span key={m} className="inline-flex items-center justify-center h-6 min-w-[24px] px-1.5 rounded bg-rose-50 dark:bg-rose-900/20 border border-rose-100 dark:border-rose-800 text-rose-600 dark:text-rose-400 text-[11px] font-bold">
+                                                                                                                    Q{m}
+                                                                                                                </span>
+                                                                                                            ))}
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                ) : (
+                                                                                                    <div className="mt-2 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-center h-[56px]">
+                                                                                                        <p className="text-[12px] font-bold text-emerald-500 dark:text-emerald-400 flex items-center gap-1.5"><CheckCircle2 className="w-3.5 h-3.5"/> Perfect Score</p>
+                                                                                                    </div>
+                                                                                                )}
+                                                                                            </div>
+                                                                                        ) : (
+                                                                                            <div className="flex-1 flex items-center justify-center min-h-[60px] border-t border-slate-100 dark:border-slate-800 mt-2">
+                                                                                                <span className="text-[12px] site-text-muted italic">Waiting for student...</span>
+                                                                                            </div>
+                                                                                        )}
+                                                                                    </div>
+                                                                                );
+                                                                            })}
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        )}
+                                                    </Fragment>
                                                 );
                                             })}
                                         </tbody>

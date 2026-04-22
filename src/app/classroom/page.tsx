@@ -21,11 +21,14 @@ import {
     sectionRevealVariants,
     staggerContainerVariants,
 } from '@/components/SiteMotion';
-import { useClassroomStore } from '@/store/classroomStore';
+import { useClassroomStore, seedOnce } from '@/store/classroomStore';
 import {
     readStudentAssignmentProgress,
     StudentAssignmentProgressMap,
 } from '@/lib/studentAssignmentProgress';
+
+// Seed synchronously so assignments appear immediately
+seedOnce();
 
 function dueLabel(createdAt: string) {
     const createdDate = new Date(createdAt);
@@ -40,74 +43,78 @@ function dueLabel(createdAt: string) {
     return `Due about ${months} month${months === 1 ? '' : 's'} ago`;
 }
 
+const AVATAR_COLORS: Record<string, { bg: string; text: string }> = {
+    blue:    { bg: 'bg-blue-100 dark:bg-blue-900/30',    text: 'text-blue-600 dark:text-blue-400' },
+    indigo:  { bg: 'bg-indigo-100 dark:bg-indigo-900/30', text: 'text-indigo-600 dark:text-indigo-400' },
+    rose:    { bg: 'bg-rose-100 dark:bg-rose-900/30',    text: 'text-rose-600 dark:text-rose-400' },
+    emerald: { bg: 'bg-emerald-100 dark:bg-emerald-900/30', text: 'text-emerald-600 dark:text-emerald-400' },
+    amber:   { bg: 'bg-amber-100 dark:bg-amber-900/30',  text: 'text-amber-600 dark:text-amber-400' },
+};
+
+function initials(name: string) {
+    return name.split(' ').map((n) => n[0]).join('').slice(0, 2).toUpperCase();
+}
+
 export default function ClassroomPage() {
     const shouldReduceMotion = useReducedMotion();
     const [isJoinModalOpen, setIsJoinModalOpen] = useState(false);
     const [joinCode, setJoinCode] = useState('');
     const [activeTab, setActiveTab] = useState<'pending' | 'completed'>('pending');
     const [studentProgressMap, setStudentProgressMap] = useState<StudentAssignmentProgressMap>({});
-    const [mounted, setMounted] = useState(false);
 
-    useEffect(() => setMounted(true), []);
-
-    const { classrooms, students, assignments, progress, seed } = useClassroomStore();
+    const { classrooms, assignments, progress, students, seed } = useClassroomStore();
     useEffect(() => { seed(); }, [seed]);
     useEffect(() => {
         setStudentProgressMap(readStudentAssignmentProgress());
     }, []);
 
-    const activeClassroom = classrooms[0] ?? null;
-    const activeStudent = useMemo(() => {
-        if (!activeClassroom) return null;
-        return students.find((student) => student.classroomId === activeClassroom.id) ?? null;
-    }, [activeClassroom, students]);
+    // Build enriched assignment items — across ALL classrooms
+    const assignmentItems = useMemo(() => {
+        return assignments.map((assignment) => {
+            const progressRow = progress.find((row) => row.assignmentId === assignment.id);
 
-    const classroomItems = useMemo(() => {
-        return classrooms.map((classroom) => {
-            const classStudents = students.filter((student) => student.classroomId === classroom.id);
-            const classAssignments = assignments.filter((assignment) => assignment.classroomIds.includes(classroom.id));
-            const latestAssignment = [...classAssignments]
-                .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())[0];
+            const total = assignment.questions.length > 0
+                ? assignment.questions.length
+                : progressRow?.total ?? 0;
+            const localProgress = studentProgressMap[assignment.id];
+            const localAnswered = localProgress ? Object.keys(localProgress.answers ?? {}).length : null;
+            const localCompleted = localProgress?.completed ?? false;
+            const hasLocalProgress = localProgress !== undefined;
+
+            // Find which classroom(s) this assignment belongs to
+            const assignedClassrooms = classrooms.filter((c) => assignment.classroomIds.includes(c.id));
+            const classroomLabel = assignedClassrooms.map((c) => c.name).join(', ') || 'Classroom';
 
             return {
-                classroom,
-                studentCount: classStudents.length,
-                assignmentCount: classAssignments.length,
-                latestAssignmentTitle: latestAssignment?.title ?? 'No assignments yet',
+                assignment,
+                total,
+                classroomLabel,
+                answered: hasLocalProgress ? (localAnswered ?? 0) : (progressRow?.answered ?? 0),
+                completed: hasLocalProgress ? localCompleted : (progressRow?.completed ?? false),
             };
         });
-    }, [classrooms, students, assignments]);
-
-    const assignmentItems = useMemo(() => {
-        if (!activeClassroom) return [];
-
-        return assignments
-            .filter((assignment) => assignment.classroomIds.includes(activeClassroom.id))
-            .map((assignment) => {
-                const progressRow = activeStudent
-                    ? progress.find((row) => row.studentId === activeStudent.id && row.assignmentId === assignment.id)
-                    : undefined;
-
-                const total = assignment.questions.length > 0
-                    ? assignment.questions.length
-                    : progressRow?.total ?? 0;
-                const localProgress = studentProgressMap[assignment.id];
-                const localAnswered = localProgress ? Object.keys(localProgress.answers ?? {}).length : null;
-                const localCompleted = localProgress?.completed ?? false;
-                const hasLocalProgress = localProgress !== undefined;
-
-                return {
-                    assignment,
-                    total,
-                    answered: hasLocalProgress ? (localAnswered ?? 0) : (progressRow?.answered ?? 0),
-                    completed: hasLocalProgress ? localCompleted : (progressRow?.completed ?? false),
-                };
-            });
-    }, [activeClassroom, assignments, activeStudent, progress, studentProgressMap]);
+    }, [assignments, progress, studentProgressMap, classrooms]);
 
     const pendingAssignments = assignmentItems.filter((item) => !item.completed);
     const completedAssignments = assignmentItems.filter((item) => item.completed);
     const visibleAssignments = activeTab === 'pending' ? pendingAssignments : completedAssignments;
+
+    // Classroom overview items
+    const classroomItems = useMemo(() => {
+        return classrooms.map((classroom) => {
+            const classAssignments = assignments.filter((a) => a.classroomIds.includes(classroom.id));
+            const latestAssignment = [...classAssignments]
+                .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())[0];
+            const classmates = students.filter(s => s.classroomId === classroom.id);
+
+            return {
+                classroom,
+                assignmentCount: classAssignments.length,
+                latestAssignmentTitle: latestAssignment?.title ?? 'No assignments yet',
+                classmates,
+            };
+        });
+    }, [classrooms, assignments, students]);
 
     return (
         <div className="relative min-h-screen pt-4 pb-12 px-4 sm:px-6 lg:px-8">
@@ -120,6 +127,7 @@ export default function ClassroomPage() {
                 animate={shouldReduceMotion ? undefined : 'visible'}
                 variants={pageRevealVariants}
             >
+                {/* Hero */}
                 <motion.section
                     className="site-hero-shell site-hero--home relative mb-7 overflow-hidden rounded-[36px] px-6 py-8 sm:px-8 lg:px-10"
                     variants={sectionRevealVariants}
@@ -140,10 +148,6 @@ export default function ClassroomPage() {
                             <p className="site-hero-body mt-4 max-w-2xl text-[15px] leading-7 sm:text-[17px]">
                                 Keep every assignment, deadline, and class update in one place with the same clean flow as practice mode.
                             </p>
-
-                            <div className="mt-7 flex flex-wrap gap-3">
-                                {/* Buttons have been moved to context headers */}
-                            </div>
                         </motion.div>
 
                         <motion.div className="grid gap-3 sm:grid-cols-2 xl:max-w-[390px] xl:justify-self-end" variants={staggerContainerVariants}>
@@ -160,20 +164,19 @@ export default function ClassroomPage() {
                                 <p className="site-hero-title mt-2 text-3xl font-black tracking-[-0.05em]">{completedAssignments.length}</p>
                             </motion.div>
                             <motion.div className="site-hero-stat rounded-[24px] px-4 py-4" variants={itemRevealVariants}>
-                                <p className="site-hero-kicker text-[10px] font-bold uppercase tracking-[0.22em]">Active Class</p>
-                                <p className="site-hero-title mt-2 text-xl font-black tracking-[-0.04em] line-clamp-2">
-                                    {activeClassroom ? activeClassroom.name : 'None'}
-                                </p>
+                                <p className="site-hero-kicker text-[10px] font-bold uppercase tracking-[0.22em]">Total</p>
+                                <p className="site-hero-title mt-2 text-3xl font-black tracking-[-0.05em]">{assignments.length}</p>
                             </motion.div>
                         </motion.div>
                     </motion.div>
                 </motion.section>
 
+                {/* My Classes */}
                 <motion.section className="site-panel rounded-[34px] p-5 sm:p-6 mb-6" variants={sectionRevealVariants}>
                     <motion.div className="mb-6 flex flex-col gap-3 md:flex-row md:items-end md:justify-between" variants={itemRevealVariants}>
                         <div>
-                            <h2 className="site-text-strong text-2xl font-black tracking-[-0.03em]">Classes</h2>
-                            <p className="site-text-muted mt-1 text-sm">Your enrolled classes in the same dashboard style.</p>
+                            <h2 className="site-text-strong text-2xl font-black tracking-[-0.03em]">My Classes</h2>
+                            <p className="site-text-muted mt-1 text-sm">Your enrolled classes.</p>
                         </div>
                         <div className="flex items-center gap-3 mt-4 md:mt-0">
                             <span className="site-chip w-fit rounded-full px-3 py-1 text-[11px] font-bold uppercase tracking-[0.2em] site-text-strong">
@@ -189,42 +192,31 @@ export default function ClassroomPage() {
                         </div>
                     </motion.div>
 
-                    <motion.div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3" variants={staggerContainerVariants}>
+                    <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
                         {classroomItems.length === 0 ? (
-                            <motion.div variants={itemRevealVariants} className="site-subpanel rounded-[24px] p-8 text-center md:col-span-2 xl:col-span-3">
+                            <div className="site-subpanel rounded-[24px] p-8 text-center md:col-span-2 xl:col-span-3">
                                 <GraduationCap className="mx-auto mb-3 h-9 w-9 site-text-muted" />
                                 <p className="site-text-strong text-lg font-bold">No classes yet</p>
                                 <p className="site-text-muted mt-2 text-sm">Join a class to unlock assignments and progress tracking here.</p>
-                            </motion.div>
+                            </div>
                         ) : (
-                            classroomItems.map(({ classroom, studentCount, assignmentCount, latestAssignmentTitle }) => (
-                                <motion.article key={classroom.id} variants={itemRevealVariants} className="site-panel-soft rounded-[26px] p-5 sm:p-6">
-                                    <div className="flex items-start justify-between gap-3">
-                                        <div className="flex items-start gap-3">
-                                            <div className="site-subpanel rounded-2xl p-3">
-                                                <GraduationCap className="h-5 w-5 site-text-strong" />
-                                            </div>
-                                            <div>
-                                                <p className="site-text-faint text-[11px] font-bold uppercase tracking-[0.2em]">{classroom.grade}</p>
-                                                <h3 className="site-text-strong mt-1 text-[1.12rem] font-black tracking-[-0.02em]">{classroom.name}</h3>
-                                            </div>
+                            classroomItems.map(({ classroom, assignmentCount, latestAssignmentTitle, classmates }) => (
+                                <article key={classroom.id} className="site-panel-soft rounded-[26px] p-5 sm:p-6">
+                                    <div className="flex items-start gap-3">
+                                        <div className="site-subpanel rounded-2xl p-3">
+                                            <GraduationCap className="h-5 w-5 site-text-strong" />
                                         </div>
-                                        {activeClassroom?.id === classroom.id ? (
-                                            <span className="rounded-full bg-indigo-500/15 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-indigo-500">
-                                                Active
-                                            </span>
-                                        ) : null}
+                                        <div>
+                                            <p className="site-text-faint text-[11px] font-bold uppercase tracking-[0.2em]">{classroom.grade}</p>
+                                            <h3 className="site-text-strong mt-1 text-[1.12rem] font-black tracking-[-0.02em]">{classroom.name}</h3>
+                                        </div>
                                     </div>
 
                                     <p className="site-text mt-4 line-clamp-2 text-[13px] leading-6">
-                                        Latest assignment: {latestAssignmentTitle}
+                                        Latest: {latestAssignmentTitle}
                                     </p>
 
-                                    <div className="mt-4 grid grid-cols-3 gap-2">
-                                        <div className="site-subpanel rounded-xl px-3 py-2">
-                                            <p className="site-text-faint text-[10px] font-bold uppercase tracking-[0.18em]">Students</p>
-                                            <p className="site-text-strong mt-1 text-lg font-black tracking-[-0.03em]">{studentCount}</p>
-                                        </div>
+                                    <div className="mt-4 grid grid-cols-2 gap-2">
                                         <div className="site-subpanel rounded-xl px-3 py-2">
                                             <p className="site-text-faint text-[10px] font-bold uppercase tracking-[0.18em]">Assignments</p>
                                             <p className="site-text-strong mt-1 text-lg font-black tracking-[-0.03em]">{assignmentCount}</p>
@@ -234,12 +226,32 @@ export default function ClassroomPage() {
                                             <p className="site-text-strong mt-1 text-sm font-black tracking-[0.04em]">{classroom.joinCode}</p>
                                         </div>
                                     </div>
-                                </motion.article>
+                                    
+                                    <div className="mt-5 flex items-center justify-between border-t border-slate-100 dark:border-slate-800/80 pt-4">
+                                        <div className="flex -space-x-2">
+                                            {classmates.slice(0, 5).map(student => {
+                                                const color = AVATAR_COLORS[student.avatar] || AVATAR_COLORS.blue;
+                                                return (
+                                                    <div key={student.id} title={student.name} className={`h-8 w-8 rounded-full flex items-center justify-center text-[10px] font-black shrink-0 ring-2 ring-white dark:ring-[#1e293b] ${color.bg} ${color.text} shadow-sm group-hover:-translate-y-1 transition-transform cursor-default z-10`}>
+                                                        {initials(student.name)}
+                                                    </div>
+                                                )
+                                            })}
+                                            {classmates.length > 5 && (
+                                                <div className="h-8 w-8 rounded-full flex items-center justify-center text-[10px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-500 ring-2 ring-white dark:ring-[#1e293b] shadow-sm z-0">
+                                                    +{classmates.length - 5}
+                                                </div>
+                                            )}
+                                        </div>
+                                        <p className="text-[12px] font-medium site-text-muted">{classmates.length} Groupmates</p>
+                                    </div>
+                                </article>
                             ))
                         )}
-                    </motion.div>
+                    </div>
                 </motion.section>
 
+                {/* Assignments */}
                 <motion.section className="site-panel rounded-[34px] p-5 sm:p-6" variants={sectionRevealVariants}>
                     <motion.div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between mb-6" variants={itemRevealVariants}>
                         <div>
@@ -273,9 +285,9 @@ export default function ClassroomPage() {
                         </div>
                     </motion.div>
 
-                    <motion.div className="space-y-3" variants={staggerContainerVariants}>
-                        {!mounted ? null : visibleAssignments.length === 0 ? (
-                            <motion.div variants={itemRevealVariants} className="site-subpanel rounded-[24px] p-10 text-center">
+                    <div className="space-y-3">
+                        {visibleAssignments.length === 0 ? (
+                            <div className="site-subpanel rounded-[24px] p-10 text-center">
                                 <ClipboardList className="w-9 h-9 mx-auto mb-3 site-text-muted" />
                                 <p className="site-text-strong font-bold text-lg">No assignments in this tab</p>
                                 <p className="site-text-muted text-sm mt-2">
@@ -283,11 +295,16 @@ export default function ClassroomPage() {
                                         ? 'Everything in your classroom is completed right now.'
                                         : 'Completed assignments will appear here as you finish them.'}
                                 </p>
-                            </motion.div>
+                            </div>
                         ) : (
-                            visibleAssignments.map(({ assignment, total, answered, completed }) => (
-                                <motion.div key={assignment.id} variants={itemRevealVariants}>
-                                    <Link href={`/classroom/assignment/${assignment.id}`} className="block">
+                            visibleAssignments.map(({ assignment, total, answered, completed, classroomLabel }) => {
+                                const isMath = assignment.subject === 'Math';
+                                const subjectChipClass = isMath
+                                    ? 'bg-teal-500/15 text-teal-600 dark:text-teal-400'
+                                    : 'bg-blue-500/15 text-blue-600 dark:text-blue-400';
+
+                                return (
+                                    <Link key={assignment.id} href={`/classroom/assignment/${assignment.id}`} className="block">
                                         <article className="site-panel-soft rounded-[26px] p-5 sm:p-6 transition hover:scale-[1.01] hover:shadow-[0_18px_45px_rgba(15,23,42,0.18)]">
                                             <div className="flex flex-col sm:flex-row sm:items-center gap-5 justify-between">
                                                 <div className="flex items-start gap-4">
@@ -295,8 +312,13 @@ export default function ClassroomPage() {
                                                         <ClipboardList className="w-5 h-5 site-text-strong" />
                                                     </div>
                                                     <div>
-                                                        <h3 className="font-black text-[1.18rem] tracking-[-0.02em] site-text-strong">{assignment.title}</h3>
-                                                        <p className="text-[13px] site-text-muted mt-1">{activeClassroom?.name ?? 'Classroom'}</p>
+                                                        <div className="flex items-center gap-2 flex-wrap">
+                                                            <h3 className="font-black text-[1.18rem] tracking-[-0.02em] site-text-strong">{assignment.title}</h3>
+                                                            <span className={`text-[11px] font-bold px-2.5 py-0.5 rounded-full ${subjectChipClass}`}>
+                                                                {assignment.subject}
+                                                            </span>
+                                                        </div>
+                                                        <p className="text-[13px] site-text-muted mt-1">{classroomLabel}</p>
 
                                                         <div className="mt-3 flex flex-wrap items-center gap-2.5">
                                                             <span className="site-chip rounded-full px-2.5 py-1 text-[11px] font-bold uppercase tracking-[0.2em] site-text-strong">
@@ -329,10 +351,10 @@ export default function ClassroomPage() {
                                             </div>
                                         </article>
                                     </Link>
-                                </motion.div>
-                            ))
+                                );
+                            })
                         )}
-                    </motion.div>
+                    </div>
                 </motion.section>
             </motion.div>
 

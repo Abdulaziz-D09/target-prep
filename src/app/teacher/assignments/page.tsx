@@ -1,12 +1,15 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import Link from 'next/link';
 import { motion, useReducedMotion } from 'framer-motion';
 import { ClipboardList, Plus, Trash2, GraduationCap, CalendarDays, ArrowRight, Clock3 } from 'lucide-react';
 import {
     FloatingPageShapes, itemRevealVariants, pageRevealVariants, staggerContainerVariants,
 } from '@/components/SiteMotion';
-import { useClassroomStore } from '@/store/classroomStore';
+import { useClassroomStore, seedOnce } from '@/store/classroomStore';
+
+// Seed synchronously so assignments are available on first render
+seedOnce();
 
 function formatDate(iso: string) {
     return new Date(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
@@ -15,9 +18,7 @@ function formatDate(iso: string) {
 export default function AssignmentsPage() {
     const shouldReduceMotion = useReducedMotion();
     const { assignments, classrooms, deleteAssignment, seed } = useClassroomStore();
-    const [mounted, setMounted] = useState(false);
 
-    useEffect(() => setMounted(true), []);
     useEffect(() => { seed(); }, [seed]);
 
     return (
@@ -53,7 +54,7 @@ export default function AssignmentsPage() {
                 </motion.div>
 
                 {/* List */}
-                {!mounted ? null : assignments.length === 0 ? (
+                {assignments.length === 0 ? (
                     <motion.div variants={itemRevealVariants}>
                         <div className="site-panel rounded-[24px] p-12 flex flex-col items-center text-center" style={{ border: '2px dashed' }}>
                             <ClipboardList className="h-12 w-12 site-text-muted mb-4 opacity-30" />
@@ -71,6 +72,9 @@ export default function AssignmentsPage() {
                     <motion.div className="flex flex-col gap-3" variants={staggerContainerVariants}>
                         {assignments.map((asgn) => {
                             const assignedClassrooms = classrooms.filter((c) => asgn.classroomIds.includes(c.id));
+                            const subjectColor = asgn.subject === 'Math'
+                                ? 'bg-teal-500/10 text-teal-600 dark:text-teal-400'
+                                : 'bg-blue-500/10 text-blue-600 dark:text-blue-400';
                             return (
                                 <motion.div key={asgn.id} variants={itemRevealVariants}>
                                     <div className="site-panel rounded-[20px] p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:scale-[1.005] transition-transform">
@@ -79,7 +83,12 @@ export default function AssignmentsPage() {
                                                 <ClipboardList className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
                                             </div>
                                             <div className="min-w-0">
-                                                <h2 className="font-bold text-[15px] site-text-strong leading-tight">{asgn.title}</h2>
+                                                <div className="flex items-center gap-2 flex-wrap mb-1">
+                                                    <h2 className="font-bold text-[15px] site-text-strong leading-tight">{asgn.title}</h2>
+                                                    <span className={`text-[11px] font-bold px-2 py-0.5 rounded-full ${subjectColor}`}>
+                                                        {asgn.subject}
+                                                    </span>
+                                                </div>
                                                 <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1.5">
                                                     <span className="flex items-center gap-1 text-[12px] site-text-muted">
                                                         <CalendarDays className="h-3.5 w-3.5" />

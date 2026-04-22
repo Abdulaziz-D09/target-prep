@@ -9,7 +9,10 @@ import {
     pageRevealVariants,
     staggerContainerVariants,
 } from '@/components/SiteMotion';
-import { useClassroomStore } from '@/store/classroomStore';
+import { useClassroomStore, seedOnce } from '@/store/classroomStore';
+
+// Seed synchronously so classes are visible on first render
+seedOnce();
 
 const GRADES = ['9th Grade', '10th Grade', '11th Grade', '12th Grade', 'Mixed'];
 
@@ -24,10 +27,8 @@ export default function ClassesPage() {
     const [newGrade, setNewGrade] = useState('11th Grade');
     const [copiedId, setCopiedId] = useState<string | null>(null);
 
-    const [mounted, setMounted] = useState(false);
-    useEffect(() => setMounted(true), []);
-
     useEffect(() => { seed(); }, [seed]);
+
 
     const handleCreate = () => {
         if (!newName.trim()) return;
@@ -82,7 +83,7 @@ export default function ClassesPage() {
                 </motion.div>
 
                 {/* Grid */}
-                {!mounted ? null : classrooms.length === 0 ? (
+                {classrooms.length === 0 ? (
                     <motion.div variants={itemRevealVariants}>
                         <div className="site-panel rounded-[24px] p-12 flex flex-col items-center text-center" style={{ border: '2px dashed' }}>
                             <GraduationCap className="h-12 w-12 site-text-muted mb-4 opacity-30" />

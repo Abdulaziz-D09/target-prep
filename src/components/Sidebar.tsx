@@ -95,8 +95,8 @@ export default function Sidebar() {
         }, 170);
     };
 
-    // Hide sidebar completely on full-screen practice and temporary full-focus flows
-    if (pathname.startsWith('/practice/test/') || isTemporarilyHidden) {
+    // Hide sidebar completely on full-screen practice, assignments, and temporary full-focus flows
+    if (pathname.startsWith('/practice/test/') || pathname.startsWith('/classroom/assignment/') || isTemporarilyHidden) {
         return null;
     }
 

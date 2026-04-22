@@ -8,7 +8,11 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import { FloatingPageShapes, itemRevealVariants, pageRevealVariants } from '@/components/SiteMotion';
-import { useClassroomStore } from '@/store/classroomStore';
+import { useClassroomStore, seedOnce } from '@/store/classroomStore';
+
+// Seed before render so classrooms show immediately in the classroom picker
+seedOnce();
+
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 

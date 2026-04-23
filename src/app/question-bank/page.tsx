@@ -405,7 +405,6 @@ function BrowseView({ onStartQuiz, reviewedIds }: { onStartQuiz: (qs: Question[]
 
     return (
         <div className="relative min-h-screen pt-4 pb-12 px-4 sm:px-6 lg:px-8">
-            <div className="site-atmosphere site-atmosphere--question-bank" />
             <FloatingPageShapes theme="question-bank" />
 
             <motion.div
@@ -1603,7 +1602,6 @@ function SummaryView({ result, onRestart, onBack }: { result: SessionResult; onR
 
     return (
         <div className="min-h-screen flex items-center justify-center relative bg-transparent">
-            <div className="site-atmosphere site-atmosphere--question-bank" />
             <FloatingPageShapes theme="question-bank" />
             <div className="relative z-10 max-w-md w-full px-6">
                 <div className="bg-white rounded-2xl shadow-lg border border-slate-100 p-10 text-center" style={{ animation: 'qb-pop 0.5s ease both' }}>

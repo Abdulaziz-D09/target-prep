@@ -120,7 +120,6 @@ export default function ClassroomPage() {
 
     return (
         <div className="relative min-h-screen pt-4 pb-12 px-4 sm:px-6 lg:px-8">
-            <div className="site-atmosphere site-atmosphere--home" />
             <FloatingPageShapes theme="home" />
 
             <motion.div

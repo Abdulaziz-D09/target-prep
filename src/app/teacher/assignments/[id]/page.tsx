@@ -32,7 +32,6 @@ export default function TeacherAssignmentDetailPage() {
     if (!assignment) {
         return (
             <div className="relative min-h-screen pt-4 pb-12 px-4 sm:px-6 lg:px-8">
-                <div className="site-atmosphere site-atmosphere--home" />
                 <FloatingPageShapes theme="home" />
                 <div className="relative z-10 mx-auto max-w-[920px]">
                     <div className="site-panel rounded-[24px] p-8 text-center mt-20">
@@ -50,7 +49,6 @@ export default function TeacherAssignmentDetailPage() {
 
     return (
         <div className="relative min-h-screen pt-4 pb-12 px-4 sm:px-6 lg:px-8">
-            <div className="site-atmosphere site-atmosphere--home" />
             <FloatingPageShapes theme="home" />
 
             <motion.div

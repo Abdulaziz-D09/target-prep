@@ -94,7 +94,7 @@ export function ReferenceSheet({ isOpen, onClose }: ReferenceSheetProps) {
             </div>
 
             {/* Scrollable Content */}
-            <div className="overflow-y-auto p-6 bg-white flex-1">
+            <div className="overflow-y-auto p-6 bg-white text-black flex-1">
                 <div className="grid grid-cols-2 gap-x-6 gap-y-8 items-center justify-items-center">
                     {/* Circle */}
                     <div className="text-center flex flex-col items-center">

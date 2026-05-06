@@ -33,7 +33,7 @@ export default function Sidebar() {
     const [mobileOpen, setMobileOpen] = useState(false);
     const [isTemporarilyHidden, setIsTemporarilyHidden] = useState(false);
     const [activePressHref, setActivePressHref] = useState<string | null>(null);
-    const siteTone = useSyncExternalStore<SiteTone>(subscribeToSiteTone, readSiteTone, () => 'light');
+    const siteTone = useSyncExternalStore<SiteTone>(subscribeToSiteTone, readSiteTone, () => 'dark');
     const activePressTimeoutRef = useRef<number | null>(null);
     const shouldReduceMotion = useReducedMotion();
 
@@ -100,35 +100,7 @@ export default function Sidebar() {
         return null;
     }
 
-    const floatingControlClass = isLightTone
-        ? 'border border-slate-200 bg-white text-slate-900 shadow-[0_8px_30px_rgba(0,0,0,0.12)] hover:bg-slate-50 hover:text-blue-600'
-        : 'border border-white/20 bg-slate-800 text-white shadow-[0_8px_30px_rgba(0,0,0,0.5)] hover:bg-slate-700 hover:text-blue-400';
 
-    const topRightControls = (
-        <motion.div
-            className={`fixed right-4 top-3 z-[60] flex flex-col items-center gap-2 transition lg:right-4 lg:top-4 ${mobileOpen ? 'pointer-events-none opacity-0' : 'opacity-100'}`}
-            initial={shouldReduceMotion ? undefined : { opacity: 0, y: -10 }}
-            animate={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
-            transition={shouldReduceMotion ? undefined : { duration: 0.28, ease: siteEase }}
-        >
-            <Link
-                href={isTeacherMode ? '/dashboard' : '/teacher'}
-                className={`flex h-11 w-11 items-center justify-center rounded-[12px] backdrop-blur-xl transition ${floatingControlClass}`}
-                title={isTeacherMode ? "Switch to Student View" : "Switch to Teacher View"}
-                aria-label={isTeacherMode ? "Switch to Student View" : "Switch to Teacher View"}
-            >
-                <CircleUserRound className="h-[19px] w-[19px]" />
-            </Link>
-            <button
-                type="button"
-                onClick={() => applySiteTone(nextTone)}
-                aria-label={isLightTone ? 'Switch to dark mode' : 'Switch to light mode'}
-                className={`flex h-11 w-11 items-center justify-center rounded-[12px] backdrop-blur-xl transition ${floatingControlClass}`}
-            >
-                <ThemeIcon className="h-[18px] w-[18px]" />
-            </button>
-        </motion.div>
-    );
 
     const sidebarContent = (
         <div className="relative flex h-full flex-col overflow-hidden">
@@ -251,20 +223,79 @@ export default function Sidebar() {
                 })}
             </nav>
             </LayoutGroup>
+
+            {/* Bottom Controls */}
+            <div className="mt-auto px-4 pb-6 space-y-2">
+                <div className={`relative flex w-full items-center p-1 overflow-hidden rounded-2xl border ${
+                    isLightTone 
+                        ? 'border-slate-200 bg-slate-100/50' 
+                        : 'border-white/10 bg-white/5'
+                }`}>
+                    <button
+                        type="button"
+                        onClick={() => applySiteTone('light')}
+                        className={`relative flex-1 flex items-center justify-center gap-2 rounded-xl py-2 text-sm font-semibold transition-colors z-10 ${
+                            isLightTone ? 'text-slate-900' : 'text-slate-500 hover:text-slate-700'
+                        }`}
+                    >
+                        {isLightTone && (
+                            <motion.div layoutId="theme-active" className="absolute inset-0 rounded-xl bg-white shadow-sm border border-slate-200/60" />
+                        )}
+                        <SunMedium className="relative z-10 h-[17px] w-[17px]" />
+                        <span className="relative z-10 tracking-tight">Light</span>
+                    </button>
+                    <button
+                        type="button"
+                        onClick={() => applySiteTone('dark')}
+                        className={`relative flex-1 flex items-center justify-center gap-2 rounded-xl py-2 text-sm font-semibold transition-colors z-10 ${
+                            !isLightTone ? 'text-white' : 'text-slate-400 hover:text-slate-200'
+                        }`}
+                    >
+                        {!isLightTone && (
+                            <motion.div layoutId="theme-active" className="absolute inset-0 rounded-xl bg-white/10 shadow-sm border border-white/10" />
+                        )}
+                        <Moon className="relative z-10 h-[17px] w-[17px]" />
+                        <span className="relative z-10 tracking-tight">Dark</span>
+                    </button>
+                </div>
+
+                <Link
+                    href={isTeacherMode ? '/dashboard' : '/teacher'}
+                    className={`group relative flex w-full items-center gap-3 overflow-hidden rounded-2xl px-4 py-2.5 text-sm font-semibold transition-all duration-200 border ${
+                        isLightTone 
+                            ? 'text-slate-600 hover:text-slate-900 hover:bg-white hover:shadow-sm border-slate-200 hover:border-slate-300' 
+                            : 'text-slate-400 hover:text-white hover:bg-white/5 border-white/10 hover:border-white/20'
+                    }`}
+                >
+                    <span className={`absolute inset-0 rounded-2xl transition duration-300 ${
+                        isLightTone
+                            ? 'hover:bg-slate-100/50 hover:shadow-sm'
+                            : 'hover:bg-white/5'
+                    }`} />
+                    <div className="relative z-10 flex h-8 w-8 items-center justify-center overflow-hidden rounded-full bg-blue-100/10 border border-blue-500/20">
+                        <CircleUserRound className="h-5 w-5 text-blue-500" />
+                    </div>
+                    <div className="relative z-10 flex flex-col items-start leading-none gap-0.5 tracking-tight">
+                        <span className={`font-semibold ${isLightTone ? 'text-slate-700' : 'text-slate-200'}`}>Abdullah D.</span>
+                        <span className={`text-[10px] uppercase tracking-wider ${isLightTone ? 'text-slate-500' : 'text-slate-500'}`}>
+                            {isTeacherMode ? 'Teacher' : 'Student'}
+                        </span>
+                    </div>
+                </Link>
+            </div>
         </div>
     );
 
     return (
         <>
-            {topRightControls}
 
             {/* Mobile Toggle */}
             <button
                 onClick={() => setMobileOpen(true)}
                 className={`lg:hidden fixed top-4 left-4 z-50 rounded-xl p-2.5 text-white backdrop-blur-xl ${
                     isLightTone
-                        ? 'border border-white/22 bg-[rgba(132,143,159,0.26)] shadow-[0_12px_30px_rgba(64,70,82,0.12)]'
-                        : 'border border-white/14 bg-[rgba(94,108,128,0.24)] shadow-[0_12px_30px_rgba(42,50,63,0.16)]'
+                        ? 'bg-[rgba(132,143,159,0.26)] border-none shadow-none'
+                        : 'bg-[rgba(94,108,128,0.24)] border-none shadow-none'
                 }`}
             >
                 <Menu className="w-5 h-5" />
@@ -294,8 +325,8 @@ export default function Sidebar() {
                         <motion.aside
                             className={`fixed left-0 top-0 bottom-0 w-[280px] flex flex-col z-50 backdrop-blur-3xl ${
                                 isLightTone
-                                    ? 'bg-white/80 border-r border-slate-200 shadow-2xl'
-                                    : 'bg-[#090a0f]/80 border-r border-white/10 shadow-2xl'
+                                    ? 'bg-white/95'
+                                    : 'bg-[#090a0f]/95'
                             }`}
                             initial={shouldReduceMotion ? undefined : { x: -24, opacity: 0.92 }}
                             animate={shouldReduceMotion ? undefined : { x: 0, opacity: 1 }}

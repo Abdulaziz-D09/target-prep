@@ -29,237 +29,67 @@ type Seg =
 /* ── OCR artifact cleanup ────────────────────────────────── */
 /**
  * Fixes common PDF-extraction / OCR spacing artifacts where a space was
- * inserted inside a word (e.g. "r epor t" → "report", "micr oorganism" →
- * "microorganism"). Runs a series of targeted passes then a generic pass
- * for any remaining single-char orphan prefix followed by a lowercase word.
+ * inserted inside a word. Uses a multi-pass universal approach instead
+ * of hardcoded word lists, so it catches ALL splits regardless of word.
  */
-function cleanOCR(text: string): string {
+export function cleanOCR(text: string): string {
   if (!text) return text;
 
-  // 1. Targeted common OCR splits (prefix → full word fragment)
-  const pairs: [RegExp, string][] = [
-    [/\br epor t/g,          'report'],
-    [/\br epor ts/g,         'reports'],
-    [/\br epor ted/g,        'reported'],
-    [/\br epor ting/g,       'reporting'],
-    [/\bappr oximately/g,    'approximately'],
-    [/\bappr oach/g,         'approach'],
-    [/\bappr oaches/g,       'approaches'],
-    [/\bappr eciat/g,        'appreciat'],
-    [/\bcountr y/g,          'country'],
-    [/\bcountr ies/g,        'countries'],
-    [/\bhistor y/g,          'history'],
-    [/\bterr ain/g,          'terrain'],
-    [/\bterr itory/g,        'territory'],
-    [/\bterr or/g,           'terror'],
-    [/\bever y/g,            'every'],
-    [/\bever ything/g,       'everything'],
-    [/\bever yone/g,         'everyone'],
-    [/\bev ery/g,            'every'],
-    [/\bev erything/g,       'everything'],
-    [/\bov er/g,             'over'],
-    [/\bov erly/g,           'overly'],
-    [/\bov erall/g,          'overall'],
-    [/\bhowe ver/g,          'however'],
-    [/\bhow ever/g,          'however'],
-    [/\bwher e/g,            'where'],
-    [/\bwher eas/g,          'whereas'],
-    [/\bwher ever/g,         'wherever'],
-    [/\bther e/g,            'there'],
-    [/\bther eby/g,          'thereby'],
-    [/\bther efore/g,        'therefore'],
-    [/\bther ein/g,          'therein'],
-    [/\bther eafter/g,       'thereafter'],
-    [/\bbefor e/g,           'before'],
-    [/\bafter ward/g,        'afterward'],
-    [/\bafter wards/g,       'afterwards'],
-    [/\bmor e/g,             'more'],
-    [/\bmor eover/g,         'moreover'],
-    [/\blar ge/g,            'large'],
-    [/\blar gely/g,          'largely'],
-    [/\blar ger/g,           'larger'],
-    [/\blear n/g,            'learn'],
-    [/\blear ned/g,          'learned'],
-    [/\blear ning/g,         'learning'],
-    [/\bhar d/g,             'hard'],
-    [/\bhar dly/g,           'hardly'],
-    [/\bhar dship/g,         'hardship'],
-    [/\bshar e/g,            'share'],
-    [/\bshar ed/g,           'shared'],
-    [/\bshar es/g,           'shares'],
-    [/\bclear ly/g,          'clearly'],
-    [/\bnear ly/g,           'nearly'],
-    [/\bnear by/g,           'nearby'],
-    [/\byear s/g,            'years'],
-    [/\by ear/g,             'year'],
-    [/\by ears/g,            'years'],
-    [/\bda y/g,              'day'],
-    [/\bda ys/g,             'days'],
-    [/\bwa y/g,              'way'],
-    [/\bwa ys/g,             'ways'],
-    [/\bsa y/g,              'say'],
-    [/\bsa ys/g,             'says'],
-    [/\bpla y/g,             'play'],
-    [/\bpla ys/g,            'plays'],
-    [/\bpla yed/g,           'played'],
-    [/\bpla ying/g,          'playing'],
-    [/\bmay/g,               'may'],
-    [/\bma y/g,              'may'],
-    [/\bstay/g,              'stay'],
-    [/\bsta y/g,             'stay'],
-    [/\bsta ys/g,            'stays'],
-    [/\bawa y/g,             'away'],
-    [/\bdisplay/g,           'display'],
-    [/\bdispla y/g,          'display'],
-    [/\bdispla yed/g,        'displayed'],
-    [/\bcr eate/g,           'create'],
-    [/\bcr eated/g,          'created'],
-    [/\bcr eates/g,          'creates'],
-    [/\bcr eation/g,         'creation'],
-    [/\bcr eativ/g,          'creativ'],
-    [/\bcr eature/g,         'creature'],
-    [/\bcr ops/g,            'crops'],
-    [/\bcr op/g,             'crop'],
-    [/\bcr oss/g,            'cross'],
-    [/\bcr osses/g,          'crosses'],
-    [/\bcr ossed/g,          'crossed'],
-    [/\bcr ossing/g,         'crossing'],
-    [/\bdr aw/g,             'draw'],
-    [/\bdr awn/g,            'drawn'],
-    [/\bdr ive/g,            'drive'],
-    [/\bdr iven/g,           'driven'],
-    [/\bdr op/g,             'drop'],
-    [/\bdr ops/g,            'drops'],
-    [/\bdr ove/g,            'drove'],
-    [/\bfr om/g,             'from'],
-    [/\bfr ont/g,            'front'],
-    [/\bfr esh/g,            'fresh'],
-    [/\bgr ow/g,             'grow'],
-    [/\bgr owing/g,          'growing'],
-    [/\bgr own/g,            'grown'],
-    [/\bgr owth/g,           'growth'],
-    [/\bgr eat/g,            'great'],
-    [/\bgr eater/g,          'greater'],
-    [/\bgr eatly/g,          'greatly'],
-    [/\bgr een/g,            'green'],
-    [/\bgr ass/g,            'grass'],
-    [/\bgr azing/g,          'grazing'],
-    [/\bgr ade/g,            'grade'],
-    [/\bgr ades/g,           'grades'],
-    [/\bpr oblem/g,          'problem'],
-    [/\bpr oblems/g,         'problems'],
-    [/\bpr ocess/g,          'process'],
-    [/\bpr ocesses/g,        'processes'],
-    [/\bpr oduce/g,          'produce'],
-    [/\bpr oduced/g,         'produced'],
-    [/\bpr oduces/g,         'produces'],
-    [/\bpr oduction/g,       'production'],
-    [/\bpr oducts/g,         'products'],
-    [/\bpr oject/g,          'project'],
-    [/\bpr ojects/g,         'projects'],
-    [/\bpr opor tion/g,      'proportion'],
-    [/\bpr opor tional/g,    'proportional'],
-    [/\bpr opor tions/g,     'proportions'],
-    [/\bpr ompt/g,           'prompt'],
-    [/\bpr ompted/g,         'prompted'],
-    [/\bpr ovide/g,          'provide'],
-    [/\bpr ovided/g,         'provided'],
-    [/\bpr ovides/g,         'provides'],
-    [/\bpr esent/g,          'present'],
-    [/\bpr esented/g,        'presented'],
-    [/\bpr esents/g,         'presents'],
-    [/\bpr edict/g,          'predict'],
-    [/\bpr edicted/g,        'predicted'],
-    [/\bpr ediction/g,       'prediction'],
-    [/\bpr edictions/g,      'predictions'],
-    [/\bpr edator/g,         'predator'],
-    [/\bpr edators/g,        'predators'],
-    [/\bpr edation/g,        'predation'],
-    [/\bpr etty/g,           'pretty'],
-    [/\bpr evious/g,         'previous'],
-    [/\bpr eviously/g,       'previously'],
-    [/\bpr event/g,          'prevent'],
-    [/\bpr events/g,         'prevents'],
-    [/\bpr evented/g,        'prevented'],
-    [/\bpr ice/g,            'price'],
-    [/\bpr ices/g,           'prices'],
-    [/\bpr imar y/g,         'primary'],
-    [/\bpr imarily/g,        'primarily'],
-    [/\btr ue/g,             'true'],
-    [/\btr uly/g,            'truly'],
-    [/\btr end/g,            'trend'],
-    [/\btr ends/g,           'trends'],
-    [/\btr eat/g,            'treat'],
-    [/\btr eated/g,          'treated'],
-    [/\btr eats/g,           'treats'],
-    [/\btr eatment/g,        'treatment'],
-    [/\btr ansfer/g,         'transfer'],
-    [/\btr ansfer red/g,     'transferred'],
-    [/\btr ansit/g,          'transit'],
-    [/\btr ansition/g,       'transition'],
-    [/\btr ansmit/g,         'transmit'],
-    [/\btr ansmitted/g,      'transmitted'],
-    [/\bstr ong/g,           'strong'],
-    [/\bstr onger/g,         'stronger'],
-    [/\bstr ongly/g,         'strongly'],
-    [/\bstr ucture/g,        'structure'],
-    [/\bstr uctures/g,       'structures'],
-    [/\bstr ategy/g,         'strategy'],
-    [/\bstr ategies/g,       'strategies'],
-    [/\bstr uggle/g,         'struggle'],
-    [/\bstr uggled/g,        'struggled'],
-    [/\bstr etched/g,        'stretched'],
-    [/\bspr ead/g,           'spread'],
-    [/\bspr eads/g,          'spreads'],
-    [/\bspr eading/g,        'spreading'],
-    [/\br eal/g,             'real'],
-    [/\br ealiz/g,           'realiz'],
-    [/\br eally/g,           'really'],
-    [/\br eality/g,          'reality'],
-    [/\br eason/g,           'reason'],
-    [/\br easons/g,          'reasons'],
-    [/\br ead/g,             'read'],
-    [/\br eads/g,            'reads'],
-    [/\br eading/g,          'reading'],
-    [/\br eader/g,           'reader'],
-    [/\br eaders/g,          'readers'],
-    [/\br elat/g,            'relat'],
-    [/\br eport/g,           'report'],
-    [/\br eveals/g,          'reveals'],
-    [/\br ecent/g,           'recent'],
-    [/\br ecently/g,         'recently'],
-    [/\br equir/g,           'requir'],
-    [/\br esearch/g,         'research'],
-    [/\br esearcher/g,       'researcher'],
-    [/\br esearchers/g,      'researchers'],
-    [/\br esult/g,           'result'],
-    [/\br esults/g,          'results'],
-    [/\br esulting/g,        'resulting'],
-    [/\br esulted/g,         'resulted'],
-  ];
+  // 0. Ligatures first
+  let out = text
+    .replace(/ﬁ/g, 'fi').replace(/ﬀ/g, 'ff').replace(/ﬃ/g, 'ffi')
+    .replace(/ﬄ/g, 'ffl').replace(/ﬂ/g, 'fl').replace(/ﬅ/g, 'st')
+    .replace(/\xa0/g, ' ');
 
-  let out = text;
-  for (const [re, rep] of pairs) {
-    if (re.source !== '') out = out.replace(re, rep);
+  // 1. Fix possessives: "word' s" → "word's"
+  out = out.replace(/(\w)' s\b/g, "$1's");
+  out = out.replace(/(\w)' t\b/g, "$1't");
+
+  // 2. Multi-pass generic single-consonant fix:
+  //    "r esearch" → "research", "b ecause" → "because"
+  //    Run up to 5 passes to handle nested splits like "r epor ted"
+  for (let i = 0; i < 5; i++) {
+    const prev = out;
+    out = out.replace(/\b([bcdfghjklmnpqrstvwxyz]) ([a-z]{2,})/g, '$1$2');
+    if (out === prev) break;
   }
 
-  // 2. Generic pass: fix "X word" where X is a single lowercase letter
-  //    followed by a space then a lowercase word — only between word chars
-  //    e.g. "r epresent" → "represent", "t oward" → "toward"
-  //    Guard: don't fire on "a word" (article) or "I word"
-  out = out.replace(/\b([bcdfghjklmnpqrstvwxyz]) ([a-z]{2,})/g, '$1$2');
+  // 3. Multi-char prefix splits: "phot ovoltaic", "astr onaut", "conser vation"
+  //    Pattern: word ending in consonant cluster + space + lowercase continuation
+  //    Only join if the left part is 2-6 chars and ends in a consonant
+  for (let i = 0; i < 3; i++) {
+    const prev = out;
+    // Short prefix (2-6 chars ending in consonant) + space + lowercase word (3+ chars)
+    out = out.replace(/\b([A-Za-z]{2,6}[bcdfghjklmnpqrstvwxyz]) ([a-z]{3,})/g, (match, prefix, suffix) => {
+      // Don't join obvious real word boundaries (common short words)
+      const skipWords = new Set(['in','on','an','at','is','it','or','as','if','of','up','by','to',
+        'no','so','do','he','we','me','be','my','us','go','am','oh','ok','and','the','for','but',
+        'not','you','all','can','had','her','was','one','our','out','are','has','his','how','its',
+        'let','may','new','now','old','see','way','who','did','get','own','say','too','use',
+        'off','per','set','top','yet','ago','ask','big','end','far','hit','hot','low','put',
+        'ran','run','sit','six','ten','try','war','win','yes']);
+      if (skipWords.has(prefix.toLowerCase())) return match;
+      return prefix + suffix;
+    });
+    if (out === prev) break;
+  }
 
-  // 3. Fix "ﬁ" / "ﬀ" / "ﬃ" / "ﬄ" ligatures from PDF extraction
-  out = out
-    .replace(/ﬁ/g, 'fi')
-    .replace(/ﬀ/g, 'ff')
-    .replace(/ﬃ/g, 'ffi')
-    .replace(/ﬄ/g, 'ffl')
-    .replace(/ﬂ/g, 'fl')
-    .replace(/ﬅ/g, 'st');
+  // 4. Trailing single letter splits: "mosquit o", "nativ e"  
+  //    Pattern: 4+ letter word ending in consonant + space + single vowel
+  out = out.replace(/\b([A-Za-z]{4,}[bcdfghjklmnpqrstvwxyz]) ([aeiouy])\b/g, '$1$2');
 
-  // 4. Collapse runs of 3+ spaces into one (but not newlines)
-  out = out.replace(/ {3,}/g, ' ');
+  // 5. Capital short-prefix splits: "Br oadway" → "Broadway"
+  out = out.replace(/\b([A-Z][a-z]?) ([a-z]{3,})/g, '$1$2');
+
+  // 6. Final single-consonant pass after all the above
+  for (let i = 0; i < 3; i++) {
+    const prev = out;
+    out = out.replace(/\b([bcdfghjklmnpqrstvwxyz]) ([a-z]{2,})/g, '$1$2');
+    if (out === prev) break;
+  }
+
+  // 7. Collapse runs of 2+ spaces into one
+  out = out.replace(/ {2,}/g, ' ');
 
   return out;
 }

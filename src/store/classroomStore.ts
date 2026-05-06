@@ -36,6 +36,7 @@ export type Assignment = {
   classroomIds: string[];
   questions: Question[];
   timeLimitMinutes: number;
+  allowExit?: boolean;
   createdAt: string;
 };
 

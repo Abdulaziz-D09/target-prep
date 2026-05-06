@@ -14,12 +14,12 @@ const siteToneInitScript = `
   const key = 'targetprep_site_tone';
   const darkShell = '#121826';
   const lightShell = '#f5f8fc';
-  let tone = 'light';
+  let tone = 'dark';
 
   try {
-    tone = window.localStorage.getItem(key) === 'dark' ? 'dark' : 'light';
+    tone = window.localStorage.getItem(key) === 'light' ? 'light' : 'dark';
   } catch {
-    tone = 'light';
+    tone = 'dark';
   }
 
   document.documentElement.dataset.siteTone = tone;

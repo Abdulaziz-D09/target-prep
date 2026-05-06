@@ -5,7 +5,7 @@ import { useParams, useRouter } from 'next/navigation';
 import {
     X, Clock, ArrowRight, Check, CheckCircle,
     Bookmark, Calculator, BookOpen, ChevronDown, ChevronUp,
-    LayoutGrid, Home, Maximize2, FileText,
+    LayoutGrid, Home, Maximize2, FileText, AlertCircle,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -42,6 +42,7 @@ export default function ClassroomAssignmentDetailPage() {
     const [timeRemaining, setTimeRemaining] = useState(0);
     const [mode, setMode] = useState<'intro' | 'test' | 'review' | 'complete'>('intro');
     const [hasHydrated, setHasHydrated] = useState(false);
+    const [warningCountdown, setWarningCountdown] = useState<number | null>(null);
 
     // UI state — identical to practice test
     const [isTimerHidden, setIsTimerHidden] = useState(false);
@@ -138,7 +139,49 @@ export default function ClassroomAssignmentDetailPage() {
         };
     }, [isDragging]);
 
+    // ── Strict Mode Listener ──────────────────────────────────────────────────
+
+    useEffect(() => {
+        if (assignment?.allowExit !== false || mode !== 'test') return;
+
+        const handleFullscreenChange = () => {
+            if (!document.fullscreenElement) {
+                setWarningCountdown(5);
+            } else {
+                setWarningCountdown(null);
+            }
+        };
+
+        document.addEventListener('fullscreenchange', handleFullscreenChange);
+        return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
+    }, [assignment?.allowExit, mode]);
+
+    useEffect(() => {
+        if (warningCountdown === null) return;
+
+        if (warningCountdown <= 0) {
+            setWarningCountdown(null);
+            setMode('complete');
+            return;
+        }
+
+        const timer = setTimeout(() => {
+            setWarningCountdown(prev => (prev !== null ? prev - 1 : null));
+        }, 1000);
+
+        return () => clearTimeout(timer);
+    }, [warningCountdown]);
+
     // ── Handlers ─────────────────────────────────────────────────────────────
+
+    const startStrictAssignment = async () => {
+        try {
+            await document.documentElement.requestFullscreen();
+            setMode('test');
+        } catch (e) {
+            alert('Full screen is required to start this assignment.');
+        }
+    };
 
     const handleSelectAnswer = (letter: StudentAssignmentOption) => {
         if (mode === 'review') return;
@@ -253,7 +296,13 @@ export default function ClassroomAssignmentDetailPage() {
 
                 <div className="absolute bottom-0 left-0 right-0 bg-white border-t border-slate-200 p-6 flex justify-end px-12 z-10 shadow-[0_-4px_20px_rgba(0,0,0,0.03)]">
                     <button
-                        onClick={() => setMode('test')}
+                        onClick={() => {
+                            if (assignment.allowExit === false) {
+                                startStrictAssignment();
+                            } else {
+                                setMode('test');
+                            }
+                        }}
                         className="bg-blue-600 hover:bg-blue-700 text-white px-10 py-3 rounded-full font-bold text-lg transition-all shadow-lg shadow-blue-200 flex items-center gap-2"
                     >
                         Begin Assignment <ArrowRight className="w-5 h-5" />
@@ -705,6 +754,45 @@ export default function ClassroomAssignmentDetailPage() {
                             </div>
                         </motion.div>
                     </div>
+                )}
+            </AnimatePresence>
+
+            {/* Strict Mode Warning Overlay */}
+            <AnimatePresence>
+                {warningCountdown !== null && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 z-[9999] bg-rose-600/95 backdrop-blur-md flex flex-col items-center justify-center p-8 text-center"
+                    >
+                        <motion.div
+                            initial={{ scale: 0.9, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            className="bg-white rounded-3xl p-10 max-w-lg shadow-[0_20px_60px_-15px_rgba(0,0,0,0.5)] flex flex-col items-center border border-rose-100"
+                        >
+                            <AlertCircle className="w-20 h-20 text-rose-500 mb-6 animate-pulse" />
+                            <h2 className="text-3xl font-black text-slate-900 mb-4 tracking-tight">Return to Full Screen</h2>
+                            <p className="text-lg text-slate-600 mb-8 font-medium leading-relaxed">
+                                You must remain in full screen to continue. Your assignment will automatically submit in:
+                            </p>
+                            <div className="text-[5rem] font-black text-rose-600 leading-none mb-10 tabular-nums drop-shadow-sm">
+                                {warningCountdown}
+                            </div>
+                            <button
+                                onClick={async () => {
+                                    try {
+                                        await document.documentElement.requestFullscreen();
+                                    } catch (e) {
+                                        // Ignore
+                                    }
+                                }}
+                                className="w-full bg-slate-900 text-white font-bold text-lg py-4 rounded-xl hover:bg-black transition-colors shadow-xl"
+                            >
+                                Enter Full Screen
+                            </button>
+                        </motion.div>
+                    </motion.div>
                 )}
             </AnimatePresence>
         </div>

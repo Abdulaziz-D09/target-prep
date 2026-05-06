@@ -20,6 +20,7 @@ type Option = 'A' | 'B' | 'C' | 'D';
 
 type ParsedQuestion = {
     id: string;
+    passage?: string | null;
     stem: string;
     options: { A: string; B: string; C: string; D: string };
     answer: Option | null;
@@ -129,6 +130,7 @@ export default function CreateAssignmentPage() {
     const [subject, setSubject]                       = useState<'English' | 'Math'>('English');
     const [selectedClassroomIds, setSelectedClassroomIds] = useState<string[]>([]);
     const [timeLimitMinutes, setTimeLimitMinutes] = useState(60);
+    const [allowExit, setAllowExit]                   = useState(false);
     const [isSaving, setIsSaving]                     = useState(false);
 
     // ── Step 1: Scan ──────────────────────────────────────────────────────────
@@ -176,8 +178,9 @@ export default function CreateAssignmentPage() {
             }
 
             const parsed: ParsedQuestion[] = data.questions.map(
-                (q: { stem: string; options: { A: string; B: string; C: string; D: string } }, i: number) => ({
+                (q: { passage?: string | null; stem: string; options: { A: string; B: string; C: string; D: string } }, i: number) => ({
                     id: `q-${i}`,
+                    passage: q.passage ?? undefined,
                     stem: q.stem,
                     options: q.options,
                     answer: null,
@@ -218,8 +221,10 @@ export default function CreateAssignmentPage() {
             subject,
             classroomIds: selectedClassroomIds,
             timeLimitMinutes,
+            allowExit,
             questions: questions.map((q) => ({
                 id: q.id,
+                passage: q.passage ?? undefined,
                 stem: q.stem,
                 options: q.options,
                 answer: q.answer ?? 'A',
@@ -417,7 +422,14 @@ export default function CreateAssignmentPage() {
 
                                 {/* Question stem */}
                                 <div className="px-6 py-6 border-b border-slate-100 dark:border-slate-800">
-                                    <p className="text-[17px] leading-[1.7] site-text-strong font-[450]">
+                                    {currentQ.passage && (
+                                        <div className="mb-4 p-4 bg-slate-50 dark:bg-slate-900/50 rounded-xl border border-slate-100 dark:border-slate-800/60">
+                                            <p className="text-[14px] leading-[1.65] site-text-muted font-bluebook whitespace-pre-wrap">
+                                                {currentQ.passage}
+                                            </p>
+                                        </div>
+                                    )}
+                                    <p className="text-[17px] leading-[1.7] site-text-strong font-[450] font-bluebook">
                                         {currentQ.stem}
                                     </p>
                                 </div>
@@ -641,6 +653,28 @@ export default function CreateAssignmentPage() {
                                             className="w-full px-4 py-3 rounded-xl site-subpanel bg-transparent outline-none border-2 border-transparent focus:border-indigo-500 transition text-[15px] font-semibold site-text-strong"
                                         />
                                         <p className="mt-1 text-[12px] site-text-muted">Students will see this before starting.</p>
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-[11px] font-bold uppercase tracking-widest site-text-muted mb-2">Strict Mode</label>
+                                        <button
+                                            onClick={() => setAllowExit(!allowExit)}
+                                            type="button"
+                                            className={`w-full flex items-center justify-between px-4 py-3 rounded-xl border-2 transition-all ${
+                                                !allowExit
+                                                    ? 'border-indigo-500 bg-indigo-50 dark:bg-indigo-900/20 text-indigo-700 dark:text-indigo-300'
+                                                    : 'border-slate-200 dark:border-slate-700 site-subpanel site-text hover:border-slate-300'
+                                            }`}
+                                        >
+                                            <div className="flex flex-col items-start text-left">
+                                                <span className="font-bold text-[14px]">Require Full Screen</span>
+                                                <span className={`text-[12px] mt-0.5 ${!allowExit ? 'text-indigo-600/80 dark:text-indigo-400/80' : 'site-text-muted'}`}>Auto-submit if student exits</span>
+                                            </div>
+                                            <div className={`w-11 h-6 rounded-full flex items-center px-1 transition-colors ${!allowExit ? 'bg-indigo-600' : 'bg-slate-300 dark:bg-slate-600'}`}>
+                                                <div className={`w-4 h-4 rounded-full bg-white shadow-sm transition-transform ${!allowExit ? 'translate-x-5' : 'translate-x-0'}`} />
+                                            </div>
+                                        </button>
+                                        <p className="mt-1.5 text-[12px] site-text-muted">Prevents cheating by locking the student in full screen.</p>
                                     </div>
                                 </div>
                             </div>

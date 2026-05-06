@@ -59,38 +59,11 @@ function formatDuration(totalMinutes: number) {
   return `${hours}h ${minutes}m`;
 }
 
-const englishTests = practiceTests.filter((test) =>
-  test.sections.some((section) => section.name === 'Reading and Writing')
-);
-const mathTests = practiceTests.filter((test) => test.sections.some((section) => section.name === 'Math'));
-
-export const combinedPracticeTests: CombinedPracticeTest[] = englishTests.map((englishTest, index) => {
-  const mathTest = mathTests[index];
-  const sections = [
-    cloneSection(englishTest.sections[0]),
-    cloneSection(mathTest.sections[0]),
-  ];
-  const totalMinutes = sections.reduce(
-    (sum, section) => sum + section.modules.reduce((moduleSum, module) => moduleSum + module.timeMinutes, 0),
-    0
-  );
-  const totalQuestions = sections.reduce(
-    (sum, section) => sum + section.modules.reduce((moduleSum, module) => moduleSum + module.questions.length, 0),
-    0
-  );
-
+export const combinedPracticeTests: CombinedPracticeTest[] = practiceTests.map((test) => {
   return {
-    id: index + 1,
-    title: `Practice Test ${index + 1}`,
-    description: '',
-    type: 'Full Test',
-    duration: formatDuration(totalMinutes),
-    totalQuestions,
-    moduleCount: 4,
-    color: 'blue',
-    sections,
-    englishSourceId: englishTest.id,
-    mathSourceId: mathTest.id,
+    ...test,
+    englishSourceId: test.id,
+    mathSourceId: test.id,
   };
 });
 

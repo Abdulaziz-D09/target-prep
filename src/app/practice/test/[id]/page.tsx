@@ -7,6 +7,7 @@ import { resolvePracticeTest } from '@/lib/practiceCatalog';
 import { HighlightableText } from '@/components/HighlightableText';
 import DesmosCalculator from '@/components/DesmosCalculator';
 import { ReferenceSheet } from '@/components/ReferenceSheet';
+import { cleanOCR } from '@/components/PassageRenderer';
 import Link from 'next/link';
 import { AnimatePresence, motion } from 'framer-motion';
 
@@ -425,7 +426,12 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
                                                                 {q.passage}
                                                             </div>
                                                         )}
-                                                        <h4 className="text-lg font-medium text-slate-900 mb-6">{q.question}</h4>
+                                                        {q.image && (
+                                                            <div className="mb-4 rounded-xl overflow-hidden border border-slate-200 bg-slate-50 flex items-center justify-center">
+                                                                <img src={q.image} alt="Question figure" className="max-w-full max-h-[280px] object-contain p-2" />
+                                                            </div>
+                                                        )}
+                                                        <h4 className="text-lg font-medium text-slate-900 mb-6">{cleanOCR(q.question)}</h4>
 
                                                         <div className="space-y-3 mb-6">
                                                             {q.options.map((opt, oIdx) => {
@@ -441,7 +447,7 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
                                                                         <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold border ${isThisCorrect ? 'bg-emerald-500 border-emerald-600 text-white' : isThisSelected ? 'bg-red-500 border-red-600 text-white' : 'bg-slate-100 border-slate-300'}`}>
                                                                             {String.fromCharCode(65 + oIdx)}
                                                                         </div>
-                                                                        <span className="font-medium">{opt}</span>
+                                                                        <span className="font-medium">{cleanOCR(opt)}</span>
                                                                         {isThisCorrect && <Check className="ml-auto text-emerald-600 w-5 h-5" />}
                                                                         {isThisSelected && !isThisCorrect && <X className="ml-auto text-red-500 w-5 h-5" />}
                                                                     </div>
@@ -453,7 +459,7 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
                                                             <h5 className="flex items-center gap-2 text-blue-800 font-bold mb-2">
                                                                 <BookOpen className="w-4 h-4" /> Explanation
                                                             </h5>
-                                                            <p className="text-blue-900/80 leading-relaxed text-sm">{q.explanation}</p>
+                                                            <p className="text-blue-900/80 leading-relaxed text-sm">{cleanOCR(q.explanation)}</p>
                                                         </div>
                                                     </div>
                                                 );
@@ -970,9 +976,19 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
                                 </div>
 
                                 {/* Question Content */}
+                                {/* Math question image/graph */}
+                                {currentQuestion?.image && (
+                                    <div className="mb-5 rounded-xl overflow-hidden border border-slate-200 bg-slate-50 flex items-center justify-center">
+                                        <img
+                                            src={currentQuestion.image}
+                                            alt="Question figure"
+                                            className="max-w-full max-h-[320px] object-contain p-2"
+                                        />
+                                    </div>
+                                )}
                                 <div className="text-[18px] text-[#111827] mb-6 leading-relaxed">
                                     <HighlightableText
-                                        text={currentQuestion?.question || ''}
+                                        text={cleanOCR(currentQuestion?.question || '')}
                                         highlights={highlights[`q-${questionKey}`] || []}
                                         onAddHighlight={(h) => addHighlight(`q-${questionKey}`, { ...h, id: Math.random().toString(36).substring(2, 11) })}
                                         onRemoveHighlight={(id) => removeHighlight(`q-${questionKey}`, id)}
@@ -1019,7 +1035,7 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
 
                                                     {/* Answer Text */}
                                                     <span className={`text-[17px] font-sans flex-1 ${isEliminated ? 'text-slate-400' : 'text-[#111827]'}`}>
-                                                        {opt}
+                                                        {cleanOCR(opt)}
                                                     </span>
 
                                                     {/* Strike-through line */}

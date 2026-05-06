@@ -11,12 +11,12 @@ function getShellColor(tone: SiteTone) {
 }
 
 export function readSiteTone(): SiteTone {
-  if (typeof window === 'undefined') return 'light';
+  if (typeof window === 'undefined') return 'dark';
 
   try {
-    return window.localStorage.getItem(SITE_TONE_STORAGE_KEY) === 'dark' ? 'dark' : 'light';
+    return window.localStorage.getItem(SITE_TONE_STORAGE_KEY) === 'light' ? 'light' : 'dark';
   } catch {
-    return 'light';
+    return 'dark';
   }
 }
 

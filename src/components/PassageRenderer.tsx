@@ -496,13 +496,16 @@ function TextBlock({
     .map(p => p.replace(/\n/g, ' ').replace(/ {2,}/g, ' ').trim())
     .filter(Boolean);
 
+  const paraData = [];
   let cumOffset = 0;
+  for (const para of paragraphs) {
+    paraData.push({ para, paraOff: offset + cumOffset });
+    cumOffset += para.length + 2;
+  }
+
   return (
     <div className="space-y-5">
-      {paragraphs.map((para, pi) => {
-        const paraOff = offset + cumOffset;
-        cumOffset += para.length + 2;
-
+      {paraData.map(({ para, paraOff }, pi) => {
         // "Text 1" / "Text 2" label detection
         const labelMatch = para.match(/^(Text\s+\d+)\s*[:\-]?\s*/i);
 

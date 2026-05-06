@@ -7,7 +7,7 @@ export interface Question {
     options: string[];
     answer: number;
     explanation: string;
-    difficulty: 'Easy' | 'Medium' | 'Hard';
+    difficulty: 'Easy' | 'Medium' | 'Hard' | 'Assessment';
     calc?: boolean;
 }
 

@@ -11,15 +11,17 @@ export function ReferenceSheet({ isOpen, onClose }: ReferenceSheetProps) {
     const [isDragging, setIsDragging] = useState(false);
     const dragStartPos = useRef({ x: 0, y: 0 });
     const modalRef = useRef<HTMLDivElement>(null);
+    const initialized = useRef(false);
 
     // Only set initial centered position once when opened
     useEffect(() => {
-        if (isOpen && position.x === 100 && position.y === 100) {
+        if (isOpen && !initialized.current) {
+            initialized.current = true;
             const x = window.innerWidth > 600 ? (window.innerWidth - 600) / 2 : 10;
             const y = (window.innerHeight - 600) / 2;
-            setPosition({ x: Math.max(0, x), y: Math.max(0, y) });
+            setTimeout(() => setPosition({ x: Math.max(0, x), y: Math.max(0, y) }), 0);
         }
-    }, [isOpen, position.x, position.y]);
+    }, [isOpen]);
 
     const handleMouseDown = (e: React.MouseEvent) => {
         setIsDragging(true);

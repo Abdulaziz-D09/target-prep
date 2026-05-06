@@ -526,7 +526,7 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
                             <BookOpen className="w-8 h-8 text-blue-600 flex-shrink-0 mt-1" />
                             <div>
                                 <h3 className="font-bold text-xl text-slate-900 mb-1">No Device Lock</h3>
-                                <p className="text-slate-600 leading-relaxed text-[17px]">We don't lock your device during practice. On test day, you'll be blocked from using other programs or apps.</p>
+                                <p className="text-slate-600 leading-relaxed text-[17px]">We don&apos;t lock your device during practice. On test day, you&apos;ll be blocked from using other programs or apps.</p>
                             </div>
                         </div>
                     </div>
@@ -621,7 +621,7 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
                     <h2 className="text-[26px] font-normal text-[#3b82f6] mb-6">This Module Is Over</h2>
                     <div className="text-center text-[#111827] space-y-3 mb-10 text-[15px]">
                         <p>All your work has been saved.</p>
-                        <p>You'll move on automatically in just a moment.</p>
+                        <p>You&apos;ll move on automatically in just a moment.</p>
                         <p>Do not refresh this page or quit the app.</p>
                     </div>
                     <div className="w-8 h-8 rounded-full border-[3px] border-slate-200 border-t-slate-800 animate-spin"></div>
@@ -655,14 +655,14 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
                     <div className="w-[55%] flex flex-col justify-center pr-16 pl-8">
                         <h2 className="text-3xl font-bold mb-4">Practice Test Break</h2>
                         <p className="text-white/70 leading-relaxed mb-8 text-[15px]">
-                            You can resume this practice test as soon as you're ready to move on. On test day, you'll wait until the clock counts down. Read below to see how breaks work on test day.
+                            You can resume this practice test as soon as you&apos;re ready to move on. On test day, you&apos;ll wait until the clock counts down. Read below to see how breaks work on test day.
                         </p>
 
                         <hr className="border-white/20 mb-8" />
 
                         <h3 className="text-2xl font-bold mb-2">Take a Break: Do Not Close Your Device</h3>
                         <p className="text-white/70 leading-relaxed mb-6 text-[15px]">
-                            After the break, a <strong className="text-white">Resume Testing Now</strong> button will appear and you'll start the next section.
+                            After the break, a <strong className="text-white">Resume Testing Now</strong> button will appear and you&apos;ll start the next section.
                         </p>
 
                         <p className="font-bold text-white mb-4">Follow these rules during the break:</p>
@@ -1078,8 +1078,8 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
                     <div className="w-full flex justify-center py-10 fade-in bg-[#FAFAFA] h-full relative">
                         <div className="w-full max-w-4xl flex flex-col items-center">
                             <h2 className="text-[28px] font-normal text-[#111827] mb-4">Check Your Work</h2>
-                            <p className="text-[#4B5563] text-center mb-1 text-[15px]">On test day, you won't be able to move on to the next module until time expires.</p>
-                            <p className="text-[#4B5563] text-center mb-8 text-[15px]">For these practice questions, you can click <strong>Next</strong> when you're ready to move on.</p>
+                            <p className="text-[#4B5563] text-center mb-1 text-[15px]">On test day, you won&apos;t be able to move on to the next module until time expires.</p>
+                            <p className="text-[#4B5563] text-center mb-8 text-[15px]">For these practice questions, you can click <strong>Next</strong> when you&apos;re ready to move on.</p>
 
                             <div className="bg-white border border-[#E5E7EB] rounded-lg shadow-sm w-full p-6 max-h-[60vh] overflow-y-auto">
                                 <div className="flex justify-between items-center mb-6 pb-4 border-b border-[#E5E7EB]">

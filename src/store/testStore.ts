@@ -136,7 +136,7 @@ export const useTestStore = create<TestStore>((set, get) => ({
             : [...currentEliminated, answerIndex];
 
         // If they eliminate an answer they currently have selected, unselect it
-        let newUserAnswers = { ...s.userAnswers };
+        const newUserAnswers = { ...s.userAnswers };
         if (!isEliminated && s.userAnswers[questionKey] === answerIndex) {
             delete newUserAnswers[questionKey];
         }

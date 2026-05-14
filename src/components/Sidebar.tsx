@@ -10,7 +10,9 @@ import { applySiteTone, readSiteTone, subscribeToSiteTone, syncDocumentTone, typ
 
 const MotionLink = motion(Link);
 
-const studentNavItems = [
+type NavItem = { href: string; label: string; icon: React.ComponentType<{ className?: string }>; badge?: string };
+
+const studentNavItems: NavItem[] = [
     { href: '/dashboard', label: 'Home', icon: Home },
     { href: '/study-plan', label: 'Study Plan', icon: Map },
     { href: '/practice', label: 'Practice Tests', icon: FileText },
@@ -20,7 +22,7 @@ const studentNavItems = [
     { href: '/progress', label: 'Progress', icon: BarChart2 },
 ];
 
-const teacherNavItems = [
+const teacherNavItems: NavItem[] = [
     { href: '/teacher', label: 'Home', icon: Home },
     { href: '/teacher/classes', label: 'Classes', icon: GraduationCap },
     { href: '/teacher/assignments', label: 'Assignments', icon: ClipboardList },

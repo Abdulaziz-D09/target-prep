@@ -163,6 +163,20 @@ export default function ProgressPage() {
                             </motion.article>
                         </motion.section>
 
+                        {/* Score Predictor */}
+                        <motion.div className="site-hero-stat rounded-[26px] p-5 mb-7 border border-blue-500/20 bg-blue-50/50 dark:bg-blue-950/20" variants={itemRevealVariants}>
+                            <div className="flex items-center gap-2">
+                                <p className="site-hero-kicker text-[11px] font-bold uppercase tracking-[0.22em] text-blue-600 dark:text-blue-400">Score Predictor</p>
+                                <Sparkles className="h-3.5 w-3.5 text-blue-500" />
+                            </div>
+                            <div className="mt-3 flex flex-wrap items-baseline gap-x-4 gap-y-2">
+                                <p className="site-hero-title text-3xl font-black tracking-[-0.04em] text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-400">
+                                    {Math.max(400, stats.avg - 30)}–{Math.min(1600, stats.avg + 30)}
+                                </p>
+                                <p className="site-hero-body text-sm font-medium">Math: {Math.round((stats.avg / 2) - 10)}–{Math.round((stats.avg / 2) + 20)} &middot; English: {Math.round((stats.avg / 2) - 20)}–{Math.round((stats.avg / 2) + 10)}</p>
+                            </div>
+                        </motion.div>
+
                         <motion.section variants={sectionRevealVariants}>
                             <h3 className="site-text-strong font-black text-2xl tracking-[-0.03em] mb-4 flex items-center gap-2">
                                 <Calendar className="w-5 h-5 text-slate-400" />

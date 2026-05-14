@@ -370,12 +370,27 @@ function MathImageSlice({
 // ══════════════════════════════════════════════════════════════════════════════
 //  BROWSE VIEW
 // ══════════════════════════════════════════════════════════════════════════════
-function BrowseView({ onStartQuiz, reviewedIds }: { onStartQuiz: (qs: Question[], label: string) => void; reviewedIds: Set<string> }) {
+function BrowseView({ onStartQuiz, reviewedIds, qbStats }: { onStartQuiz: (qs: Question[], label: string) => void; reviewedIds: Set<string>; qbStats: QBStats }) {
     const shouldReduceMotion = useReducedMotion();
     const [diff, setDiff] = useState<Difficulty>('All');
     const [showDiff, setShowDiff] = useState(false);
     const [shuffled, setShuffled] = useState(false);
-    const [reviewOnly, setReviewOnly] = useState(false);
+    
+    // New filter states
+    const [completedFilter, setCompletedFilter] = useState<'All' | 'Solved' | 'Unsolved'>('All');
+    const [showCompletedDropdown, setShowCompletedDropdown] = useState(false);
+
+    const [statusFilter, setStatusFilter] = useState<'All' | 'Correct' | 'Incorrect'>('All');
+    const [showStatusDropdown, setShowStatusDropdown] = useState(false);
+
+    const [reviewFilter, setReviewFilter] = useState<'All' | 'Marked' | 'Not Marked'>('All');
+    const [showReviewDropdown, setShowReviewDropdown] = useState(false);
+
+    // Time ranges: 0=0s, 1=20s, 2=40s, 3=60s, 4=120s, 5=180s, 6=300s, 7=Infinity
+    const timeLimits = [0, 20, 40, 60, 120, 180, 300, Infinity];
+    const timeLabels = ['0s', '20s', '40s', '1m', '2m', '3m', '5m', '5m+'];
+    const [timeRange, setTimeRange] = useState<[number, number]>([0, 7]);
+    const [showTimeDropdown, setShowTimeDropdown] = useState(false);
 
     const englishGroups = useMemo(() => {
         const g: Record<string, Record<string, Question[]>> = {};
@@ -391,11 +406,36 @@ function BrowseView({ onStartQuiz, reviewedIds }: { onStartQuiz: (qs: Question[]
 
     const filter = useCallback((qs: Question[]) => {
         let f = qs;
+        
+        // Difficulty
         if (diff !== 'All') f = f.filter(q => q.difficulty === diff);
-        if (reviewOnly) f = f.filter(q => reviewedIds.has(q.id));
+        
+        // Review (Marked)
+        if (reviewFilter === 'Marked') f = f.filter(q => reviewedIds.has(q.id));
+        if (reviewFilter === 'Not Marked') f = f.filter(q => !reviewedIds.has(q.id));
+        
+        // Completed Status
+        if (completedFilter === 'Solved') f = f.filter(q => !!qbStats[q.id]);
+        if (completedFilter === 'Unsolved') f = f.filter(q => !qbStats[q.id]);
+        
+        // Question Status (Correct/Incorrect)
+        if (statusFilter === 'Correct') f = f.filter(q => qbStats[q.id]?.status === 'correct');
+        if (statusFilter === 'Incorrect') f = f.filter(q => qbStats[q.id]?.status === 'incorrect');
+
+        // Time Spent
+        if (timeRange[0] > 0 || timeRange[1] < 7) {
+            const minTime = timeLimits[timeRange[0]];
+            const maxTime = timeLimits[timeRange[1]];
+            f = f.filter(q => {
+                const timeSpent = qbStats[q.id]?.timeSpentSeconds || 0;
+                return timeSpent >= minTime && timeSpent <= maxTime;
+            });
+        }
+
+        // Shuffle
         if (shuffled) f = shuffleArray(f);
         return f;
-    }, [diff, reviewOnly, reviewedIds, shuffled]);
+    }, [diff, reviewFilter, completedFilter, statusFilter, timeRange, reviewedIds, qbStats, shuffled]);
 
     const englishReadyCount = useMemo(() => filter(allEnglishQuestions).length, [filter]);
     const mathReadyCount = useMemo(() => filter(allMathQuestions).length, [filter]);
@@ -444,67 +484,113 @@ function BrowseView({ onStartQuiz, reviewedIds }: { onStartQuiz: (qs: Question[]
                     </motion.div>
                 </motion.section>
 
+                {(showDiff || showCompletedDropdown || showStatusDropdown || showReviewDropdown || showTimeDropdown) && (
+                    <div 
+                        className="fixed inset-0 z-[80]" 
+                        onClick={() => {
+                            setShowDiff(false);
+                            setShowCompletedDropdown(false);
+                            setShowStatusDropdown(false);
+                            setShowReviewDropdown(false);
+                            setShowTimeDropdown(false);
+                        }} 
+                    />
+                )}
                 <motion.div className="site-panel relative z-40 mb-5 flex flex-wrap items-center gap-3 overflow-visible rounded-[24px] p-4" variants={sectionRevealVariants}>
+                    {/* Difficulty Dropdown */}
                     <div className="relative">
-                        <button
-                            onClick={() => setShowDiff(!showDiff)}
-                            className={`flex items-center gap-2 rounded-full border px-5 py-2.5 text-sm font-bold transition ${
-                                diff !== 'All'
-                                    ? 'border-[#8e1f3d] bg-[#8e1f3d] text-white'
-                                    : 'site-button-secondary'
-                            }`}
-                        >
-                            <Filter className="h-4 w-4" />
-                            {diff === 'All' ? 'All Difficulties' : diff}
-                            <ChevronDown className={`h-4 w-4 transition-transform ${showDiff ? 'rotate-180' : ''}`} />
+                        <button onClick={() => { setShowDiff(!showDiff); setShowCompletedDropdown(false); setShowStatusDropdown(false); setShowReviewDropdown(false); setShowTimeDropdown(false); }} className={`flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-bold transition ${diff !== 'All' ? 'border-[#8e1f3d] bg-[#8e1f3d] text-white' : 'site-button-secondary'}`}>
+                            <Filter className="h-4 w-4" /> {diff === 'All' ? 'Difficulty' : diff} <ChevronDown className={`h-4 w-4 transition-transform ${showDiff ? 'rotate-180' : ''}`} />
                         </button>
-
                         {showDiff && (
                             <div className="absolute left-0 top-full z-[90] mt-2 w-44 rounded-2xl site-panel p-2 shadow-xl" style={{ animation: 'qb-pop 0.25s ease both' }}>
                                 {(['All', 'Easy', 'Medium', 'Hard'] as Difficulty[]).map(d => (
-                                    <button
-                                        key={d}
-                                        onClick={() => { setDiff(d); setShowDiff(false); }}
-                                        className={`flex w-full items-center justify-between rounded-xl px-4 py-2.5 text-left text-[14px] font-medium transition-all ${
-                                            diff === d ? 'site-subpanel font-bold site-text-strong' : 'site-button-secondary site-text'
-                                        }`}
-                                    >
-                                        <span>{d === 'All' ? 'All Difficulties' : d}</span>
-                                        {d === 'Easy' && <CheckCircle className="h-4 w-4 text-emerald-500" />}
-                                        {d === 'Medium' && <Zap className="h-4 w-4 text-amber-500" />}
-                                        {d === 'Hard' && <Flame className="h-4 w-4 text-rose-500" />}
+                                    <button key={d} onClick={() => { setDiff(d); setShowDiff(false); }} className={`flex w-full items-center justify-between rounded-xl px-4 py-2 text-left text-sm font-medium transition-all ${diff === d ? 'site-subpanel font-bold site-text-strong' : 'site-button-secondary site-text'}`}>
+                                        <span>{d === 'All' ? 'All' : d}</span>
                                     </button>
                                 ))}
                             </div>
                         )}
                     </div>
 
-                    <button
-                        onClick={() => setShuffled(!shuffled)}
-                        className={`flex items-center gap-2 rounded-full border px-5 py-2.5 text-sm font-bold transition ${
-                            shuffled
-                                ? 'border-[#0f2744] bg-[#0f2744] text-white'
-                                : 'site-button-secondary'
-                        }`}
-                    >
-                        <Shuffle className="h-4 w-4" />
-                        Shuffle
-                    </button>
+                    {/* Completed Dropdown */}
+                    <div className="relative">
+                        <button onClick={() => { setShowCompletedDropdown(!showCompletedDropdown); setShowDiff(false); setShowStatusDropdown(false); setShowReviewDropdown(false); setShowTimeDropdown(false); }} className={`flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-bold transition ${completedFilter !== 'All' ? 'border-[#0f2744] bg-[#0f2744] text-white' : 'site-button-secondary'}`}>
+                            <CheckCircle className="h-4 w-4" /> {completedFilter === 'All' ? 'Completed' : completedFilter} <ChevronDown className={`h-4 w-4 transition-transform ${showCompletedDropdown ? 'rotate-180' : ''}`} />
+                        </button>
+                        {showCompletedDropdown && (
+                            <div className="absolute left-0 top-full z-[90] mt-2 w-44 rounded-2xl site-panel p-2 shadow-xl" style={{ animation: 'qb-pop 0.25s ease both' }}>
+                                {(['All', 'Solved', 'Unsolved'] as const).map(c => (
+                                    <button key={c} onClick={() => { setCompletedFilter(c); setShowCompletedDropdown(false); }} className={`flex w-full items-center justify-between rounded-xl px-4 py-2 text-left text-sm font-medium transition-all ${completedFilter === c ? 'site-subpanel font-bold site-text-strong' : 'site-button-secondary site-text'}`}>
+                                        <span>{c === 'All' ? 'All' : c}</span>
+                                    </button>
+                                ))}
+                            </div>
+                        )}
+                    </div>
 
-                    <button
-                        onClick={() => setReviewOnly(!reviewOnly)}
-                        className={`flex items-center gap-2 rounded-full border px-5 py-2.5 text-sm font-bold transition ${
-                            reviewOnly
-                                ? 'border-[#8e1f3d] bg-[#8e1f3d] text-white'
-                                : 'site-button-secondary'
-                        }`}
-                    >
-                        <Bookmark className={`h-4 w-4 ${reviewOnly ? 'fill-white text-white' : 'text-slate-500'}`} />
-                        Review
-                        <span className={`rounded-full px-2 py-0.5 text-[11px] font-black ${reviewOnly ? 'bg-white/15 text-white' : 'site-chip site-text'}`}>
-                            {reviewedCount}
-                        </span>
-                    </button>
+                    {/* Status Dropdown */}
+                    <div className="relative">
+                        <button onClick={() => { setShowStatusDropdown(!showStatusDropdown); setShowDiff(false); setShowCompletedDropdown(false); setShowReviewDropdown(false); setShowTimeDropdown(false); }} className={`flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-bold transition ${statusFilter !== 'All' ? 'border-indigo-600 bg-indigo-600 text-white' : 'site-button-secondary'}`}>
+                            <Target className="h-4 w-4" /> {statusFilter === 'All' ? 'Status' : statusFilter} <ChevronDown className={`h-4 w-4 transition-transform ${showStatusDropdown ? 'rotate-180' : ''}`} />
+                        </button>
+                        {showStatusDropdown && (
+                            <div className="absolute left-0 top-full z-[90] mt-2 w-44 rounded-2xl site-panel p-2 shadow-xl" style={{ animation: 'qb-pop 0.25s ease both' }}>
+                                {(['All', 'Correct', 'Incorrect'] as const).map(s => (
+                                    <button key={s} onClick={() => { setStatusFilter(s); setShowStatusDropdown(false); }} className={`flex w-full items-center justify-between rounded-xl px-4 py-2 text-left text-sm font-medium transition-all ${statusFilter === s ? 'site-subpanel font-bold site-text-strong' : 'site-button-secondary site-text'}`}>
+                                        <span>{s === 'All' ? 'All' : s}</span>
+                                    </button>
+                                ))}
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Review Dropdown */}
+                    <div className="relative">
+                        <button onClick={() => { setShowReviewDropdown(!showReviewDropdown); setShowDiff(false); setShowCompletedDropdown(false); setShowStatusDropdown(false); setShowTimeDropdown(false); }} className={`flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-bold transition ${reviewFilter !== 'All' ? 'border-amber-500 bg-amber-500 text-white' : 'site-button-secondary'}`}>
+                            <Bookmark className={`h-4 w-4 ${reviewFilter !== 'All' ? 'fill-white text-white' : 'text-slate-500'}`} /> {reviewFilter === 'All' ? 'Review' : reviewFilter} <ChevronDown className={`h-4 w-4 transition-transform ${showReviewDropdown ? 'rotate-180' : ''}`} />
+                        </button>
+                        {showReviewDropdown && (
+                            <div className="absolute left-0 top-full z-[90] mt-2 w-44 rounded-2xl site-panel p-2 shadow-xl" style={{ animation: 'qb-pop 0.25s ease both' }}>
+                                {(['All', 'Marked', 'Not Marked'] as const).map(r => (
+                                    <button key={r} onClick={() => { setReviewFilter(r); setShowReviewDropdown(false); }} className={`flex w-full items-center justify-between rounded-xl px-4 py-2 text-left text-sm font-medium transition-all ${reviewFilter === r ? 'site-subpanel font-bold site-text-strong' : 'site-button-secondary site-text'}`}>
+                                        <span>{r === 'All' ? 'All' : r}</span>
+                                    </button>
+                                ))}
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Time Spent Dropdown */}
+                    <div className="relative">
+                        <button onClick={() => { setShowTimeDropdown(!showTimeDropdown); setShowDiff(false); setShowCompletedDropdown(false); setShowStatusDropdown(false); setShowReviewDropdown(false); }} className={`flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-bold transition ${timeRange[0] > 0 || timeRange[1] < 7 ? 'border-emerald-600 bg-emerald-600 text-white' : 'site-button-secondary'}`}>
+                            <Clock className="h-4 w-4" /> {(timeRange[0] > 0 || timeRange[1] < 7) ? `${timeLabels[timeRange[0]]} - ${timeLabels[timeRange[1]]}` : 'Time Spent'} <ChevronDown className={`h-4 w-4 transition-transform ${showTimeDropdown ? 'rotate-180' : ''}`} />
+                        </button>
+                        {showTimeDropdown && (
+                            <div className="absolute left-0 top-full z-[90] mt-2 w-64 rounded-2xl site-panel p-4 shadow-xl" style={{ animation: 'qb-pop 0.25s ease both' }}>
+                                <style>{`.dual-slider::-webkit-slider-thumb { pointer-events: auto; appearance: none; width: 16px; height: 16px; border-radius: 50%; background: white; border: 2px solid #059669; cursor: pointer; box-shadow: 0 1px 3px rgba(0,0,0,0.2); }`}</style>
+                                <p className="text-xs font-bold text-slate-500 mb-4 uppercase tracking-wider text-center">Select Time Range</p>
+                                <div className="flex justify-between text-xs font-bold text-slate-700 mb-2 px-1">
+                                    <span>{timeLabels[timeRange[0]]}</span>
+                                    <span>{timeLabels[timeRange[1]]}</span>
+                                </div>
+                                <div className="relative h-1.5 w-full bg-slate-200 rounded-full flex items-center mb-1">
+                                    <div className="absolute h-full bg-emerald-500 rounded-full" style={{ left: `${(timeRange[0] / 7) * 100}%`, right: `${100 - (timeRange[1] / 7) * 100}%` }} />
+                                    <input type="range" min={0} max={7} value={timeRange[0]} onChange={e => setTimeRange([Math.min(parseInt(e.target.value), timeRange[1] - 1), timeRange[1]])} className="dual-slider absolute w-full appearance-none bg-transparent pointer-events-none" style={{ zIndex: 3 }} />
+                                    <input type="range" min={0} max={7} value={timeRange[1]} onChange={e => setTimeRange([timeRange[0], Math.max(parseInt(e.target.value), timeRange[0] + 1)])} className="dual-slider absolute w-full appearance-none bg-transparent pointer-events-none" style={{ zIndex: 4 }} />
+                                </div>
+                                <div className="flex justify-between px-1.5 text-[9px] text-slate-400 font-medium">
+                                    {[0, 1, 2, 3, 4, 5, 6, 7].map(i => <span key={i}>|</span>)}
+                                </div>
+                            </div>
+                        )}
+                    </div>
+
+                    <div className="ml-auto flex items-center gap-2">
+                        <button onClick={() => setShuffled(!shuffled)} className={`flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-bold transition ${shuffled ? 'border-slate-800 bg-slate-800 text-white' : 'site-button-secondary'}`}>
+                            <Shuffle className="h-4 w-4" /> Shuffle
+                        </button>
+                    </div>
                 </motion.div>
 
                 <motion.section className="relative z-10 grid gap-6 lg:grid-cols-2" variants={sectionRevealVariants}>
@@ -682,15 +768,19 @@ function BrowseView({ onStartQuiz, reviewedIds }: { onStartQuiz: (qs: Question[]
 function QuizView({
     questions,
     reviewedIds,
+    qbStats,
     onBack,
     onFinish,
     onToggleReview,
+    onUpdateStat,
 }: {
     questions: Question[];
     reviewedIds: Set<string>;
+    qbStats: QBStats;
     onBack: () => void;
     onFinish: (r: SessionResult) => void;
     onToggleReview: (questionId: string, nextValue: boolean) => void;
+    onUpdateStat: (questionId: string, status: 'correct' | 'incorrect', timeSpentSeconds: number) => void;
 }) {
     const [idx, setIdx] = useState(0);
     const [sel, setSel] = useState<number | null>(null);
@@ -708,7 +798,7 @@ function QuizView({
     const [eliminatedAnswers, setEliminatedAnswers] = useState<Record<number, number[]>>({});
     const [isHighlightActive, setIsHighlightActive] = useState(false);
     const [highlights, setHighlights] = useState<Record<string, Highlight[]>>({});
-    const [timeSeconds, setTimeSeconds] = useState(0);
+    const [questionTimes, setQuestionTimes] = useState<Record<number, number>>({});
     const [isTimerHidden, setIsTimerHidden] = useState(false);
     const [isPaused, setIsPaused] = useState(false);
     const [isDesmosOpen, setIsDesmosOpen] = useState(false);
@@ -717,9 +807,14 @@ function QuizView({
 
     useEffect(() => {
         if (isPaused) return;
-        const interval = setInterval(() => setTimeSeconds(s => s + 1), 1000);
+        const interval = setInterval(() => {
+            setQuestionTimes(prev => ({
+                ...prev,
+                [idx]: (prev[idx] || 0) + 1
+            }));
+        }, 1000);
         return () => clearInterval(interval);
-    }, [isPaused]);
+    }, [isPaused, idx]);
 
     useEffect(() => {
         const nextFlags: Record<number, boolean> = {};
@@ -807,6 +902,7 @@ function QuizView({
             if (answersMatch(q, response)) {
                 setResolvedQuestions(prev => ({ ...prev, [idx]: true }));
                 setNumericResponses(prev => ({ ...prev, [idx]: response }));
+                onUpdateStat(q.id, 'correct', questionTimes[idx] || 0);
                 return;
             }
 
@@ -815,12 +911,14 @@ function QuizView({
                 if (current.includes(response)) return prev;
                 return { ...prev, [idx]: [...current, response] };
             });
+            onUpdateStat(q.id, 'incorrect', questionTimes[idx] || 0);
             return;
         }
 
         if (sel === null) return;
         if (sel === q.answer) {
             setResolvedQuestions(prev => ({ ...prev, [idx]: true }));
+            onUpdateStat(q.id, 'correct', questionTimes[idx] || 0);
             return;
         }
 
@@ -829,6 +927,7 @@ function QuizView({
             if (current.includes(sel)) return prev;
             return { ...prev, [idx]: [...current, sel] };
         });
+        onUpdateStat(q.id, 'incorrect', questionTimes[idx] || 0);
         setSel(null);
     };
 
@@ -893,7 +992,7 @@ function QuizView({
                 <div className="flex flex-col items-center justify-center flex-1 absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 w-[260px]">
                     {!isTimerHidden ? (
                         <div className="timer-digits font-bold text-[20px] tracking-wider text-slate-800 flex items-center justify-center gap-2 bg-slate-100/80 backdrop-blur-sm px-5 py-1.5 rounded-full border border-slate-200 shadow-inner">
-                            {formatTime(timeSeconds)}
+                            {formatTime(questionTimes[idx] || 0)}
                         </div>
                     ) : (
                         <div className="font-bold text-[22px] tracking-tight flex items-center justify-center gap-2 opacity-50 mb-1">
@@ -1635,12 +1734,20 @@ function SummaryView({ result, onRestart, onBack }: { result: SessionResult; onR
 }
 
 // ── Root ──────────────────────────────────────────────────────────────────────
+export interface QBStat {
+    status: 'correct' | 'incorrect';
+    timeSpentSeconds: number;
+}
+export type QBStats = Record<string, QBStat>;
+const QB_STATS_STORAGE_KEY = 'targetprep_qb_stats';
+
 export default function QuestionBankPage() {
     const [view, setView] = useState<View>('browse');
     const [quizQ, setQuizQ] = useState<Question[]>([]);
     const [label, setLabel] = useState('');
     const [result, setResult] = useState<SessionResult | null>(null);
     const [reviewedQuestionIds, setReviewedQuestionIds] = useState<string[]>([]);
+    const [qbStats, setQbStats] = useState<QBStats>({});
     const router = useRouter();
     const reviewedIdSet = useMemo(() => new Set(reviewedQuestionIds), [reviewedQuestionIds]);
 
@@ -1648,16 +1755,24 @@ export default function QuestionBankPage() {
         let frameId = 0;
 
         try {
-            const raw = window.localStorage.getItem(QB_REVIEW_STORAGE_KEY);
-            if (!raw) return undefined;
+            const rawReview = window.localStorage.getItem(QB_REVIEW_STORAGE_KEY);
+            if (rawReview) {
+                const parsed = JSON.parse(rawReview);
+                if (Array.isArray(parsed)) {
+                    setReviewedQuestionIds(parsed.filter((item): item is string => typeof item === 'string'));
+                }
+            }
 
-            const parsed = JSON.parse(raw);
-            if (Array.isArray(parsed)) {
-                const nextIds = parsed.filter((item): item is string => typeof item === 'string');
-                frameId = window.requestAnimationFrame(() => setReviewedQuestionIds(nextIds));
+            const rawStats = window.localStorage.getItem(QB_STATS_STORAGE_KEY);
+            if (rawStats) {
+                const parsedStats = JSON.parse(rawStats);
+                if (typeof parsedStats === 'object' && parsedStats !== null) {
+                    setQbStats(parsedStats as QBStats);
+                }
             }
         } catch {
-            frameId = window.requestAnimationFrame(() => setReviewedQuestionIds([]));
+            setReviewedQuestionIds([]);
+            setQbStats({});
         }
 
         return () => {
@@ -1676,13 +1791,27 @@ export default function QuestionBankPage() {
         });
     }, []);
 
+    const updateQuestionStat = useCallback((questionId: string, status: 'correct' | 'incorrect', timeSpentSeconds: number) => {
+        setQbStats(prev => {
+            const updated = { ...prev };
+            const existingTime = updated[questionId]?.timeSpentSeconds || 0;
+            updated[questionId] = {
+                status,
+                // Add the new time spent to any previously recorded time spent
+                timeSpentSeconds: existingTime + timeSpentSeconds
+            };
+            window.localStorage.setItem(QB_STATS_STORAGE_KEY, JSON.stringify(updated));
+            return updated;
+        });
+    }, []);
+
     const start = (qs: Question[], l: string) => {
         setQuizQ(qs); setLabel(l); setResult(null); setView('quiz');
         router.push('/question-bank?view=quiz');
     };
     const finish = (r: SessionResult) => { setResult(r); setView('summary'); router.replace('/question-bank'); };
 
-    if (view === 'quiz') return <QuizView questions={quizQ} reviewedIds={reviewedIdSet} onBack={() => { setView('browse'); router.replace('/question-bank'); }} onFinish={finish} onToggleReview={toggleReviewedQuestion} />;
+    if (view === 'quiz') return <QuizView questions={quizQ} reviewedIds={reviewedIdSet} qbStats={qbStats} onBack={() => { setView('browse'); router.replace('/question-bank'); }} onFinish={finish} onToggleReview={toggleReviewedQuestion} onUpdateStat={updateQuestionStat} />;
     if (view === 'summary' && result) return <SummaryView result={result} onRestart={() => start(quizQ, label)} onBack={() => { setView('browse'); router.replace('/question-bank'); }} />;
-    return <BrowseView onStartQuiz={start} reviewedIds={reviewedIdSet} />;
+    return <BrowseView onStartQuiz={start} reviewedIds={reviewedIdSet} qbStats={qbStats} />;
 }

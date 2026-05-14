@@ -17,6 +17,9 @@ export type Student = {
   classroomId: string;
   joinedAt: string;
   avatar: string; // initials color key: 'blue' | 'indigo' | 'rose' | 'emerald' | 'amber'
+  plannedExamDate?: string;
+  scorePredictor?: string;
+  history?: { date: string; accuracy: number }[];
 };
 
 export type QuestionOption = { A: string; B: string; C: string; D: string };
@@ -32,7 +35,7 @@ export type Question = {
 export type Assignment = {
   id: string;
   title: string;
-  subject: 'English' | 'Math';
+  subject: 'English' | 'Math' | 'Both';
   classroomIds: string[];
   questions: Question[];
   timeLimitMinutes: number;
@@ -69,14 +72,14 @@ const MOCK_CLASSROOMS: Classroom[] = [
 ];
 
 const MOCK_STUDENTS: Student[] = [
-  { id: 's1', name: 'Alex Kim', classroomId: 'cls-1', joinedAt: '2026-01-16T00:00:00Z', avatar: 'blue' },
-  { id: 's2', name: 'Sara Chen', classroomId: 'cls-1', joinedAt: '2026-01-17T00:00:00Z', avatar: 'rose' },
-  { id: 's3', name: 'James Park', classroomId: 'cls-1', joinedAt: '2026-01-18T00:00:00Z', avatar: 'emerald' },
-  { id: 's4', name: 'Mia Torres', classroomId: 'cls-1', joinedAt: '2026-01-20T00:00:00Z', avatar: 'amber' },
-  { id: 's5', name: 'Noah Wang', classroomId: 'cls-1', joinedAt: '2026-01-22T00:00:00Z', avatar: 'indigo' },
-  { id: 's6', name: 'Lily Patel', classroomId: 'cls-2', joinedAt: '2026-02-02T00:00:00Z', avatar: 'rose' },
-  { id: 's7', name: 'Ethan Brooks', classroomId: 'cls-2', joinedAt: '2026-02-03T00:00:00Z', avatar: 'blue' },
-  { id: 's8', name: 'Zara Johnson', classroomId: 'cls-2', joinedAt: '2026-02-04T00:00:00Z', avatar: 'emerald' },
+  { id: 's1', name: 'Alex Kim', classroomId: 'cls-1', joinedAt: '2026-01-16T00:00:00Z', avatar: 'blue', plannedExamDate: 'June 6', scorePredictor: '1480-1520', history: [{date: 'W1', accuracy: 60}, {date: 'W2', accuracy: 68}, {date: 'W3', accuracy: 75}, {date: 'W4', accuracy: 80}] },
+  { id: 's2', name: 'Sara Chen', classroomId: 'cls-1', joinedAt: '2026-01-17T00:00:00Z', avatar: 'rose', plannedExamDate: 'June 6', scorePredictor: '1350-1410', history: [{date: 'W1', accuracy: 50}, {date: 'W2', accuracy: 55}, {date: 'W3', accuracy: 62}, {date: 'W4', accuracy: 65}] },
+  { id: 's3', name: 'James Park', classroomId: 'cls-1', joinedAt: '2026-01-18T00:00:00Z', avatar: 'emerald', plannedExamDate: 'Aug 24', scorePredictor: '1550-1600', history: [{date: 'W1', accuracy: 80}, {date: 'W2', accuracy: 85}, {date: 'W3', accuracy: 88}, {date: 'W4', accuracy: 92}] },
+  { id: 's4', name: 'Mia Torres', classroomId: 'cls-1', joinedAt: '2026-01-20T00:00:00Z', avatar: 'amber', plannedExamDate: 'June 6', scorePredictor: '--', history: [{date: 'W1', accuracy: 40}, {date: 'W2', accuracy: 42}, {date: 'W3', accuracy: 45}, {date: 'W4', accuracy: 45}] },
+  { id: 's5', name: 'Noah Wang', classroomId: 'cls-1', joinedAt: '2026-01-22T00:00:00Z', avatar: 'indigo', plannedExamDate: 'Aug 24', scorePredictor: '1400-1460', history: [{date: 'W1', accuracy: 70}, {date: 'W2', accuracy: 70}, {date: 'W3', accuracy: 72}, {date: 'W4', accuracy: 75}] },
+  { id: 's6', name: 'Lily Patel', classroomId: 'cls-2', joinedAt: '2026-02-02T00:00:00Z', avatar: 'rose', plannedExamDate: 'Nov 2', scorePredictor: '1280-1340', history: [{date: 'W1', accuracy: 55}, {date: 'W2', accuracy: 60}, {date: 'W3', accuracy: 65}, {date: 'W4', accuracy: 70}] },
+  { id: 's7', name: 'Ethan Brooks', classroomId: 'cls-2', joinedAt: '2026-02-03T00:00:00Z', avatar: 'blue', plannedExamDate: 'Nov 2', scorePredictor: '1380-1440', history: [{date: 'W1', accuracy: 65}, {date: 'W2', accuracy: 70}, {date: 'W3', accuracy: 75}, {date: 'W4', accuracy: 78}] },
+  { id: 's8', name: 'Zara Johnson', classroomId: 'cls-2', joinedAt: '2026-02-04T00:00:00Z', avatar: 'emerald', plannedExamDate: 'Nov 2', scorePredictor: '1500-1550', history: [{date: 'W1', accuracy: 82}, {date: 'W2', accuracy: 85}, {date: 'W3', accuracy: 89}, {date: 'W4', accuracy: 91}] },
 ];
 
 const MOCK_ASSIGNMENTS: Assignment[] = [

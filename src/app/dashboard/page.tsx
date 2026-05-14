@@ -15,6 +15,7 @@ import {
   Target,
   TrendingUp,
   Trophy,
+  Map,
 } from 'lucide-react';
 import { satDates } from '@/data/questions';
 import {
@@ -68,6 +69,7 @@ export default function HomePage() {
     completed: 0,
     answered: 0,
   });
+  const [hasPlan, setHasPlan] = useState(false);
 
   const nextTest = useMemo(() => {
     return satDates.find((date) => new Date(date.target).getTime() > PAGE_LOAD_TIME) ?? satDates[satDates.length - 1];
@@ -88,6 +90,8 @@ export default function HomePage() {
           year: 'numeric',
         }).format(new Date())
       );
+
+      setHasPlan(!!localStorage.getItem('targetprep_plan'));
 
       try {
         const raw = localStorage.getItem('targetprep_progress');
@@ -129,6 +133,11 @@ export default function HomePage() {
     const interval = setInterval(update, 1000);
     return () => clearInterval(interval);
   }, [nextTest]);
+
+  // Mock predicted score
+  const predictedScoreRange = stats.avgScore > 0 ? `${Math.max(400, stats.avgScore - 30)}–${Math.min(1600, stats.avgScore + 30)}` : '--';
+  const mathRange = stats.avgScore > 0 ? `${Math.round((stats.avgScore / 2) - 10)}–${Math.round((stats.avgScore / 2) + 20)}` : '';
+  const engRange = stats.avgScore > 0 ? `${Math.round((stats.avgScore / 2) - 20)}–${Math.round((stats.avgScore / 2) + 10)}` : '';
 
   const quickLinks = [
     {
@@ -172,8 +181,8 @@ export default function HomePage() {
           <div className="absolute bottom-0 right-0 h-48 w-64 translate-x-10 translate-y-10 rounded-full bg-rose-300/10 dark:bg-amber-500/10 blur-3xl" />
 
           <motion.div className="relative grid gap-8 xl:grid-cols-[1.15fr_0.85fr]" variants={staggerContainerVariants}>
-            <motion.div variants={itemRevealVariants}>
-              <div className="site-hero-chip inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.24em]">
+            <motion.div className="flex flex-col" variants={itemRevealVariants}>
+              <div className="site-hero-chip inline-flex w-fit items-center gap-2 rounded-full px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.24em]">
                 <Sparkles className="h-3.5 w-3.5" />
                 SAT control center
               </div>
@@ -183,9 +192,8 @@ export default function HomePage() {
                 <h1 className="site-hero-title mt-3 max-w-2xl text-4xl font-black leading-[1.02] tracking-[-0.04em] sm:text-5xl lg:text-[4.3rem]">
                   Practice with structure, not guesswork.
                 </h1>
-                <p className="site-hero-body mt-5 max-w-2xl text-[15px] leading-7 sm:text-[17px]">
-                  Train the real SAT flow from one place: full practice tests, focused question-bank reps,
-                  and a clean scoreboard for what is actually moving.
+                <p className="site-hero-body mt-4 font-semibold text-blue-600 dark:text-blue-400">
+                  Train the real SAT flow from one place: full practice tests, focused question-bank reps, and a clean scoreboard for what is actually moving.
                 </p>
               </div>
 
@@ -198,34 +206,71 @@ export default function HomePage() {
                   <ArrowRight className="h-4 w-4" />
                 </Link>
                 <Link
-                  href="/question-bank"
+                  href="/study-plan"
                   className="site-hero-secondary-btn inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-bold transition hover:scale-[1.02] shadow-sm"
                 >
-                  Open Question Bank
-                  <LayoutGrid className="h-4 w-4" />
+                  View Study Plan
+                  <Map className="h-4 w-4" />
                 </Link>
               </div>
 
-              <motion.div className="mt-10 grid gap-4 sm:grid-cols-3" variants={staggerContainerVariants}>
-                <motion.div className="site-hero-stat rounded-[26px] p-4" variants={itemRevealVariants}>
-                  <p className="site-hero-kicker text-[11px] font-bold uppercase tracking-[0.22em]">Completed</p>
-                  <p className="site-hero-title mt-3 text-3xl font-black tracking-[-0.04em]">{stats.completed}</p>
-                  <p className="site-hero-body mt-1 text-sm">Finished tests stored in progress.</p>
-                </motion.div>
-                <motion.div className="site-hero-stat rounded-[26px] p-4" variants={itemRevealVariants}>
-                  <p className="site-hero-kicker text-[11px] font-bold uppercase tracking-[0.22em]">Average score</p>
-                  <p className="site-hero-title mt-3 text-3xl font-black tracking-[-0.04em]">{stats.avgScore || '--'}</p>
-                  <p className="site-hero-body mt-1 text-sm">Based on saved completed tests.</p>
-                </motion.div>
-                <motion.div className="site-hero-stat rounded-[26px] p-4" variants={itemRevealVariants}>
-                  <p className="site-hero-kicker text-[11px] font-bold uppercase tracking-[0.22em]">Questions logged</p>
-                  <p className="site-hero-title mt-3 text-3xl font-black tracking-[-0.04em]">{stats.answered}</p>
-                  <p className="site-hero-body mt-1 text-sm">All answered reps tracked in progress.</p>
+              <motion.div className="mt-10" variants={staggerContainerVariants}>
+                <div className="grid gap-4 sm:grid-cols-3">
+                  <motion.div className="site-hero-stat rounded-[26px] p-4" variants={itemRevealVariants}>
+                    <p className="site-hero-kicker text-[11px] font-bold uppercase tracking-[0.22em]">Completed</p>
+                    <p className="site-hero-title mt-3 text-3xl font-black tracking-[-0.04em]">{stats.completed}</p>
+                    <p className="site-hero-body mt-1 text-sm">Finished tests stored in progress.</p>
+                  </motion.div>
+                  <motion.div className="site-hero-stat rounded-[26px] p-4" variants={itemRevealVariants}>
+                    <p className="site-hero-kicker text-[11px] font-bold uppercase tracking-[0.22em]">Average score</p>
+                    <p className="site-hero-title mt-3 text-3xl font-black tracking-[-0.04em]">{stats.avgScore || '--'}</p>
+                    <p className="site-hero-body mt-1 text-sm">Based on saved completed tests.</p>
+                  </motion.div>
+                  <motion.div className="site-hero-stat rounded-[26px] p-4" variants={itemRevealVariants}>
+                    <p className="site-hero-kicker text-[11px] font-bold uppercase tracking-[0.22em]">Questions logged</p>
+                    <p className="site-hero-title mt-3 text-3xl font-black tracking-[-0.04em]">{stats.answered}</p>
+                    <p className="site-hero-body mt-1 text-sm">All answered reps tracked in progress.</p>
+                  </motion.div>
+                </div>
+                
+                {/* Score Predictor */}
+                <motion.div className="site-hero-stat mt-4 rounded-[26px] p-6 border-2 border-blue-500/20 bg-blue-50/50 dark:bg-blue-950/20" variants={itemRevealVariants}>
+                  <div className="flex items-center gap-2">
+                    <p className="site-hero-kicker text-[11px] font-bold uppercase tracking-[0.22em] text-blue-600 dark:text-blue-400">Score Predictor</p>
+                    <Sparkles className="h-3.5 w-3.5 text-blue-500" />
+                  </div>
+                  {stats.completed > 0 ? (
+                    <div className="mt-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                      <p className="text-5xl font-black tracking-[-0.04em] text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-400">
+                        {predictedScoreRange}
+                      </p>
+                      <div className="flex items-center gap-6">
+                        <div className="text-right">
+                          <p className="text-[10px] font-bold uppercase tracking-widest site-text-muted mb-1">Math</p>
+                          <p className="text-lg font-bold text-blue-700 dark:text-blue-400">{mathRange}</p>
+                        </div>
+                        <div className="w-px h-8 bg-blue-500/20" />
+                        <div>
+                          <p className="text-[10px] font-bold uppercase tracking-widest site-text-muted mb-1">English</p>
+                          <p className="text-lg font-bold text-blue-700 dark:text-blue-400">{engRange}</p>
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="mt-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                      <p className="text-5xl font-black tracking-[-0.04em] text-slate-300 dark:text-slate-700">
+                        --
+                      </p>
+                      <p className="text-sm font-medium site-text-muted">Complete a practice test to unlock your prediction.</p>
+                    </div>
+                  )}
                 </motion.div>
               </motion.div>
             </motion.div>
 
-            <motion.div className="flex flex-col justify-between gap-5" variants={staggerContainerVariants}>
+            <motion.div className="flex flex-col gap-5" variants={staggerContainerVariants}>
+              
+              {/* Big Countdown Restored */}
               <motion.div
                 className="site-panel flex min-h-[340px] flex-col rounded-[32px] p-6"
                 variants={itemRevealVariants}
@@ -271,6 +316,39 @@ export default function HomePage() {
                   </div>
                 </div>
               </motion.div>
+
+              {/* Today's Focus */}
+              <motion.div
+                className="site-panel flex flex-col rounded-[32px] p-6"
+                variants={itemRevealVariants}
+              >
+                <div className="flex items-start justify-between gap-4">
+                  <div>
+                    <p className="site-hero-kicker text-[11px] font-bold uppercase tracking-[0.24em]">Today's Focus</p>
+                    <h2 className="site-hero-title mt-2 text-2xl font-black tracking-[-0.03em]">
+                      {hasPlan ? 'Advanced Math' : 'No Active Plan'}
+                    </h2>
+                    <p className="site-hero-body mt-2 text-sm leading-6">
+                      {hasPlan ? 'Complete 15 practice questions to stay on track.' : 'You have not set up your study plan yet.'}
+                    </p>
+                  </div>
+                  <div className={`site-chip rounded-2xl p-3 ${!hasPlan ? 'bg-slate-100 dark:bg-slate-800' : ''}`}>
+                    <Target className={`h-5 w-5 ${hasPlan ? 'site-text-strong' : 'text-slate-400'}`} />
+                  </div>
+                </div>
+
+                <div className="mt-8">
+                  <Link
+                    href="/study-plan"
+                    className="inline-flex w-full justify-center items-center gap-2 rounded-xl bg-[linear-gradient(135deg,#10b981,#059669)] px-4 py-3 text-sm font-bold text-white transition hover:scale-[1.02] shadow-lg shadow-emerald-500/20"
+                  >
+                    {hasPlan ? 'Continue Plan' : 'Set up your study plan'}
+                    <ArrowRight className="h-4 w-4" />
+                  </Link>
+                </div>
+              </motion.div>
+
+              {/* Big Countdown Restored - REMOVED FROM HERE, MOVED ABOVE */}
 
               <motion.div className="grid gap-4 sm:grid-cols-2" variants={staggerContainerVariants}>
                 <motion.div className="site-panel rounded-[28px] p-6" variants={itemRevealVariants}>

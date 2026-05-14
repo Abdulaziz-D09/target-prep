@@ -2,14 +2,14 @@
 import { useState, useEffect, Fragment } from 'react';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
-import { motion, useReducedMotion } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import {
-    ArrowLeft, Copy, Users, ClipboardList, CheckCircle2, Clock, GraduationCap, ChevronDown, ChevronUp, X
+    ArrowLeft, Copy, Users, ClipboardList, CheckCircle2, Clock, GraduationCap, ChevronDown, ChevronUp, ChevronRight, X
 } from 'lucide-react';
 import {
-    FloatingPageShapes, itemRevealVariants, pageRevealVariants, staggerContainerVariants,
+    FloatingPageShapes,
 } from '@/components/SiteMotion';
-import { useClassroomStore } from '@/store/classroomStore';
+import { useClassroomStore, seedOnce, Student } from '@/store/classroomStore';
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -52,19 +52,21 @@ function getMistakes(studentId: string, assignmentId: string, total: number, cor
     return mistakes.sort((a, b) => a - b);
 }
 
+// Seed data synchronously before first render
+seedOnce();
+
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function ClassDetailPage() {
-    const shouldReduceMotion = useReducedMotion();
     const params = useParams<{ id: string }>();
     const router = useRouter();
 
     const [activeTab, setActiveTab] = useState<'students' | 'assignments'>('students');
     const [expandedAssignmentId, setExpandedAssignmentId] = useState<string | null>(null);
     const [copiedCode, setCopiedCode] = useState(false);
+    const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
 
-    const { classrooms, students, assignments, progress, seed } = useClassroomStore();
-    useEffect(() => { seed(); }, [seed]);
+    const { classrooms, students, assignments, progress } = useClassroomStore();
 
     const cls = classrooms.find((c) => c.id === params.id);
 
@@ -104,6 +106,8 @@ export default function ClassDetailPage() {
             completed,
             outOf: classAssignments.length,
             avgScore: totalQuestions > 0 ? Math.round((totalCorrect / totalQuestions) * 100) : null,
+            totalCorrect,
+            totalQuestions,
         };
     };
 
@@ -119,35 +123,28 @@ export default function ClassDetailPage() {
         return { started, completed, avgScore };
     };
 
-    const overallCompletion = classStudents.length > 0
-        ? Math.round(
-            classStudents.filter((s) => {
-                const { completed, outOf } = getStudentRollup(s.id);
-                return outOf > 0 && completed === outOf;
-            }).length / classStudents.length * 100
-        )
-        : null;
+    const allRows = classAssignments.flatMap((a) => 
+        progress.filter(p => p.assignmentId === a.id && classStudents.some(s => s.id === p.studentId))
+    );
+    const groupCorrect = allRows.reduce((s, r) => s + r.correct, 0);
+    const groupTotal = allRows.reduce((s, r) => s + r.total, 0);
+    const groupAccuracy = groupTotal > 0 ? Math.round((groupCorrect / groupTotal) * 100) : null;
 
     return (
         <div className="relative min-h-screen pt-4 pb-12 px-4 sm:px-6 lg:px-8">
             <FloatingPageShapes theme="home" />
 
-            <motion.div
-                className="relative z-10 mx-auto max-w-[1000px]"
-                initial={shouldReduceMotion ? undefined : 'hidden'}
-                animate={shouldReduceMotion ? undefined : 'visible'}
-                variants={pageRevealVariants}
-            >
+            <div className="relative z-10 mx-auto max-w-[1320px]">
                 {/* Back */}
-                <motion.div className="mb-6" variants={itemRevealVariants}>
+                <div className="mb-6">
                     <Link href="/teacher/classes" className="inline-flex items-center gap-1.5 text-sm font-semibold site-text-muted hover:site-text transition">
                         <ArrowLeft className="h-4 w-4" />
                         Back to Classes
                     </Link>
-                </motion.div>
+                </div>
 
                 {/* Class header card */}
-                <motion.div className="site-panel rounded-[24px] p-6 mb-6 border-t-4 border-t-indigo-500" variants={itemRevealVariants}>
+                <div className="site-panel rounded-[24px] p-6 mb-6 border-t-4 border-t-indigo-500">
                     <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
                         <div>
                             <div className="flex items-center gap-2 mb-1">
@@ -187,15 +184,15 @@ export default function ClassDetailPage() {
                         </div>
                         <div className="text-center">
                             <p className="text-2xl font-black tracking-tight site-text-strong">
-                                {overallCompletion !== null ? `${overallCompletion}%` : '–'}
+                                {groupAccuracy !== null ? `${groupAccuracy}%` : '–'}
                             </p>
-                            <p className="text-[11px] uppercase tracking-wider font-bold site-text-muted mt-0.5">All Done</p>
+                            <p className="text-[11px] uppercase tracking-wider font-bold site-text-muted mt-0.5">Group Accuracy</p>
                         </div>
                     </div>
-                </motion.div>
+                </div>
 
                 {/* Tabs */}
-                <motion.div className="flex gap-2 mb-5" variants={itemRevealVariants}>
+                <div className="flex gap-2 mb-5">
                     {(['students', 'assignments'] as const).map((tab) => (
                         <button
                             key={tab}
@@ -210,73 +207,71 @@ export default function ClassDetailPage() {
                             {tab === 'students' ? `Students (${classStudents.length})` : `Assignments (${classAssignments.length})`}
                         </button>
                     ))}
-                </motion.div>
+                </div>
 
-                {/* ── Students tab ──────────────────────────────────────────── */}
+                {/* Tab content — instant switch, no waiting animation */}
+                <div>
                 {activeTab === 'students' && (
-                    <motion.div variants={staggerContainerVariants}>
+                <div className="animate-in fade-in duration-150">
                         {classStudents.length === 0 ? (
-                            <motion.div variants={itemRevealVariants} className="site-panel rounded-[24px] p-12 text-center">
+                            <div className="site-panel rounded-[24px] p-12 text-center">
                                 <Users className="h-10 w-10 site-text-muted mx-auto mb-3 opacity-30" />
                                 <p className="font-bold site-text-strong text-lg mb-1">No students yet</p>
                                 <p className="text-sm site-text-muted">
                                     Share code <span className="font-mono font-bold">{cls.joinCode}</span> with your students.
                                 </p>
-                            </motion.div>
+                            </div>
                         ) : (
-                            <motion.div className="site-panel rounded-[24px] overflow-hidden" variants={itemRevealVariants}>
+                            <div className="site-panel rounded-[24px] overflow-hidden">
                                 <div className="overflow-x-auto">
                                     <table className="w-full">
                                         <thead>
                                             <tr className="border-b border-slate-200 dark:border-slate-700/50">
-                                                <th className="text-left px-6 py-4 text-[11px] uppercase tracking-widest font-bold site-text-muted">Student</th>
-                                                <th className="text-left px-6 py-4 text-[11px] uppercase tracking-widest font-bold site-text-muted hidden sm:table-cell">Joined</th>
-                                                <th className="text-center px-6 py-4 text-[11px] uppercase tracking-widest font-bold site-text-muted">Completed</th>
-                                                <th className="text-center px-6 py-4 text-[11px] uppercase tracking-widest font-bold site-text-muted">Avg Score</th>
-                                                <th className="text-center px-6 py-4 text-[11px] uppercase tracking-widest font-bold site-text-muted">Status</th>
+                                                <th className="text-left px-8 py-5 text-[12px] uppercase tracking-widest font-bold site-text-muted">Student</th>
+                                                <th className="text-left px-8 py-5 text-[12px] uppercase tracking-widest font-bold site-text-muted hidden sm:table-cell">Exam Date</th>
+                                                <th className="text-center px-8 py-5 text-[12px] uppercase tracking-widest font-bold site-text-muted hidden md:table-cell">Predicted Score</th>
+                                                <th className="text-right px-8 py-5 text-[12px] uppercase tracking-widest font-bold site-text-muted">Overall Accuracy</th>
+                                                <th className="w-12"></th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             {classStudents.map((student, idx) => {
-                                                const { completed, outOf, avgScore } = getStudentRollup(student.id);
+                                                const { avgScore } = getStudentRollup(student.id);
                                                 const colors = AVATAR_COLORS[student.avatar] ?? AVATAR_COLORS.blue;
                                                 const pct = avgScore ?? 0;
-                                                const allDone = outOf > 0 && completed === outOf;
                                                 return (
                                                     <tr
                                                         key={student.id}
-                                                        className={`${idx < classStudents.length - 1 ? 'border-b border-slate-100 dark:border-slate-800' : ''} hover:bg-slate-50 dark:hover:bg-white/[0.03] transition-colors`}
+                                                        onClick={() => setSelectedStudent(student)}
+                                                        className={`${idx < classStudents.length - 1 ? 'border-b border-slate-100 dark:border-slate-800' : ''} hover:bg-slate-50 dark:hover:bg-white/[0.03] transition-colors cursor-pointer group`}
                                                     >
-                                                        <td className="px-6 py-4">
-                                                            <div className="flex items-center gap-3">
-                                                                <div className={`h-9 w-9 rounded-full flex items-center justify-center text-[12px] font-black shrink-0 ${colors.bg} ${colors.text}`}>
+                                                        <td className="px-8 py-5">
+                                                            <div className="flex items-center gap-4">
+                                                                <div className={`h-10 w-10 rounded-full flex items-center justify-center text-[13px] font-black shrink-0 ${colors.bg} ${colors.text}`}>
                                                                     {initials(student.name)}
                                                                 </div>
-                                                                <span className="font-semibold site-text-strong text-[14px]">{student.name}</span>
+                                                                <span className="font-bold site-text-strong text-[15px] group-hover:text-indigo-500 transition">{student.name}</span>
                                                             </div>
                                                         </td>
-                                                        <td className="px-6 py-4 text-[13px] site-text-muted hidden sm:table-cell">
-                                                            {formatDate(student.joinedAt)}
+                                                        <td className="px-8 py-5 text-[14px] font-semibold site-text-muted hidden sm:table-cell">
+                                                            {student.plannedExamDate || 'Not set'}
                                                         </td>
-                                                        <td className="px-6 py-4 text-center">
-                                                            <span className="text-[14px] font-bold site-text-strong">{completed}</span>
-                                                            <span className="text-[13px] site-text-muted">/{outOf}</span>
+                                                        <td className="px-8 py-5 text-center hidden md:table-cell">
+                                                            <span className="text-[14px] font-bold text-indigo-600 dark:text-indigo-400">
+                                                                {student.scorePredictor || '--'}
+                                                            </span>
                                                         </td>
-                                                        <td className="px-6 py-4 text-center">
+                                                        <td className="px-8 py-5 text-right">
                                                             {avgScore !== null
-                                                                ? <span className={`text-[14px] font-black ${scoreColor(pct)}`}>{avgScore}%</span>
-                                                                : <span className="text-[13px] site-text-muted">–</span>}
+                                                                ? <span className={`inline-flex items-center justify-center px-3.5 py-1.5 rounded-full text-[13px] font-black bg-slate-100 dark:bg-slate-800 ${scoreColor(pct)}`}>{avgScore}%</span>
+                                                                : <span className="text-[14px] site-text-muted">–</span>}
                                                         </td>
-                                                        <td className="px-6 py-4 text-center">
-                                                            {allDone ? (
-                                                                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-100/80 dark:bg-emerald-900/30 text-emerald-800 dark:text-emerald-400 border border-emerald-300 dark:border-emerald-800/50 text-[11px] font-bold">
-                                                                    <CheckCircle2 className="h-3 w-3" /> Done
-                                                                </span>
-                                                            ) : (
-                                                                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-100/80 dark:bg-amber-900/30 text-amber-800 dark:text-amber-400 border border-amber-300 dark:border-amber-800/50 text-[11px] font-bold">
-                                                                    <Clock className="h-3 w-3" /> In Progress
-                                                                </span>
-                                                            )}
+                                                        <td className="pr-8 py-5 text-right">
+                                                            <div className="flex justify-end">
+                                                                <div className="h-9 w-9 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all -translate-x-2 group-hover:translate-x-0">
+                                                                    <ChevronRight className="h-5 w-5 site-text-strong" />
+                                                                </div>
+                                                            </div>
                                                         </td>
                                                     </tr>
                                                 );
@@ -284,16 +279,15 @@ export default function ClassDetailPage() {
                                         </tbody>
                                     </table>
                                 </div>
-                            </motion.div>
+                            </div>
                         )}
-                    </motion.div>
+                    </div>
                 )}
 
-                {/* ── Assignments tab ───────────────────────────────────────── */}
                 {activeTab === 'assignments' && (
-                    <motion.div variants={staggerContainerVariants}>
+                    <div className="animate-in fade-in duration-150">
                         {classAssignments.length === 0 ? (
-                            <motion.div variants={itemRevealVariants} className="site-panel rounded-[24px] p-12 text-center">
+                            <div className="site-panel rounded-[24px] p-12 text-center">
                                 <ClipboardList className="h-10 w-10 site-text-muted mx-auto mb-3 opacity-30" />
                                 <p className="font-bold site-text-strong text-lg mb-1">No assignments yet</p>
                                 <p className="text-sm site-text-muted">
@@ -302,9 +296,9 @@ export default function ClassDetailPage() {
                                     </Link>
                                     {' '}and send it to this class.
                                 </p>
-                            </motion.div>
+                            </div>
                         ) : (
-                            <motion.div className="site-panel rounded-[24px] overflow-hidden" variants={itemRevealVariants}>
+                            <div className="site-panel rounded-[24px] overflow-hidden">
                                 <div className="overflow-x-auto">
                                     <table className="w-full">
                                         <thead>
@@ -365,6 +359,33 @@ export default function ClassDetailPage() {
                                                             <tr className={`${idx < classAssignments.length - 1 ? 'border-b border-slate-100 dark:border-slate-800' : ''}`}>
                                                                 <td colSpan={5} className="p-0">
                                                                     <div className="bg-slate-50 dark:bg-slate-800/30 px-6 py-6 border-t border-slate-200 dark:border-slate-700/50 shadow-inner">
+                                                                        <div className="mb-6 flex flex-wrap gap-6 bg-white dark:bg-[#0f111a] p-4 rounded-xl border border-slate-200 dark:border-slate-800/60 shadow-sm">
+                                                                            <div>
+                                                                                <p className="text-[10px] uppercase tracking-widest font-bold site-text-muted mb-1">Created</p>
+                                                                                <p className="text-[13px] font-bold site-text-strong">{new Date(asgn.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })}</p>
+                                                                            </div>
+                                                                            <div className="w-px bg-slate-200 dark:bg-slate-800 hidden sm:block" />
+                                                                            <div>
+                                                                                <p className="text-[10px] uppercase tracking-widest font-bold site-text-muted mb-1">Subject</p>
+                                                                                <p className="text-[13px] font-bold site-text-strong">{asgn.subject}</p>
+                                                                            </div>
+                                                                            <div className="w-px bg-slate-200 dark:bg-slate-800 hidden sm:block" />
+                                                                            <div>
+                                                                                <p className="text-[10px] uppercase tracking-widest font-bold site-text-muted mb-1">Questions</p>
+                                                                                <p className="text-[13px] font-bold site-text-strong">{asgn.questions.length}</p>
+                                                                            </div>
+                                                                            <div className="w-px bg-slate-200 dark:bg-slate-800 hidden sm:block" />
+                                                                            <div>
+                                                                                <p className="text-[10px] uppercase tracking-widest font-bold site-text-muted mb-1">Time Limit</p>
+                                                                                <p className="text-[13px] font-bold site-text-strong">{asgn.timeLimitMinutes > 0 ? `${asgn.timeLimitMinutes} min` : 'None'}</p>
+                                                                            </div>
+                                                                            <div className="w-px bg-slate-200 dark:bg-slate-800 hidden sm:block" />
+                                                                            <div>
+                                                                                <p className="text-[10px] uppercase tracking-widest font-bold site-text-muted mb-1">Strict Mode (Fullscreen)</p>
+                                                                                <p className="text-[13px] font-bold site-text-strong">{asgn.allowExit ? 'Disabled' : 'Enabled'}</p>
+                                                                            </div>
+                                                                        </div>
+
                                                                         <div className="mb-4 flex items-center justify-between">
                                                                             <h3 className="font-bold site-text-strong text-sm">Student Results</h3>
                                                                         </div>
@@ -435,11 +456,100 @@ export default function ClassDetailPage() {
                                         </tbody>
                                     </table>
                                 </div>
-                            </motion.div>
+                            </div>
                         )}
-                    </motion.div>
+                    </div>
                 )}
-            </motion.div>
+                </div>
+            </div>
+
+            {/* ── Student Profile Modal ───────────────────────────────────────── */}
+            <AnimatePresence>
+                {selectedStudent && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+                        <motion.div
+                            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                            className="absolute inset-0 bg-slate-900/60 backdrop-blur-md"
+                            onClick={() => setSelectedStudent(null)}
+                        />
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.94, y: 12 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.94, y: 12 }}
+                            transition={{ type: 'spring', damping: 28, stiffness: 320 }}
+                            className="relative w-full max-w-lg rounded-[32px] site-panel shadow-2xl p-8 overflow-hidden"
+                        >
+                            <button onClick={() => setSelectedStudent(null)} className="absolute right-5 top-5 p-2 rounded-full site-subpanel hover:scale-105 transition z-10">
+                                <X className="w-5 h-5 site-text" />
+                            </button>
+
+                            {/* Header */}
+                            <div className="flex items-center gap-4 mb-8">
+                                <div className={`h-16 w-16 rounded-full flex items-center justify-center text-2xl font-black ${AVATAR_COLORS[selectedStudent.avatar]?.bg} ${AVATAR_COLORS[selectedStudent.avatar]?.text}`}>
+                                    {initials(selectedStudent.name)}
+                                </div>
+                                <div>
+                                    <h2 className="text-2xl font-black tracking-tight site-text-strong">{selectedStudent.name}</h2>
+                                    <p className="text-[13px] font-semibold site-text-muted mt-0.5">{cls.name}</p>
+                                </div>
+                            </div>
+
+                            {/* Stats */}
+                            <div className="grid grid-cols-2 gap-4 mb-8">
+                                <div className="site-subpanel rounded-2xl p-4 flex flex-col items-center text-center border border-slate-200 dark:border-slate-800">
+                                    <p className="text-[10px] uppercase tracking-widest font-bold site-text-muted mb-1">Target Exam Date</p>
+                                    <p className="text-lg font-black site-text-strong">{selectedStudent.plannedExamDate || 'Not Set'}</p>
+                                </div>
+                                <div className="site-subpanel rounded-2xl p-4 flex flex-col items-center text-center border border-slate-200 dark:border-slate-800">
+                                    <p className="text-[10px] uppercase tracking-widest font-bold site-text-muted mb-1">Score Predictor</p>
+                                    <p className="text-lg font-black text-indigo-600 dark:text-indigo-400">
+                                        {selectedStudent.scorePredictor || '--'}
+                                    </p>
+                                </div>
+                            </div>
+
+                            {/* Growth Chart */}
+                            <div className="mb-2">
+                                <h3 className="text-[12px] uppercase tracking-[0.15em] font-bold site-text-muted mb-4">Accuracy Growth</h3>
+                                <div className="relative h-40 w-full rounded-2xl border border-slate-200 dark:border-slate-800/60 bg-slate-50 dark:bg-[#0b0e14] p-4 flex items-end gap-2">
+                                    {/* Grid Lines */}
+                                    <div className="absolute inset-0 pointer-events-none flex flex-col justify-between p-4 py-6">
+                                        {[100, 75, 50, 25, 0].map((val) => (
+                                            <div key={val} className="w-full border-t border-slate-200/50 dark:border-slate-800/50 relative">
+                                                <span className="absolute -top-2.5 -left-1 text-[9px] font-bold text-slate-400 dark:text-slate-600">{val}%</span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                    
+                                    {/* Chart Bars */}
+                                    {selectedStudent.history && selectedStudent.history.length > 0 ? (
+                                        <div className="relative w-full h-full flex items-end justify-between px-6 z-10 pt-2">
+                                            {selectedStudent.history.map((pt, i) => (
+                                                <div key={i} className="flex flex-col items-center group w-full">
+                                                    <div 
+                                                        className="w-full max-w-[24px] bg-[linear-gradient(to_top,#4f46e5,#6366f1)] rounded-t-sm transition-all duration-500 ease-out relative group-hover:bg-[linear-gradient(to_top,#4338ca,#4f46e5)]"
+                                                        style={{ height: `${pt.accuracy}%` }}
+                                                    >
+                                                        <div className="absolute -top-7 left-1/2 -translate-x-1/2 bg-slate-800 text-white text-[10px] font-bold px-1.5 py-0.5 rounded opacity-0 group-hover:opacity-100 transition-opacity">
+                                                            {pt.accuracy}%
+                                                        </div>
+                                                    </div>
+                                                    <span className="text-[10px] font-bold site-text-muted mt-2">{pt.date}</span>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    ) : (
+                                        <div className="w-full h-full flex items-center justify-center relative z-10">
+                                            <p className="text-[12px] font-semibold site-text-muted">Not enough data to plot.</p>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
         </div>
     );
 }

@@ -127,7 +127,7 @@ export default function CreateAssignmentPage() {
 
     // Step 4
     const [title, setTitle]                           = useState('');
-    const [subject, setSubject]                       = useState<'English' | 'Math'>('English');
+    const [subject, setSubject]                       = useState<'English' | 'Math' | 'Both'>('English');
     const [selectedClassroomIds, setSelectedClassroomIds] = useState<string[]>([]);
     const [timeLimitMinutes, setTimeLimitMinutes] = useState(60);
     const [allowExit, setAllowExit]                   = useState(false);
@@ -605,7 +605,7 @@ export default function CreateAssignmentPage() {
                                     <div className="sm:col-span-2">
                                         <label className="block text-[11px] font-bold uppercase tracking-widest site-text-muted mb-2">Subject</label>
                                         <div className="flex gap-2">
-                                            {(['English', 'Math'] as const).map((s) => (
+                                            {(['English', 'Math', 'Both'] as const).map((s) => (
                                                 <button
                                                     key={s}
                                                     type="button"
@@ -614,11 +614,13 @@ export default function CreateAssignmentPage() {
                                                         subject === s
                                                             ? s === 'English'
                                                                 ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300'
-                                                                : 'border-violet-500 bg-violet-50 dark:bg-violet-900/20 text-violet-700 dark:text-violet-300'
+                                                                : s === 'Math'
+                                                                    ? 'border-violet-500 bg-violet-50 dark:bg-violet-900/20 text-violet-700 dark:text-violet-300'
+                                                                    : 'border-emerald-500 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-300'
                                                             : 'border-slate-200 dark:border-slate-700 site-subpanel site-text hover:border-slate-300'
                                                     }`}
                                                 >
-                                                    {s === 'English' ? '📖 English' : '🔢 Math'}
+                                                    {s === 'English' ? '📖 English' : s === 'Math' ? '🔢 Math' : '📚 Both'}
                                                 </button>
                                             ))}
                                         </div>
@@ -741,8 +743,8 @@ export default function CreateAssignmentPage() {
                                 </button>
                                 <button
                                     onClick={handleSave}
-                                    disabled={!title.trim() || isSaving}
-                                    className="flex items-center gap-2 px-7 py-3 rounded-full bg-emerald-600 hover:bg-emerald-700 disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold text-[15px] shadow-md transition hover:scale-[1.01]"
+                                    disabled={!title.trim() || isSaving || selectedClassroomIds.length === 0}
+                                    className="flex items-center gap-2 px-7 py-3 rounded-full bg-emerald-600 hover:bg-emerald-700 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:scale-100 text-white font-bold text-[15px] shadow-md transition hover:scale-[1.01]"
                                 >
                                     {isSaving
                                         ? <><Loader2 className="h-4 w-4 animate-spin" /> Saving…</>

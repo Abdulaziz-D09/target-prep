@@ -2,7 +2,7 @@
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Home, FileText, BarChart2, BookOpen, Menu, X, LayoutGrid, SunMedium, Moon, CircleUserRound, GraduationCap, ClipboardList } from 'lucide-react';
+import { Home, FileText, BarChart2, BookOpen, Menu, X, LayoutGrid, SunMedium, Moon, CircleUserRound, GraduationCap, ClipboardList, Map, Rocket } from 'lucide-react';
 import { useEffect, useRef, useState, useSyncExternalStore, type MouseEvent } from 'react';
 import { AnimatePresence, LayoutGroup, motion, useReducedMotion } from 'framer-motion';
 import { itemRevealVariants, siteEase } from '@/components/SiteMotion';
@@ -12,17 +12,19 @@ const MotionLink = motion(Link);
 
 const studentNavItems = [
     { href: '/dashboard', label: 'Home', icon: Home },
+    { href: '/study-plan', label: 'Study Plan', icon: Map },
     { href: '/practice', label: 'Practice Tests', icon: FileText },
+    { href: '#', label: 'SAT Go!', icon: Rocket, badge: 'Soon' },
     { href: '/question-bank', label: 'Question Bank', icon: LayoutGrid },
     { href: '/classroom', label: 'Classroom', icon: GraduationCap },
     { href: '/progress', label: 'Progress', icon: BarChart2 },
-    { href: '/resources', label: 'Playbook', icon: BookOpen },
 ];
 
 const teacherNavItems = [
     { href: '/teacher', label: 'Home', icon: Home },
     { href: '/teacher/classes', label: 'Classes', icon: GraduationCap },
     { href: '/teacher/assignments', label: 'Assignments', icon: ClipboardList },
+    { href: '/teacher/analytics', label: 'Analytics', icon: BarChart2 },
 ];
 
 export default function Sidebar() {
@@ -32,9 +34,7 @@ export default function Sidebar() {
     
     const [mobileOpen, setMobileOpen] = useState(false);
     const [isTemporarilyHidden, setIsTemporarilyHidden] = useState(false);
-    const [activePressHref, setActivePressHref] = useState<string | null>(null);
     const siteTone = useSyncExternalStore<SiteTone>(subscribeToSiteTone, readSiteTone, () => 'dark');
-    const activePressTimeoutRef = useRef<number | null>(null);
     const shouldReduceMotion = useReducedMotion();
 
     useEffect(() => {
@@ -54,11 +54,9 @@ export default function Sidebar() {
         syncDocumentTone(siteTone);
     }, [siteTone]);
 
-    useEffect(() => () => {
-        if (activePressTimeoutRef.current !== null) {
-            window.clearTimeout(activePressTimeoutRef.current);
-        }
-    }, []);
+    useEffect(() => {
+        syncDocumentTone(siteTone);
+    }, [siteTone]);
 
     const isActive = (href: string) => {
         if (href === '/dashboard' || href === '/teacher') return pathname === href;
@@ -82,17 +80,7 @@ export default function Sidebar() {
     const handleNavClick = (event: MouseEvent<HTMLAnchorElement>, href: string, active: boolean) => {
         setMobileOpen(false);
         if (!active) return;
-
         event.preventDefault();
-
-        setActivePressHref(href);
-        if (activePressTimeoutRef.current !== null) {
-            window.clearTimeout(activePressTimeoutRef.current);
-        }
-        activePressTimeoutRef.current = window.setTimeout(() => {
-            setActivePressHref(null);
-            activePressTimeoutRef.current = null;
-        }, 170);
     };
 
     // Hide sidebar completely on full-screen practice, assignments, and temporary full-focus flows
@@ -166,17 +154,10 @@ export default function Sidebar() {
                                 initial="rest"
                                 animate="rest"
                                 whileHover="hover"
-                                whileTap={shouldReduceMotion ? undefined : { scale: 0.985 }}
-                                className={`group relative flex w-full items-center gap-3 overflow-hidden rounded-2xl px-4 py-2.5 text-sm font-semibold transition-all duration-200 ${
+                                className={`group relative flex w-full items-center gap-3 overflow-hidden rounded-2xl px-4 py-2.5 text-sm font-semibold transition-all duration-200 border ${
                                     active
-                                        ? isLightTone ? 'text-slate-900 shadow-sm border-slate-300 bg-white' : 'text-white border-white/20 bg-white/5'
-                                        : isLightTone ? 'text-slate-600 hover:text-slate-900 hover:bg-white hover:shadow-sm border-slate-200 hover:border-slate-300' : 'text-slate-400 hover:text-white hover:bg-white/5 border-white/10 hover:border-white/20'
-                                } border ${
-                                    activePressHref === item.href
-                                        ? isLightTone
-                                            ? 'ring-1 ring-blue-200'
-                                            : 'ring-1 ring-blue-500/50'
-                                        : ''
+                                        ? isLightTone ? 'text-slate-900 border-slate-300' : 'text-white border-white/20'
+                                        : isLightTone ? 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/50 border-slate-200 hover:border-slate-300' : 'text-slate-400 hover:text-white hover:bg-white/[0.04] border-white/10 hover:border-white/20'
                                 }`}
                             >
                                 {active && (
@@ -184,18 +165,11 @@ export default function Sidebar() {
                                         layoutId="sidebar-active-pill"
                                         className={`absolute inset-0 rounded-2xl ${
                                             isLightTone
-                                                ? 'bg-white border border-slate-200 shadow-[0_2px_8px_rgba(0,0,0,0.04)]'
-                                                : 'bg-white/[0.08] border border-white/10 backdrop-blur-md shadow-[inset_0_1px_0_rgba(255,255,255,0.1)]'
+                                                ? 'bg-white shadow-sm'
+                                                : 'bg-white/[0.08] backdrop-blur-md'
                                         }`}
                                         transition={{ type: 'spring', stiffness: 340, damping: 30, mass: 0.76 }}
                                     />
-                                )}
-                                {!active && (
-                                    <span className={`absolute inset-0 rounded-2xl transition duration-300 ${
-                                        isLightTone
-                                            ? 'hover:bg-slate-100/50 hover:shadow-sm'
-                                            : 'hover:bg-white/5'
-                                    }`} />
                                 )}
                                 <motion.span
                                     className={`relative z-10 flex h-8 w-8 items-center justify-center transition-colors ${
@@ -217,6 +191,15 @@ export default function Sidebar() {
                                 >
                                     {item.label}
                                 </motion.span>
+                                {item.badge && (
+                                    <span className={`ml-auto relative z-10 rounded-full px-2 py-0.5 text-[9px] font-black uppercase tracking-widest ${
+                                        isLightTone 
+                                            ? 'bg-blue-100 text-blue-600' 
+                                            : 'bg-blue-500/20 text-blue-400'
+                                    }`}>
+                                        {item.badge}
+                                    </span>
+                                )}
                             </MotionLink>
                         </motion.div>
                     );
@@ -226,6 +209,7 @@ export default function Sidebar() {
 
             {/* Bottom Controls */}
             <div className="mt-auto px-4 pb-6 space-y-2">
+                <div className={`mx-1 mb-3 h-px ${isLightTone ? 'bg-slate-200/60' : 'bg-white/[0.06]'}`} />
                 <div className={`relative flex w-full items-center p-1 overflow-hidden rounded-2xl border ${
                     isLightTone 
                         ? 'border-slate-200 bg-slate-100/50' 
@@ -235,7 +219,7 @@ export default function Sidebar() {
                         type="button"
                         onClick={() => applySiteTone('light')}
                         className={`relative flex-1 flex items-center justify-center gap-2 rounded-xl py-2 text-sm font-semibold transition-colors z-10 ${
-                            isLightTone ? 'text-slate-900' : 'text-slate-500 hover:text-slate-700'
+                            isLightTone ? 'text-slate-900' : 'text-slate-400 hover:text-slate-200'
                         }`}
                     >
                         {isLightTone && (
@@ -248,7 +232,7 @@ export default function Sidebar() {
                         type="button"
                         onClick={() => applySiteTone('dark')}
                         className={`relative flex-1 flex items-center justify-center gap-2 rounded-xl py-2 text-sm font-semibold transition-colors z-10 ${
-                            !isLightTone ? 'text-white' : 'text-slate-400 hover:text-slate-200'
+                            !isLightTone ? 'text-white' : 'text-slate-500 hover:text-slate-700'
                         }`}
                     >
                         {!isLightTone && (

@@ -22,14 +22,11 @@ import {
     sectionRevealVariants,
     staggerContainerVariants,
 } from '@/components/SiteMotion';
-import { useClassroomStore, seedOnce } from '@/store/classroomStore';
+import { useClassroomStore } from '@/store/classroomStore';
 import {
     readStudentAssignmentProgress,
     StudentAssignmentProgressMap,
 } from '@/lib/studentAssignmentProgress';
-
-// Seed synchronously so assignments appear immediately
-seedOnce();
 
 function dueLabel(createdAt: string) {
     const createdDate = new Date(createdAt);
@@ -64,59 +61,61 @@ export default function ClassroomPage() {
     const [activeTab, setActiveTab] = useState<'pending' | 'completed'>('pending');
     const [studentProgressMap, setStudentProgressMap] = useState<StudentAssignmentProgressMap>({});
 
-    const { classrooms, assignments, progress, students, seed } = useClassroomStore();
-    useEffect(() => { seed(); }, [seed]);
+    const { classrooms, assignments, progress, students, joinedClassroomIds, joinClassroom, leaveClassroom } = useClassroomStore();
+    
     useEffect(() => {
         setStudentProgressMap(readStudentAssignmentProgress());
     }, []);
 
-    // Build enriched assignment items — across ALL classrooms
     const assignmentItems = useMemo(() => {
-        return assignments.map((assignment) => {
-            const progressRow = progress.find((row) => row.assignmentId === assignment.id);
+        return assignments
+            .filter(assignment => assignment.classroomIds.some(id => joinedClassroomIds.includes(id)))
+            .map((assignment) => {
+                const progressRow = progress.find((row) => row.assignmentId === assignment.id);
 
-            const total = assignment.questions.length > 0
-                ? assignment.questions.length
-                : progressRow?.total ?? 0;
-            const localProgress = studentProgressMap[assignment.id];
-            const localAnswered = localProgress ? Object.keys(localProgress.answers ?? {}).length : null;
-            const localCompleted = localProgress?.completed ?? false;
-            const hasLocalProgress = localProgress !== undefined;
+                const total = assignment.questions.length > 0
+                    ? assignment.questions.length
+                    : progressRow?.total ?? 0;
+                const localProgress = studentProgressMap[assignment.id];
+                const localAnswered = localProgress ? Object.keys(localProgress.answers ?? {}).length : null;
+                const localCompleted = localProgress?.completed ?? false;
+                const hasLocalProgress = localProgress !== undefined;
 
-            // Find which classroom(s) this assignment belongs to
-            const assignedClassrooms = classrooms.filter((c) => assignment.classroomIds.includes(c.id));
-            const classroomLabel = assignedClassrooms.map((c) => c.name).join(', ') || 'Classroom';
+                // Find which classroom(s) this assignment belongs to
+                const assignedClassrooms = classrooms.filter((c) => assignment.classroomIds.includes(c.id) && joinedClassroomIds.includes(c.id));
+                const classroomLabel = assignedClassrooms.map((c) => c.name).join(', ') || 'Classroom';
 
-            return {
-                assignment,
-                total,
-                classroomLabel,
-                answered: hasLocalProgress ? (localAnswered ?? 0) : (progressRow?.answered ?? 0),
-                completed: hasLocalProgress ? localCompleted : (progressRow?.completed ?? false),
-            };
-        });
-    }, [assignments, progress, studentProgressMap, classrooms]);
+                return {
+                    assignment,
+                    total,
+                    classroomLabel,
+                    answered: hasLocalProgress ? (localAnswered ?? 0) : (progressRow?.answered ?? 0),
+                    completed: hasLocalProgress ? localCompleted : (progressRow?.completed ?? false),
+                };
+            });
+    }, [assignments, progress, studentProgressMap, classrooms, joinedClassroomIds]);
 
     const pendingAssignments = assignmentItems.filter((item) => !item.completed);
     const completedAssignments = assignmentItems.filter((item) => item.completed);
     const visibleAssignments = activeTab === 'pending' ? pendingAssignments : completedAssignments;
 
-    // Classroom overview items
     const classroomItems = useMemo(() => {
-        return classrooms.map((classroom) => {
-            const classAssignments = assignments.filter((a) => a.classroomIds.includes(classroom.id));
-            const latestAssignment = [...classAssignments]
-                .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())[0];
-            const classmates = students.filter(s => s.classroomId === classroom.id);
+        return classrooms
+            .filter((c) => joinedClassroomIds.includes(c.id))
+            .map((classroom) => {
+                const classAssignments = assignments.filter((a) => a.classroomIds.includes(classroom.id));
+                const latestAssignment = [...classAssignments]
+                    .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())[0];
+                const classmates = students.filter(s => s.classroomId === classroom.id);
 
-            return {
-                classroom,
-                assignmentCount: classAssignments.length,
-                latestAssignmentTitle: latestAssignment?.title ?? 'No assignments yet',
-                classmates,
-            };
-        });
-    }, [classrooms, assignments, students]);
+                return {
+                    classroom,
+                    assignmentCount: classAssignments.length,
+                    latestAssignmentTitle: latestAssignment?.title ?? 'No assignments yet',
+                    classmates,
+                };
+            });
+    }, [classrooms, assignments, students, joinedClassroomIds]);
 
     return (
         <div className="relative min-h-screen pt-4 pb-12 px-4 sm:px-6 lg:px-8">
@@ -154,7 +153,7 @@ export default function ClassroomPage() {
                         <motion.div className="grid gap-3 sm:grid-cols-2 xl:max-w-[390px] xl:justify-self-end" variants={staggerContainerVariants}>
                             <motion.div className="site-hero-stat rounded-[24px] px-4 py-4" variants={itemRevealVariants}>
                                 <p className="site-hero-kicker text-[10px] font-bold uppercase tracking-[0.22em]">Classes</p>
-                                <p className="site-hero-title mt-2 text-3xl font-black tracking-[-0.05em]">{classrooms.length}</p>
+                                <p className="site-hero-title mt-2 text-3xl font-black tracking-[-0.05em]">{classroomItems.length}</p>
                             </motion.div>
                             <motion.div className="site-hero-stat rounded-[24px] px-4 py-4" variants={itemRevealVariants}>
                                 <p className="site-hero-kicker text-[10px] font-bold uppercase tracking-[0.22em]">Pending</p>
@@ -166,7 +165,7 @@ export default function ClassroomPage() {
                             </motion.div>
                             <motion.div className="site-hero-stat rounded-[24px] px-4 py-4" variants={itemRevealVariants}>
                                 <p className="site-hero-kicker text-[10px] font-bold uppercase tracking-[0.22em]">Total</p>
-                                <p className="site-hero-title mt-2 text-3xl font-black tracking-[-0.05em]">{assignments.length}</p>
+                                <p className="site-hero-title mt-2 text-3xl font-black tracking-[-0.05em]">{assignmentItems.length}</p>
                             </motion.div>
                         </motion.div>
                     </motion.div>
@@ -405,8 +404,13 @@ export default function ClassroomPage() {
                             <button
                                 onClick={() => {
                                     if (joinCode) {
-                                        setIsJoinModalOpen(false);
-                                        setJoinCode('');
+                                        const success = joinClassroom(joinCode);
+                                        if (success) {
+                                            setIsJoinModalOpen(false);
+                                            setJoinCode('');
+                                        } else {
+                                            alert('Invalid join code or class not found.');
+                                        }
                                     }
                                 }}
                                 disabled={!joinCode}
@@ -461,7 +465,6 @@ export default function ClassroomPage() {
                                     );
                                 })()}
                             </div>
-
                             <div className="p-2 overflow-y-auto">
                                 {(() => {
                                     const activeClass = classroomItems.find(c => c.classroom.id === viewMembersClassroomId);
@@ -478,6 +481,20 @@ export default function ClassroomPage() {
                                         );
                                     });
                                 })()}
+                            </div>
+                            
+                            <div className="p-4 border-t border-slate-100 dark:border-slate-800/80 bg-slate-50 dark:bg-slate-800/20">
+                                <button
+                                    onClick={() => {
+                                        if (viewMembersClassroomId) {
+                                            leaveClassroom(viewMembersClassroomId);
+                                            setViewMembersClassroomId(null);
+                                        }
+                                    }}
+                                    className="w-full py-3 rounded-xl font-bold text-red-600 bg-red-50 hover:bg-red-100 transition"
+                                >
+                                    Leave Class
+                                </button>
                             </div>
                         </motion.div>
                     </div>

@@ -1,9 +1,9 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
-import { BarChart2, ChevronDown, Activity, Target } from 'lucide-react';
+import { BarChart2, ChevronDown, Activity, Target, Sparkles } from 'lucide-react';
 import {
-    FloatingPageShapes, itemRevealVariants, pageRevealVariants, staggerContainerVariants,
+    FloatingPageShapes, itemRevealVariants, pageRevealVariants, staggerContainerVariants, sectionRevealVariants
 } from '@/components/SiteMotion';
 import { useClassroomStore, seedOnce } from '@/store/classroomStore';
 
@@ -59,41 +59,51 @@ export default function AnalyticsPage() {
             <FloatingPageShapes theme="home" />
 
             <motion.div
-                className="relative z-10 mx-auto max-w-[1000px]"
+                className="relative z-10 mx-auto max-w-[1320px]"
                 initial={shouldReduceMotion ? undefined : 'hidden'}
                 animate={shouldReduceMotion ? undefined : 'visible'}
                 variants={pageRevealVariants}
             >
-                {/* Header */}
-                <motion.div
-                    className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-8"
-                    variants={itemRevealVariants}
+                {/* Hero */}
+                <motion.section
+                    className="site-hero-shell site-hero--home relative mb-7 overflow-hidden rounded-[36px] px-6 py-8 sm:px-8 lg:px-10"
+                    variants={sectionRevealVariants}
                 >
-                    <div>
-                        <div className="inline-flex items-center gap-2 px-3 py-1 bg-indigo-600 text-white dark:bg-indigo-500/20 dark:text-indigo-400 rounded-full text-xs font-bold uppercase tracking-widest mb-3 shadow-sm border border-transparent dark:border-indigo-500/20">
-                            Teacher Portal
-                        </div>
-                        <h1 className="text-3xl font-black tracking-[-0.03em] site-text-strong">Analytics</h1>
-                        <p className="mt-1 text-sm site-text-muted">Class-level insights and performance trends.</p>
-                    </div>
-                </motion.div>
+                    <div className="absolute -left-16 top-10 h-56 w-56 rounded-full bg-indigo-300/10 blur-3xl" />
+                    <div className="absolute bottom-0 right-0 h-48 w-64 translate-x-10 translate-y-10 rounded-full bg-blue-300/10 blur-3xl" />
 
-                {/* Filter */}
-                <motion.div className="mb-6 flex justify-end" variants={itemRevealVariants}>
-                    <div className="relative inline-block w-full sm:w-64">
-                        <select
-                            value={classFilter}
-                            onChange={(e) => setClassFilter(e.target.value)}
-                            className="w-full appearance-none rounded-2xl site-panel px-4 py-3 pr-10 text-[14px] font-bold site-text-strong focus:outline-none focus:ring-2 focus:ring-indigo-500 transition shadow-sm cursor-pointer border border-transparent"
-                        >
-                            <option value="all">All Classes</option>
-                            {classrooms.map((c) => (
-                                <option key={c.id} value={c.id}>{c.name}</option>
-                            ))}
-                        </select>
-                        <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 h-5 w-5 site-text-muted pointer-events-none" />
-                    </div>
-                </motion.div>
+                    <motion.div className="relative grid gap-8 xl:grid-cols-[1.15fr_0.85fr] xl:items-center" variants={staggerContainerVariants}>
+                        <motion.div variants={itemRevealVariants}>
+                            <div className="site-hero-chip inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.24em]">
+                                <Sparkles className="h-3.5 w-3.5" />
+                                Teacher Portal
+                            </div>
+
+                            <h1 className="site-hero-title mt-4 text-4xl font-black leading-[1.04] tracking-[-0.04em] sm:text-5xl">
+                                Analytics
+                            </h1>
+                            <p className="site-hero-body mt-4 max-w-2xl text-[15px] leading-7 sm:text-[17px]">
+                                Class-level insights and performance trends.
+                            </p>
+                        </motion.div>
+                        
+                        <motion.div className="flex xl:justify-end" variants={itemRevealVariants}>
+                            <div className="relative inline-block w-full sm:w-64">
+                                <select
+                                    value={classFilter}
+                                    onChange={(e) => setClassFilter(e.target.value)}
+                                    className="w-full appearance-none rounded-full bg-white dark:bg-slate-800/80 px-5 py-3 pr-10 text-[15px] font-bold site-text-strong focus:outline-none focus:ring-2 focus:ring-indigo-500 transition shadow-sm cursor-pointer border border-slate-200/50 dark:border-slate-700/50"
+                                >
+                                    <option value="all">All Classes</option>
+                                    {classrooms.map((c) => (
+                                        <option key={c.id} value={c.id}>{c.name}</option>
+                                    ))}
+                                </select>
+                                <ChevronDown className="absolute right-5 top-1/2 -translate-y-1/2 h-5 w-5 site-text-muted pointer-events-none" />
+                            </div>
+                        </motion.div>
+                    </motion.div>
+                </motion.section>
 
                 {/* KPI Cards */}
                 <motion.div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-8" variants={staggerContainerVariants}>

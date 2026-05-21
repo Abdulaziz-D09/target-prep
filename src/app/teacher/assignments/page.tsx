@@ -1,7 +1,15 @@
 'use client';
 import Link from 'next/link';
-import { ClipboardList, Plus, ChevronRight, GraduationCap, Trash2 } from 'lucide-react';
-import { FloatingPageShapes } from '@/components/SiteMotion';
+import { useState } from 'react';
+import { ClipboardList, Plus, ChevronRight, GraduationCap, Trash2, Sparkles } from 'lucide-react';
+import {
+    FloatingPageShapes,
+    staggerContainerVariants,
+    itemRevealVariants,
+    sectionRevealVariants,
+    pageRevealVariants
+} from '@/components/SiteMotion';
+import { motion } from 'framer-motion';
 import { useClassroomStore, seedOnce } from '@/store/classroomStore';
 
 seedOnce();
@@ -14,33 +22,63 @@ function scoreColor(pct: number) {
 
 export default function AssignmentsPage() {
     const { assignments, classrooms, students, progress, deleteAssignment } = useClassroomStore();
+    const [deleteId, setDeleteId] = useState<string | null>(null);
 
     return (
         <div className="relative min-h-screen pt-4 pb-12 px-4 sm:px-6 lg:px-8">
             <FloatingPageShapes theme="home" />
-            <div className="relative z-10 mx-auto max-w-[1320px]">
+            <motion.div
+                className="relative z-10 mx-auto max-w-[1320px]"
+                initial="hidden"
+                animate="visible"
+                variants={pageRevealVariants}
+            >
 
-                {/* Header */}
-                <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-8">
-                    <div>
-                        <div className="inline-flex items-center gap-2 px-3 py-1 bg-indigo-600 text-white rounded-full text-xs font-bold uppercase tracking-widest mb-3 shadow-sm">
-                            Teacher Portal
-                        </div>
-                        <h1 className="text-3xl sm:text-[2.6rem] font-black tracking-[-0.05em] site-text-strong">Assignments</h1>
-                        <p className="mt-1 text-[15px] site-text-muted">Click an assignment to view class results and student breakdown.</p>
-                    </div>
-                    <Link
-                        href="/teacher/assignments/create"
-                        className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-bold text-white transition hover:scale-[1.03] shadow-md bg-indigo-600 hover:bg-indigo-700 shrink-0"
-                    >
-                        <Plus className="h-4 w-4" />
-                        New Assignment
-                    </Link>
-                </div>
+                {/* Hero */}
+                <motion.section
+                    className="site-hero-shell site-hero--home relative mb-7 overflow-hidden rounded-[36px] px-6 py-8 sm:px-8 lg:px-10"
+                    variants={sectionRevealVariants}
+                    initial="hidden"
+                    animate="visible"
+                >
+                    <div className="absolute -left-16 top-10 h-56 w-56 rounded-full bg-indigo-300/10 blur-3xl" />
+                    <div className="absolute bottom-0 right-0 h-48 w-64 translate-x-10 translate-y-10 rounded-full bg-blue-300/10 blur-3xl" />
 
-                {/* List */}
+                    <motion.div className="relative grid gap-8 xl:grid-cols-[1.15fr_0.85fr] xl:items-center" variants={staggerContainerVariants}>
+                        <motion.div variants={itemRevealVariants}>
+                            <div className="site-hero-chip inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.24em]">
+                                <Sparkles className="h-3.5 w-3.5" />
+                                Teacher Portal
+                            </div>
+
+                            <h1 className="site-hero-title mt-4 text-4xl font-black leading-[1.04] tracking-[-0.04em] sm:text-5xl">
+                                Assignments
+                            </h1>
+                            <p className="site-hero-body mt-4 max-w-2xl text-[15px] leading-7 sm:text-[17px]">
+                                Click an assignment to view class results and student breakdown.
+                            </p>
+                        </motion.div>
+                        <motion.div className="flex xl:justify-end" variants={itemRevealVariants}>
+                            <Link
+                                href="/teacher/assignments/create"
+                                className="inline-flex items-center gap-2 rounded-full px-6 py-3 text-[15px] font-bold text-white transition hover:scale-[1.03] shadow-md bg-indigo-600 hover:bg-indigo-700 shrink-0"
+                            >
+                                <Plus className="h-5 w-5" />
+                                New Assignment
+                            </Link>
+                        </motion.div>
+                    </motion.div>
+                </motion.section>
+
+                {/* List Container */}
+                <motion.section 
+                    className="site-panel rounded-[34px] p-5 sm:p-6 mb-6" 
+                    variants={sectionRevealVariants}
+                    initial="hidden"
+                    animate="visible"
+                >
                 {assignments.length === 0 ? (
-                    <div className="site-panel rounded-[24px] p-14 flex flex-col items-center text-center border-2 border-dashed border-slate-200 dark:border-slate-800">
+                    <div className="site-panel rounded-[24px] p-16 flex flex-col items-center text-center border-2 border-slate-200 dark:border-slate-800">
                         <ClipboardList className="h-12 w-12 site-text-muted mb-4 opacity-30" />
                         <p className="font-bold site-text-strong text-lg">No assignments yet</p>
                         <p className="site-text-muted text-sm mt-1 mb-5">Create your first assignment to get started.</p>
@@ -93,7 +131,7 @@ export default function AssignmentsPage() {
                                             </div>
                                             {/* Delete */}
                                             <button
-                                                onClick={() => { if (confirm('Delete this assignment?')) deleteAssignment(asgn.id); }}
+                                                onClick={() => setDeleteId(asgn.id)}
                                                 className="p-2 rounded-full text-slate-300 dark:text-slate-600 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-900/20 transition"
                                             >
                                                 <Trash2 className="h-4 w-4" />
@@ -109,7 +147,26 @@ export default function AssignmentsPage() {
                         })}
                     </div>
                 )}
-            </div>
+                </motion.section>
+            </motion.div>
+
+            {/* Custom Delete Confirmation Modal */}
+            {deleteId && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm" onClick={() => setDeleteId(null)}>
+                    <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-slate-100 dark:border-slate-800 p-6 max-w-sm w-full animate-in fade-in zoom-in-95 duration-200" onClick={e => e.stopPropagation()}>
+                        <h3 className="font-bold text-lg site-text-strong mb-2">Delete Assignment</h3>
+                        <p className="site-text-muted mb-6 text-sm">Are you sure you want to delete this assignment? This action cannot be undone.</p>
+                        <div className="flex justify-end gap-3">
+                            <button onClick={() => setDeleteId(null)} className="px-5 py-2.5 text-sm font-bold site-text-muted hover:site-text-strong transition">
+                                Cancel
+                            </button>
+                            <button onClick={() => { deleteAssignment(deleteId); setDeleteId(null); }} className="px-5 py-2.5 text-sm font-bold text-white bg-rose-600 hover:bg-rose-700 rounded-full transition shadow-sm">
+                                Delete
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

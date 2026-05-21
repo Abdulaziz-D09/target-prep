@@ -2,14 +2,11 @@
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
-import { GraduationCap, ClipboardList, ArrowRight, Plus, Users } from 'lucide-react';
+import { GraduationCap, ClipboardList, ArrowRight, Plus, Users, Sparkles } from 'lucide-react';
 import {
-    FloatingPageShapes, itemRevealVariants, pageRevealVariants, staggerContainerVariants,
+    FloatingPageShapes, itemRevealVariants, pageRevealVariants, staggerContainerVariants, sectionRevealVariants
 } from '@/components/SiteMotion';
-import { useClassroomStore, seedOnce } from '@/store/classroomStore';
-
-// Seed data synchronously before first render to avoid blank flash
-seedOnce();
+import { useClassroomStore } from '@/store/classroomStore';
 
 export default function TeacherHomePage() {
     const shouldReduceMotion = useReducedMotion();
@@ -25,38 +22,48 @@ export default function TeacherHomePage() {
             <FloatingPageShapes theme="home" />
 
             <motion.div
-                className="relative z-10 mx-auto max-w-[1000px]"
+                className="relative z-10 mx-auto max-w-[1320px]"
                 initial={shouldReduceMotion ? undefined : 'hidden'}
                 animate={shouldReduceMotion ? undefined : 'visible'}
                 variants={pageRevealVariants}
             >
-                {/* Header */}
-                <motion.div className="mb-10" variants={itemRevealVariants}>
-                    <div className="inline-flex items-center gap-2 px-3 py-1 bg-indigo-600 text-white dark:bg-indigo-500/20 dark:text-indigo-400 rounded-full text-xs font-bold uppercase tracking-widest mb-3 shadow-sm border border-transparent dark:border-indigo-500/20">
-                        Teacher Portal
-                    </div>
-                    <h1 className="text-3xl font-black tracking-[-0.03em] site-text-strong">Teacher Dashboard</h1>
-                    <p className="mt-2 text-[15px] site-text-muted">
-                        Manage your classes, track student progress, and assign coursework.
-                    </p>
-                </motion.div>
+                {/* Hero */}
+                <motion.section
+                    className="site-hero-shell site-hero--home relative mb-7 overflow-hidden rounded-[36px] px-6 py-8 sm:px-8 lg:px-10"
+                    variants={sectionRevealVariants}
+                >
+                    <div className="absolute -left-16 top-10 h-56 w-56 rounded-full bg-indigo-300/10 blur-3xl" />
+                    <div className="absolute bottom-0 right-0 h-48 w-64 translate-x-10 translate-y-10 rounded-full bg-blue-300/10 blur-3xl" />
 
-                {/* Stats strip */}
-                <motion.div className="grid gap-4 grid-cols-3 mb-8" variants={staggerContainerVariants}>
-                    {[
-                        { label: 'Classes', value: classrooms.length, icon: GraduationCap, color: 'text-indigo-500' },
-                        { label: 'Students', value: totalStudents, icon: Users, color: 'text-blue-500' },
-                        { label: 'Assignments', value: totalAssignments, icon: ClipboardList, color: 'text-emerald-500' },
-                    ].map(({ label, value, icon: Icon, color }) => (
-                        <motion.div key={label} variants={itemRevealVariants}>
-                            <div className="site-panel rounded-[20px] p-5 text-center">
-                                <Icon className={`h-6 w-6 ${color} mx-auto mb-2`} />
-                                <p className="text-2xl font-black tracking-tight site-text-strong">{value}</p>
-                                <p className="text-[12px] uppercase tracking-wider font-bold site-text-muted mt-0.5">{label}</p>
+                    <motion.div className="relative grid gap-8 xl:grid-cols-[1.15fr_0.85fr]" variants={staggerContainerVariants}>
+                        <motion.div variants={itemRevealVariants}>
+                            <div className="site-hero-chip inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.24em]">
+                                <Sparkles className="h-3.5 w-3.5" />
+                                Teacher Portal
                             </div>
+
+                            <h1 className="site-hero-title mt-4 text-4xl font-black leading-[1.04] tracking-[-0.04em] sm:text-5xl">
+                                Teacher Dashboard
+                            </h1>
+                            <p className="site-hero-body mt-4 max-w-2xl text-[15px] leading-7 sm:text-[17px]">
+                                Manage your classes, track student progress, and assign coursework.
+                            </p>
                         </motion.div>
-                    ))}
-                </motion.div>
+
+                        <motion.div className="grid gap-3 sm:grid-cols-3 xl:max-w-[450px] xl:justify-self-end" variants={staggerContainerVariants}>
+                            {[
+                                { label: 'Classes', value: classrooms.length },
+                                { label: 'Students', value: totalStudents },
+                                { label: 'Assignments', value: totalAssignments },
+                            ].map(({ label, value }) => (
+                                <motion.div key={label} className="site-hero-stat rounded-[24px] px-4 py-4" variants={itemRevealVariants}>
+                                    <p className="site-hero-kicker text-[10px] font-bold uppercase tracking-[0.22em]">{label}</p>
+                                    <p className="site-hero-title mt-2 text-3xl font-black tracking-[-0.05em]">{value}</p>
+                                </motion.div>
+                            ))}
+                        </motion.div>
+                    </motion.div>
+                </motion.section>
 
                 {/* Quick action cards */}
                 <motion.div className="grid gap-5 md:grid-cols-2" variants={staggerContainerVariants}>

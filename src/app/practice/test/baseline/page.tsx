@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState, use, useMemo } from 'react';
+import { useEffect, useState, use, useMemo, useRef } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { X, Clock, ArrowLeft, ArrowRight, Check, CheckCircle, Coffee, Trophy, Flag, BookOpen, ChevronDown, ChevronUp, Highlighter, Maximize2, MoreHorizontal, ArrowLeftCircle, Bookmark, LayoutGrid, FileText, Calculator, Home, BarChart3 } from 'lucide-react';
 import { useTestStore, Highlight } from '@/store/testStore';
@@ -11,7 +11,12 @@ import { cleanOCR } from '@/components/PassageRenderer';
 import Link from 'next/link';
 import { AnimatePresence, motion } from 'framer-motion';
 
-const ACTIVE_TEST_SESSION_KEY = 'targetprep_active_test';
+import 'katex/dist/katex.min.css';
+import renderMathInElement from 'katex/contrib/auto-render';
+
+import { baselineTest } from '@/data/baselineTest';
+
+const ACTIVE_TEST_SESSION_KEY = 'targetprep_active_baseline';
 
 type ActiveTestSession = {
     testId: number;
@@ -27,15 +32,14 @@ type ActiveTestSession = {
     savedAt: string;
 };
 
-export default function TestInterfacePage({ params }: { params: Promise<{ id: string }> }) {
+export default function BaselineTestPage() {
     const router = useRouter();
     const searchParams = useSearchParams();
-    const { id } = use(params);
-    const testId = parseInt(id, 10);
-    const moduleKey = searchParams.get('module');
+    const moduleKey = null;
     const resumeRequested = searchParams.get('resume') === '1';
-    const isFullTest = !moduleKey;
-    const test = resolvePracticeTest(testId, moduleKey);
+    const isFullTest = true;
+    const testId = 999;
+    const test = baselineTest;
 
     const {
         currentSectionIndex, currentModuleIndex, currentQuestionIndex,
@@ -54,13 +58,13 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
     const externalReviewTestParam = useMemo(() => {
         if (!isExternalReview) return null;
         const state = useTestStore.getState();
-        const tests = state.completedTests.filter(t => t.testId === Number(id));
+        const tests = state.completedTests.filter(t => t.testId === testId);
         if (reviewDateStr) {
             const match = tests.find(t => t.date === reviewDateStr);
             if (match) return match;
         }
         return tests[tests.length - 1] || null;
-    }, [isExternalReview, id, reviewDateStr]);
+    }, [isExternalReview, testId, reviewDateStr]);
     const [isTimerHidden, setIsTimerHidden] = useState(false);
     const [isDirectionsOpen, setIsDirectionsOpen] = useState(false);
     const [isEliminationMode, setIsEliminationMode] = useState(false);
@@ -74,6 +78,22 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
     const [calcMode, setCalcMode] = useState<'graphing' | 'scientific'>('graphing');
     const [hasInitialized, setHasInitialized] = useState(false);
     const [isExitModalOpen, setIsExitModalOpen] = useState(false);
+
+    const contentRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        if (contentRef.current) {
+            renderMathInElement(contentRef.current, {
+                delimiters: [
+                    { left: '$$', right: '$$', display: true },
+                    { left: '$', right: '$', display: false },
+                    { left: '\\(', right: '\\)', display: false },
+                    { left: '\\[', right: '\\]', display: true }
+                ],
+                throwOnError: false
+            });
+        }
+    }, [currentQuestionIndex, currentModuleIndex, currentSectionIndex, showCheckWork]);
 
     const clearActiveSession = () => {
         if (typeof window === 'undefined') return;
@@ -197,8 +217,8 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
             eliminatedAnswers: {},
             highlights: {},
             timeRemaining: (test.sections[0]?.modules[0]?.timeMinutes ?? 1) * 60,
-            isIntroScreen: isFullTest,
-            isTestActive: !isFullTest,
+            isIntroScreen: false,
+            isTestActive: true,
             showResults: false,
         });
         setHasInitialized(true);
@@ -292,10 +312,13 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
         if (showCheckWork) {
             setShowCheckWork(false);
             if (currentModuleIndex < currentSection.modules.length - 1) {
-                setTransitionState('moduleEnd');
+                goToModule(currentSectionIndex, currentModuleIndex + 1);
+                setTimeRemaining(test.sections[currentSectionIndex].modules[currentModuleIndex + 1].timeMinutes * 60);
+                setTransitionState('none');
             } else if (currentSectionIndex < test.sections.length - 1) {
-                setBreakTimeRemaining(600);
-                setTransitionState('break');
+                goToModule(currentSectionIndex + 1, 0);
+                setTimeRemaining(test.sections[currentSectionIndex + 1].modules[0].timeMinutes * 60);
+                setTransitionState('none');
             } else {
                 finishTest();
             }
@@ -490,17 +513,19 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
                     <div className="w-20 h-20 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-8">
                         <CheckCircle className="w-10 h-10 text-emerald-600" />
                     </div>
-                    <h2 className="text-3xl font-bold text-slate-900 mb-4 tracking-tight">Your Practice Test Is Complete</h2>
-                    <p className="text-slate-500 mb-4 leading-relaxed text-[16px]">Congratulations! You have finished all sections of this practice test. Your answers have been saved.</p>
-                    <p className="text-slate-500 mb-10 leading-relaxed text-[16px]">To view your estimated score, score breakdown, and detailed answer explanations, head to your <strong className="text-slate-700">Progress</strong> page.</p>
+                    <h2 className="text-3xl font-bold text-slate-900 mb-4 tracking-tight">Your Diagnostic Test Is Complete</h2>
+                    <p className="text-slate-500 mb-4 leading-relaxed text-[16px]">Congratulations! You have finished the 30-question baseline diagnostic.</p>
+                    <p className="text-slate-500 mb-10 leading-relaxed text-[16px]">Based on your performance, we have generated your customized study plan roadmap.</p>
 
                     <div className="space-y-3">
-                        <div className="grid grid-cols-2 gap-3">
-                            <button onClick={() => { router.push('/dashboard'); setTimeout(() => resetTest(), 500); }} className="bg-white border-2 border-slate-200 text-slate-700 py-3.5 rounded-xl font-bold hover:bg-slate-50 hover:border-slate-300 transition-all flex items-center justify-center gap-2">
-                                <Home className="w-4 h-4" /> Home
-                            </button>
-                            <button onClick={() => { router.push('/progress'); setTimeout(() => resetTest(), 500); }} className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white py-3.5 rounded-xl font-bold transition-all shadow-md shadow-blue-500/20 flex items-center justify-center gap-2">
-                                <BarChart3 className="w-4 h-4" /> Progress
+                        <div className="flex justify-center">
+                            <button onClick={() => { 
+                                localStorage.setItem('targetprep_plan_state', 'active');
+                                localStorage.setItem('targetprep_plan', 'true');
+                                router.push('/study-plan'); 
+                                setTimeout(() => resetTest(), 500); 
+                            }} className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white py-3.5 px-8 rounded-xl font-bold transition-all shadow-md shadow-blue-500/20 flex items-center justify-center gap-2">
+                                <BookOpen className="w-4 h-4" /> Go to Study Plan
                             </button>
                         </div>
                     </div>
@@ -810,11 +835,11 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
                                 <span className="font-bold text-[12px] leading-none">Calculator</span>
                             </button>
                             <button
-                                onClick={() => setIsReferenceOpen(true)}
-                                className="flex flex-col items-center justify-center gap-1.5 w-[80px] h-[64px] rounded-lg hover:bg-black/5 text-slate-700 transition-colors"
+                                onClick={() => setIsReferenceOpen(!isReferenceOpen)}
+                                className={`flex flex-col items-center justify-center gap-1.5 w-[80px] h-[64px] rounded-lg transition-colors ${isReferenceOpen ? 'bg-slate-100 text-[#111827]' : 'text-[#111827] hover:bg-slate-50'}`}
                             >
-                                <FileText className="w-[24px] h-[24px]" />
-                                <span className="font-bold text-[12px] leading-none text-slate-500">Reference</span>
+                                <FileText className="w-[24px] h-[24px] text-[#111827]" />
+                                <span className="font-bold text-[12px] leading-none text-[#111827]">Reference</span>
                             </button>
                         </>
                     ) : (
@@ -834,7 +859,7 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
                         <span className="font-bold text-[12px] leading-none">Fullscreen</span>
                     </button>
                     <button
-                        onClick={() => setIsExitModalOpen(true)}
+                        onClick={() => { setIsExitModalOpen(true); setIsReferenceOpen(false); }}
                         className="flex flex-col items-center justify-center gap-1.5 w-[80px] h-[64px] rounded-lg hover:bg-black/5 text-slate-700 transition-colors"
                     >
                         <div className="flex items-center justify-center w-6 h-6 bg-slate-800 rounded text-white">
@@ -880,7 +905,7 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
                                             persistActiveSession();
                                         }
                                         resetTest();
-                                        router.push('/practice');
+                                        router.push('/study-plan');
                                     }}
                                     className="px-6 py-2.5 rounded-full text-sm font-bold bg-[#111827] text-white hover:bg-slate-800 shadow-md transition"
                                 >
@@ -956,7 +981,7 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
 
                         {/* Right Pane (Question Area) */}
                         <div className={`overflow-y-auto p-4 lg:p-10 pl-4 lg:pl-8 flex justify-center bg-white ${!isDragging && currentSection?.name === 'Math' ? 'transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]' : ''}`} style={{ width: (currentSection?.name === 'Math' && !isDesmosOpen) ? '100%' : `${100 - leftPanelWidth}%` }}>
-                            <div className="w-full max-w-[800px] flex flex-col">
+                            <div className="w-full max-w-[800px] flex flex-col" ref={contentRef}>
 
                                 {/* Header: Connected Question Number & Mark for Review & ABC */}
                                 <div className="flex mb-6 mt-4 shadow-sm w-full">

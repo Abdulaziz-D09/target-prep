@@ -20,7 +20,17 @@ function readLegacyHistoryFromStorage(): CompletedTest[] {
         if (!raw) return [];
 
         const parsed = JSON.parse(raw) as { completedTests?: CompletedTest[] };
-        return Array.isArray(parsed.completedTests) ? parsed.completedTests : [];
+        const rawTests = Array.isArray(parsed.completedTests) ? parsed.completedTests : [];
+        return rawTests.map(t => {
+            const roundedEnglish = Math.max(200, Math.min(800, Math.round((t.englishScore || 200) / 10) * 10));
+            const roundedMath = Math.max(200, Math.min(800, Math.round((t.mathScore || 200) / 10) * 10));
+            return {
+                ...t,
+                englishScore: roundedEnglish,
+                mathScore: roundedMath,
+                totalScore: roundedEnglish + roundedMath
+            };
+        });
     } catch {
         return [];
     }
@@ -44,16 +54,23 @@ export default function ProgressPage() {
         };
     }, [completedTests.length]);
 
-    const history = useMemo(() => (completedTests.length > 0 ? completedTests : legacyHistory), [completedTests, legacyHistory]);
+    const history = useMemo(() => {
+        const allTests = completedTests.length > 0 ? completedTests : legacyHistory;
+        // Filter out tests with 0 answers
+        return allTests.filter((t) => t.answers && Object.keys(t.answers).length > 0);
+    }, [completedTests, legacyHistory]);
 
     const stats = useMemo(() => {
         if (history.length === 0) return { total: 0, avg: 0, highest: 0, readingAvg: 0, mathAvg: 0 };
 
         const total = history.length;
-        const avg = Math.round(history.reduce((acc, test) => acc + test.totalScore, 0) / total);
+        const rawAvg = history.reduce((acc, test) => acc + test.totalScore, 0) / total;
+        const avg = Math.round(rawAvg / 10) * 10;
         const highest = Math.max(...history.map((test) => test.totalScore));
-        const readingAvg = Math.round(history.reduce((acc, test) => acc + test.englishScore, 0) / total);
-        const mathAvg = Math.round(history.reduce((acc, test) => acc + test.mathScore, 0) / total);
+        const rawReadingAvg = history.reduce((acc, test) => acc + test.englishScore, 0) / total;
+        const readingAvg = Math.round(rawReadingAvg / 10) * 10;
+        const rawMathAvg = history.reduce((acc, test) => acc + test.mathScore, 0) / total;
+        const mathAvg = Math.round(rawMathAvg / 10) * 10;
         return { total, avg, highest, readingAvg, mathAvg };
     }, [history]);
 
@@ -217,10 +234,10 @@ export default function ProgressPage() {
                                                         <p className="text-3xl font-black text-blue-500 tracking-[-0.04em]">{test.totalScore}</p>
                                                     </div>
                                                     <Link 
-                                                        href={`/practice/test/${test.testId}?review=true&date=${encodeURIComponent(test.date)}`}
-                                                        className="w-full py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] font-bold uppercase tracking-wider text-center transition-colors dark:bg-white/5 dark:text-white/80 dark:hover:bg-white/10"
+                                                        href={`/progress/review?testId=${test.testId}&date=${encodeURIComponent(test.date)}`}
+                                                        className="w-full py-1.5 rounded-xl bg-blue-500/10 hover:bg-blue-500/20 text-blue-600 dark:text-blue-400 text-[11px] font-bold uppercase tracking-wider text-center transition-colors border border-blue-500/20"
                                                     >
-                                                        Review
+                                                        📊 Review
                                                     </Link>
                                                 </div>
                                             </div>

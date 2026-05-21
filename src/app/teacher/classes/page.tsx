@@ -2,17 +2,15 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
-import { GraduationCap, Plus, Trash2, Copy, ChevronRight, X, Users, ClipboardList } from 'lucide-react';
+import { GraduationCap, Plus, Trash2, Copy, ChevronRight, X, Users, ClipboardList, Sparkles } from 'lucide-react';
 import {
     FloatingPageShapes,
     itemRevealVariants,
     pageRevealVariants,
     staggerContainerVariants,
+    sectionRevealVariants
 } from '@/components/SiteMotion';
-import { useClassroomStore, seedOnce } from '@/store/classroomStore';
-
-// Seed synchronously so classes are visible on first render
-seedOnce();
+import { useClassroomStore } from '@/store/classroomStore';
 
 const GRADES = ['9th Grade', '10th Grade', '11th Grade', '12th Grade', 'Mixed'];
 
@@ -55,36 +53,50 @@ export default function ClassesPage() {
             <FloatingPageShapes theme="home" />
 
             <motion.div
-                className="relative z-10 mx-auto max-w-[1000px]"
+                className="relative z-10 mx-auto max-w-[1320px]"
                 initial={shouldReduceMotion ? undefined : 'hidden'}
                 animate={shouldReduceMotion ? undefined : 'visible'}
                 variants={pageRevealVariants}
             >
-                {/* Header */}
-                <motion.div
-                    className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-8"
-                    variants={itemRevealVariants}
+                {/* Hero */}
+                <motion.section
+                    className="site-hero-shell site-hero--home relative mb-7 overflow-hidden rounded-[36px] px-6 py-8 sm:px-8 lg:px-10"
+                    variants={sectionRevealVariants}
                 >
-                    <div>
-                        <div className="inline-flex items-center gap-2 px-3 py-1 bg-indigo-600 text-white dark:bg-indigo-500/20 dark:text-indigo-400 rounded-full text-xs font-bold uppercase tracking-widest mb-3 shadow-sm border border-transparent dark:border-indigo-500/20">
-                            Teacher Portal
-                        </div>
-                        <h1 className="text-3xl font-black tracking-[-0.03em] site-text-strong">My Classes</h1>
-                        <p className="mt-1 text-sm site-text-muted">Manage your classrooms and student groups.</p>
-                    </div>
-                    <button
-                        onClick={() => setIsCreateOpen(true)}
-                        className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-bold text-white transition hover:scale-[1.03] shadow-md bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 shrink-0"
-                    >
-                        <Plus className="h-4 w-4" />
-                        Create Class
-                    </button>
-                </motion.div>
+                    <div className="absolute -left-16 top-10 h-56 w-56 rounded-full bg-indigo-300/10 blur-3xl" />
+                    <div className="absolute bottom-0 right-0 h-48 w-64 translate-x-10 translate-y-10 rounded-full bg-blue-300/10 blur-3xl" />
 
-                {/* Grid */}
+                    <motion.div className="relative grid gap-8 xl:grid-cols-[1.15fr_0.85fr] xl:items-center" variants={staggerContainerVariants}>
+                        <motion.div variants={itemRevealVariants}>
+                            <div className="site-hero-chip inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.24em]">
+                                <Sparkles className="h-3.5 w-3.5" />
+                                Teacher Portal
+                            </div>
+
+                            <h1 className="site-hero-title mt-4 text-4xl font-black leading-[1.04] tracking-[-0.04em] sm:text-5xl">
+                                My Classes
+                            </h1>
+                            <p className="site-hero-body mt-4 max-w-2xl text-[15px] leading-7 sm:text-[17px]">
+                                Manage your classrooms and student groups.
+                            </p>
+                        </motion.div>
+                        <motion.div className="flex xl:justify-end" variants={itemRevealVariants}>
+                            <button
+                                onClick={() => setIsCreateOpen(true)}
+                                className="inline-flex items-center gap-2 rounded-full px-6 py-3 text-[15px] font-bold text-white transition hover:scale-[1.03] shadow-md bg-indigo-600 hover:bg-indigo-700 shrink-0"
+                            >
+                                <Plus className="h-5 w-5" />
+                                Create Class
+                            </button>
+                        </motion.div>
+                    </motion.div>
+                </motion.section>
+
+                {/* List Container */}
+                <motion.section className="site-panel rounded-[34px] p-5 sm:p-6 mb-6" variants={sectionRevealVariants}>
                 {classrooms.length === 0 ? (
                     <motion.div variants={itemRevealVariants}>
-                        <div className="site-panel rounded-[24px] p-12 flex flex-col items-center text-center" style={{ border: '2px dashed' }}>
+                        <div className="site-panel rounded-[24px] p-16 flex flex-col items-center text-center border-2 border-slate-200 dark:border-slate-800">
                             <GraduationCap className="h-12 w-12 site-text-muted mb-4 opacity-30" />
                             <p className="font-bold site-text-strong text-lg">No classes yet</p>
                             <p className="site-text-muted text-sm mt-1 mb-5">Click &ldquo;Create Class&rdquo; to get started.</p>
@@ -161,6 +173,7 @@ export default function ClassesPage() {
                         })}
                     </motion.div>
                 )}
+                </motion.section>
             </motion.div>
 
             {/* ── Create Modal ─────────────────────────────────────────────── */}

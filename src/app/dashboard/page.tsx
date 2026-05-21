@@ -39,6 +39,100 @@ type ProgressSnapshot = {
   totalQuestionsAnswered?: number;
 };
 
+const STUDY_PLAN_DAYS = [
+  {
+    day: 1,
+    title: 'Algebra Fundamentals',
+    subject: 'Math',
+    color: 'amber',
+    gradient: 'from-amber-500 to-orange-500',
+    bg: 'bg-amber-500/10',
+    border: 'border-amber-500/30',
+    text: 'text-amber-500',
+    glow: 'rgba(245,158,11,0.15)',
+    description: 'Linear equations in one variable, systems, and core algebraic manipulation.',
+    tip: 'Focus on isolating variables and recognizing equation types quickly.',
+  },
+  {
+    day: 2,
+    title: 'Command of Evidence',
+    subject: 'English',
+    color: 'blue',
+    gradient: 'from-blue-500 to-indigo-600',
+    bg: 'bg-blue-500/10',
+    border: 'border-blue-500/30',
+    text: 'text-blue-400',
+    glow: 'rgba(59,130,246,0.15)',
+    description: 'Textual and quantitative evidence, inference chains, and claim support.',
+    tip: 'Read the claim first, then scan for the option that directly matches it.',
+  },
+  {
+    day: 3,
+    title: 'Advanced Math',
+    subject: 'Math',
+    color: 'orange',
+    gradient: 'from-orange-500 to-red-500',
+    bg: 'bg-orange-500/10',
+    border: 'border-orange-500/30',
+    text: 'text-orange-400',
+    glow: 'rgba(249,115,22,0.15)',
+    description: 'Nonlinear functions, polynomials, abstract constants, and equation systems.',
+    tip: 'When you see a constant like k or c, plug in numbers to test behavior.',
+  },
+  {
+    day: 4,
+    title: 'Reading Comprehension',
+    subject: 'English',
+    color: 'indigo',
+    gradient: 'from-indigo-500 to-purple-600',
+    bg: 'bg-indigo-500/10',
+    border: 'border-indigo-500/30',
+    text: 'text-indigo-400',
+    glow: 'rgba(99,102,241,0.15)',
+    description: 'Central ideas, words in context, author purpose, and passage structure.',
+    tip: 'The correct answer to "main idea" is almost never the first sentence alone.',
+  },
+  {
+    day: 5,
+    title: 'Geometry & Trig',
+    subject: 'Math',
+    color: 'cyan',
+    gradient: 'from-cyan-500 to-blue-500',
+    bg: 'bg-cyan-500/10',
+    border: 'border-cyan-500/30',
+    text: 'text-cyan-400',
+    glow: 'rgba(6,182,212,0.15)',
+    description: 'Circles, triangles, angle relationships, and trigonometric ratios.',
+    tip: 'Memorize the unit circle and the special right triangle ratios before test day.',
+  },
+  {
+    day: 6,
+    title: 'Standard English',
+    subject: 'English',
+    color: 'rose',
+    gradient: 'from-rose-500 to-pink-500',
+    bg: 'bg-rose-500/10',
+    border: 'border-rose-500/30',
+    text: 'text-rose-400',
+    glow: 'rgba(244,63,94,0.15)',
+    description: 'Sentence boundaries, transitions, punctuation, and grammatical agreement.',
+    tip: 'If you can split the blank into two full sentences, a semicolon always works.',
+  },
+  {
+    day: 7,
+    title: 'Data Analysis',
+    subject: 'Math',
+    color: 'emerald',
+    gradient: 'from-emerald-500 to-teal-500',
+    bg: 'bg-emerald-500/10',
+    border: 'border-emerald-500/30',
+    text: 'text-emerald-400',
+    glow: 'rgba(16,185,129,0.15)',
+    description: 'Scatterplots, two-way tables, rates, percent change, and statistical claims.',
+    tip: 'Always look at axis labels and units before choosing an answer on chart questions.',
+  },
+];
+
 const PAGE_LOAD_TIME = Date.now();
 
 const EMPTY_COUNTDOWN: Countdown = {
@@ -70,6 +164,7 @@ export default function HomePage() {
     answered: 0,
   });
   const [hasPlan, setHasPlan] = useState(false);
+  const [todayPlanDay, setTodayPlanDay] = useState<typeof STUDY_PLAN_DAYS[0] | null>(null);
 
   const nextTest = useMemo(() => {
     return satDates.find((date) => new Date(date.target).getTime() > PAGE_LOAD_TIME) ?? satDates[satDates.length - 1];
@@ -91,20 +186,45 @@ export default function HomePage() {
         }).format(new Date())
       );
 
-      setHasPlan(!!localStorage.getItem('targetprep_plan'));
+      const planRaw = localStorage.getItem('targetprep_plan');
+      setHasPlan(!!planRaw);
+
+      // Compute today's study plan focus day
+      if (planRaw) {
+        try {
+          const plan = JSON.parse(planRaw);
+          const startDate = plan.startDate ? new Date(plan.startDate) : new Date();
+          const msPerDay = 1000 * 60 * 60 * 24;
+          const daysSinceStart = Math.floor((Date.now() - startDate.getTime()) / msPerDay);
+          const dayIndex = daysSinceStart % STUDY_PLAN_DAYS.length;
+          setTodayPlanDay(STUDY_PLAN_DAYS[dayIndex]);
+        } catch {
+          setTodayPlanDay(STUDY_PLAN_DAYS[0]);
+        }
+      }
 
       try {
         const raw = localStorage.getItem('targetprep_progress');
         if (!raw) return;
 
         const progress = JSON.parse(raw) as ProgressSnapshot;
-        const completedTests = progress.completedTests ?? [];
-        const avgScore =
+        const rawTests = progress.completedTests ?? [];
+        const completedTests = rawTests.map(t => {
+            const roundedEnglish = Math.max(200, Math.min(800, Math.round(((t as any).englishScore || 200) / 10) * 10));
+            const roundedMath = Math.max(200, Math.min(800, Math.round(((t as any).mathScore || 200) / 10) * 10));
+            return {
+                ...t,
+                englishScore: roundedEnglish,
+                mathScore: roundedMath,
+                totalScore: roundedEnglish + roundedMath
+            };
+        });
+
+        const rawAvgScore =
           completedTests.length > 0
-            ? Math.round(
-                completedTests.reduce((sum, test) => sum + (test.totalScore ?? 0), 0) / completedTests.length
-              )
+            ? completedTests.reduce((sum, test) => sum + (test.totalScore ?? 0), 0) / completedTests.length
             : 0;
+        const avgScore = Math.round(rawAvgScore / 10) * 10;
 
         setStats({
           streak: progress.streak ?? 0,
@@ -136,8 +256,8 @@ export default function HomePage() {
 
   // Mock predicted score
   const predictedScoreRange = stats.avgScore > 0 ? `${Math.max(400, stats.avgScore - 30)}–${Math.min(1600, stats.avgScore + 30)}` : '--';
-  const mathRange = stats.avgScore > 0 ? `${Math.round((stats.avgScore / 2) - 10)}–${Math.round((stats.avgScore / 2) + 20)}` : '';
-  const engRange = stats.avgScore > 0 ? `${Math.round((stats.avgScore / 2) - 20)}–${Math.round((stats.avgScore / 2) + 10)}` : '';
+  const mathRange = stats.avgScore > 0 ? `${Math.round(((stats.avgScore / 2) - 10) / 10) * 10}–${Math.round(((stats.avgScore / 2) + 20) / 10) * 10}` : '';
+  const engRange = stats.avgScore > 0 ? `${Math.round(((stats.avgScore / 2) - 20) / 10) * 10}–${Math.round(((stats.avgScore / 2) + 10) / 10) * 10}` : '';
 
   const quickLinks = [
     {
@@ -317,34 +437,86 @@ export default function HomePage() {
                 </div>
               </motion.div>
 
-              {/* Today's Focus */}
+              {/* Today's Focus — Dynamic Study Plan Day */}
               <motion.div
-                className="site-panel flex flex-col rounded-[32px] p-6"
+                className="site-panel flex flex-col rounded-[32px] p-6 overflow-hidden relative"
                 variants={itemRevealVariants}
               >
-                <div className="flex items-start justify-between gap-4">
-                  <div>
-                    <p className="site-hero-kicker text-[11px] font-bold uppercase tracking-[0.24em]">Today's Focus</p>
-                    <h2 className="site-hero-title mt-2 text-2xl font-black tracking-[-0.03em]">
-                      {hasPlan ? 'Advanced Math' : 'No Active Plan'}
-                    </h2>
-                    <p className="site-hero-body mt-2 text-sm leading-6">
-                      {hasPlan ? 'Complete 15 practice questions to stay on track.' : 'You have not set up your study plan yet.'}
-                    </p>
-                  </div>
-                  <div className={`site-chip rounded-2xl p-3 ${!hasPlan ? 'bg-slate-100 dark:bg-slate-800' : ''}`}>
-                    <Target className={`h-5 w-5 ${hasPlan ? 'site-text-strong' : 'text-slate-400'}`} />
-                  </div>
-                </div>
+                {/* Background glow wash */}
+                {hasPlan && todayPlanDay && (
+                  <div
+                    className="absolute inset-0 pointer-events-none rounded-[32px]"
+                    style={{ background: `radial-gradient(ellipse at 0% 50%, ${todayPlanDay.glow}, transparent 65%)` }}
+                  />
+                )}
 
-                <div className="mt-8">
-                  <Link
-                    href="/study-plan"
-                    className="inline-flex w-full justify-center items-center gap-2 rounded-xl bg-[linear-gradient(135deg,#10b981,#059669)] px-4 py-3 text-sm font-bold text-white transition hover:scale-[1.02] shadow-lg shadow-emerald-500/20"
-                  >
-                    {hasPlan ? 'Continue Plan' : 'Set up your study plan'}
-                    <ArrowRight className="h-4 w-4" />
-                  </Link>
+                <div className="relative z-10">
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 mb-2">
+                        <p className="site-hero-kicker text-[10px] font-bold uppercase tracking-[0.24em]">Today&apos;s Focus</p>
+                        {hasPlan && todayPlanDay && (
+                          <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider ${todayPlanDay.bg} ${todayPlanDay.text} border ${todayPlanDay.border}`}>
+                            {todayPlanDay.subject}
+                          </span>
+                        )}
+                      </div>
+                      <h2 className="site-hero-title text-2xl font-black tracking-[-0.03em]">
+                        {hasPlan && todayPlanDay ? todayPlanDay.title : 'No Active Plan'}
+                      </h2>
+                    </div>
+                    <div className={`shrink-0 w-11 h-11 rounded-2xl flex items-center justify-center ${hasPlan && todayPlanDay ? `${todayPlanDay.bg} border ${todayPlanDay.border}` : 'bg-slate-100 dark:bg-slate-800'}`}>
+                      <Target className={`h-5 w-5 ${hasPlan && todayPlanDay ? todayPlanDay.text : 'text-slate-400'}`} />
+                    </div>
+                  </div>
+
+                  {hasPlan && todayPlanDay ? (
+                    <>
+                      <p className="site-hero-body text-sm leading-6 mt-3">{todayPlanDay.description}</p>
+
+                      {/* Day badge + tip */}
+                      <div className={`mt-4 rounded-2xl p-3 border ${todayPlanDay.bg} ${todayPlanDay.border}`}>
+                        <p className={`text-[10px] font-black uppercase tracking-widest mb-1 ${todayPlanDay.text}`}>💡 Quick Tip</p>
+                        <p className="text-[12px] site-text font-medium leading-relaxed">{todayPlanDay.tip}</p>
+                      </div>
+
+                      {/* 7-day progress dots */}
+                      <div className="mt-4 flex items-center gap-1.5">
+                        {STUDY_PLAN_DAYS.map((d) => (
+                          <div
+                            key={d.day}
+                            title={`Day ${d.day}: ${d.title}`}
+                            className={`h-1.5 flex-1 rounded-full transition-all ${
+                              d.day === todayPlanDay.day
+                                ? `bg-gradient-to-r ${todayPlanDay.gradient}`
+                                : d.day < todayPlanDay.day
+                                ? 'bg-emerald-500/60'
+                                : 'bg-slate-200 dark:bg-slate-700'
+                            }`}
+                          />
+                        ))}
+                      </div>
+                      <p className="text-[10px] site-text-muted font-semibold mt-1.5">Day {todayPlanDay.day} of 7</p>
+                    </>
+                  ) : (
+                    <p className="site-hero-body mt-2 text-sm leading-6">
+                      Set up your study plan to get a personalized daily focus topic and tips.
+                    </p>
+                  )}
+
+                  <div className="mt-5">
+                    <Link
+                      href="/study-plan"
+                      className={`inline-flex w-full justify-center items-center gap-2 rounded-xl px-4 py-3 text-sm font-bold text-white transition hover:scale-[1.02] shadow-lg ${
+                        hasPlan && todayPlanDay
+                          ? `bg-gradient-to-r ${todayPlanDay.gradient} shadow-amber-500/10`
+                          : 'bg-[linear-gradient(135deg,#10b981,#059669)] shadow-emerald-500/20'
+                      }`}
+                    >
+                      {hasPlan ? 'Go to Study Plan' : 'Set up your study plan'}
+                      <ArrowRight className="h-4 w-4" />
+                    </Link>
+                  </div>
                 </div>
               </motion.div>
 

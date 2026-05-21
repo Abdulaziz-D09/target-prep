@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Highlight } from '@/store/testStore';
 import { Underline, MessageSquarePlus, X, Trash2 } from 'lucide-react';
+import { LatexRenderer } from './LatexRenderer';
 
 interface HighlightableTextProps {
     text: string;
@@ -89,7 +90,7 @@ export function HighlightableText({
 
     // Render text with highlights
     const renderContent = () => {
-        if (!highlights || highlights.length === 0) return <span>{text}</span>;
+        if (!highlights || highlights.length === 0) return <LatexRenderer text={text} />;
 
         // Sort highlights by start offset
         const sorted = [...highlights].sort((a, b) => a.start - b.start);
@@ -100,7 +101,7 @@ export function HighlightableText({
         sorted.forEach((h) => {
             // Add unhighlighted text before this highlight
             if (h.start > currentIndex) {
-                nodes.push(<span key={`text-${currentIndex}`}>{text.substring(currentIndex, h.start)}</span>);
+                nodes.push(<LatexRenderer key={`text-${currentIndex}`} text={text.substring(currentIndex, h.start)} className="inline" />);
             }
 
             // Draw highlight
@@ -114,7 +115,7 @@ export function HighlightableText({
                         className={`relative group cursor-pointer ${highlightClass}`}
                         onClick={() => h.note ? setActiveNoteHighlightId(h.id) : null}
                     >
-                        {highlightText}
+                        <LatexRenderer text={highlightText} className="inline" />
 
                         {/* Note Indicator Indicator */}
                         {h.note && (
@@ -151,7 +152,7 @@ export function HighlightableText({
 
         // Add remaining text
         if (currentIndex < text.length) {
-            nodes.push(<span key={`text-${currentIndex}`}>{text.substring(currentIndex)}</span>);
+            nodes.push(<LatexRenderer key={`text-${currentIndex}`} text={text.substring(currentIndex)} className="inline" />);
         }
 
         return nodes;

@@ -71,8 +71,19 @@ function loadProgress(): Partial<TestState> {
         const data = localStorage.getItem(PROGRESS_STORAGE_KEY);
         if (data) {
             const parsed = JSON.parse(data);
+            const rawTests = parsed.completedTests || [];
+            const roundedTests = rawTests.map((t: any) => {
+                const roundedEnglish = Math.max(200, Math.min(800, Math.round((t.englishScore || 200) / 10) * 10));
+                const roundedMath = Math.max(200, Math.min(800, Math.round((t.mathScore || 200) / 10) * 10));
+                return {
+                    ...t,
+                    englishScore: roundedEnglish,
+                    mathScore: roundedMath,
+                    totalScore: roundedEnglish + roundedMath
+                };
+            });
             return {
-                completedTests: parsed.completedTests || [],
+                completedTests: roundedTests,
                 streak: parsed.streak || 0,
                 // Backward-compat: older snapshots used `totalQuestions`.
                 totalQuestionsAnswered: parsed.totalQuestionsAnswered ?? parsed.totalQuestions ?? 0,

@@ -128,6 +128,7 @@ type State = {
   students: Student[];
   assignments: Assignment[];
   progress: StudentProgress[];
+  joinedClassroomIds: string[];
   seeded: boolean;
 };
 
@@ -137,6 +138,8 @@ type Actions = {
   deleteClassroom: (id: string) => void;
   addAssignment: (data: Omit<Assignment, 'id' | 'createdAt'>) => void;
   deleteAssignment: (id: string) => void;
+  joinClassroom: (code: string) => boolean;
+  leaveClassroom: (id: string) => void;
 };
 
 function normalizeAssignmentTimeLimit(assignment: Assignment): Assignment {
@@ -155,10 +158,17 @@ export const useClassroomStore = create<State & Actions>()(
       students: [],
       assignments: [],
       progress: [],
+      joinedClassroomIds: [],
       seeded: false,
 
       seed: () => {
         const current = get();
+
+        // Clear old mock data if it persists in local storage
+        if (current.classrooms.some(c => c.id === 'cls-1' || c.id === 'cls-2')) {
+            set({ classrooms: [], students: [], assignments: [], progress: [], seeded: true });
+            return;
+        }
 
         if (current.seeded) {
           const normalized = current.assignments.map(normalizeAssignmentTimeLimit);
@@ -168,10 +178,10 @@ export const useClassroomStore = create<State & Actions>()(
         }
 
         set({
-          classrooms: MOCK_CLASSROOMS,
-          students: MOCK_STUDENTS,
-          assignments: MOCK_ASSIGNMENTS.map(normalizeAssignmentTimeLimit),
-          progress: MOCK_PROGRESS,
+          classrooms: [],
+          students: [],
+          assignments: [],
+          progress: [],
           seeded: true,
         });
       },
@@ -206,6 +216,29 @@ export const useClassroomStore = create<State & Actions>()(
 
       deleteAssignment: (id) => {
         set((s) => ({ assignments: s.assignments.filter((a) => a.id !== id) }));
+      },
+
+      joinClassroom: (code) => {
+        const s = get();
+        const cls = s.classrooms.find(c => c.joinCode === code.trim().toUpperCase());
+        if (!cls) return false;
+        if (s.joinedClassroomIds.includes(cls.id)) return true; // Already joined
+        const newStudent: Student = {
+            id: `stu-${Date.now()}`,
+            name: "You (Student)",
+            classroomId: cls.id,
+            joinedAt: new Date().toISOString(),
+            avatar: "blue",
+        };
+        set((s) => ({ 
+            joinedClassroomIds: [...s.joinedClassroomIds, cls.id],
+            students: [...s.students, newStudent]
+        }));
+        return true;
+      },
+
+      leaveClassroom: (id) => {
+        set((s) => ({ joinedClassroomIds: s.joinedClassroomIds.filter((cId) => cId !== id) }));
       },
     }),
     {

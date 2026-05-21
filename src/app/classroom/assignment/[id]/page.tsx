@@ -637,33 +637,76 @@ export default function ClassroomAssignmentDetailPage() {
                         </div>
                     </div>
                 </div>
-{/* ── Nav panel (bottom-right overlay) ── */}
                 {isNavPanelOpen && (
-                    <div className="absolute bottom-0 right-0 w-full md:w-96 bg-white border-l border-[#E5E7EB] shadow-2xl z-30 flex flex-col transform transition-transform border-t h-[350px]">
-                        <div className="border-b border-[#E5E7EB] p-6 flex justify-between items-center bg-[#F9FAFB]">
-                            <h3 className="font-bold text-lg text-[#111827]">Questions</h3>
-                            <button onClick={() => setIsNavPanelOpen(false)} className="p-2 rounded-md hover:bg-[#E5E7EB] text-[#4B5563] transition-colors">
-                                <X className="w-5 h-5" />
-                            </button>
-                        </div>
-                        <div className="p-6 overflow-y-auto grid grid-cols-4 sm:grid-cols-5 gap-3 h-full content-start">
-                            {assignment.questions.map((_, idx) => {
-                                const isFlagged = flaggedQuestions[idx];
-                                const isAnswered = answers[String(idx)] !== undefined;
-                                const isCurrent = currentIdx === idx;
-                                return (
-                                    <button
-                                        key={idx}
-                                        onClick={() => { setCurrentIdx(idx); setIsNavPanelOpen(false); }}
-                                        className={`relative flex items-center justify-center h-12 rounded-lg text-[15px] font-bold border-2 transition-all hover:-translate-y-0.5 hover:shadow-md ${isCurrent ? 'bg-blue-50 border-blue-600 text-blue-700' : isAnswered ? 'bg-slate-900 text-white border-slate-900 border-b-4' : 'bg-white border-[#D1D5DB] text-[#4B5563] hover:border-[#9CA3AF]'}`}
-                                    >
-                                        <div className="flex items-center justify-center w-full h-full relative font-mono">
-                                            {idx + 1}
-                                            {isFlagged && <Bookmark className="w-4 h-4 text-red-500 absolute -top-2 -right-2 bg-white rounded-full shadow-sm" fill="currentColor" />}
+                    <div className="fixed inset-0 z-50 flex items-end justify-center sm:items-center p-4 bg-black/40 backdrop-blur-sm" onClick={() => setIsNavPanelOpen(false)}>
+                        <div
+                            className="bg-white w-full max-w-3xl rounded-xl shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200"
+                            onClick={e => e.stopPropagation()}
+                        >
+                            <div className="border-b border-[#E5E7EB] p-6 flex justify-between items-center bg-[#F9FAFB]">
+                                <h3 className="font-bold text-lg text-[#111827]">
+                                    {isMath ? 'Section 2: Math' : 'Section 1: Reading and Writing'}
+                                </h3>
+                                <button onClick={() => setIsNavPanelOpen(false)} className="p-2 rounded-md hover:bg-[#E5E7EB] text-[#4B5563] transition-colors">
+                                    <X className="w-5 h-5" />
+                                </button>
+                            </div>
+
+                            <div className="p-8 max-h-[60vh] overflow-y-auto">
+                                <div className="mb-6 pb-6 border-b border-[#E5E7EB]">
+                                    <div className="flex flex-wrap items-center gap-6 mb-4">
+                                        <div className="flex items-center gap-2">
+                                            <div className="w-4 h-4 border-2 border-dashed border-[#9CA3AF] rounded-sm"></div>
+                                            <span className="text-[13px] font-bold text-[#4B5563]">Unanswered</span>
                                         </div>
-                                    </button>
-                                );
-                            })}
+                                        <div className="flex items-center gap-2">
+                                            <div className="w-4 h-4 bg-[#111827] rounded-sm"></div>
+                                            <span className="text-[13px] font-bold text-[#4B5563]">Answered</span>
+                                        </div>
+                                        <div className="flex items-center gap-2">
+                                            <Bookmark className="w-[14px] h-[14px] fill-red-600 text-red-600" />
+                                            <span className="text-[13px] font-bold text-[#4B5563]">For Review</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="grid grid-cols-6 sm:grid-cols-8 md:grid-cols-11 gap-4 gap-y-6 justify-items-center">
+                                    {Array.from({ length: totalQuestions }).map((_, idx) => {
+                                        const isAnswered = answers[String(idx)] !== undefined;
+                                        const isFlagged = flaggedQuestions[idx];
+                                        const isActive = idx === currentIdx;
+
+                                        let boxClass = 'cursor-pointer font-bold text-[15px] flex items-center justify-center relative transition-all w-10 h-10 ';
+
+                                        if (isActive && isAnswered) {
+                                            boxClass += 'border-[#2563EB] bg-[#111827] text-white shadow-[inset_0_0_0_2px_#2563EB]';
+                                        } else if (isActive) {
+                                            boxClass += 'border-[#2563EB] bg-[#EFF6FF] text-[#1E3A8A] shadow-[inset_0_0_0_2px_#2563EB]';
+                                        } else if (isAnswered) {
+                                            boxClass += 'bg-[#111827] text-white hover:bg-[#374151]';
+                                        } else {
+                                            boxClass += 'border-[1.5px] border-dashed border-[#9CA3AF] text-[#4B5563] bg-white hover:bg-slate-50';
+                                        }
+
+                                        return (
+                                            <button
+                                                key={idx}
+                                                onClick={() => {
+                                                    setCurrentIdx(idx);
+                                                    setIsNavPanelOpen(false);
+                                                }}
+                                                className={boxClass}
+                                            >
+                                                {idx + 1}
+                                                {isFlagged && (
+                                                    <div className="absolute -top-2 left-1/2 -translate-x-1/2">
+                                                        <Bookmark className="w-[12px] h-[12px] fill-red-600 text-red-600" />
+                                                    </div>
+                                                )}
+                                            </button>
+                                        );
+                                    })}
+                                </div>
+                            </div>
                         </div>
                     </div>
                 )}
@@ -677,10 +720,10 @@ export default function ClassroomAssignmentDetailPage() {
                 <div className="absolute left-1/2 -translate-x-1/2">
                     <button
                         onClick={() => setIsNavPanelOpen(true)}
-                        className="flex items-center justify-center gap-2 px-6 h-[44px] rounded-[6px] font-bold text-white bg-[#222222] hover:bg-[#333333] transition-colors shadow-sm"
+                        className="flex flex-col items-center justify-center px-4"
                     >
-                        <span className="text-[15px] tracking-wide">Question {currentIdx + 1} of {totalQuestions}</span>
-                        <ChevronUp className="w-[18px] h-[18px]" />
+                        <span className="font-bold text-[#111827] text-[15px] leading-tight">Question {currentIdx + 1} of {totalQuestions}</span>
+                        <ChevronUp className="w-5 h-5 text-[#374151]" strokeWidth={2.5} />
                     </button>
                 </div>
 

@@ -474,11 +474,11 @@ function BrowseView({ onStartQuiz, reviewedIds, qbStats }: { onStartQuiz: (qs: Q
                         <motion.div className="grid gap-3 sm:grid-cols-2 xl:max-w-[360px] xl:justify-self-end" variants={staggerContainerVariants}>
                             <motion.div className="site-hero-stat rounded-[22px] px-4 py-4" variants={itemRevealVariants}>
                                 <p className="site-hero-kicker text-[10px] font-bold uppercase tracking-[0.22em]">Reading bank</p>
-                                <p className="site-hero-title mt-2 text-3xl font-black tracking-[-0.05em]">{allEnglishQuestions.length}</p>
+                                <p className="site-hero-title mt-2 text-3xl font-black tracking-[-0.05em]">{englishReadyCount}</p>
                             </motion.div>
                             <motion.div className="site-hero-stat rounded-[22px] px-4 py-4" variants={itemRevealVariants}>
                                 <p className="site-hero-kicker text-[10px] font-bold uppercase tracking-[0.22em]">Math catalog</p>
-                                <p className="site-hero-title mt-2 text-3xl font-black tracking-[-0.05em]">{mathQuestionCount}</p>
+                                <p className="site-hero-title mt-2 text-3xl font-black tracking-[-0.05em]">{mathReadyCount}</p>
                             </motion.div>
                         </motion.div>
                     </motion.div>
@@ -496,16 +496,16 @@ function BrowseView({ onStartQuiz, reviewedIds, qbStats }: { onStartQuiz: (qs: Q
                         }} 
                     />
                 )}
-                <motion.div className="site-panel relative z-40 mb-5 flex flex-wrap items-center gap-3 overflow-visible rounded-[24px] p-4" variants={sectionRevealVariants}>
+                <motion.div className="site-panel relative z-[90] mb-5 flex flex-wrap items-center gap-3 overflow-visible rounded-[24px] p-4" variants={sectionRevealVariants}>
                     {/* Difficulty Dropdown */}
                     <div className="relative">
-                        <button onClick={() => { setShowDiff(!showDiff); setShowCompletedDropdown(false); setShowStatusDropdown(false); setShowReviewDropdown(false); setShowTimeDropdown(false); }} className={`flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-bold transition ${diff !== 'All' ? 'border-[#8e1f3d] bg-[#8e1f3d] text-white' : 'site-button-secondary'}`}>
+                        <button onClick={() => { setShowDiff(!showDiff); setShowCompletedDropdown(false); setShowStatusDropdown(false); setShowReviewDropdown(false); setShowTimeDropdown(false); }} className={`flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-bold transition ${diff !== 'All' ? 'border-emerald-500 bg-emerald-500 text-white shadow-[0_0_15px_rgba(16,185,129,0.35)]' : 'site-button-secondary'}`}>
                             <Filter className="h-4 w-4" /> {diff === 'All' ? 'Difficulty' : diff} <ChevronDown className={`h-4 w-4 transition-transform ${showDiff ? 'rotate-180' : ''}`} />
                         </button>
                         {showDiff && (
                             <div className="absolute left-0 top-full z-[90] mt-2 w-44 rounded-2xl site-panel p-2 shadow-xl" style={{ animation: 'qb-pop 0.25s ease both' }}>
                                 {(['All', 'Easy', 'Medium', 'Hard'] as Difficulty[]).map(d => (
-                                    <button key={d} onClick={() => { setDiff(d); setShowDiff(false); }} className={`flex w-full items-center justify-between rounded-xl px-4 py-2 text-left text-sm font-medium transition-all ${diff === d ? 'site-subpanel font-bold site-text-strong' : 'site-button-secondary site-text'}`}>
+                                    <button key={d} onClick={() => { setDiff(d); setShowDiff(false); }} className={`flex w-full items-center justify-between rounded-xl px-4 py-2 text-left text-sm font-medium transition-all ${diff === d ? 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-bold' : 'site-button-secondary site-text'}`}>
                                         <span>{d === 'All' ? 'All' : d}</span>
                                     </button>
                                 ))}
@@ -515,13 +515,13 @@ function BrowseView({ onStartQuiz, reviewedIds, qbStats }: { onStartQuiz: (qs: Q
 
                     {/* Completed Dropdown */}
                     <div className="relative">
-                        <button onClick={() => { setShowCompletedDropdown(!showCompletedDropdown); setShowDiff(false); setShowStatusDropdown(false); setShowReviewDropdown(false); setShowTimeDropdown(false); }} className={`flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-bold transition ${completedFilter !== 'All' ? 'border-[#0f2744] bg-[#0f2744] text-white' : 'site-button-secondary'}`}>
+                        <button onClick={() => { setShowCompletedDropdown(!showCompletedDropdown); setShowDiff(false); setShowStatusDropdown(false); setShowReviewDropdown(false); setShowTimeDropdown(false); }} className={`flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-bold transition ${completedFilter !== 'All' ? 'border-emerald-500 bg-emerald-500 text-white shadow-[0_0_15px_rgba(16,185,129,0.35)]' : 'site-button-secondary'}`}>
                             <CheckCircle className="h-4 w-4" /> {completedFilter === 'All' ? 'Completed' : completedFilter} <ChevronDown className={`h-4 w-4 transition-transform ${showCompletedDropdown ? 'rotate-180' : ''}`} />
                         </button>
                         {showCompletedDropdown && (
                             <div className="absolute left-0 top-full z-[90] mt-2 w-44 rounded-2xl site-panel p-2 shadow-xl" style={{ animation: 'qb-pop 0.25s ease both' }}>
                                 {(['All', 'Solved', 'Unsolved'] as const).map(c => (
-                                    <button key={c} onClick={() => { setCompletedFilter(c); setShowCompletedDropdown(false); }} className={`flex w-full items-center justify-between rounded-xl px-4 py-2 text-left text-sm font-medium transition-all ${completedFilter === c ? 'site-subpanel font-bold site-text-strong' : 'site-button-secondary site-text'}`}>
+                                    <button key={c} onClick={() => { setCompletedFilter(c); setShowCompletedDropdown(false); }} className={`flex w-full items-center justify-between rounded-xl px-4 py-2 text-left text-sm font-medium transition-all ${completedFilter === c ? 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-bold' : 'site-button-secondary site-text'}`}>
                                         <span>{c === 'All' ? 'All' : c}</span>
                                     </button>
                                 ))}
@@ -531,13 +531,13 @@ function BrowseView({ onStartQuiz, reviewedIds, qbStats }: { onStartQuiz: (qs: Q
 
                     {/* Status Dropdown */}
                     <div className="relative">
-                        <button onClick={() => { setShowStatusDropdown(!showStatusDropdown); setShowDiff(false); setShowCompletedDropdown(false); setShowReviewDropdown(false); setShowTimeDropdown(false); }} className={`flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-bold transition ${statusFilter !== 'All' ? 'border-indigo-600 bg-indigo-600 text-white' : 'site-button-secondary'}`}>
+                        <button onClick={() => { setShowStatusDropdown(!showStatusDropdown); setShowDiff(false); setShowCompletedDropdown(false); setShowReviewDropdown(false); setShowTimeDropdown(false); }} className={`flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-bold transition ${statusFilter !== 'All' ? 'border-emerald-500 bg-emerald-500 text-white shadow-[0_0_15px_rgba(16,185,129,0.35)]' : 'site-button-secondary'}`}>
                             <Target className="h-4 w-4" /> {statusFilter === 'All' ? 'Status' : statusFilter} <ChevronDown className={`h-4 w-4 transition-transform ${showStatusDropdown ? 'rotate-180' : ''}`} />
                         </button>
                         {showStatusDropdown && (
                             <div className="absolute left-0 top-full z-[90] mt-2 w-44 rounded-2xl site-panel p-2 shadow-xl" style={{ animation: 'qb-pop 0.25s ease both' }}>
                                 {(['All', 'Correct', 'Incorrect'] as const).map(s => (
-                                    <button key={s} onClick={() => { setStatusFilter(s); setShowStatusDropdown(false); }} className={`flex w-full items-center justify-between rounded-xl px-4 py-2 text-left text-sm font-medium transition-all ${statusFilter === s ? 'site-subpanel font-bold site-text-strong' : 'site-button-secondary site-text'}`}>
+                                    <button key={s} onClick={() => { setStatusFilter(s); setShowStatusDropdown(false); }} className={`flex w-full items-center justify-between rounded-xl px-4 py-2 text-left text-sm font-medium transition-all ${statusFilter === s ? 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-bold' : 'site-button-secondary site-text'}`}>
                                         <span>{s === 'All' ? 'All' : s}</span>
                                     </button>
                                 ))}
@@ -547,13 +547,13 @@ function BrowseView({ onStartQuiz, reviewedIds, qbStats }: { onStartQuiz: (qs: Q
 
                     {/* Review Dropdown */}
                     <div className="relative">
-                        <button onClick={() => { setShowReviewDropdown(!showReviewDropdown); setShowDiff(false); setShowCompletedDropdown(false); setShowStatusDropdown(false); setShowTimeDropdown(false); }} className={`flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-bold transition ${reviewFilter !== 'All' ? 'border-amber-500 bg-amber-500 text-white' : 'site-button-secondary'}`}>
+                        <button onClick={() => { setShowReviewDropdown(!showReviewDropdown); setShowDiff(false); setShowCompletedDropdown(false); setShowStatusDropdown(false); setShowTimeDropdown(false); }} className={`flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-bold transition ${reviewFilter !== 'All' ? 'border-emerald-500 bg-emerald-500 text-white shadow-[0_0_15px_rgba(16,185,129,0.35)]' : 'site-button-secondary'}`}>
                             <Bookmark className={`h-4 w-4 ${reviewFilter !== 'All' ? 'fill-white text-white' : 'text-slate-500'}`} /> {reviewFilter === 'All' ? 'Review' : reviewFilter} <ChevronDown className={`h-4 w-4 transition-transform ${showReviewDropdown ? 'rotate-180' : ''}`} />
                         </button>
                         {showReviewDropdown && (
                             <div className="absolute left-0 top-full z-[90] mt-2 w-44 rounded-2xl site-panel p-2 shadow-xl" style={{ animation: 'qb-pop 0.25s ease both' }}>
                                 {(['All', 'Marked', 'Not Marked'] as const).map(r => (
-                                    <button key={r} onClick={() => { setReviewFilter(r); setShowReviewDropdown(false); }} className={`flex w-full items-center justify-between rounded-xl px-4 py-2 text-left text-sm font-medium transition-all ${reviewFilter === r ? 'site-subpanel font-bold site-text-strong' : 'site-button-secondary site-text'}`}>
+                                    <button key={r} onClick={() => { setReviewFilter(r); setShowReviewDropdown(false); }} className={`flex w-full items-center justify-between rounded-xl px-4 py-2 text-left text-sm font-medium transition-all ${reviewFilter === r ? 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-bold' : 'site-button-secondary site-text'}`}>
                                         <span>{r === 'All' ? 'All' : r}</span>
                                     </button>
                                 ))}
@@ -563,7 +563,7 @@ function BrowseView({ onStartQuiz, reviewedIds, qbStats }: { onStartQuiz: (qs: Q
 
                     {/* Time Spent Dropdown */}
                     <div className="relative">
-                        <button onClick={() => { setShowTimeDropdown(!showTimeDropdown); setShowDiff(false); setShowCompletedDropdown(false); setShowStatusDropdown(false); setShowReviewDropdown(false); }} className={`flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-bold transition ${timeRange[0] > 0 || timeRange[1] < 7 ? 'border-emerald-600 bg-emerald-600 text-white' : 'site-button-secondary'}`}>
+                        <button onClick={() => { setShowTimeDropdown(!showTimeDropdown); setShowDiff(false); setShowCompletedDropdown(false); setShowStatusDropdown(false); setShowReviewDropdown(false); }} className={`flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-bold transition ${timeRange[0] > 0 || timeRange[1] < 7 ? 'border-emerald-500 bg-emerald-500 text-white shadow-[0_0_15px_rgba(16,185,129,0.35)]' : 'site-button-secondary'}`}>
                             <Clock className="h-4 w-4" /> {(timeRange[0] > 0 || timeRange[1] < 7) ? `${timeLabels[timeRange[0]]} - ${timeLabels[timeRange[1]]}` : 'Time Spent'} <ChevronDown className={`h-4 w-4 transition-transform ${showTimeDropdown ? 'rotate-180' : ''}`} />
                         </button>
                         {showTimeDropdown && (
@@ -587,8 +587,17 @@ function BrowseView({ onStartQuiz, reviewedIds, qbStats }: { onStartQuiz: (qs: Q
                     </div>
 
                     <div className="ml-auto flex items-center gap-2">
-                        <button onClick={() => setShuffled(!shuffled)} className={`flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-bold transition ${shuffled ? 'border-slate-800 bg-slate-800 text-white' : 'site-button-secondary'}`}>
-                            <Shuffle className="h-4 w-4" /> Shuffle
+                        <button 
+                            onClick={() => {
+                                const allQs = filter([...allEnglishQuestions, ...allMathQuestions]);
+                                if (allQs.length > 0) {
+                                    const randomQ = allQs[Math.floor(Math.random() * allQs.length)];
+                                    onStartQuiz([randomQ], "Random Question");
+                                }
+                            }} 
+                            className={`flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-bold transition site-button-secondary`}
+                        >
+                            <Shuffle className="h-4 w-4" /> Random Question
                         </button>
                     </div>
                 </motion.div>
@@ -747,8 +756,8 @@ function BrowseView({ onStartQuiz, reviewedIds, qbStats }: { onStartQuiz: (qs: Q
                                 <p>Pick one topic, answer a short set, then move to the next weak area.</p>
                             </div>
                             <div>
-                                <p className="site-text-strong font-bold">What does shuffle do?</p>
-                                <p>Shuffle changes the order of the questions in the set you open.</p>
+                                <p className="site-text-strong font-bold">What does random do?</p>
+                                <p>Random Question immediately gives you one random question from your filtered results.</p>
                             </div>
                             <div>
                                 <p className="site-text-strong font-bold">Should I use this or full tests?</p>
@@ -1442,7 +1451,7 @@ function QuizView({
                                     <div className="rounded-[20px] border border-slate-100 bg-white px-6 py-7 shadow-[0_8px_25px_rgba(15,23,42,0.04)]" style={{ animation: 'qb-slideUp 0.4s ease both' }}>
                                         <PassageRenderer
                                             text={q.passage}
-                                            className="text-[16px] leading-[1.9] text-slate-700"
+                                            className="text-[16px] leading-[1.9] text-[#111827] dark:text-slate-200"
                                             highlights={highlights[`p-${idx}`] || []}
                                             onAddHighlight={(h) => setHighlights(p => ({ ...p, [`p-${idx}`]: [...(p[`p-${idx}`] || []), { ...h, id: Math.random().toString(36).substr(2, 9) }] }))}
                                             onRemoveHighlight={(id) => setHighlights(p => ({ ...p, [`p-${idx}`]: (p[`p-${idx}`] || []).filter(x => x.id !== id) }))}

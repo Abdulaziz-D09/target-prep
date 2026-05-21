@@ -529,7 +529,7 @@ function TextBlock({
               </span>}
               <HighlightableText
                 text={body}
-                className="text-[16px] leading-[1.9] text-slate-700 dark:text-slate-300"
+                className="text-[16px] leading-[1.9] text-[#111827] dark:text-slate-300"
                 highlights={hl}
                 onAddHighlight={h => onAddHighlight({...h, start: h.start + bodyOff, end: h.end + bodyOff})}
                 onRemoveHighlight={onRemoveHighlight}
@@ -547,7 +547,7 @@ function TextBlock({
           <HighlightableText
             key={pi}
             text={para}
-            className="text-[16px] leading-[1.9] text-slate-700 dark:text-slate-300"
+            className="text-[16px] leading-[1.9] text-[#111827] dark:text-slate-300"
             highlights={hl}
             onAddHighlight={h => onAddHighlight({...h, start: h.start + paraOff, end: h.end + paraOff})}
             onRemoveHighlight={onRemoveHighlight}

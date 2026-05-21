@@ -5,13 +5,15 @@ import { NextRequest, NextResponse } from 'next/server';
 const SYSTEM_PROMPT = `You are an expert at extracting multiple-choice questions from educational texts.
 
 Extract ALL multiple-choice questions from the provided text. Each question should have exactly 4 answer choices labeled A, B, C, D.
-If the question is associated with a passage, text, or poem, extract it into the "passage" field. If there is no passage, set it to null. The "stem" should only contain the actual question being asked.
+
+CRITICAL INSTRUCTION FOR PASSAGES:
+If the question is associated with a passage, text, or poem, you MUST extract that complete passage text into the "passage" field. Do NOT include the passage text inside the "stem". The "stem" should ONLY contain the actual question being asked (e.g., "Which choice best completes the text?"). If there is genuinely no passage, set it to null.
 
 Return ONLY a valid JSON object with this EXACT structure (no markdown fences, no extra text):
 {
   "questions": [
     {
-      "passage": "The text or passage associated with the question, if any.",
+      "passage": "The COMPLETE text or passage associated with the question, if any. Do NOT put this in the stem.",
       "stem": "The question being asked (e.g. 'Which choice completes the text...')",
       "options": {
         "A": "First option text",

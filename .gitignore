@@ -41,3 +41,6 @@ yarn-error.log*
 next-env.d.ts
 .venv/
 venv/
+
+pdf_extractor/venv2/
+pdf_extractor/venv/

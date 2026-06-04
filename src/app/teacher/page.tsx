@@ -50,7 +50,7 @@ export default function TeacherHomePage() {
                             </p>
                         </motion.div>
 
-                        <motion.div className="grid gap-3 sm:grid-cols-3 xl:max-w-[450px] xl:justify-self-end" variants={staggerContainerVariants}>
+                        <motion.div className="grid gap-3 sm:grid-cols-3 xl: xl:justify-self-end" variants={staggerContainerVariants}>
                             {[
                                 { label: 'Classes', value: classrooms.length },
                                 { label: 'Students', value: totalStudents },

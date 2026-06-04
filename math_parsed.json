@@ -1,0 +1,440 @@
+{
+    "m1": [
+        {
+            "num": 1,
+            "question": "If $9x+4=67$ what is the value of $90x+40$?",
+            "options": [
+                "7",
+                "70",
+                "130",
+                "670"
+            ],
+            "answer": 3
+        },
+        {
+            "num": 2,
+            "question": "(Note: Figure not drawn to scale. In the figure, line p is parallel to line r, and line t intersects both lines.)What is the value of x?",
+            "options": [
+                "36",
+                "72",
+                "180",
+                "252"
+            ],
+            "answer": 1
+        },
+        {
+            "num": 3,
+            "question": "A length of 450 meters is equal to how many decimeters? (1 meter = 10 decimeters)",
+            "options": [],
+            "answer": 4500.0
+        },
+        {
+            "num": 4,
+            "question": "The equation $58=2x+2y$ gives the perimeter of a rectangular garden that has length x, in feet, and width y, in feet. The width of the garden is 14 feet. What is the length, in feet, of the garden?",
+            "options": [],
+            "answer": 15.0
+        },
+        {
+            "num": 5,
+            "question": "The relationship between the variables x and y is defined by an exponential equation. When $x=0$, the value of y is 40, and for every increase in the value of x by 1, the corresponding value of y increases by 50% of its previous value. Which equation represents this relationship?",
+            "options": [
+                "$y=40(1.50)^{x}$",
+                "$y=40(1.05)^{x}$",
+                "$y=50(1.40)^{x}$",
+                "$y=50(1.04)^{x}$"
+            ],
+            "answer": 0
+        },
+        {
+            "num": 6,
+            "question": "The function f is defined by $f(x)=\\frac{1}{8x}$. What is the value of $f(x)$ when $x=9$?",
+            "options": [],
+            "answer": 138.0
+        },
+        {
+            "num": 7,
+            "question": "The function f is defined by $f(x)=3x-\\frac{1}{4}$ What is the y-intercept of the graph of $y=f(x)$ in the xy-plane?",
+            "options": [
+                "$(0,-\\frac{1}{4})$",
+                "$(0,-3)$",
+                "(0,3)",
+                "(0,4)"
+            ],
+            "answer": 0
+        },
+        {
+            "num": 8,
+            "question": "$x+6y=28$$6y=14$The solution to the given system of equations is $(x,y)$. What is the value of x?",
+            "options": [],
+            "answer": 14.0
+        },
+        {
+            "num": 9,
+            "question": "The length of a side of square X is 9 centimeters. The area of rectangle Y is 32 square centimeters. What is the total area, in square centimeters, of square X and rectangle Y?",
+            "options": [
+                "145",
+                "113",
+                "82",
+                "81"
+            ],
+            "answer": 1
+        },
+        {
+            "num": 10,
+            "question": "During hibernation, American black bears do not eat or replenish calories. A certain black bear weighed 293 pounds when entering hibernation and lost weight at a mean rate of 0.9 pounds per day. At this rate, how many days after entering hibernation would the black bear weigh 230 pounds?",
+            "options": [
+                "57",
+                "63",
+                "70",
+                "207"
+            ],
+            "answer": 2
+        },
+        {
+            "num": 11,
+            "question": "The complete graph of $y=f(x)$ is shown. For how many values of x does $f(x)=0$?",
+            "options": [
+                "One",
+                "Two",
+                "Three",
+                "Four"
+            ],
+            "answer": 2
+        },
+        {
+            "num": 12,
+            "question": "$b^{2}+4c=7d$The given equation relates the real numbers b, c, and d, where $d>\\frac{4}{7}c$. Which equation correctly expresses b in terms of c and d?",
+            "options": [
+                "$b=\\frac{7d+4c}{2}$",
+                "$b=\\frac{7d-4c}{2}$",
+                "$b=\\pm\\sqrt{7d+4c}$",
+                "$b=\\pm\\sqrt{7d-4c}$"
+            ],
+            "answer": 3
+        },
+        {
+            "num": 13,
+            "question": "$x^{2}-\\frac{81}{16}=0$How many distinct real solutions does the given equation have?",
+            "options": [
+                "Zero",
+                "Exactly one",
+                "Exactly two",
+                "Infinitely many"
+            ],
+            "answer": 2
+        },
+        {
+            "num": 14,
+            "question": "Triangles ABC and $A^{\\prime}B^{\\prime}C^{\\prime}$ are shown. Triangle ABC is dilated by a scale factor of 6 to form triangle $A^{\\prime}B^{\\prime}C^{\\prime}$. If the length of $\\overline{AB}$ is 18, what is the length of $\\overline{A^{\\prime}B^{\\prime}}$?",
+            "options": [
+                "3",
+                "6",
+                "24",
+                "108"
+            ],
+            "answer": 3
+        },
+        {
+            "num": 15,
+            "question": "What is the radius of the circle in the xy-plane defined by $(x+3)^{2}+(y+9)^{2}=361$?",
+            "options": [],
+            "answer": 19.0
+        },
+        {
+            "num": 16,
+            "question": "In the xy-plane, which of the following does NOT contain any points that are part of the solution set to $5x-7y>35$?",
+            "options": [
+                "The x-axis",
+                "The region where $x>0$ and $y>0$",
+                "The region where $x<0$ and $y<0$",
+                "The region where $x<0$ and $y>0$"
+            ],
+            "answer": 3
+        },
+        {
+            "num": 17,
+            "question": "The table shows the distribution of people in a certain city by age group.Age groupProportionLess than 18 years old26%18-40 years old21%41-65 years old29%Greater than 65 years old24%If a person in this city is selected at random, which of the following is closest to the probability of selecting a person who is greater than 65 years old, given that the person is at least 18 years old?",
+            "options": [
+                "0.24",
+                "0.32",
+                "0.50",
+                "0.92"
+            ],
+            "answer": 1
+        },
+        {
+            "num": 18,
+            "question": "Line h is defined by $\\frac{1}{2}x+\\frac{1}{9}y-54=0.$ Line j is perpendicular to line h in the xy-plane. What is the slope of line j?",
+            "options": [
+                "$-\\frac{9}{2}$",
+                "$-\\frac{2}{9}$",
+                "$\\frac{9}{2}$",
+                "$\\frac{2}{9}$"
+            ],
+            "answer": 3
+        },
+        {
+            "num": 19,
+            "question": "a, 26, 29, b, 31, 47, cFor the given data set, the data values are listed in ascending order, where a, b, and c are constants. For this data set, the mean is 36, the median is 29, and the range is 72. What is the value of c?",
+            "options": [
+                "54",
+                "72",
+                "81",
+                "98"
+            ],
+            "answer": 2
+        },
+        {
+            "num": 20,
+            "question": "In triangle QRS shown, $QR<RS$. Which expression represents the length of $\\overline{QS}$?",
+            "options": [
+                "37 cos Q",
+                "37 sin Q",
+                "$\\frac{37}{cos~Q}$",
+                "$\\frac{37}{sin~Q}$"
+            ],
+            "answer": 3
+        },
+        {
+            "num": 21,
+            "question": "$y=9(\\frac{a}{7})^{x+c}-b$How many times does the graph of the given equation in the xy-plane cross the x-axis, where a, b, and c are positive constants such that $a>7$ and $b>c$?",
+            "options": [
+                "Zero",
+                "One",
+                "Two",
+                "Three"
+            ],
+            "answer": 1
+        },
+        {
+            "num": 22,
+            "question": "A certain town has an area of 4.29 square miles. What is the area, in square yards, of this town?(1 mile = 1,760 yards)",
+            "options": [
+                "410",
+                "7,550",
+                "722,051",
+                "13,288,704"
+            ],
+            "answer": 3
+        }
+    ],
+    "m2": [
+        {
+            "num": 1,
+            "question": "Zuri has a goal to run at least 16 miles per week while training for a race. This week, she has run 4 miles. If x represents the additional number of miles Zuri needs to run this week to meet her goal, which inequality represents this situation?",
+            "options": [
+                "$4-x\\le16$",
+                "$4+x\\le16$",
+                "$4-x\\ge16$",
+                "$4+x\\ge16$"
+            ],
+            "answer": 3
+        },
+        {
+            "num": 2,
+            "question": "In the figure shown, line k intersects lines r and s. If $w=147$, which additional piece of information is sufficient to prove that lines r and s are parallel?",
+            "options": [
+                "$x=33$",
+                "$y=147$",
+                "$w+y=180$",
+                "$y+z=180$"
+            ],
+            "answer": 1
+        },
+        {
+            "num": 3,
+            "question": "Number of food ticketsTotal amount paid10$44.0015$51.5025$66.50At a fundraiser, a family pays a fixed entrance fee. They then purchase food tickets, which each have the same cost. The table shows the relationship between the number of food tickets, x, that are purchased and the total amount paid y, in dollars, for both the entrance fee and the food tickets. Which equation represents the relationship between x and y?",
+            "options": [
+                "$y=\\frac{3}{2}x+29$",
+                "$y=\\frac{3}{2}x-56$",
+                "$y=\\frac{2}{3}x+\\frac{112}{3}$",
+                "$y=\\frac{2}{3}x+\\frac{58}{3}$"
+            ],
+            "answer": 0
+        },
+        {
+            "num": 4,
+            "question": "A group of 10 gardeners recorded data on the germination rates of their tomato crop for one growing season. The scatterplot shows the relationship between the number of tomato seeds planted, x, and the number of tomato seeds that germinated, y, for each of the gardeners. A line of best fit is also shown.Which of the following is the best interpretation of the slope of the line of best fit in this context?",
+            "options": [
+                "The number of tomato seeds planted is predicted to increase by 60 seeds every 100 days.",
+                "The number of tomato seeds planted is predicted to increase by 300 seeds every 100 days.",
+                "The number of tomato seeds that germinate is predicted to increase by 60 seeds for every additional 100 tomato seeds that are planted.",
+                "The number of tomato seeds that germinate is predicted to increase by 300 seeds for every additional 100 tomato seeds that are planted."
+            ],
+            "answer": 2
+        },
+        {
+            "num": 5,
+            "question": "The graph of $2x+y=11$ in the xy-plane is a line. What is the slope of the line?",
+            "options": [],
+            "answer": -2.0
+        },
+        {
+            "num": 6,
+            "question": "$f(x)=2x+3$$g(x)=7x-2$$h(x)=5x+6$The functions f, g, and h are defined as shown. If $f(x)\\cdot g(x)-h(x)=ax^{2}+bx+c$, where a, b, and c are constants, what is the value of b?",
+            "options": [
+                "-5",
+                "12",
+                "20",
+                "22"
+            ],
+            "answer": 1
+        },
+        {
+            "num": 7,
+            "question": "The function f is defined by $f(x)=\\frac{x+11}{5}$, and $f(a)=-18$ where a is a constant. What is the value of a?",
+            "options": [
+                "-101",
+                "-79",
+                "$-\\frac{79}{5}$",
+                "$-\\frac{7}{5}$"
+            ],
+            "answer": 0
+        },
+        {
+            "num": 8,
+            "question": "The table shows values of x and their corresponding values of y for three points on line j in the xy-plane.Xy0-10-4122Line k also lies in the xy-plane and is defined by the equation $y=4x.$ At what point (x, y) do lines j and k intersect?",
+            "options": [
+                "(5, 20)",
+                "(5, -44)",
+                "(6, 24)",
+                "(6, 26)"
+            ],
+            "answer": 0
+        },
+        {
+            "num": 9,
+            "question": "$h(t)=-16t^{2}+b$The function h estimates an object's height, in feet, above the ground t seconds after the object is dropped, where b is a constant. The function estimates that the object is 19.36 feet above the ground when it is dropped at $t=0$. How many seconds after being dropped does the function estimate the object will hit the ground?",
+            "options": [],
+            "answer": 1.1
+        },
+        {
+            "num": 10,
+            "question": "$|4x-3|=-9$How many solutions does the given equation have?",
+            "options": [
+                "Zero",
+                "One",
+                "Two",
+                "Infinitely many"
+            ],
+            "answer": 0
+        },
+        {
+            "num": 11,
+            "question": "The function h is defined by $h(x)=a^{x}+b$, where a and b are positive constants. The graph of $y=h(x)$ in the xy-plane passes through the points (0, 10) and (2, 13). What is the value of ab?",
+            "options": [
+                "13",
+                "18",
+                "20",
+                "26"
+            ],
+            "answer": 1
+        },
+        {
+            "num": 12,
+            "question": "A circle has center P, and points A and B lie on the circle. The measure of arc AB is 45\u00b0 and the length of arc AB is $4\\pi$ units. What is the length, in units, of the radius of the circle?",
+            "options": [],
+            "answer": 16.0
+        },
+        {
+            "num": 13,
+            "question": "The function f is defined by $f(x)=56(0.19)^{x}.$ For any positive integer n, the value of $f(n)$ is p% less than the value of $f(n-1)$. What is the value of p?",
+            "options": [
+                "19",
+                "44",
+                "56",
+                "81"
+            ],
+            "answer": 3
+        },
+        {
+            "num": 14,
+            "question": "$x^{2}+(\\sqrt{k-3})x+42=0$In the given equation, k is a constant. The equation has exactly one real solution. What is the value of k?",
+            "options": [
+                "171",
+                "168",
+                "165",
+                "45"
+            ],
+            "answer": 0
+        },
+        {
+            "num": 15,
+            "question": "$x^{2}+y^{2}=36$$y=mx+\\frac{b}{4}$In the given system of equations, m and b are negative constants. In the xy-plane, the graphs of the equations in the given system intersect at the point $(-5,y)$, where $y<0.$ Which expression represents the value of b?",
+            "options": [
+                "$-\\frac{5m}{4}+\\frac{\\sqrt{11}}{4}$",
+                "$\\frac{5m}{4}-\\frac{\\sqrt{11}}{4}$",
+                "$-20m+4\\sqrt{11}$",
+                "$20m-4\\sqrt{11}$"
+            ],
+            "answer": 3
+        },
+        {
+            "num": 16,
+            "question": "A biologist mixed a solution that is 0.3% sodium chloride by mass with a solution that is 0.15% sodium chloride by mass to obtain a new solution, which has a mass of 80 grams and contains 0.21 grams of sodium chloride. How many grams of 0.3% sodium chloride solution did the biologist use?",
+            "options": [
+                "0.14",
+                "20",
+                "60",
+                "79.86"
+            ],
+            "answer": 2
+        },
+        {
+            "num": 17,
+            "question": "For data set A, the table summarizes the distribution of the number of pieces of mail received by a business each day during a period of 11 days.Pieces of mailDays023242526171131The data value 13 is removed from data set A to create data set B, which consists of the remaining 10 data values. Which statement best compares the median of data set A and the median of data set B?",
+            "options": [
+                "The median of data set B is less than the median of data set A.",
+                "The median of data set B is greater than the median of data set A.",
+                "The median of data set B is equal to the median of data set A.",
+                "There is not enough information to compare the medians of the two data sets."
+            ],
+            "answer": 2
+        },
+        {
+            "num": 18,
+            "question": "$\\frac{x}{5}+\\frac{y}{9}=\\frac{47}{45}$An engineer connects resistors in series, where the resistors in the series have a total resistance of $\\frac{47}{45}$ ohms. In this series, there are x resistors of type A, which each have a resistance of a ohms, and y resistors of type B, which each have a resistance of b ohms. The given equation represents this situation. According to this equation, what is the positive difference between the value of a and the value of b?",
+            "options": [
+                "47",
+                "4",
+                "$\\frac{47}{45}$",
+                "$\\frac{4}{45}$"
+            ],
+            "answer": 3
+        },
+        {
+            "num": 19,
+            "question": "$9x^{2}+8=nx$In the given equation, n is a constant. The equation has exactly one solution. What is the value of $\\frac{n^{2}}{8}$?",
+            "options": [],
+            "answer": 36.0
+        },
+        {
+            "num": 20,
+            "question": "The table gives the areas and perimeters of two similar rectangles, where n is a constant.Area (square inches)Perimeter (inches)Rectangle A630210Rectangle B2,520nWhat is the value of n?",
+            "options": [
+                "2,100",
+                "1,680",
+                "840",
+                "420"
+            ],
+            "answer": 3
+        },
+        {
+            "num": 21,
+            "question": "The mass of object A is 444% of the mass of object B, and the mass of object A is 0.740% of the mass of object C. If the mass of object C is p% of the mass of object B, what is the value of p?",
+            "options": [],
+            "answer": 60000.0
+        },
+        {
+            "num": 22,
+            "question": "Which expression is a factor of $y^{2}(x-3)-25(x-3)^{3}$?",
+            "options": [
+                "$y(x-3)$",
+                "$(x-5)(x-3)$",
+                "$y+x-3$",
+                "$y+5x-15$"
+            ],
+            "answer": 3
+        }
+    ]
+}

@@ -1,0 +1,168 @@
+[
+  {
+    "num": 1,
+    "question": "Which choice completes the text with the most logical and precise word or phrase?",
+    "options": [
+      "identify",
+      "disturb",
+      "replace",
+      "exceed"
+    ],
+    "answer": 3,
+    "passage": "A study by Augusta D. Gaspar and Joana Carneiro Pinto found that a bank's corporate social responsibility (CSR) efforts, including environmental and social campaigns, improve its corporate image. When CSR was mentioned in bank marketing strategies, favorability scores assigned by study participants tended to _____ the scores assigned by participants when CSR wasn't mentioned.",
+    "explanation": "Algebra / Inequalities\n\nAnswer: D \u2014 4 + x \u2265 16\n\nCore Mathematical Concept: Translate \"at least 16 miles total\" \u2192 total miles \u2265 16. Total = already run + additional = 4 + x.\n\n\ud83d\udcd0 Step-by-Step Proof\n\nGoal: run AT LEAST 16 miles \u2192 total \u2265 16\n\nAlready run: 4 miles\n\nAdditional miles needed: x\n\nTotal: 4 + x\n\nConstraint: 4 + x \u2265 16\n\nAnswer: D \u2713\n\nA (4 \u2212 x \u2264 16): Subtracting x means Zuri is removing miles \u2014 nonsensical context. Also wrong direction.\n\nB (4 + x \u2264 16): Wrong direction \u2014 \"at least\" means \u2265, not \u2264.\n\nC (4 \u2212 x \u2265 16): Subtraction is wrong \u2014 x miles are being added, not removed.",
+    "id": "pt1-m1-q1",
+    "difficulty": "Medium",
+    "type": "Reading"
+  },
+  {
+    "num": 2,
+    "question": "Which choice completes the text with the most logical and precise word or phrase?",
+    "options": [
+      "esoteric",
+      "authoritative",
+      "solitary",
+      "speculative"
+    ],
+    "answer": 3,
+    "passage": "Researchers have long debated the origins of silver used in European coins from the 600s through the early 800s CE. Geochemical analysis by Kershaw et al. of 49 coins dating to 660-820 CE provides concrete evidence that reconciles two competing theories: early coins were made from Byzantine silver, and later coins used Frankish silver, findings that provide firm details in a previously _____ area of study.",
+    "explanation": "Geometry / Parallel Lines \u2014 Corresponding Angles\n\nAnswer: B \u2014 y = 147\n\nCore Mathematical Concept: Lines r and s are parallel iff corresponding angles formed by the same transversal k are equal. w and y are corresponding angles at the two intersections.\n\n\ud83d\udcd0 Step-by-Step Proof\n\nw = 147\u00b0 (given)\n\nw\u00b0 is formed at intersection k\u2229r\n\ny\u00b0 is formed at intersection k\u2229s (same position)\n\nr \u2225 s  \u2194  corresponding angles equal  \u2194  y = w = 147\n\nAnswer: B \u2014 y = 147 \u2713\n\nA (x = 33): x and w are supplementary at r (w + x = 180 \u2192 x = 33), but knowing x tells us nothing about angles at s.\n\nC (w + y = 180): Would prove r and s are cut by a transversal making co-interior angles \u2014 but 147 + 33 = 180 would mean w and y are supplementary, not equal, proving something different.\n\nD (y + z = 180): y and z are supplementary angles at s regardless of whether r \u2225 s \u2014 provides no information about parallelism.",
+    "id": "pt1-m1-q2",
+    "difficulty": "Medium",
+    "type": "Reading"
+  },
+  {
+    "num": 3,
+    "question": "As used in the text, what does the word \"mastery\" most nearly mean?",
+    "options": [],
+    "answer": "0138",
+    "passage": "The following text is adapted from Alice Dunbar Nelson's 1899 short story \"The Fisherman of Pass Christian.\" Pass Christian is a city in the US state of Mississippi. The swift breezes on the beach at Pass Christian meet and conflict as though each strove for the mastery of the air. The land-breeze blows down thr",
+    "explanation": "Algebra / Linear Models from Tables\n\nAnswer: A \u2014 y = (3/2)x + 29\n\nCore Mathematical Concept: Find the slope from two table points, then use point-slope to find the y-intercept (which represents the fixed entrance fee).\n\n\ud83d\udcd0 Step-by-Step Proof\n\nTable: (10, 44), (15, 51.50), (25, 66.50)\n\nSlope = \u0394y/\u0394x = (51.50 \u2212 44)/(15 \u2212 10) = 7.50/5 = 1.50 = 3/2\n\nUsing point (10, 44): 44 = (3/2)(10) + b\n\n44 = 15 + b  \u2192  b = 29\n\nEquation: y = (3/2)x + 29\n\nVerify with (25, 66.50): (3/2)(25) + 29 = 37.5 + 29 = 66.5 \u2713\n\nAnswer: A \u2713\n\nB (y = 3/2x \u2212 56): Wrong sign for intercept \u2014 arithmetic error in solving for b.\n\nC/D (slope 2/3): Inverts \u0394y and \u0394x when computing slope \u2014 gets 5/7.50 instead of 7.50/5.",
+    "id": "pt1-m1-q3",
+    "difficulty": "Medium",
+    "type": "Reading"
+  },
+  {
+    "num": 7,
+    "question": "The function f is defined by $f(x)=3x-\\frac{1}{4}$ What is the y-intercept of the graph of $y=f(x)$ in the xy-plane?",
+    "options": [
+      "$(0,-\\frac{1}{4})$",
+      "$(0,-3)$",
+      "(0,3)",
+      "(0,4)"
+    ],
+    "answer": 0,
+    "passage": "",
+    "explanation": "Algebra / Function Evaluation \u2014 Solving for Input\n\nAnswer: A \u2014 \u2212101\n\nCore Mathematical Concept: Set f(a) = \u221218, substitute a for x in the function definition, and solve the resulting linear equation.\n\n\ud83d\udcd0 Step-by-Step Proof\n\nf(x) = (x + 11)/5,   f(a) = \u221218\n\n(a + 11)/5 = \u221218\n\na + 11 = \u221290\n\na = \u221290 \u2212 11 = \u2212101\n\nAnswer: A \u2014 a = \u2212101 \u2713\n\nB (\u221279): Adds 11 instead of subtracting (\u221290 + 11 = \u221279) \u2014 wrong direction for solving a + 11 = \u221290.\n\nC (\u221279/5): Divides \u221218 by 5 instead of multiplying \u2014 inverts the algebra step.\n\nD (\u22127/5): Computes (\u221218 + 11)/5 \u2014 adds 11 to \u221218 before dividing, instead of multiplying first.",
+    "id": "pt1-m1-q7",
+    "difficulty": "Medium",
+    "type": "Math"
+  },
+  {
+    "num": 8,
+    "question": "$x+6y=28$\n$6y=14$\nThe solution to the given system of equations is $(x,y)$. What is the value of x?",
+    "options": [],
+    "answer": "14",
+    "passage": "",
+    "explanation": "Algebra / Systems of Equations \u2014 Intersection Point\n\nAnswer: A \u2014 (5, 20)\n\nCore Mathematical Concept: Find equation of line j from the table (slope and y-intercept), then set equal to y = 4x and solve.\n\n\ud83d\udcd0 Step-by-Step Proof\n\nFrom table: points (0,\u221210), (1,\u22124), (2,2)\n\nSlope of j = (\u22124\u2212(\u221210))/(1\u22120) = 6\n\ny-intercept = \u221210 (from table at x=0)\n\nLine j: y = 6x \u2212 10\n\nIntersection with k: y = 4x\n\n4x = 6x \u2212 10  \u2192  \u22122x = \u221210  \u2192  x = 5\n\ny = 4(5) = 20\n\nIntersection: (5, 20) \u2192 Answer: A \u2713\n\nB (5, \u221244): Uses y = 6(5) \u2212 10 = 20 for line j, not k \u2014 confuses which line to evaluate.\n\nC/D (6, 24) or (6, 26): Arithmetic error in solving 4x = 6x \u2212 10 \u2014 gets x = 6 instead of x = 5.",
+    "id": "pt1-m1-q8",
+    "difficulty": "Medium",
+    "type": "Math"
+  },
+  {
+    "num": 9,
+    "question": "The length of a side of square X is 9 centimeters. The area of rectangle Y is 32 square centimeters. What is the total area, in square centimeters, of square X and rectangle Y?",
+    "options": [
+      "145",
+      "113",
+      "82",
+      "81"
+    ],
+    "answer": 1,
+    "passage": "",
+    "explanation": "Advanced Math / Quadratic \u2014 Finding When Function = 0\n\nAnswer: 1.1\n\nCore Mathematical Concept: Use h(0) = 19.36 to find b, then set h(t) = 0 (ground level) and solve for t.\n\n\ud83d\udcd0 Step-by-Step Proof\n\nh(t) = \u221216t\u00b2 + b\n\nh(0) = 19.36:  \u221216(0)\u00b2 + b = 19.36  \u2192  b = 19.36\n\nSet h(t) = 0 (object hits ground):\n\n\u221216t\u00b2 + 19.36 = 0\n\n16t\u00b2 = 19.36\n\nt\u00b2 = 19.36/16 = 1.21\n\nt = \u221a1.21 = 1.1\n\nt = 1.1 seconds \u2713\n\n\ud83d\udda9 Desmos Method\n\nGraph y = -16x^2 + 19.36. Find positive x-intercept \u2192 x = 1.1.\n\nCommon error: Taking \u221a(19.36/16) = \u221a19.36/4 = 4.4/4 = 1.1 correctly, but some students get 19.36/4 = 4.84 (forgetting to square root at the end).",
+    "id": "pt1-m1-q9",
+    "difficulty": "Medium",
+    "type": "Math"
+  },
+  {
+    "num": 10,
+    "question": "During hibernation, American black bears do not eat or replenish calories. A certain black bear weighed 293 pounds when entering hibernation and lost weight at a mean rate of 0.9 pounds per day. At this rate, how many days after entering hibernation would the black bear weigh 230 pounds?",
+    "options": [
+      "57",
+      "63",
+      "70",
+      "207"
+    ],
+    "answer": 2,
+    "passage": "",
+    "explanation": "Algebra / Absolute Value Equations\n\nAnswer: A \u2014 Zero solutions\n\nCore Mathematical Concept: Absolute value is always \u2265 0. It can never equal a negative number \u2192 no solutions exist.\n\n\ud83d\udcd0 Step-by-Step Proof\n\n|4x \u2212 3| = \u22129\n\nBy definition: |any expression| \u2265 0 for all real x\n\n\u22129 < 0\n\nTherefore: |4x \u2212 3| \u2265 0 > \u22129 for all x\n\nNo value of x can make this equation true\n\nAnswer: A \u2014 Zero solutions \u2713\n\nB/C: Attempts to split into cases (4x\u22123 = \u22129 and 4x\u22123 = 9) \u2014 but this is wrong procedure when RHS is negative; the split only applies when RHS \u2265 0.\n\nD: Absolute value equations cannot have infinitely many solutions in a single equation of this form.",
+    "id": "pt1-m1-q10",
+    "difficulty": "Medium",
+    "type": "Math"
+  },
+  {
+    "num": 11,
+    "question": "The complete graph of $y=f(x)$ is shown. For how many values of x does $f(x)=0$?",
+    "options": [
+      "One",
+      "Two",
+      "Three",
+      "Four"
+    ],
+    "answer": 2,
+    "passage": "",
+    "explanation": "Advanced Math / Exponential Functions \u2014 Solving for Constants\n\nAnswer: B \u2014 ab = 18\n\nCore Mathematical Concept: Use the two given points to create a system of equations and solve for a and b.\n\n\ud83d\udcd0 Step-by-Step Proof\n\nh(x) = a\u02e3 + b\n\nPoint (0, 10): a\u2070 + b = 10  \u2192  1 + b = 10  \u2192  b = 9\n\nPoint (2, 13): a\u00b2 + b = 13  \u2192  a\u00b2 + 9 = 13  \u2192  a\u00b2 = 4  \u2192  a = 2\n\n(a is positive since stated as positive constant)\n\nab = 2 \u00d7 9 = 18\n\nAnswer: B \u2014 ab = 18 \u2713\n\nA (13): Gives the y-value at x=2 rather than computing ab = 2\u00d79.\n\nC (20): Likely uses b = 10 (forgetting to subtract 1), giving a = \u221a3 and ab \u2248 incorrect value.\n\nD (26): Arithmetic error \u2014 perhaps doubles one of the values incorrectly.",
+    "id": "pt1-m1-q11",
+    "difficulty": "Medium",
+    "type": "Math"
+  },
+  {
+    "num": 12,
+    "question": "$b^{2}+4c=7d$\nThe given equation relates the real numbers b, c, and d, where $d>\\frac{4}{7}c$. Which equation correctly expresses b in terms of c and d?",
+    "options": [
+      "$b=\\frac{7d+4c}{2}$",
+      "$b=\\frac{7d-4c}{2}$",
+      "$b=\\pm\\sqrt{7d+4c}$",
+      "$b=\\pm\\sqrt{7d-4c}$"
+    ],
+    "answer": 3,
+    "passage": "",
+    "explanation": "Geometry / Circle Arc Length\n\nAnswer: 16\n\nCore Mathematical Concept: Arc length formula: L = (\u03b8/360\u00b0) \u00d7 2\u03c0r. Solve for r.\n\n\ud83d\udcd0 Step-by-Step Proof\n\nArc length L = 4\u03c0,  \u03b8 = 45\u00b0\n\nL = (\u03b8/360\u00b0) \u00d7 2\u03c0r\n\n4\u03c0 = (45/360) \u00d7 2\u03c0r\n\n4\u03c0 = (1/8) \u00d7 2\u03c0r\n\n4\u03c0 = \u03c0r/4\n\nr = 16\u03c0/\u03c0 = 16\n\nRadius = 16 units \u2713\n\nCommon error: Using circumference formula without the fraction: 4\u03c0 = 2\u03c0r \u2192 r = 2 (forgets to account for the arc being only 45\u00b0/360\u00b0 of the full circle).",
+    "id": "pt1-m1-q12",
+    "difficulty": "Medium",
+    "type": "Math"
+  },
+  {
+    "num": 13,
+    "question": "$x^{2}-\\frac{81}{16}=0$\nHow many distinct real solutions does the given equation have?",
+    "options": [
+      "Zero",
+      "Exactly one",
+      "Exactly two",
+      "Infinitely many"
+    ],
+    "answer": 2,
+    "passage": "",
+    "explanation": "Advanced Math / Exponential Decay \u2014 Percent Change\n\nAnswer: D \u2014 p = 81\n\nCore Mathematical Concept: Find f(n)/f(n\u22121), then compute the percent decrease: p% = (1 \u2212 ratio) \u00d7 100.\n\n\ud83d\udcd0 Step-by-Step Proof\n\nf(x) = 56(0.19)\u02e3\n\nf(n)   = 56(0.19)\u207f\n\nf(n\u22121) = 56(0.19)\u207f\u207b\u00b9\n\nRatio: f(n)/f(n\u22121) = (0.19)\u207f / (0.19)\u207f\u207b\u00b9 = 0.19\n\nf(n) is 0.19 \u00d7 f(n\u22121) \u2192 it is 19% of f(n\u22121)\n\nPercent decrease: (1 \u2212 0.19) \u00d7 100 = 0.81 \u00d7 100 = 81%\n\np = 81 \u2192 Answer: D \u2713\n\nA (19): Confuses the base (0.19) with the percent decrease. The base 0.19 means f(n) RETAINS 19%, so it DECREASES by 81%.\n\nB (44): No algebraic basis.\n\nC (56): Confuses the initial value (56) with the percentage.",
+    "id": "pt1-m1-q13",
+    "difficulty": "Medium",
+    "type": "Math"
+  },
+  {
+    "num": 14,
+    "question": "Triangles ABC and $A^{\\prime}B^{\\prime}C^{\\prime}$ are shown. Triangle ABC is dilated by a scale factor of 6 to form triangle $A^{\\prime}B^{\\prime}C^{\\prime}$. If the length of $\\overline{AB}$ is 18, what is the length of $\\overline{A^{\\prime}B^{\\prime}}$?\nNOTE: The output was truncated because it was too long. Use a more targeted query or a smaller range to get the information you need.",
+    "options": [
+      "3",
+      "6",
+      "24",
+      "108"
+    ],
+    "answer": 3,
+    "passage": "",
+    "explanation": "Advanced Math / Discriminant = 0 for One Real Solution\n\nAnswer: A \u2014 k = 171\n\nCore Mathematical Concept: A quadratic has exactly one real solution when its discriminant = 0: b\u00b2 \u2212 4ac = 0.\n\n\ud83d\udcd0 Step-by-Step Proof\n\nx\u00b2 + (\u221a(k\u22123))x + 42 = 0\n\na = 1,  b = \u221a(k\u22123),  c = 42\n\nDiscriminant = b\u00b2 \u2212 4ac = (k\u22123) \u2212 4(1)(42) = 0\n\nk \u2212 3 \u2212 168 = 0\n\nk \u2212 171 = 0\n\nk = 171 \u2192 Answer: A \u2713\n\n\ud83d\udda9 Desmos Method\n\nGraph y = x^2 + sqrt(171-3)x + 42. Verify one x-intercept (tangent to x-axis).\n\nB (168): Sets k \u2212 3 = 168 but forgets to add 3 back: 168 + 3 = 171, not 168.\n\nC (165): Arithmetic error: uses 4\u00d742 = 160 instead of 168.\n\nD (45): Uses 4\u00d7c as 4\u00d742 = 45 somehow \u2014 major arithmetic error.",
+    "id": "pt1-m1-q14",
+    "difficulty": "Medium",
+    "type": "Math"
+  }
+]

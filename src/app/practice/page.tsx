@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { ArrowRight, BookOpen, Calculator, ChevronDown, ChevronUp, Clock3, Layers3, Sparkles, X } from 'lucide-react';
-import { practiceCards } from '@/lib/practiceCatalog';
+import { practiceCards, type PracticeCard } from '@/lib/practiceCatalog';
 import { useTestStore } from '@/store/testStore';
 import {
   FloatingPageShapes,
@@ -15,6 +15,7 @@ import {
   siteEase,
   staggerContainerVariants,
 } from '@/components/SiteMotion';
+import { saveToHistory } from '@/lib/userHistory';
 
 const ACTIVE_TEST_SESSION_KEY = 'targetprep_active_test';
 
@@ -81,6 +82,7 @@ export default function PracticePage() {
       window.localStorage.removeItem(ACTIVE_TEST_SESSION_KEY);
     }
     startTest(testId);
+    saveToHistory('start_full_test', { testId });
     router.push(`/practice/test/${testId}`);
   };
 
@@ -93,8 +95,182 @@ export default function PracticePage() {
     startFreshFullTest(testId);
   };
 
+  const renderCard = (card: PracticeCard) => {
+    const isOpen = openCardId === card.id;
+    const theme = practiceThemes[(card.id - 1) % practiceThemes.length];
+
+    return (
+      <motion.article
+        key={card.id}
+        variants={itemRevealVariants}
+        whileHover={shouldReduceMotion ? undefined : { scale: 1.02 }}
+        transition={{ type: 'spring', stiffness: 260, damping: 22 }}
+        className="site-panel relative overflow-hidden rounded-[32px] p-5 sm:p-6"
+      >
+        <div className={`absolute left-12 top-8 h-24 w-24 rounded-full blur-2xl ${theme.accentGlow}`} />
+        <div className="absolute right-6 top-6 h-24 w-24 rounded-full bg-white/8 blur-3xl" />
+
+        <div className="relative flex items-start gap-4">
+          <div className={`flex h-[86px] w-[86px] flex-shrink-0 flex-col items-center justify-center rounded-[24px] ${theme.statIcon} text-center shadow-sm`}>
+              <p className="text-[10px] font-bold uppercase tracking-[0.24em] opacity-70">Test</p>
+              <p className="mt-1 text-3xl font-black tracking-[-0.06em]">{card.id}</p>
+          </div>
+
+          <div className="max-w-[30rem]">
+              <p className={`inline-flex items-center gap-2 rounded-full px-3 py-1 text-[11px] font-bold uppercase tracking-[0.22em] ${theme.accentChip}`}>
+                <Sparkles className="h-3.5 w-3.5" />
+                {card.label}
+              </p>
+              <h2 className="site-text-strong mt-4 text-[2rem] font-black tracking-[-0.045em]">
+                {card.title}
+              </h2>
+              <p className="site-text mt-3 max-w-[30rem] text-[16px] leading-7">
+                {card.summary}
+              </p>
+          </div>
+        </div>
+
+        <div className="mt-6 grid gap-3 sm:grid-cols-3">
+          <div className="site-subpanel rounded-[22px] px-4 py-3">
+            <div className={`flex h-10 w-10 items-center justify-center rounded-2xl ${theme.statIcon}`}>
+              <Clock3 className="h-4 w-4" />
+            </div>
+            <p className="site-text-faint mt-4 text-[11px] font-bold uppercase tracking-[0.2em]">Timing</p>
+            <p className="site-text-strong mt-1 text-xl font-black tracking-[-0.03em]">{card.duration}</p>
+          </div>
+
+          <div className="site-subpanel rounded-[22px] px-4 py-3">
+            <div className={`flex h-10 w-10 items-center justify-center rounded-2xl ${theme.statIcon}`}>
+              <BookOpen className="h-4 w-4" />
+            </div>
+            <p className="site-text-faint mt-4 text-[11px] font-bold uppercase tracking-[0.2em]">Questions</p>
+            <p className="site-text-strong mt-1 text-xl font-black tracking-[-0.03em]">{card.totalQuestions}</p>
+          </div>
+
+          <div className="site-subpanel rounded-[22px] px-4 py-3">
+            <div className={`flex h-10 w-10 items-center justify-center rounded-2xl ${theme.statIcon}`}>
+              <Layers3 className="h-4 w-4" />
+            </div>
+            <p className="site-text-faint mt-4 text-[11px] font-bold uppercase tracking-[0.2em]">Modules</p>
+            <p className="site-text-strong mt-1 text-xl font-black tracking-[-0.03em]">{card.moduleCount}</p>
+          </div>
+        </div>
+
+        <div className="mt-5 flex flex-col gap-3 sm:flex-row">
+          <button
+            type="button"
+            onClick={() => handleFullTestPress(card.id)}
+            className={`inline-flex h-12 items-center justify-center gap-2 rounded-full px-7 text-base font-bold transition ${theme.fullTestButton}`}
+          >
+            Full Test
+            <ArrowRight className="h-4 w-4" />
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setOpenCardId(isOpen ? null : card.id)}
+            className="site-button-secondary inline-flex h-12 items-center justify-center gap-2 rounded-full px-7 text-base font-bold transition"
+          >
+            Individual Module
+            {isOpen ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+          </button>
+        </div>
+
+        <AnimatePresence initial={false}>
+        {isOpen && (
+          <motion.div
+            key="collapsible-modules"
+            className="overflow-hidden"
+            initial={shouldReduceMotion ? undefined : { height: 0, opacity: 0 }}
+            animate={shouldReduceMotion ? undefined : { height: 'auto', opacity: 1 }}
+            exit={shouldReduceMotion ? undefined : { height: 0, opacity: 0 }}
+            transition={shouldReduceMotion ? undefined : { duration: 0.3, ease: siteEase }}
+          >
+            <div className="pt-5">
+              <div className="site-panel-soft grid gap-4 rounded-[28px] p-4 sm:p-5 lg:grid-cols-2">
+                <motion.div className="site-subpanel rounded-[24px] p-4" initial={shouldReduceMotion ? undefined : { opacity: 0, y: 12 }} animate={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }} exit={shouldReduceMotion ? undefined : { opacity: 0, y: 12 }} transition={shouldReduceMotion ? undefined : { duration: 0.35, ease: siteEase }}>
+                  <div className="flex items-center gap-3">
+                    <div className="practice-icon--sky flex h-11 w-11 items-center justify-center rounded-2xl">
+                      <BookOpen className="h-5 w-5" />
+                    </div>
+                    <div>
+                      <p className="site-text-faint text-[11px] font-bold uppercase tracking-[0.22em]">
+                        Reading &amp; Writing
+                      </p>
+                      <p className="site-text text-[15px] font-semibold leading-6">Choose one module start point</p>
+                    </div>
+                  </div>
+
+                  <div className="mt-4 grid gap-2">
+                    {card.englishButtons.map((button) =>
+                      button.available && button.href ? (
+                        <Link
+                          key={button.key}
+                          href={button.href}
+                          onClick={() => saveToHistory('start_individual_module', { moduleKey: button.key, testId: card.id })}
+                          className="inline-flex h-11 items-center justify-center rounded-full bg-[linear-gradient(135deg,#1e3a8a,#2563eb)] px-4 text-sm font-bold text-white transition hover:brightness-105"
+                        >
+                          {button.label}
+                        </Link>
+                      ) : (
+                        <span
+                          key={button.key}
+                          className="site-button-secondary inline-flex h-11 items-center justify-center rounded-full border border-dashed px-4 text-sm font-bold site-text-faint"
+                        >
+                          {button.label}
+                        </span>
+                      )
+                    )}
+                  </div>
+                </motion.div>
+
+                <motion.div className="site-subpanel rounded-[24px] p-4" initial={shouldReduceMotion ? undefined : { opacity: 0, y: 12 }} animate={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }} exit={shouldReduceMotion ? undefined : { opacity: 0, y: 12 }} transition={shouldReduceMotion ? undefined : { duration: 0.35, ease: siteEase, delay: 0.04 }}>
+                  <div className="flex items-center gap-3">
+                    <div className="practice-icon--rose flex h-11 w-11 items-center justify-center rounded-2xl">
+                      <Calculator className="h-5 w-5" />
+                    </div>
+                    <div>
+                      <p className="site-text-faint text-[11px] font-bold uppercase tracking-[0.22em]">
+                        Math
+                      </p>
+                      <p className="site-text text-[15px] font-semibold leading-6">Jump straight into a selected module</p>
+                    </div>
+                  </div>
+
+                  <div className="mt-4 grid gap-2">
+                    {card.mathButtons.map((button) =>
+                      button.available && button.href ? (
+                        <Link
+                          key={button.key}
+                          href={button.href}
+                          onClick={() => saveToHistory('start_individual_module', { moduleKey: button.key, testId: card.id })}
+                          className="inline-flex h-11 items-center justify-center rounded-full bg-[linear-gradient(135deg,#9f1239,#dc2626)] px-4 text-sm font-bold text-white transition hover:brightness-105"
+                        >
+                          {button.label}
+                        </Link>
+                      ) : (
+                        <span
+                          key={button.key}
+                          className="site-button-secondary inline-flex h-11 items-center justify-center rounded-full border border-dashed px-4 text-sm font-bold site-text-faint"
+                        >
+                          {button.label}
+                        </span>
+                      )
+                    )}
+                  </div>
+                </motion.div>
+              </div>
+            </div>
+          </motion.div>
+        )}
+        </AnimatePresence>
+      </motion.article>
+    );
+  };
+
   const continueFullTest = (testId: number) => {
     setResumePromptTestId(null);
+    saveToHistory('resume_full_test', { testId });
     router.push(`/practice/test/${testId}?resume=1`);
   };
 
@@ -137,180 +313,25 @@ export default function PracticePage() {
               </motion.div>
               <motion.div className="site-hero-stat rounded-[22px] px-4 py-4" variants={itemRevealVariants}>
                 <p className="site-hero-kicker text-[10px] font-bold uppercase tracking-[0.22em]">Module paths</p>
-                <p className="site-hero-title mt-2 text-3xl font-black tracking-[-0.05em]">6</p>
+                <p className="site-hero-title mt-2 text-3xl font-black tracking-[-0.05em]">4</p>
               </motion.div>
             </motion.div>
           </motion.div>
         </motion.section>
 
-        <motion.section className="grid gap-6 md:grid-cols-2" variants={staggerContainerVariants}>
-          {practiceCards.map((card) => {
-            const isOpen = openCardId === card.id;
-            const theme = practiceThemes[(card.id - 1) % practiceThemes.length];
+        {/* Mobile View: Single vertical column to preserve standard order */}
+        <motion.section className="grid gap-6 md:hidden" variants={staggerContainerVariants}>
+          {practiceCards.map(renderCard)}
+        </motion.section>
 
-            return (
-              <motion.article
-                key={card.id}
-                variants={itemRevealVariants}
-                whileHover={shouldReduceMotion ? undefined : { scale: 1.02 }}
-                transition={{ type: 'spring', stiffness: 260, damping: 22 }}
-                className="site-panel relative overflow-hidden rounded-[32px] p-5 sm:p-6"
-              >
-                <div className={`absolute left-12 top-8 h-24 w-24 rounded-full blur-2xl ${theme.accentGlow}`} />
-                <div className="absolute right-6 top-6 h-24 w-24 rounded-full bg-white/8 blur-3xl" />
-
-                <div className="relative flex items-start gap-4">
-                  <div className={`flex h-[86px] w-[86px] flex-shrink-0 flex-col items-center justify-center rounded-[24px] ${theme.statIcon} text-center shadow-sm`}>
-                      <p className="text-[10px] font-bold uppercase tracking-[0.24em] opacity-70">Test</p>
-                      <p className="mt-1 text-3xl font-black tracking-[-0.06em]">{card.id}</p>
-                  </div>
-
-                  <div className="max-w-[30rem]">
-                      <p className={`inline-flex items-center gap-2 rounded-full px-3 py-1 text-[11px] font-bold uppercase tracking-[0.22em] ${theme.accentChip}`}>
-                        <Sparkles className="h-3.5 w-3.5" />
-                        {card.label}
-                      </p>
-                      <h2 className="site-text-strong mt-4 text-[2rem] font-black tracking-[-0.045em]">
-                        {card.title}
-                      </h2>
-                      <p className="site-text mt-3 max-w-[30rem] text-[16px] leading-7">
-                        {card.summary}
-                      </p>
-                  </div>
-                </div>
-
-                <div className="mt-6 grid gap-3 sm:grid-cols-3">
-                  <div className="site-subpanel rounded-[22px] px-4 py-3">
-                    <div className={`flex h-10 w-10 items-center justify-center rounded-2xl ${theme.statIcon}`}>
-                      <Clock3 className="h-4 w-4" />
-                    </div>
-                    <p className="site-text-faint mt-4 text-[11px] font-bold uppercase tracking-[0.2em]">Timing</p>
-                    <p className="site-text-strong mt-1 text-xl font-black tracking-[-0.03em]">{card.duration}</p>
-                  </div>
-
-                  <div className="site-subpanel rounded-[22px] px-4 py-3">
-                    <div className={`flex h-10 w-10 items-center justify-center rounded-2xl ${theme.statIcon}`}>
-                      <BookOpen className="h-4 w-4" />
-                    </div>
-                    <p className="site-text-faint mt-4 text-[11px] font-bold uppercase tracking-[0.2em]">Questions</p>
-                    <p className="site-text-strong mt-1 text-xl font-black tracking-[-0.03em]">{card.totalQuestions}</p>
-                  </div>
-
-                  <div className="site-subpanel rounded-[22px] px-4 py-3">
-                    <div className={`flex h-10 w-10 items-center justify-center rounded-2xl ${theme.statIcon}`}>
-                      <Layers3 className="h-4 w-4" />
-                    </div>
-                    <p className="site-text-faint mt-4 text-[11px] font-bold uppercase tracking-[0.2em]">Modules</p>
-                    <p className="site-text-strong mt-1 text-xl font-black tracking-[-0.03em]">{card.moduleCount}</p>
-                  </div>
-                </div>
-
-                <div className="mt-5 flex flex-col gap-3 sm:flex-row">
-                  <button
-                    type="button"
-                    onClick={() => handleFullTestPress(card.id)}
-                    className={`inline-flex h-12 items-center justify-center gap-2 rounded-full px-7 text-base font-bold transition ${theme.fullTestButton}`}
-                  >
-                    Full Test
-                    <ArrowRight className="h-4 w-4" />
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => setOpenCardId(isOpen ? null : card.id)}
-                    className="site-button-secondary inline-flex h-12 items-center justify-center gap-2 rounded-full px-7 text-base font-bold transition"
-                  >
-                    Individual Module
-                    {isOpen ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
-                  </button>
-                </div>
-
-                <AnimatePresence initial={false}>
-                {isOpen && (
-                  <motion.div
-                    className="mt-5 overflow-hidden"
-                    initial={shouldReduceMotion ? undefined : { height: 0, opacity: 0 }}
-                    animate={shouldReduceMotion ? undefined : { height: 'auto', opacity: 1 }}
-                    exit={shouldReduceMotion ? undefined : { height: 0, opacity: 0 }}
-                    transition={shouldReduceMotion ? undefined : { duration: 0.42, ease: siteEase }}
-                  >
-                  <div className="site-panel-soft grid gap-4 rounded-[28px] p-4 sm:p-5 lg:grid-cols-2">
-                    <motion.div className="site-subpanel rounded-[24px] p-4" initial={shouldReduceMotion ? undefined : { opacity: 0, y: 12 }} animate={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }} exit={shouldReduceMotion ? undefined : { opacity: 0, y: 12 }} transition={shouldReduceMotion ? undefined : { duration: 0.35, ease: siteEase }}>
-                      <div className="flex items-center gap-3">
-                        <div className="practice-icon--sky flex h-11 w-11 items-center justify-center rounded-2xl">
-                          <BookOpen className="h-5 w-5" />
-                        </div>
-                        <div>
-                          <p className="site-text-faint text-[11px] font-bold uppercase tracking-[0.22em]">
-                            Reading &amp; Writing
-                          </p>
-                          <p className="site-text text-[15px] font-semibold leading-6">Choose one module start point</p>
-                        </div>
-                      </div>
-
-                      <div className="mt-4 grid gap-2">
-                        {card.englishButtons.map((button) =>
-                          button.available && button.href ? (
-                            <Link
-                              key={button.key}
-                              href={button.href}
-                              className="inline-flex h-11 items-center justify-center rounded-full bg-[linear-gradient(135deg,#1e3a8a,#2563eb)] px-4 text-sm font-bold text-white transition hover:brightness-105"
-                            >
-                              {button.label}
-                            </Link>
-                          ) : (
-                            <span
-                              key={button.key}
-                              className="site-button-secondary inline-flex h-11 items-center justify-center rounded-full border border-dashed px-4 text-sm font-bold site-text-faint"
-                            >
-                              {button.label}
-                            </span>
-                          )
-                        )}
-                      </div>
-                    </motion.div>
-
-                    <motion.div className="site-subpanel rounded-[24px] p-4" initial={shouldReduceMotion ? undefined : { opacity: 0, y: 12 }} animate={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }} exit={shouldReduceMotion ? undefined : { opacity: 0, y: 12 }} transition={shouldReduceMotion ? undefined : { duration: 0.35, ease: siteEase, delay: 0.04 }}>
-                      <div className="flex items-center gap-3">
-                        <div className="practice-icon--rose flex h-11 w-11 items-center justify-center rounded-2xl">
-                          <Calculator className="h-5 w-5" />
-                        </div>
-                        <div>
-                          <p className="site-text-faint text-[11px] font-bold uppercase tracking-[0.22em]">
-                            Math
-                          </p>
-                          <p className="site-text text-[15px] font-semibold leading-6">Jump straight into a selected module</p>
-                        </div>
-                      </div>
-
-                      <div className="mt-4 grid gap-2">
-                        {card.mathButtons.map((button) =>
-                          button.available && button.href ? (
-                            <Link
-                              key={button.key}
-                              href={button.href}
-                              className="inline-flex h-11 items-center justify-center rounded-full bg-[linear-gradient(135deg,#9f1239,#dc2626)] px-4 text-sm font-bold text-white transition hover:brightness-105"
-                            >
-                              {button.label}
-                            </Link>
-                          ) : (
-                            <span
-                              key={button.key}
-                              className="site-button-secondary inline-flex h-11 items-center justify-center rounded-full border border-dashed px-4 text-sm font-bold site-text-faint"
-                            >
-                              {button.label}
-                            </span>
-                          )
-                        )}
-                      </div>
-                    </motion.div>
-                  </div>
-                  </motion.div>
-                )}
-                </AnimatePresence>
-              </motion.article>
-            );
-          })}
+        {/* Desktop View: Two independent vertical column stacks to prevent height synchronization */}
+        <motion.section className="hidden md:grid grid-cols-2 gap-6 items-start" variants={staggerContainerVariants}>
+          <div className="grid gap-6">
+            {practiceCards.filter((_, idx) => idx % 2 === 0).map(renderCard)}
+          </div>
+          <div className="grid gap-6">
+            {practiceCards.filter((_, idx) => idx % 2 === 1).map(renderCard)}
+          </div>
         </motion.section>
       </motion.div>
 

@@ -1,0 +1,1723 @@
+📝 SAT English — Full Explanations (Module 1 + Module 2 Hard)
+
+---
+
+# SECTION 1 — MODULE 1: Reading and Writing (Difficulty: Unknown) — 27 Questions
+
+---
+
+## Question 1 — Answer: **C (detected)**
+
+**Core Logic Summary:** The tools found patterns that were already there — they did not create, fix, or scatter them.
+
+**Why [C] is Correct:**
+"Detected" means discovered or identified something that exists. The text says scientists used machine learning to "uncover a sophisticated communication system" and that the patterns are "specific calls elephants use for individuals." This means the patterns pre-existed; the tools simply found them. "Detected" perfectly captures the act of identifying hidden, existing patterns.
+
+**Why the Incorrect Answers are Wrong:**
+- **Choice A (created)** is incorrect because the tools did not produce the patterns — elephants made the sounds; the tools only analyzed them.
+- **Choice B (corrected)** is incorrect because there is nothing in the text to suggest patterns were flawed or needed fixing.
+- **Choice D (scattered)** is incorrect because it implies the tools spread or dispersed patterns, which contradicts the idea of identifying them within sounds.
+
+---
+
+## Question 2 — Answer: **A (Pondered)**
+
+**Core Logic Summary:** Ezeulu is deeply reflecting on the abstract, troubling nature of his power — an act of sustained thought, not anticipation, permission, or respect.
+
+**Why [A] is Correct:**
+"Pondered" means thought deeply and carefully about. The passage shows Ezeulu thinking about "the immensity of his power" and "wondering if it was real." He reflects on what he actually controls vs. what he merely watches. This is introspective deliberation — pondering.
+
+**Why the Incorrect Answers are Wrong:**
+- **Choice B (anticipated)** is incorrect because there is no forward-looking expectation; Ezeulu is reflecting on a present reality, not expecting a future event.
+- **Choice C (allowed)** is incorrect because it implies permission, which doesn't match the act of philosophical reflection about his own power.
+- **Choice D (respected)** is incorrect because Ezeulu is not admiring or honoring his power — he is questioning whether it even exists.
+
+---
+
+## Question 3 — Answer: **C (Indications)**
+
+**Core Logic Summary:** The fog is erasing the visible signs of familiar landscapes, making "indications" (visible marks or signs) the only logical fit.
+
+**Why [C] is Correct:**
+"Traces" in this passage means visible signs or hints of something. The fog is "obliterating" them — making familiar landscapes unrecognizable. "Indications" means signs or evidence of something — in this case, the recognizable features of the landscape. The bridge becoming "a spectral outline" confirms that visible signs are vanishing.
+
+**Why the Incorrect Answers are Wrong:**
+- **Choice A (debris)** is incorrect because "debris" means rubble/waste — the fog is not erasing physical waste.
+- **Choice B (copies)** is incorrect because copies implies duplicates, which has no connection to the context of recognizing a landscape.
+- **Choice D (remembrances)** is incorrect because it implies memory/nostalgia, but the passage focuses on physical, visible disappearance — not a mental state.
+
+---
+
+## Question 4 — Answer: **B (inconsistencies)**
+
+**Core Logic Summary:** The em-dash clarifies the blank by defining it as "variations in size, shape, and material" — the word that captures such variations among particles is "inconsistencies."
+
+**Why [B] is Correct:**
+The text says "High concentrations and _____ among particles—variations in size, shape, and material—make it onerous to classify microplastics." The em-dash is a definition: the blank = "variations in size, shape, and material." "Inconsistencies" means lack of uniformity — which precisely describes how particles differ from one another in size, shape, and material.
+
+**Why the Incorrect Answers are Wrong:**
+- **Choice A (restraints)** is incorrect because restraints means limitations or constraints, not variation among the particles themselves.
+- **Choice C (incompatibilities)** is incorrect because incompatibilities suggests things that cannot coexist, not variations in physical properties.
+- **Choice D (disruptions)** is incorrect because disruptions implies interference or interruptions, not the inherent variability in particle characteristics.
+
+---
+
+## Question 5 — Answer: **B (Calculation)**
+
+**Core Logic Summary:** Osmond does everything with a deliberate, strategic purpose — and the text explicitly says "his tastes, his studies, his accomplishments, his collections, were all for a purpose," which defines "consideration" as purposeful, strategic thinking — i.e., calculation.
+
+**Why [B] is Correct:**
+The passage says Osmond "lived so much in the land of consideration" and that everything he did was "pose" — carefully constructed for strategic effect. The phrase "were all for a purpose" confirms that his "consideration" was not courtesy or open-mindedness, but cold, deliberate calculation.
+
+**Why the Incorrect Answers are Wrong:**
+- **Choice A (deference)** is incorrect because deference means respectful submission to others, which contradicts Osmond's self-serving, controlling character.
+- **Choice C (indecision)** is incorrect because the text shows Osmond is highly deliberate and purposeful — the opposite of indecisive.
+- **Choice D (courtesy)** is incorrect because the tone of the passage is ironic — what looks like consideration is actually strategic posturing, not politeness.
+
+---
+
+## Question 6 — Answer: **C**
+
+**Core Logic Summary:** The underlined phrase explains that solving the mystery of glass eels benefits not just the eels themselves, but also other species that depend on them — thus extending the benefit beyond the eels.
+
+**Why [C] is Correct:**
+The underlined portion reads: "helping in turn to sustain several other species that rely on them as a food source." This directly shows that understanding glass eels creates a benefit that goes beyond the eels — it helps the broader ecosystem. The key phrase "in turn" signals a ripple effect that extends outward.
+
+**Why the Incorrect Answers are Wrong:**
+- **Choice A** is incorrect because the underlined portion does not identify circumstances required for eel survival — it discusses the broader ecological benefit.
+- **Choice B** is incorrect because the text doesn't suggest scientists care more about other species than about eels; both are presented as interconnected.
+- **Choice D** is incorrect because the passage does not describe what roles eels and other species play in supporting the Sargasso Sea ecosystem specifically — only that other species rely on eels as food.
+
+---
+
+## Question 7 — Answer: **C**
+
+**Core Logic Summary:** The text first introduces Adeyemi's debut novel with praise, then places it within the literary tradition of Afrofuturism, then describes Afrofuturism's defining themes — this is an introduction → contextualization → thematic description structure.
+
+**Why [C] is Correct:**
+The three-part structure: (1) "Tomi Adeyemi's first published work, the inventive West African–inspired fantasy novel Children of Blood and Bone, has intriguing things to say..." = introduces a debut work; (2) "Adeyemi works in a decades-long tradition going back to writers such as Samuel Delany and Octavia Butler..." = contextualizes within an ongoing tradition; (3) "At its core, the movement is characterized by speculation...Afrofuturism's meditations on authority reinvigorate the creative potential of fiction" = describes important themes.
+
+**Why the Incorrect Answers are Wrong:**
+- **Choice A** is incorrect because the text does not mention Adeyemi's political stance, nor does it analyze political events' influence on the book.
+- **Choice B** is incorrect because the text does not compare Adeyemi to other writers who are similar, nor does it single out what makes her unique — it integrates her into a tradition.
+- **Choice D** is incorrect because the text does not "summarize" the book's plot, nor does it point out features the book shares with "more widely read works."
+
+---
+
+## Question 8 — Answer: **A**
+
+**Core Logic Summary:** The text explicitly states the Hispanic Society has "more than 18,000 objects in its museum collection," which directly supports Choice A.
+
+**Why [A] is Correct:**
+The passage states: "It is located in New York City and has more than 18,000 objects in its museum collection." Choice A rephrases this: "Its collection includes over 18,000 objects." This is a direct and accurate paraphrase of the text.
+
+**Why the Incorrect Answers are Wrong:**
+- **Choice B** is incorrect because the text states the Society IS located in New York City — there is no claim it has moved.
+- **Choice C** is incorrect because the text says it was "Founded in 1904," which is well before 2000.
+- **Choice D** is incorrect because the text makes no comparison between the Hispanic Society's visitor numbers and other Latino cultural institutions.
+
+---
+
+## Question 9 — Answer: **A**
+
+**Core Logic Summary:** Walsh's method used intact, naturally occurring microbial communities specifically to avoid the limitation of the spinach study, which used individual strains that would not reflect natural diversity — meaning those strains were likely not representative of naturally existing compositions.
+
+**Why [A] is Correct:**
+Walsh "applied intact microbial communities gathered from ecologically distinct settings...to ensure that the microbial conditions in their experiment would better reflect the variation and complexity of naturally occurring communities." This implies that adding isolated strains (as Baslam did) does NOT reflect naturally occurring communities — meaning the spinach study's microbial composition was probably not representative of natural soil microbiomes.
+
+**Why the Incorrect Answers are Wrong:**
+- **Choice B** is incorrect because the spinach study did affect flavor chemistry (flavonoid content), not just nutrition — so Walsh was not avoiding it because it missed flavor.
+- **Choice C** is incorrect because there is no claim that the spinach study used species similar to those in wild soils; Walsh's design explicitly aimed to recreate that diversity.
+- **Choice D** is incorrect because nothing in the text says the spinach study had abnormally high diversity — the opposite problem (limited, non-natural strains) is what Walsh avoided.
+
+---
+
+## Question 10 — Answer: **C**
+
+**Core Logic Summary:** The table data shows Tetris (puzzle, 43M units) and Super Mario Brothers 2 (platformer, 7.46M units) far outsell Carmen Sandiego (education, 4M) and Ice Hockey (sports, 2.42M).
+
+**Why [C] is Correct:**
+From the table: Puzzle (Tetris) = 43,000,000; Platformer (Super Mario Brothers 2) = 7,460,000; Education (Carmen Sandiego) = 4,000,000; Sports (Ice Hockey) = 2,420,000. Both puzzle and platformer genres sold more than the other two genres combined. The student's claim that "the games in the genres of _____ outsold the games in the other genres" is completed by "puzzle and platformer."
+
+**Why the Incorrect Answers are Wrong:**
+- **Choice A** is incorrect because puzzle (43M) vastly outsold sports (2.42M) — they are not nearly the same.
+- **Choice B** is incorrect because platformer (7.46M) and education (4M) differ by nearly 4 million units — not "nearly the same."
+- **Choice D** is incorrect because sports sold the fewest units (2.42M) and didn't outsell either education or platformer individually.
+
+---
+
+## Question 11 — Answer: **D**
+
+**Core Logic Summary:** The graph shows that adhesion strength at 1V (~8 kPa) was essentially identical to adhesion strength at 0V (~8 kPa) — proving that merely applying a positive voltage doesn't increase adhesion.
+
+**Why [D] is Correct:**
+The passage argues that "the mere application of a direct current electrical field with positive voltage is not sufficient to cause increased adhesion." The graph shows that from 0V to 1V, adhesion stayed nearly flat (~8 kPa at both points). This directly proves that having a positive voltage (1V) is no better than having no voltage (0V) in terms of adhesion.
+
+**Why the Incorrect Answers are Wrong:**
+- **Choice A** is incorrect because at 0V, adhesion strength was approximately 8 kPa — not 0 kPa. The graph does not show zero adhesion at 0V.
+- **Choice B** is incorrect because at 3V, adhesion was approximately 40 kPa — not "approximately 30 kPa" as stated.
+- **Choice C** is incorrect because at 2V, adhesion strength (~14 kPa) was NOT lower than at 0V or 1V (~8 kPa); it was actually higher.
+
+---
+
+## Question 12 — Answer: **C (biochar and compost)**
+
+**Core Logic Summary:** The question restricts the farmer to non-inorganic options; among those, "biochar and compost" produces the highest weight (979.3g), length (6.76cm), and near-highest diameter.
+
+**Why [C] is Correct:**
+"No access to inorganic soil additives" rules out NPK fertilizer. The remaining options are: Compost alone (864.8g, 6.15cm, 13.22cm), Biochar alone (915.7g, 6.56cm, 13.63cm), and Biochar and compost (979.3g, 6.76cm, 13.68cm). Biochar + compost produces the highest weight and length of all non-inorganic treatments — meaning it increases fruit size by the greatest amount without NPK.
+
+**Why the Incorrect Answers are Wrong:**
+- **Choice A (compost alone)** is incorrect because compost alone (864.8g) produces less fruit weight than biochar alone (915.7g) or biochar + compost (979.3g).
+- **Choice B (biochar alone)** is incorrect because biochar + compost (979.3g) outperforms biochar alone (915.7g) in every metric.
+- **Choice D (biochar and NPK fertilizer)** is incorrect because the question explicitly states the farmer has no access to inorganic additives, and NPK fertilizer is an inorganic additive.
+
+---
+
+## Question 13 — Answer: **B**
+
+**Core Logic Summary:** The study found that across vastly different modes of living, people rated odors the same — the only conclusion that follows is that mode of living does not strongly influence odor preferences.
+
+**Why [B] is Correct:**
+The team assessed "ten groups of people with different modes of living (urban, agricultural, and hunter-gatherer)" and found that "across cultures, people generally rated odors about the same." The logical conclusion is that mode of living (urban vs agricultural vs hunter-gatherer) does not significantly affect whether someone finds an odor pleasant or unpleasant.
+
+**Why the Incorrect Answers are Wrong:**
+- **Choice A** is incorrect because the study did not compare culture vs anatomy — it compared different modes of living, not cultural vs biological factors specifically.
+- **Choice C** is incorrect because the text makes no claim about where vanillin odors are encountered more frequently; the study is about preference, not exposure frequency.
+- **Choice D** is incorrect because the passage shows different odors are ranked differently (vanillin above galbazine) — people do not perceive them as equally pleasant.
+
+---
+
+## Question 14 — Answer: **B**
+
+**Core Logic Summary:** The two conditions (ship sounds alone vs ship sounds + sonic pulses) produced nearly identical behavioral responses, meaning the addition of sonic pulses barely changed anything — which makes sense if ship sounds already dominate the sound environment so fully that adding more has negligible effect.
+
+**Why [B] is Correct:**
+The passage says "differences between diving behaviors in the two exposure types were negligible." If ship sounds + sonic pulses produce the same effect as ship sounds alone, it means sonic pulses added little to the auditory experience — consistent with the explanation that ship sounds already overwhelm the environment to the point where sonic pulses are a minor addition.
+
+**Why the Incorrect Answers are Wrong:**
+- **Choice A** is incorrect because hearing range at depth is irrelevant — the study measured behavioral responses, not depth-based perception of sounds.
+- **Choice C** is incorrect because the study found behaviors were nearly identical in both exposure types, not that narwhals forage at different depths in each condition.
+- **Choice D** is incorrect because both exposure conditions DID produce significant decreases in deep dives compared to natural conditions — so narwhals were responsive; the issue is the similarity between the two exposure types.
+
+---
+
+## Question 15 — Answer: **B (had been)**
+
+**Core Logic Summary:** The painting was chosen before it was featured in the exhibition — requiring past perfect passive ("had been chosen") to establish that sequence.
+
+**Why [B] is Correct:**
+The sentence describes a past action (the 2013 exhibition featured the painting) that was preceded by another past action (the curator chose the painting for the exhibition). Past perfect passive is required: "The piece had been chosen for the exhibition by curator E. Carmen Ramos" (before the exhibition took place).
+
+**Why the Incorrect Answers are Wrong:**
+- **Choice A (is)** is incorrect because simple present tense cannot describe a completed action from a past event (the 2013 exhibition).
+- **Choice C (will be)** is incorrect because future tense is illogical — the exhibition already happened in 2013.
+- **Choice D (is being)** is incorrect because present progressive implies the choosing is currently ongoing, which contradicts the past context.
+
+---
+
+## Question 16 — Answer: **C (village, tells)**
+
+**Core Logic Summary:** The long relative clause ("which takes place in a mid-twentieth-century rural Alaskan fishing village") modifies the novel, not the verb — a comma separates the clause from the main verb "tells."
+
+**Why [C] is Correct:**
+The full sentence: "Mia Heavener's 2019 novel Under Nushagak Bluff, which takes place in a mid-twentieth-century rural Alaskan fishing village, tells the story of three Yup'ik women..." The non-restrictive relative clause "which takes place...village" is enclosed by commas, and the main verb "tells" follows. The comma after "village" closes the parenthetical clause before the predicate.
+
+**Why the Incorrect Answers are Wrong:**
+- **Choice A (village: tells)** is incorrect because a colon would imply the following clause explains or lists what was said before — grammatically awkward here.
+- **Choice B (village. Tells)** is incorrect because a period followed by "Tells" creates a sentence fragment ("Tells the story of three Yup'ik women...").
+- **Choice D (village tells)** is incorrect because without a comma, the relative clause bleeds into the verb, making it appear as though "the fishing village tells the story."
+
+---
+
+## Question 17 — Answer: **A (lost. Conversely,)**
+
+**Core Logic Summary:** Two contrasting, independent facts require a period to separate them; "Conversely" logically introduces the contradiction between Strabo's lost works and the surviving Geographica.
+
+**Why [A] is Correct:**
+The sentence needs two complete thoughts: (1) Many works of Strabo are lost; (2) His Geographica is an extant work. These are contrasting independent clauses. A period separates them cleanly, and "Conversely" signals the direct contradiction (most works lost → but this one survives).
+
+**Why the Incorrect Answers are Wrong:**
+- **Choice B (lost and conversely,)** is incorrect because "and" is a coordinating conjunction that signals addition, not contrast. Placing it before "conversely" is grammatically redundant and contradictory.
+- **Choice C (lost, conversely,)** is incorrect because two commas around "conversely" create a comma splice — two independent clauses joined only by commas.
+- **Choice D (lost, and conversely)** is incorrect for the same reason: "and conversely" is contradictory in meaning, and the comma alone between two independent clauses creates a splice.
+
+---
+
+## Question 18 — Answer: **D (ranks)**
+
+**Core Logic Summary:** The grammatical subject — "Iceland's 4,089-word constitution" — is singular and describes a stable, established characteristic, requiring the simple present singular "ranks."
+
+**Why [D] is Correct:**
+The subject of the blank is "Iceland's 4,089-word constitution" (singular). The sentence is describing a stable, established ranking fact. Simple present "ranks" is correct: "Iceland's constitution ranks as the 2nd shortest in the world."
+
+**Why the Incorrect Answers are Wrong:**
+- **Choice A (have ranked)** is incorrect because "have ranked" is plural present perfect, which doesn't agree with the singular subject.
+- **Choice B (rank)** is incorrect because "rank" is the plural form and doesn't agree with the singular subject.
+- **Choice C (are ranking)** is incorrect because present progressive ("are ranking") implies an ongoing or temporary action, when in fact this is a stable, established fact.
+
+---
+
+## Question 19 — Answer: **C (nanoparticles' properties)**
+
+**Core Logic Summary:** "Nanoparticles" is a plural noun and requires a plural possessive apostrophe — after the "s." The singular "nanoparticle's" would mean a single nanoparticle, which is not the intended meaning.
+
+**Why [C] is Correct:**
+The text refers to cerium oxide nanoparticles (plural) — the properties belong to all of them collectively. For a plural noun ending in "s," the possessive apostrophe goes after the "s": "nanoparticles' properties." Choice C correctly applies this rule.
+
+**Why the Incorrect Answers are Wrong:**
+- **Choice A (nanoparticles' properties')** is incorrect because "properties'" adds an extra unnecessary apostrophe after "properties," making it appear as if "properties" also possesses something.
+- **Choice B (nanoparticles properties)** is incorrect because it omits the apostrophe entirely, making "nanoparticles" an adjective rather than a possessive — meaning is altered.
+- **Choice D (nanoparticle's properties)** is incorrect because the singular possessive "nanoparticle's" implies only one nanoparticle, while the text clearly refers to the plural class of cerium oxide nanoparticles.
+
+---
+
+## Question 20 — Answer: **A**
+
+**Core Logic Summary:** "Recordings of electrical activity in the brain" is the subject, and the blank must supply an appositive renaming it ("electrograms") followed by the predicate that logically completes the sentence.
+
+**Why [A] is Correct:**
+The full sentence becomes: "Recordings of electrical activity in the brain, electrograms show that while responding to hypothetical match scenarios, the most highly skilled soccer players have increased activity in brain areas associated with suppressing motor functions." "Electrograms" is an appositive (renaming "recordings of electrical activity in the brain"), and then "show that...players have increased activity" is the predicate. This is grammatically and logically complete.
+
+**Why the Incorrect Answers are Wrong:**
+- **Choice B** is incorrect because "hypothetical match scenario responses" is not a valid appositive for "recordings of electrical activity in the brain" — the subjects don't match.
+- **Choice C** is incorrect because "the most highly skilled soccer players responding to hypothetical match scenarios have electrograms that show" leaves "Recordings of electrical activity in the brain" without a verb, creating a dangling subject.
+- **Choice D** is incorrect because "responses to hypothetical match scenarios" doesn't logically rename "recordings of electrical activity" — these are different things.
+
+---
+
+## Question 21 — Answer: **D (For example,)**
+
+**Core Logic Summary:** The first sentence makes a general claim (mushrooms contain phenolic compounds); the second sentence gives specific instances of which compounds appear in which mushrooms — a classic example relationship requiring "For example."
+
+**Why [D] is Correct:**
+The first sentence: "many species of mushrooms contain chemicals called phenolic compounds, such as cinnamic acid and catechin." The second sentence then names specific mushroom species paired with specific compounds: "Ferreira detected cinnamic acid in Agaricus blazei mushrooms and catechin in Lentinus edodes." This is the general → specific (example) structure. "For example" is the correct transition.
+
+**Why the Incorrect Answers are Wrong:**
+- **Choice A (For this reason,)** is incorrect because there is no cause-and-effect relationship — the second sentence doesn't result from the first.
+- **Choice B (However,)** is incorrect because there is no contrast or contradiction between the two sentences.
+- **Choice C (Nevertheless,)** is incorrect because this concessive transition implies an obstacle being overcome, which is absent here.
+
+---
+
+## Question 22 — Answer: **D (For example,)**
+
+**Core Logic Summary:** The first sentence introduces "several important roles" — the second sentence gives one specific role (sealing wounds) as an example of those roles.
+
+**Why [D] is Correct:**
+"Resins play several important roles in maintaining the health of conifers..." → then "_____ resins quickly seal wounds, which helps prevent harmful insects and fungi from entering trees." The wound-sealing function is one specific instance of the "several important roles," making "For example" the logically correct transition.
+
+**Why the Incorrect Answers are Wrong:**
+- **Choice A (Regardless,)** is incorrect because "regardless" introduces something that persists despite an obstacle — there is no obstacle mentioned here.
+- **Choice B (Next,)** is incorrect because "Next" implies a sequential list where something came before — the passage has not established a numbered list.
+- **Choice C (However,)** is incorrect because there is no contrast — the second sentence supports and illustrates the first.
+
+---
+
+## Question 23 — Answer: **B (Instead,)**
+
+**Core Logic Summary:** The first sentence rules out acting on Kepler-296e (it's 737 light-years away); the second proposes what to do as an alternative — a direct redirection signaled by "Instead."
+
+**Why [B] is Correct:**
+"It's unlikely that humanity will be able to take advantage of [Kepler-296e's] favorable conditions..." — then "_____ humanity must first focus on making planets within our solar system more habitable." The second sentence proposes an alternative action to replacing the impossible one. "Instead" marks this pivot from one option to a different, more feasible option.
+
+**Why the Incorrect Answers are Wrong:**
+- **Choice A (Likewise,)** is incorrect because "likewise" signals similarity — but the two sentences propose different courses of action, not similar ones.
+- **Choice C (For example,)** is incorrect because the second sentence isn't an example of what was said about Kepler-296e.
+- **Choice D (Next,)** is incorrect because "next" implies sequence in a series, not a pivot away from one action to another.
+
+---
+
+## Question 24 — Answer: **B (Here,)**
+
+**Core Logic Summary:** The first sentence names a specific location (Tres Zapotes in Veracruz); the second sentence describes what exists at that location — "Here" is the spatial reference word that bridges the two.
+
+**Why [B] is Correct:**
+"The Tres Zapotes archaeological site is located in our home state of Veracruz, Mexico." → "_____ an 8.5-ton stone statue of a human head was left behind by the ancient Olmec civilization." The blank transitions from identifying the location to describing what can be found there. "Here" = at this location (Tres Zapotes), making it the only spatially logical transition.
+
+**Why the Incorrect Answers are Wrong:**
+- **Choice A (In other words,)** is incorrect because the second sentence adds new information (the statue) rather than rephrasing the first sentence.
+- **Choice C (Similarly,)** is incorrect because "similarly" compares two things — but only one location is being discussed.
+- **Choice D (Therefore,)** is incorrect because no causal reasoning is at play — the existence of a statue doesn't follow logically from Tres Zapotes being in Veracruz.
+
+---
+
+## Question 25 — Answer: **A (Indeed,)**
+
+**Core Logic Summary:** The second sentence intensifies and confirms the claim of the first — Yalenti doesn't just say photography is elevated; he asserts it surpasses even great painters. "Indeed" marks this emphatic reinforcement.
+
+**Why [A] is Correct:**
+First sentence: Yalenti argues that photography's use of lines "elevates the medium to the status of fine art." Second sentence: "Yalenti insisted that conveying perspective through linear forms is photography's 'indisputable and exclusive domain,' creating a visual language surpassing even celebrated painters' works." The second sentence strengthens the first — it's a bolder version of the same claim. "Indeed" signals this emphatic confirmation and intensification.
+
+**Why the Incorrect Answers are Wrong:**
+- **Choice B (In any case,)** is incorrect because "in any case" implies dismissing a prior complication and moving on regardless — there is no complication to dismiss.
+- **Choice C (However,)** is incorrect because the second sentence does not contradict or contrast with the first — it agrees with and amplifies it.
+- **Choice D (Even so,)** is incorrect because "even so" introduces a concession to a problem — no problem exists in this context.
+
+---
+
+## Question 26 — Answer: **C**
+
+**Core Logic Summary:** The student wants to emphasize the combined deadweight tonnage specifically — only Choice C states the combined DWT figure of 74.3 million tons directly.
+
+**Why [C] is Correct:**
+The student's goal is to "emphasize the combined deadweight tonnage of the Bahamas' merchant ships in 2021." The relevant note states: "The combined DWT of these ships was 74.3 million tons." Choice C says: "Combined, the Bahamas' merchant ships had a deadweight tonnage of 74.3 million tons in 2021." This directly fulfills the goal.
+
+**Why the Incorrect Answers are Wrong:**
+- **Choice A** is incorrect because it only defines what deadweight tonnage is — it does not mention the Bahamas or 2021.
+- **Choice B** is incorrect because it emphasizes the number of ships (1,323), not the combined tonnage.
+- **Choice D** is incorrect because it emphasizes the number of ships (1,323) while defining "merchant ship," not the combined DWT.
+
+---
+
+## Question 27 — Answer: **C**
+
+**Core Logic Summary:** To "support Browner's claim," the answer must both state the claim and provide concrete evidence from the notes that validates it — only Choice C does both.
+
+**Why [C] is Correct:**
+Browner's claim: "Ballard's compositions rely on elements originating within Native musical traditions." Choice C states the claim ("Browner posits that Louis Ballard's compositions rely on elements originating within Native musical traditions") AND provides a direct example supporting it ("Devil's Promenade affirms this assertion, incorporating a Seneca cow-horn rattle" — a traditional Native instrument). Claim + supporting evidence = strongest answer.
+
+**Why the Incorrect Answers are Wrong:**
+- **Choice A** is incorrect because it only summarizes Browner's claim about Desert Trilogy without providing any supporting evidence.
+- **Choice B** is incorrect because it only mentions that Devil's Promenade was nominated for a Pulitzer Prize — this has nothing to do with Browner's claim about Native musical traditions.
+- **Choice D** is incorrect because while it mentions Browner's claim and the Pulitzer Prize nomination, it doesn't connect the specific example to Native musical traditions as evidence.
+
+---
+---
+
+# SECTION 1 — MODULE 2: Reading and Writing (Difficulty: Hard) — 27 Questions
+
+---
+
+## Question 1 — Answer: **C (complementary)**
+
+**Core Logic Summary:** The colon after the blank introduces an explanation of how seismic monitoring and orbital imaging work together — one narrows the location, the other pinpoints it — making their roles "complementary."
+
+**Why [C] is Correct:**
+The text says the two data sources "are _____" and then the colon provides the definition: seismic monitoring identifies a rough location, and then orbital imaging can zero in on that limited area. The two methods are not duplicates (not "redundant"), not exhaustive separately, and not interchangeable — they serve distinct but mutually reinforcing functions. "Complementary" means completing each other through different but cooperative contributions.
+
+**Why the Incorrect Answers are Wrong:**
+- **Choice A (redundant)** is incorrect because redundant means unnecessarily repetitive — but the two methods play different roles and neither is unnecessary.
+- **Choice B (exhaustive)** is incorrect because exhaustive means covering everything thoroughly, which is not the relationship being described.
+- **Choice D (interchangeable)** is incorrect because the two methods cannot replace each other — one provides approximate location, the other provides precision.
+
+---
+
+## Question 2 — Answer: **C (surreptitiously)**
+
+**Core Logic Summary:** A game created as an anonymous act of political protest against an authoritarian regime would logically have been distributed covertly/secretly — the word for this is "surreptitiously."
+
+**Why [C] is Correct:**
+The game was made anonymously to protest Czechoslovakia's authoritarian regime — distributing it openly would have been dangerous. "Surreptitiously" means in a secretive, concealed manner. The contrast with "is now readily available online for anyone to play" reinforces that original distribution was the opposite: hidden and restricted.
+
+**Why the Incorrect Answers are Wrong:**
+- **Choice A (succinctly)** is incorrect because succinctly means briefly/concisely — it describes communication style, not distribution method.
+- **Choice B (dispassionately)** is incorrect because dispassionately means without emotion, which has no relevance to how copies were distributed.
+- **Choice D (disingenuously)** is incorrect because disingenuously means dishonestly/insincerely — but the distribution wasn't dishonest in intent; it was secretive for safety.
+
+---
+
+## Question 3 — Answer: **A (prescient)**
+
+**Core Logic Summary:** Although some of Toffler's specific predictions seem silly in hindsight, his core thesis about disorienting rapid change is validated by contemporary reality — making it "remarkably prescient" (accurately predicting what came to pass).
+
+**Why [A] is Correct:**
+The passage contrasts Toffler's "ludicrous" specific predictions with his "fundamental claim" that "rapid technological and social change will leave people feeling disoriented and atomized." The text then says this claim "seems, in our age of disequilibrium and fragmentation, remarkably _____." Since the claim has proven accurate for modern times, "prescient" (having foresight; accurately seeing what was to come) is the only fit.
+
+**Why the Incorrect Answers are Wrong:**
+- **Choice B (articulate)** is incorrect because articulate means well-expressed — the claim's expression quality is not the point; its accuracy is.
+- **Choice C (iconoclastic)** is incorrect because iconoclastic means challenging tradition — the text doesn't frame the claim as rebellious, but as accurate.
+- **Choice D (equivocal)** is incorrect because equivocal means ambiguous/uncertain — but the text is praising the claim's accuracy, not its vagueness.
+
+---
+
+## Question 4 — Answer: **A (defied)**
+
+**Core Logic Summary:** The honeycomb conjecture went unproven for over 2,000 years — meaning it resisted/challenged mathematicians' attempts at proof until 1999, which is precisely what "defied" expresses.
+
+**Why [A] is Correct:**
+"A conclusive demonstration of the logical certainty of the honeycomb conjecture, posed in the first century BCE, _____ mathematicians' efforts until Thomas C. Hales presented the first valid proof in 1999." The blank needs a word meaning "resisted" or "eluded." "Defied" means successfully resisted or withstood — perfect for describing how the conjecture resisted proof for over two millennia.
+
+**Why the Incorrect Answers are Wrong:**
+- **Choice B (prefigured)** is incorrect because prefigured means foreshadowed — the conjecture didn't foreshadow mathematicians' efforts.
+- **Choice C (epitomized)** is incorrect because epitomized means perfectly represented — the conjecture didn't exemplify mathematicians' efforts.
+- **Choice D (displaced)** is incorrect because displaced means replaced or moved out — the conjecture didn't replace mathematicians' efforts.
+
+---
+
+## Question 5 — Answer: **C**
+
+**Core Logic Summary:** The text presents: (1) a widely held belief (PAs hurt economies), (2) the reason that belief persists (economic assessments miss tourism effects), and (3) a study whose findings contradict that belief (Zhu et al. find economic benefits from PA-linked tourism).
+
+**Why [C] is Correct:**
+Structure: (1) "it's widely thought that they [PAs] hinder economic development" = widely held belief; (2) "This perception is driven in part by the fact that economic assessments often don't capture the indirect effects of tourism linked to PAs" = reason for that belief; (3) "But Heng Zhu et al. found that tourism associated with Abrolhos boosts local demand..." = study whose findings conflict with that belief. Choice C maps perfectly onto this three-part structure.
+
+**Why the Incorrect Answers are Wrong:**
+- **Choice A** is incorrect because the text doesn't claim PAs "generally" harm economies, doesn't outline research "supporting" that claim, and doesn't describe a "novel methodology" — it identifies one study.
+- **Choice B** is incorrect because the text does not discuss making conservation and economic priorities coexist, nor does it suggest most PAs "fall short" of a particular goal.
+- **Choice D** is incorrect because the text does not "explain how PAs typically affect" development as a known fact, nor does it summarize "several economic studies."
+
+---
+
+## Question 6 — Answer: **D**
+
+**Core Logic Summary:** The underlined sentence proposes that present-day isolates (like Washoe and Chitimacha) may once have had language family members, meaning the isolate/non-isolate distinction didn't necessarily exist in the distant past.
+
+**Why [D] is Correct:**
+The underlined sentence: "Yet Washoe and Chitimacha, like all isolates, are potentially remnants of families whose other members vanished before the historical record could attest to them." This implies that in the distant past, Washoe and Chitimacha may have had related languages (family members) — meaning they weren't always isolates. The distinction between isolates and language families may not have applied historically the way it does now.
+
+**Why the Incorrect Answers are Wrong:**
+- **Choice A** is incorrect because the sentence does not suggest a nonisolate language influenced Washoe or Chitimacha, causing them to lose family relationships.
+- **Choice B** is incorrect because the sentence says that Washoe and Chitimacha were likely PARTS of families (not that they replaced nonisolate languages).
+- **Choice C** is incorrect because the sentence says nothing about the historical record overrepresenting nonisolate languages; it says the record couldn't attest to the vanished family members.
+
+---
+
+## Question 7 — Answer: **D**
+
+**Core Logic Summary:** Text 1 says bland public art avoids backlash — implying that the art's own qualities determine reactions. Text 2 critics say reactions depend on how well art is integrated into its setting — meaning the art's attributes are not the sole factor, which is exactly how they'd push back on Text 1's claim.
+
+**Why [D] is Correct:**
+Text 1's underlined claim: "Public art that fails to appease everyone by being sufficiently aesthetically and conceptually bland almost inevitably provokes backlash." This implies that the art's inherent qualities (being non-bland) cause backlash. Text 2 critics argue that norm-defying pieces that "aren't effectively integrated within their surroundings...tend to be regarded more unfavorably." This means the reaction depends not just on the art itself but on its context — so reactions to controversial public art aren't exclusively due to properties inherent in the works themselves.
+
+**Why the Incorrect Answers are Wrong:**
+- **Choice A** is incorrect because Text 2 does not dispute whether civic leaders are easily placated; it discusses the setting/integration of artwork.
+- **Choice B** is incorrect because Text 2 critics do not agree that only universally appealing art should be displayed — they analyze why some art gets negative reactions.
+- **Choice C** is incorrect because Text 2 critics do NOT argue that disagreement about art's merits is unrelated to its unconventionality; they argue it also depends on integration.
+
+---
+
+## Question 8 — Answer: **A**
+
+**Core Logic Summary:** The narrator describes Aunt Polly as believing she is skilled at "dark and mysterious diplomacy" while her actual methods are "most transparent" — this gentle irony is the narrator gently mocking her mistaken belief in her own subtlety.
+
+**Why [A] is Correct:**
+The narrator says it was Aunt Polly's "pet vanity to believe she was endowed with a talent for dark and mysterious diplomacy" and that "she loved to contemplate her most transparent devices as marvels of low cunning." She thinks she's subtle and clever; she is actually transparent. The narrator's tone is gently ironic — not harsh, but softly humorous at her self-delusion about her subtlety.
+
+**Why the Incorrect Answers are Wrong:**
+- **Choice B** is incorrect because the text mocks her confidence in her subtlety/cunning specifically, not her view of herself as an intellectual.
+- **Choice C** is incorrect because Aunt Polly is not described as nosy about others' private lives — she is asking Tom questions to trap him in an admission, which is about her own household authority.
+- **Choice D** is incorrect because the narrator does not suggest Aunt Polly's intentions are good — in fact, she is trying to trick Tom into "damaging revealments."
+
+---
+
+## Question 9 — Answer: **C**
+
+**Core Logic Summary:** Oliveira "suggests that although some obstacles may prevent electrolytic hydrogen from dominating energy systems, there is utility in its ability to decarbonize" these industries — meaning the potential exists but hasn't been fully realized yet.
+
+**Why [C] is Correct:**
+"Although some obstacles may prevent electrolytic hydrogen from dominating energy systems, there is utility in its ability to decarbonize the petroleum and heating industries, where reducing carbon emissions is especially challenging." The word "although" + "some obstacles" signals that the full potential isn't realized. The potential to decarbonize exists but is at least partially unrealized due to obstacles. Choice C captures this precisely.
+
+**Why the Incorrect Answers are Wrong:**
+- **Choice A** is incorrect because the text does not say these industries have been impeded by concerns about how carbon-intensive electrolytic hydrogen production is — rather, large-scale electrolytic production is itself the challenge.
+- **Choice B** is incorrect because the text does not compare the advancement of electrolytic hydrogen in petroleum/heating to its advancement in "other carbon-intensive industries."
+- **Choice D** is incorrect because the text doesn't say these industries have limited interest — Oliveira suggests there is utility and they are worth pursuing.
+
+---
+
+## Question 10 — Answer: **B**
+
+**Core Logic Summary:** The researchers concluded that "a lack of crop variety may reduce total pollen collection" — Kampar (monoculture = low variety) should have lower pollen than Kerinci (multi-crop = high variety); Choice B shows exactly this pattern.
+
+**Why [B] is Correct:**
+Kerinci has diverse crops (multi-crop agriculture including hot peppers, coffee, etc.) = higher crop variety. Kampar has monoculture = lower crop variety. If lower crop variety reduces pollen collection, then Kampar bees should collect less pollen. Choice B: "Honey samples from Kerinci bee colonies contained significantly higher concentrations of pollen than honey samples from Kampar bee colonies did." → Kerinci (diverse) has MORE pollen than Kampar (monoculture) = directly supports the conclusion.
+
+**Why the Incorrect Answers are Wrong:**
+- **Choice A** is incorrect because it shows fewer bees foraging NEAR KERINCI than near Kampar — this would suggest diverse crops attract fewer bees, contradicting the conclusion.
+- **Choice C** is incorrect because it shows that Kampar bees used a single pollen source (consistent with monoculture) and Kerinci used multiple sources — while interesting, it doesn't measure TOTAL pollen collection quantity.
+- **Choice D** is incorrect because it only describes one Kerinci colony, and the mixed results within a single colony don't directly compare Kampar vs Kerinci pollen collection.
+
+---
+
+## Question 11 — Answer: **B**
+
+**Core Logic Summary:** To determine if RSRs specifically caused changes, you need to compare BOTH types of data (insurer count AND new policy premiums) in Montana to the same types of data from a similar state WITHOUT RSRs — a proper controlled comparison.
+
+**Why [B] is Correct:**
+The students collected: (1) number of insurers before/after 2009, and (2) premium prices for new policies before/after 2009. To isolate the RSR effect, they should compare both datasets against equivalent data from a similar state that did NOT enact RSRs during the same period. Choice B does exactly this: compare both types of data with analogous data from an otherwise similar, non-RSR state for the same period.
+
+**Why the Incorrect Answers are Wrong:**
+- **Choice A** is incorrect because it compares new policy premiums to premiums for existing policies (policies already in effect) — these are different types of data, not equivalent comparisons.
+- **Choice C** is incorrect because comparing with Montana data from several years after 2009 uses Montana data from a period when RSRs were already in effect — no valid control.
+- **Choice D** is incorrect because it only compares insurer-number data (not both types) and uses a state that enacted RSRs at a different time — the timing mismatch undermines the comparison.
+
+---
+
+## Question 12 — Answer: **B**
+
+**Core Logic Summary:** Carter and Kilikoglou's argument is that consistent obsidian methods at Malia = local cultural continuity. If other Mediterranean cultures ALSO used those same methods, the consistency at Malia is no longer evidence of LOCAL continuity — it could just be a regionally common practice.
+
+**Why [B] is Correct:**
+The argument: consistent obsidian production methods at Malia during architectural changes = evidence of local cultural continuity. To weaken this, show the methods were NOT unique to local Malian culture. Choice B does this: "The methods used to produce obsidian objects at Malia during the Middle and Late Bronze Ages were also used by some other Mediterranean cultures." If the same methods appeared elsewhere, their consistency at Malia doesn't prove local distinctiveness.
+
+**Why the Incorrect Answers are Wrong:**
+- **Choice A** is incorrect because the source of obsidian (where it came from geographically) is irrelevant to whether production methods changed at Malia.
+- **Choice C** is incorrect because comparing efficiency of methods across cultures doesn't directly challenge the argument that Malia's methods being consistent = local continuity.
+- **Choice D** is incorrect because the argument is specifically about Malia — what happened in other cultures regarding building-change/method-change correlations doesn't weaken the claim about Malia itself.
+
+---
+
+## Question 13 — Answer: **C**
+
+**Core Logic Summary:** Social buffering = a companion reduces stress responses. The measure of stress is the percent change between baseline and peak heart rate — if this is lower with a companion than alone or with a rope, it directly shows the companion mitigates stress.
+
+**Why [C] is Correct:**
+"The researchers compared the percent change between baseline and peak heart rate in response to a disturbance, with higher values indicating higher stress levels." Social buffering means a companion reduces this stress. Choice C: "The average percent change in heart rate was lower among C. helleri with a companion than among solitary C. helleri and C. helleri with a rope." → companion = lower stress response → directly supports social buffering.
+
+**Why the Incorrect Answers are Wrong:**
+- **Choice A** is incorrect because showing that peak heart rates were highest when alone (not percent change) doesn't cleanly support social buffering — and the key measure is percent change, not absolute peak rate.
+- **Choice B** is incorrect because lower BASELINE and peak heart rates with a companion could reflect baseline differences between individual snakes, not a stress-buffering effect of companionship.
+- **Choice D** is incorrect because it shows inconsistent results within Kerinci colonies and doesn't address the rattlesnake study.
+
+---
+
+## Question 14 — Answer: **A**
+
+**Core Logic Summary:** The text says elevation and prominence "can differ significantly" — Choice A provides the most dramatic example of this: Saser Kangri III has very high elevation (7,495m) but quite low prominence (850m), showing how these values can diverge significantly.
+
+**Why [A] is Correct:**
+Saser Kangri III: elevation = 7,495 meters (very high — highest in the table), but prominence = only 850 meters (second lowest in the table). This is the sharpest contrast between a high elevation value and a relatively low prominence value in the table — perfectly illustrating how much these two measurements can differ. The text says these values can differ significantly, and A provides the most striking example.
+
+**Why the Incorrect Answers are Wrong:**
+- **Choice B** is incorrect because Kangto has a prominence (2,195m) that is quite high relative to its elevation (7,060m) — this doesn't show a dramatic contrast.
+- **Choice C** is incorrect because it compares two different mountains (Kangto and Mount Lakshmi) from different ranges — the text is about one mountain's elevation vs prominence values differing.
+- **Choice D** is incorrect because it only states Sri Kailash's elevation and calls it the highest from its range — it doesn't address the elevation/prominence contrast.
+
+---
+
+## Question 15 — Answer: **A**
+
+**Core Logic Summary:** A meaningful handedness study requires 176 individuals minimum — both Lockard's study (8 individuals) and Goodall's study (8 individuals) fall far short, meaning NEITHER provides sufficient evidence.
+
+**Why [A] is Correct:**
+The text states: "Statistical analysis indicates a handedness study would need a minimum of 176 individuals to show a representative result; however, the study by Lockard included a total population of 8, and the study by Goodall included a total population of 8." Both studies used only 8 individuals — 22 times fewer than the required minimum. Therefore, neither study is sufficient to draw meaningful conclusions about handedness in primates.
+
+**Why the Incorrect Answers are Wrong:**
+- **Choice B** is incorrect because it claims Lockard's study reliably represents captive primates — but 8 individuals is far below the 176 minimum for ANY reliable representation.
+- **Choice C** is incorrect because underestimating prevalence of right-handedness is not discussed — the issue is insufficient sample size.
+- **Choice D** is identical in error to Choice B — Lockard's study (only 8 subjects) cannot be deemed reliable for captive primates either, as 8 < 176.
+
+---
+
+## Question 16 — Answer: **B**
+
+**Core Logic Summary:** By ensuring no participant saw both iris versions of the same dog, the researchers eliminated the possibility that results reflected preferences for other facial features that happened to come with dark irises in specific dogs — not the iris color itself.
+
+**Why [B] is Correct:**
+The design rule: "They distributed the images such that no participant saw both the light and dark versions of the same dog." This design controls for the possibility that a given dog's other facial features (eye size, face shape, fur pattern) — which happen to be paired with dark irises in the images — caused the preference, rather than iris color itself. Choice B identifies exactly this confounding factor that the design rules out.
+
+**Why the Incorrect Answers are Wrong:**
+- **Choice A** is incorrect because whether participants saw real dogs vs images is a limitation the study can't address by its own design — it's a separate question.
+- **Choice C** is incorrect because the design doesn't specifically rule out that participants were focusing on iris color — it rules out species-specific facial feature effects.
+- **Choice D** is incorrect because the design DOES rule out preexisting feelings about specific dogs — but Choice D says the design "excluded the possibility" of this, which actually makes D seem correct. Let me re-examine.
+
+Wait — Choice D says: "could be explained by participants having preexisting positive feelings about dogs with dark irises or preexisting negative feelings about dogs with light irises." 
+
+Since participants never saw both versions of the same dog, they couldn't have pre-existing feelings about those specific dogs — but they COULD still have general preexisting feelings about dark-iris dogs as a category. The design doesn't rule out general preexisting preferences for dark irises.
+
+Choice B says: "reflected a preference...for facial features that happened to coincide with dark irises in the dogs depicted in the images." The design DOES rule this out — because since participants only saw ONE iris version of each dog, any preference can't be attributed to facial features specific to the dark-iris version of a particular dog (the same dog appears in both versions, only the iris color differs). The researchers adjusted the images so iris was the controlled variable. So B is what the design specifically rules out. ✓
+
+---
+
+## Question 17 — Answer: **A (support. Decreasing)**
+
+**Core Logic Summary:** "Support" completes the noun phrase "provide structural support," and a period starts a new sentence: "Decreasing in thickness from the center to the edges, these veins allow..." — a complete, grammatical participial phrase + main clause.
+
+**Why [A] is Correct:**
+The sentence: "...a complex network of radiating veins that provide structural support. Decreasing in thickness from the center to the edges, these veins allow the leaves to maintain their large size and buoyancy with minimal material..." The first sentence ends with "structural support." The second begins with a participial phrase "Decreasing in thickness from the center to the edges" modifying "these veins," followed by the main clause. This is grammatically correct.
+
+**Why the Incorrect Answers are Wrong:**
+- **Choice B (support, decreasing)** is incorrect because using a comma before "decreasing" makes "these veins allow" a second independent clause attached only by a comma — a comma splice.
+- **Choice C (support, while decreasing)** is incorrect because "while decreasing in thickness...these veins allow" creates a run-on; a comma alone cannot join two independent clauses.
+- **Choice D (support decreasing)** is incorrect because without punctuation or a connective, "support decreasing in thickness" makes "decreasing" appear to modify "support" — an illogical noun phrase.
+
+---
+
+## Question 18 — Answer: **A (title, though;)**
+
+**Core Logic Summary:** "Title" completes the noun phrase; "though" serves as a concessive adverb signaling contrast; the semicolon joins two contrasting independent clauses: "had a different title, though" and "while writing and editing, Dickens had planned to call the novel Mag's Diversions."
+
+**Why [A] is Correct:**
+Full sentence: "Dickens's novel originally had a different title, though; while writing and editing, Dickens had planned to call the novel Mag's Diversions." IC1: "Dickens's novel originally had a different title, though" (with "though" as a sentence adverb meaning "however"). IC2: "while writing and editing, Dickens had planned to call the novel Mag's Diversions." The semicolon correctly joins these two independent clauses.
+
+**Why the Incorrect Answers are Wrong:**
+- **Choice B (title, though,)** is incorrect because two commas without a semicolon creates a comma splice between the two independent clauses.
+- **Choice C (title; though)** is incorrect because placing the semicolon before "though" leaves "though" dangling at the start of the second clause, creating an awkward subordination.
+- **Choice D (title, though)** is incorrect because without the semicolon, the two independent clauses are improperly joined — comma splice.
+
+---
+
+## Question 19 — Answer: **C (bare and the other)**
+
+**Core Logic Summary:** The blank creates an absolute phrase — "one hand bare and the other covered in Persian script" — describing both hands simultaneously, which then serves as the context for "the hands imply an out-of-frame figure."
+
+**Why [C] is Correct:**
+The full sentence: "Clasping a microphone, one hand bare and the other covered in Persian script, the hands imply an out-of-frame figure on the edge of speaking." "One hand bare and the other covered in Persian script" is an absolute phrase (participial in nature, with implied "being") describing the state of both hands. This absolute phrase sits between the opening participial phrase and the main clause, creating a grammatically correct complex sentence.
+
+**Why the Incorrect Answers are Wrong:**
+- **Choice A (is bare and the other is)** is incorrect because "one hand is bare and the other is covered in Persian script" creates an independent clause — then "the hands imply" begins another independent clause, creating a comma splice.
+- **Choice B (bare, the other is)** is incorrect because "one hand bare, the other is covered" creates a fragment (one hand bare) followed by an independent clause — the result is a run-on.
+- **Choice D (is bare, the other)** is incorrect because "one hand is bare, the other covered in Persian script" — "is bare" then leaves a comma after "bare" joining to "the other covered" — dangling and structurally unclear.
+
+---
+
+## Question 20 — Answer: **B**
+
+**Core Logic Summary:** The sentence compares the radial velocity method's zone of discovery to the direct imaging method's — the blank must correctly describe the radial velocity method's scope and how it detects exoplanets.
+
+**Why [B] is Correct:**
+Full sentence: "Compared to that of the direct imaging method, the radial velocity method's zone of discovery is vast, as distant exoplanets too dim to be observed are detected by the effect these exoplanets have on nearby stars." The comparison ("compared to that of the direct imaging method") modifies the zone of discovery. The radial velocity method has a vast zone because it detects exoplanets through their gravitational effect on nearby stars — even dim, distant ones. Choice B provides the correct subject, predicate, and explanatory clause.
+
+**Why the Incorrect Answers are Wrong:**
+- **Choice A** is incorrect because it begins "the detection of distant exoplanets, too dim to be observed in the radial velocity method's vast zone of discovery, is based on" — this confusingly places dim exoplanets inside the radial velocity zone while saying they are "too dim to be observed," creating contradiction.
+- **Choice C** is incorrect because "the radial velocity method, with its vast zone of discovery, detects exoplanets that are too dim to be observed by [the effect]" — the preposition "by" attaches illogically to the effect (the method is not detected by the effect; the exoplanets are).
+- **Choice D** is incorrect because "distant exoplanets too dim to be observed are detected within the radial velocity method's vast zone of discovery through" — "through the effect" works, but placing "within" implies the dim exoplanets reside inside the zone of discovery, which is a spatial confusion.
+
+---
+
+## Question 21 — Answer: **D (dating)**
+
+**Core Logic Summary:** "Dating" is a present participle that modifies "tradition of embroidery" — the tradition is one that dates back over 2,000 years; the participle elegantly slots into the noun phrase without disrupting the main verb "remains."
+
+**Why [D] is Correct:**
+Full sentence: "...a unique tradition of embroidery dating back over two thousand years—one that includes iconic double-sided stitching...—remains popular with modern audiences." "Dating back over two thousand years" is a participial phrase modifying "tradition of embroidery." The main subject is "tradition" and the main verb is "remains." The participle "dating" correctly adds descriptive information without replacing the verb.
+
+**Why the Incorrect Answers are Wrong:**
+- **Choice A (dates)** is incorrect because "dates" is a finite verb, giving the noun phrase two main verbs ("dates...remains") — creating a run-on sentence.
+- **Choice B (date)** is incorrect for the same reason — "date" as a finite verb creates a subject with two verbs and no proper connector.
+- **Choice C (has dated)** is incorrect because "has dated" is a present perfect finite verb — same structural problem of giving the sentence two main verbs.
+
+---
+
+## Question 22 — Answer: **C (On the other hand,)**
+
+**Core Logic Summary:** The text explicitly sets up a two-sided structure with "On one hand" — the logical and necessary complement is "On the other hand" to introduce the opposing effect.
+
+**Why [C] is Correct:**
+"On one hand, the dust can enhance the formation of ice clouds in the cyclone's core, increasing precipitation. _____ the dust can lower sea surface temperatures around the cyclone's core, weakening the storm." The text explicitly introduced the first side with "On one hand," making "On the other hand" the required transitional phrase for the second, contrasting effect. The sentence structure and transition are pre-determined by the first clause.
+
+**Why the Incorrect Answers are Wrong:**
+- **Choice A (In other words,)** is incorrect because "in other words" signals a restatement, not a contrasting second effect.
+- **Choice B (For example,)** is incorrect because the second sentence is a second, contrasting effect — not an example of the first effect.
+- **Choice D (Previously,)** is incorrect because "previously" implies a temporal sequence, but both effects occur simultaneously and are not ordered by time.
+
+---
+
+## Question 23 — Answer: **A (To date,)**
+
+**Core Logic Summary:** The second sentence provides a cumulative total from 1908 to the present — "To date" (meaning "up to the present moment") is the only transition that properly frames this ongoing accumulation.
+
+**Why [A] is Correct:**
+"In 1908... scientists discovered the moon Pasiphae... _____ researchers have discovered eighty moons orbiting Jupiter." The second sentence provides the running total of all moons discovered up to the present moment. "To date" means "as of right now" or "up until the present" — precisely the meaning needed to introduce a cumulative count from past to present.
+
+**Why the Incorrect Answers are Wrong:**
+- **Choice B (In other words,)** is incorrect because 80 moons is not a restatement or paraphrase of discovering Pasiphae in 1908 — it's new, cumulative information.
+- **Choice C (For example,)** is incorrect because the 80 moons total is not an example of the 1908 discovery — it's a comprehensive count.
+- **Choice D (Rather,)** is incorrect because "rather" signals a correction or contrast — the second sentence doesn't contradict the first.
+
+---
+
+## Question 24 — Answer: **C (By contrast,)**
+
+**Core Logic Summary:** Cartographers start ordering from the river's lowest point; hydrologists start from the top — these are directly opposite approaches, requiring a contrast transition.
+
+**Why [C] is Correct:**
+"Cartographers tend to begin with the riverway's lowest point, the Colville River. _____ hydrologists begin at the top of the river system, with the Siksikpuk River." Starting at the bottom vs starting at the top are directly contrasting methodologies. "By contrast" is the precise signal for a direct opposition between two approaches.
+
+**Why the Incorrect Answers are Wrong:**
+- **Choice A (In a similar way,)** is incorrect because the two approaches are opposite — cartographers start at the bottom, hydrologists at the top.
+- **Choice B (For example,)** is incorrect because hydrologists' approach is not an example of cartographers' approach — they are compared, not exemplified.
+- **Choice D (In other words,)** is incorrect because the second sentence provides new, contrasting information — it does not rephrase the first sentence.
+
+---
+
+## Question 25 — Answer: **D (Of course, the distinction is not always so neat:)**
+
+**Core Logic Summary:** The text just established that thalassocracies and tellurocracies are distinct categories — the Ottoman Empire is then introduced as an empire that held BOTH land and sea power, muddying the distinction. The transition must acknowledge the complication.
+
+**Why [D] is Correct:**
+"Historians classify thalassocracies as distinct from tellurocracies, or land-based powers. _____ the Ottoman Empire (1300s–1900s CE) is known for both land and sea supremacy." The Ottoman Empire is neither purely a thalassocracy nor a tellurocracy — it defies the clean distinction. "Of course, the distinction is not always so neat:" acknowledges that the clean thalassocracy/tellurocracy dichotomy has exceptions — followed by the colon introducing the Ottoman Empire as that exception.
+
+**Why the Incorrect Answers are Wrong:**
+- **Choice A (For example, tellurocracies have long overpowered their rivals:)** is incorrect because the Ottoman Empire is not an example of a tellurocracy overpowering rivals — it is an example of an empire that blurs the land/sea category distinction.
+- **Choice B (Likewise, thalassocracies are sea-based powers:)** is incorrect because the transition should introduce a complication, not restate a definition.
+- **Choice C (In other words, empires are classified according to their source of power:)** is incorrect because this merely restates the preceding information without introducing the Ottoman Empire's complicating example.
+
+---
+
+## Question 26 — Answer: **D**
+
+**Core Logic Summary:** The student wants to "make AND support a claim about Thailand specifically" — only Choice D makes a specific claim about Thailand that uses both studies as evidence for and against applicability of the hypothesis.
+
+**Why [D] is Correct:**
+Choice D: "Although the farm-size transition hypothesis may be applicable to some countries in Asia, it is inconsistent with the development of rice farming in Thailand." This uses Masters et al. (Asia farm sizes will rise = hypothesis applicable to Asia broadly) as a concession, then uses Promkhambut et al. (Thai rice farms stayed small while modernizing = hypothesis inconsistent with Thailand) as the supporting evidence for the specific claim about Thailand. Claim + evidence from notes = strongest answer.
+
+**Why the Incorrect Answers are Wrong:**
+- **Choice A** is incorrect because it contradicts Promkhambut et al. — rice farms in Thailand have NOT responded to modernization by expanding in size; they've remained small.
+- **Choice B** is incorrect because it only states Promkhambut's finding without making the broader comparative claim about the hypothesis's applicability to Asia vs Thailand.
+- **Choice C** is incorrect because it only states Masters et al.'s finding — it says nothing about Thailand or about whether the hypothesis applies to Thailand, which is the required claim.
+
+---
+
+## Question 27 — Answer: **B**
+
+**Core Logic Summary:** The goal is to connect a specific quotation (about video game culture/pixelization) to a specific nontraditional design element in Cody's work — only Choice B does both precisely and correctly.
+
+**Why [B] is Correct:**
+The quotation: "I'm a child of '80s video game culture...I grew up with this world of pixelization." The nontraditional design element: In *Only Love Can Break Your Heart* — "pop song lyrics in a blocky digital font." Choice B: "The pop song lyrics in a blocky digital font in *Only Love Can Break Your Heart* reflect Cody's childhood familiarity with blocky video game graphics—what she calls 'this world of pixelization.'" This directly connects the specific nontraditional element (blocky digital font) to the exact quotation (pixelization), fulfilling both requirements of the task.
+
+**Why the Incorrect Answers are Wrong:**
+- **Choice A** is incorrect because it connects the jagged diamond pattern to the quote "we consider tradition now" — the diamond pattern is a traditional Diné design element, not a nontraditional element, so the connection is to the wrong quote and the wrong element type.
+- **Choice C** is incorrect because it connects contrasting colored diamonds in *Walking Off No Water Mesa* to the tradition quote — but colored diamonds are a traditional design element; this doesn't connect to the pixelization/video game quotation.
+- **Choice D** is incorrect because it mentions the '80s video game culture quote but connects it to *Walking Off No Water Mesa* — which features rectangular panes and contrasting diamonds, not the blocky digital font that most directly evokes pixelization.
+
+---
+
+*End of SAT English Explanations — Module 1 (27 Qs) + Module 2 Hard (27 Qs)*
+ENDOFFILE
+
+SAT Math — Section 2, Module 1 & Module 2
+Complete Answer Explanations
+
+MODULE 1 (22 Questions)
+
+Question 1 — Answer: 19
+Core Mathematical Concept: Linear equations / Systems with infinite solutions (Heart of Algebra)
+Step-by-Step Proof:
+Choice 19 is correct.
+For a system of two linear equations to have infinitely many solutions, both equations must represent the exact same line. The given equation is:
+y=9x+19y = 9x + 19y=9x+19
+The second equation is y=mx+by = mx + b
+y=mx+b. For the lines to be identical:
+m=9andb=19m = 9 \quad \text{and} \quad b = 19m=9andb=19
+Therefore, b=19b = \mathbf{19}
+b=19.
+Alternative / Desmos Method:
+Type y = 9x + 19 and y = 9x + b. Slide the value of b. The system has infinite solutions only when the lines overlap completely, which happens only when b=19b = 19
+b=19.
+Why the Incorrect Answers are Wrong:Any value of b≠19b \neq 19
+b=19 creates two parallel lines (same slope, different intercepts), which have zero solutions — not infinitely many.
+
+Question 2 — Answer: D (320)
+Core Mathematical Concept: Linear equations / Proportional scaling (Heart of Algebra)
+Step-by-Step Proof:
+Choice D is correct.
+5x+2=325x + 2 = 325x+2=32
+5x=305x = 305x=30
+The target expression 50x+2050x + 20
+50x+20 is exactly 10 times the left side of the equation:
+50x+20=10(5x+2)=10(32)=32050x + 20 = 10(5x + 2) = 10(32) = \mathbf{320}50x+20=10(5x+2)=10(32)=320
+Alternative / Desmos Method:Solve 5x+2=325x + 2 = 32
+5x+2=32 → x=6x = 6
+x=6. Then compute 50(6)+20=300+20=32050(6) + 20 = 300 + 20 = 320
+50(6)+20=300+20=320.
+Why the Incorrect Answers are Wrong:
+
+A (6): This is the value of xx
+x, not 50x+2050x + 20
+50x+20.
+B (60): This is 10x10x
+10x, not 50x+2050x + 20
+50x+20.
+C (70): This is 10(5x)+10=31010(5x) + 10 = 310
+10(5x)+10=310... actually this results from incorrectly computing 10(5x+2)−25010(5x + 2) - 250
+10(5x+2)−250 — a sign error.
+
+
+Question 3 — Answer: D
+Core Mathematical Concept: Statistics / Standard deviation (Problem Solving & Data Analysis)
+Step-by-Step Proof:
+Choice D is correct. Standard deviation measures how far values are from the mean. The larger the deviations, the larger the SD.
+All four sets are centered at pp
+p (mean = pp
+p). Compute the sum of squared deviations for each:
+SetValuesSquared DeviationsVarianceAp−4,p,p,p,p+4p-4, p, p, p, p+4
+p−4,p,p,p,p+416+0+0+0+16=3216+0+0+0+16 = 32
+16+0+0+0+16=3232/5=6.432/5 = 6.4
+32/5=6.4Bp−1,p−1,p,p+1,p+1p-1, p-1, p, p+1, p+1
+p−1,p−1,p,p+1,p+11+1+0+1+1=41+1+0+1+1 = 4
+1+1+0+1+1=44/5=0.84/5 = 0.8
+4/5=0.8Cp,p,p,p,pp, p, p, p, p
+p,p,p,p,p0+0+0+0+0=00+0+0+0+0 = 0
+0+0+0+0+0=000
+0Dp−5,p−4,p,p+4,p+5p-5, p-4, p, p+4, p+5
+p−5,p−4,p,p+4,p+525+16+0+16+25=8225+16+0+16+25 = 82
+25+16+0+16+25=8282/5=16.482/5 = 16.4
+82/5=16.4
+SDD=16.4≈4.05SD_D = \sqrt{16.4} \approx 4.05
+SDD​=16.4​≈4.05 — the largest of all four sets.
+Why the Incorrect Answers are Wrong:
+
+A: Spread of ±4, but two of the five values sit at the mean, reducing SD.
+B: Values only deviate by ±1 — tightly clustered.
+C: All values identical → SD = 0.
+
+
+Question 4 — Answer: A (86)
+Core Mathematical Concept: Percentages (Problem Solving & Data Analysis)
+Step-by-Step Proof:
+Choice A is correct.
+0.20×430=860.20 \times 430 = \mathbf{86}0.20×430=86
+Why the Incorrect Answers are Wrong:
+
+B (172): This is 0.40×4300.40 \times 430
+0.40×430 — doubling the percentage.
+C (215): This is 0.50×4300.50 \times 430
+0.50×430 — using 50% instead of 20%.
+D (410): This is 430−20=410430 - 20 = 410
+430−20=410 — subtracting 20 as a count instead of a percentage.
+
+
+Question 5 — Answer: A
+Core Mathematical Concept: Inequalities / Testing values (Heart of Algebra)
+Step-by-Step Proof:
+Choice A is correct. Check every (r,g)(r, g)
+(r,g) pair in each table against r+g<56r + g < 56
+r+g<56:
+Option A: (0,55):55<56(0,55): 55 < 56
+(0,55):55<56 ✓ · (2,53):55<56(2,53): 55 < 56
+(2,53):55<56 ✓ · (4,51):55<56(4,51): 55 < 56
+(4,51):55<56 ✓ — all satisfy.
+Option B: (2,55):57<56(2,55): 57 < 56
+(2,55):57<56 ✗ — fails.
+Option C: (2,55):57<56(2,55): 57 < 56
+(2,55):57<56 ✗ — fails.
+Option D: (4,55):59<56(4,55): 59 < 56
+(4,55):59<56 ✗ — fails.
+Only A has every pair satisfying the inequality.
+
+Question 6 — Answer: C (7.5)
+Core Mathematical Concept: Scatterplots / Line of best fit interpretation (Problem Solving & Data Analysis)
+Step-by-Step Proof:
+Choice C is correct. The scatterplot shows a positive linear trend among 12 stores. Following the upward trend, a store at x=4x = 4
+x=4 (4,000 sq ft) falls between the data clusters near x=3x = 3
+x=3 (y ≈ 6–7) and x=5x = 5
+x=5 (y ≈ 8–10). The line of best fit at x=4x = 4
+x=4 predicts approximately 7.5 million dollars.
+Why the Incorrect Answers are Wrong:
+
+A (4.1): Too low — falls below the actual data trend at x=4x = 4
+x=4.
+B (5.4): Still below the trend; closer to predictions at x=2–3x = 2–3
+x=2–3.
+D (10.2): Too high — this is more consistent with the largest stores (x=6x = 6
+x=6).
+
+
+Question 7 — Answer: 20
+Core Mathematical Concept: Systems of linear equations (Heart of Algebra)
+Step-by-Step Proof:
+Choice 20 is correct.
+Eq. 1:x+y=165\text{Eq. 1:} \quad x + y = 165Eq. 1:x+y=165
+Eq. 2:x+y+y=185\text{Eq. 2:} \quad x + y + y = 185Eq. 2:x+y+y=185
+Substitute Eq. 1 into Eq. 2:
+165+y=185165 + y = 185165+y=185
+y=20y = \mathbf{20}y=20
+Alternative: Subtract Eq. 1 from Eq. 2 directly: (x+2y)−(x+y)=185−165⇒y=20(x+2y) - (x+y) = 185 - 165 \Rightarrow y = 20
+(x+2y)−(x+y)=185−165⇒y=20.
+
+Question 8 — Answer: A (0, −1/7)
+Core Mathematical Concept: Linear functions / y-intercept (Heart of Algebra)
+Step-by-Step Proof:
+Choice A is correct. The y-intercept is the point where x=0x = 0
+x=0:
+f(0)=6(0)−17=−17f(0) = 6(0) - \frac{1}{7} = -\frac{1}{7}f(0)=6(0)−71​=−71​
+y-intercept =(0, −17)= \left(0,\ -\dfrac{1}{7}\right)
+=(0, −71​).
+Why the Incorrect Answers are Wrong:
+
+B (0, −6): Misidentifies the slope (6) as the y-intercept.
+C (0, 6): Takes the slope as positive y-intercept.
+D (0, 7): Inverts the constant term — takes the denominator of −17-\frac{1}{7}
+−71​ as the y-intercept.
+
+
+Question 9 — Answer: 0.18
+Core Mathematical Concept: Probability (Problem Solving & Data Analysis)
+Step-by-Step Proof:
+P(vegetarian)=950=0.18P(\text{vegetarian}) = \frac{9}{50} = \mathbf{0.18}P(vegetarian)=509​=0.18
+There are 9 vegetarian choices out of 50 total attendees.
+
+Question 10 — Answer: A (y < 64)
+Core Mathematical Concept: Parallel lines / Transversal angles (Geometry)
+Step-by-Step Proof:
+Choice A is correct. Lines ℓ\ell
+ℓ and kk
+k are parallel, cut by transversal tt
+t. Angles x°x°
+x° and y°y°
+y° are co-interior angles (also called consecutive interior angles or same-side interior angles), so:
+x+y=180°x + y = 180°x+y=180°
+Given x>116x > 116
+x>116:
+y<180−116=64y < 180 - 116 = \mathbf{64}y<180−116=64
+Why the Incorrect Answers are Wrong:
+
+B (y>64y > 64
+y>64): Reverses the direction of the inequality.
+C (x+y<180x + y < 180
+x+y<180): Co-interior angles of parallel lines always equal exactly 180°, never less.
+D (x+y>180x + y > 180
+x+y>180): Same error — co-interior angles sum to exactly 180° on parallel lines.
+
+
+Question 11 — Answer: C (2)
+Core Mathematical Concept: Nonlinear equations / Intersections (Advanced Math)
+Step-by-Step Proof:
+Choice C is correct. Set y=2xy = 2x
+y=2x equal to y=x2−35y = x^2 - 35
+y=x2−35:
+2x=x2−352x = x^2 - 352x=x2−35
+0=x2−2x−350 = x^2 - 2x - 350=x2−2x−35
+0=(x−7)(x+5)0 = (x - 7)(x + 5)0=(x−7)(x+5)
+x=7orx=−5x = 7 \quad \text{or} \quad x = -5x=7orx=−5
+Sum of x-coordinates =7+(−5)=2= 7 + (-5) = \mathbf{2}
+=7+(−5)=2.
+Alternative / Desmos Method:Graph y=2xy = 2x
+y=2x and y=x2−35y = x^2 - 35
+y=x2−35. The two intersection points are at x=7x = 7
+x=7 and x=−5x = -5
+x=−5. Sum = 2.
+Why the Incorrect Answers are Wrong:
+
+A (−35): This is the constant term of the quadratic, not the sum of roots.
+B (−5): This is only one of the two roots.
+D (7): This is only the other root.
+
+
+Question 12 — Answer: 13/4
+Core Mathematical Concept: Function evaluation (Advanced Math)
+Step-by-Step Proof:
+Choice 13/4 is correct. Substitute x=14x = \frac{1}{4}
+x=41​:
+f ⁣(14)=3 ⁣(14−14)2+134=3(0)2+134=134f\!\left(\tfrac{1}{4}\right) = 3\!\left(\tfrac{1}{4} - \tfrac{1}{4}\right)^2 + \tfrac{13}{4} = 3(0)^2 + \tfrac{13}{4} = \mathbf{\tfrac{13}{4}}f(41​)=3(41​−41​)2+413​=3(0)2+413​=413​
+The squared term vanishes because the input equals the value inside the parentheses.
+
+Question 13 — Answer: B (15)
+Core Mathematical Concept: Statistics / Range from box plot (Problem Solving & Data Analysis)
+Step-by-Step Proof:
+Choice B is correct. Range = maximum − minimum.
+From the box plot:
+
+Minimum (left whisker) ≈35\approx 35
+≈35 cm
+Maximum (right whisker) ≈50\approx 50
+≈50 cm
+
+Range=50−35=15 cm\text{Range} = 50 - 35 = \mathbf{15} \text{ cm}Range=50−35=15 cm
+Why the Incorrect Answers are Wrong:
+
+A (10): This is the IQR (interquartile range, Q3 − Q1), not the full range.
+C (29): No clear reading of the plot produces 29.
+D (41): This equals the maximum value, not the range.
+
+
+Question 14 — Answer: C (30)
+Core Mathematical Concept: Triangle area (Geometry)
+Step-by-Step Proof:
+Choice C is correct.
+Area=12×base×height\text{Area} = \tfrac{1}{2} \times \text{base} \times \text{height}Area=21​×base×height
+150=12×10×h150 = \tfrac{1}{2} \times 10 \times h150=21​×10×h
+150=5h150 = 5h150=5h
+h=30 cmh = \mathbf{30} \text{ cm}h=30 cm
+Why the Incorrect Answers are Wrong:
+
+A (10): This is the base, not the height.
+B (15): Results from dividing 150 by 10 without the factor of 12\frac{1}{2}
+21​.
+D (60): Results from computing 2×Area/base2 \times \text{Area}/\text{base}
+2×Area/base with an arithmetic error.
+
+
+Question 15 — Answer: B (1 + √30)
+Core Mathematical Concept: Quadratic equations / Quadratic formula (Advanced Math)
+Step-by-Step Proof:
+Choice B is correct.
+x2−2x=29x^2 - 2x = 29x2−2x=29
+x2−2x−29=0x^2 - 2x - 29 = 0x2−2x−29=0
+Apply the quadratic formula with a=1a=1
+a=1, b=−2b=-2
+b=−2, c=−29c=-29
+c=−29:
+x=2±4+1162=2±1202=2±2302=1±30x = \frac{2 \pm \sqrt{4 + 116}}{2} = \frac{2 \pm \sqrt{120}}{2} = \frac{2 \pm 2\sqrt{30}}{2} = 1 \pm \sqrt{30}x=22±4+116​​=22±120​​=22±230​​=1±30​
+One solution is 1+301 + \sqrt{30}
+1+30​.
+Alternative / Desmos Method:Graph y=x2−2x−29y = x^2 - 2x - 29
+y=x2−2x−29. Find the x-intercepts. The positive root is ≈6.48\approx 6.48
+≈6.48. Check: 1+30≈1+5.48=6.481 + \sqrt{30} \approx 1 + 5.48 = 6.48
+1+30​≈1+5.48=6.48 ✓.
+Why the Incorrect Answers are Wrong:
+
+A (29\sqrt{29}
+29​): Comes from incorrectly moving the 2x term: treating x2=29+2xx^2 = 29 + 2x
+x2=29+2x as x2=29x^2 = 29
+x2=29 and ignoring the linear term.
+C (30): A whole-number guess — doesn't satisfy the equation.
+D (29+229 + \sqrt{2}
+29+2​): Results from a sign error or misapplication of the quadratic formula.
+
+
+Question 16 — Answer: 100
+Core Mathematical Concept: Circles / Radius and equation (Geometry)
+Step-by-Step Proof:
+Answer is 100.
+Circle A: (x+8)2+(y−8)2=25(x+8)^2 + (y-8)^2 = 25
+(x+8)2+(y−8)2=25, so radiusA=25=5_A = \sqrt{25} = 5
+A​=25​=5.
+Circle B has the same center and twice the radius:
+
+radiusB=2×5=10\text{radius}_B = 2 \times 5 = 10radiusB​=2×5=10
+Circle B's equation: (x+8)2+(y−8)2=102=100(x+8)^2 + (y-8)^2 = 10^2 = \mathbf{100}
+(x+8)2+(y−8)2=102=100.
+Therefore k=100k = 100
+k=100.
+
+Question 17 — Answer: D (4)
+Core Mathematical Concept: Reading a graph / x-intercept (Advanced Math)
+Step-by-Step Proof:
+Choice D is correct. f(x)=0f(x) = 0
+f(x)=0 at the x-intercept of the graph — the point where the curve crosses the x-axis. From the graph shown, the curve crosses y=0y = 0
+y=0 at exactly x=4x = \mathbf{4}
+x=4.
+Why the Incorrect Answers are Wrong:
+
+A (−4): At x=−4x = -4
+x=−4, the curve is at a large positive y-value, not zero.
+B (0): At x=0x = 0
+x=0, the curve is at a negative y-value.
+C (1): At x=1x = 1
+x=1, the curve is still below the x-axis.
+
+
+Question 18 — Answer: C (20)
+Core Mathematical Concept: Absolute value equations (Advanced Math)
+Step-by-Step Proof:
+Choice C is correct.
+∣3x−30∣+36=5\frac{|3x - 30| + 3}{6} = 56∣3x−30∣+3​=5
+∣3x−30∣+3=30|3x - 30| + 3 = 30∣3x−30∣+3=30
+∣3x−30∣=27|3x - 30| = 27∣3x−30∣=27
+Case 1: 3x−30=27⇒3x=57⇒x=193x - 30 = 27 \Rightarrow 3x = 57 \Rightarrow x = 19
+3x−30=27⇒3x=57⇒x=19
+Case 2: 3x−30=−27⇒3x=3⇒x=13x - 30 = -27 \Rightarrow 3x = 3 \Rightarrow x = 1
+3x−30=−27⇒3x=3⇒x=1
+Sum =19+1=20= 19 + 1 = \mathbf{20}
+=19+1=20.
+Why the Incorrect Answers are Wrong:
+
+A (1): This is only the smaller of the two solutions.
+B (19): This is only the larger solution.
+D (30): Results from not subtracting 3 before applying the absolute value split.
+
+
+Question 19 — Answer: D (2/5)
+Core Mathematical Concept: Slopes of perpendicular lines (Geometry)
+Step-by-Step Proof:
+Choice D is correct. Rewrite line hh
+h in slope-intercept form:
+12x+15y−40=0\tfrac{1}{2}x + \tfrac{1}{5}y - 40 = 021​x+51​y−40=0
+15y=−12x+40\tfrac{1}{5}y = -\tfrac{1}{2}x + 4051​y=−21​x+40
+y=−52x+200y = -\tfrac{5}{2}x + 200y=−25​x+200
+Slope of h=−52h = -\dfrac{5}{2}
+h=−25​.
+Perpendicular lines have slopes that are negative reciprocals:
+slope of j=−1−5/2=25\text{slope of } j = -\frac{1}{-5/2} = \mathbf{\frac{2}{5}}slope of j=−−5/21​=52​
+Why the Incorrect Answers are Wrong:
+
+A (−5/2-5/2
+−5/2): This is the slope of hh
+h itself, not the perpendicular.
+B (−2/5-2/5
+−2/5): The reciprocal but with the wrong sign — perpendicular requires flipping the sign.
+C (5/25/2
+5/2): The correct magnitude but wrong sign.
+
+
+Question 20 — Answer: B (10)
+Core Mathematical Concept: Quadratic equations / Word problems (Advanced Math)
+Step-by-Step Proof:
+Choice B is correct.
+Let length =L= L
+=L. Then width W=2L−16W = 2L - 16
+W=2L−16.
+L⋅W=130L \cdot W = 130L⋅W=130
+L(2L−16)=130L(2L - 16) = 130L(2L−16)=130
+2L2−16L−130=02L^2 - 16L - 130 = 02L2−16L−130=0
+L2−8L−65=0L^2 - 8L - 65 = 0L2−8L−65=0
+(L−13)(L+5)=0(L - 13)(L + 5) = 0(L−13)(L+5)=0
+L=13(reject L=−5)L = 13 \quad (\text{reject } L = -5)L=13(reject L=−5)
+W=2(13)−16=10 inchesW = 2(13) - 16 = \mathbf{10} \text{ inches}W=2(13)−16=10 inches
+Why the Incorrect Answers are Wrong:
+
+A (5): 5=2(10.5)−165 = 2(10.5) - 16
+5=2(10.5)−16 — doesn't match length 13.
+C (13): This is the length LL
+L, not the width.
+D (18): Comes from computing 2L−162L - 16
+2L−16 with an incorrect LL
+L.
+
+
+Question 21 — Answer: D (6n + 4 = 100)
+Core Mathematical Concept: Linear equations / Modeling (Heart of Algebra)
+Step-by-Step Proof:
+Choice D is correct. Let nn
+n = number of 9-inch parts.
+PartCount9-inchnn
+n8-inch5n5n
+5n3-inch44
+4
+Total: 5n+n+4=100⇒6n+4=1005n + n + 4 = 100 \Rightarrow \mathbf{6n + 4 = 100}
+5n+n+4=100⇒6n+4=100.
+Why the Incorrect Answers are Wrong:
+
+**A (8(5n)+9n+3(4)=1008(5n)+9n+3(4)=100
+8(5n)+9n+3(4)=100):** This sets up a total *value* (inches) equation, not a parts-count equation. The problem asks for the count.
+B (8n+9n+3n=1008n+9n+3n=100
+8n+9n+3n=100): Assigns the wrong coefficient — 3-inch parts number 4 (fixed), not 3n3n
+3n.
+C (5n+4=1005n+4=100
+5n+4=100): Leaves out the nn
+n 9-inch parts themselves.
+
+
+Question 22 — Answer: D (N = 200(2.20)^(t/4))
+Core Mathematical Concept: Exponential models (Advanced Math)
+Step-by-Step Proof:
+Choice D is correct.
+"120% more" means each 4-year period multiplies the population by 1+1.20=2.201 + 1.20 = 2.20
+1+1.20=2.20.
+
+At t=0t = 0
+t=0: N=200N = 200
+N=200 ✓
+At t=4t = 4
+t=4 (one 4-year period): N=200×2.204/4=200×2.20=440N = 200 \times 2.20^{4/4} = 200 \times 2.20 = 440
+N=200×2.204/4=200×2.20=440 ✓ (120% more than 200 = 440)
+At t=8t = 8
+t=8: N=200×2.208/4=200×2.202=968N = 200 \times 2.20^{8/4} = 200 \times 2.20^2 = 968
+N=200×2.208/4=200×2.202=968 ✓
+
+The exponent is t4\dfrac{t}{4}
+4t​ because one period passes every 4 years.
+N=200(2.20)t/4\boxed{N = 200(2.20)^{t/4}}N=200(2.20)t/4​
+Why the Incorrect Answers are Wrong:
+
+A (200(2.20)4t200(2.20)^{4t}
+200(2.20)4t): Exponent grows 16× too fast — after just t=1t=1
+t=1 year the population would be ~4,686.
+B (200(1.20)4t200(1.20)^{4t}
+200(1.20)4t): Uses 1.20 (which would be "20% more"), and the 4t4t
+4t exponent grows too fast.
+C (200(1.20)t/4200(1.20)^{t/4}
+200(1.20)t/4): Uses 1.20 which represents only a 20% increase, not 120%.
+
+
+
+MODULE 2 — HARD (22 Questions)
+
+Question 1 — Answer: B (y = 141)
+Core Mathematical Concept: Parallel lines / Corresponding and co-interior angles (Geometry)
+Step-by-Step Proof:
+Choice B is correct. w=141°w = 141°
+w=141° is the angle at the intersection of transversal kk
+k with line rr
+r.
+For two lines cut by a transversal to be parallel, corresponding angles must be equal. Angle y°y°
+y° is at the intersection of kk
+k with line ss
+s, and it corresponds to angle w°w°
+w°.
+If y=141=wy = 141 = w
+y=141=w, then yy
+y and ww
+w are equal corresponding angles, proving r∥sr \parallel s
+r∥s.
+Why the Incorrect Answers are Wrong:
+
+A (x=39x = 39
+x=39): xx
+x and ww
+w are supplementary at line rr
+r: x+141=180⇒x=39x + 141 = 180 \Rightarrow x = 39
+x+141=180⇒x=39. Knowing x=39x = 39
+x=39 only confirms info about line rr
+r — it gives no information about line ss
+s.
+**C (w+y=180w + y = 180
+w+y=180):** This would be true if r∥sr \parallel s
+r∥s (co-interior angles), but it's not sufficient evidence *to prove* they are parallel — it's circular.
+D (y+z=180y + z = 180
+y+z=180): yy
+y and zz
+z form a linear pair at line ss
+s, so this is always true regardless of parallelism.
+
+
+Question 2 — Answer: 3/2
+Core Mathematical Concept: Slope formula (Heart of Algebra)
+Step-by-Step Proof:Answer is 32\dfrac{3}{2}
+23​.
+m=28−718−4=2114=32m = \frac{28 - 7}{18 - 4} = \frac{21}{14} = \mathbf{\frac{3}{2}}m=18−428−7​=1421​=23​
+
+Question 3 — Answer: C (28)
+Core Mathematical Concept: Pythagorean theorem / Perimeter (Geometry)
+Step-by-Step Proof:
+Choice C is correct. Let the unknown side =b= b
+=b.
+92+b2=(106)29^2 + b^2 = (\sqrt{106})^292+b2=(106​)2
+81+b2=10681 + b^2 = 10681+b2=106
+b2=25b^2 = 25b2=25
+b=5b = 5b=5
+Perimeter=2(9+5)=2(14)=28\text{Perimeter} = 2(9 + 5) = 2(14) = \mathbf{28}Perimeter=2(9+5)=2(14)=28
+Why the Incorrect Answers are Wrong:
+
+A (106): This is the diagonal squared, not the perimeter.
+B (45): This is 9×59 \times 5
+9×5 — confuses multiplication with the perimeter formula.
+D (14): This is only half the perimeter (9+59 + 5
+9+5).
+
+
+Question 4 — Answer: B (−6/5)
+Core Mathematical Concept: Zero product property (Advanced Math)
+Step-by-Step Proof:
+Choice B is correct.
+(5x+6)(8x−5)=0(5x + 6)(8x - 5) = 0(5x+6)(8x−5)=0
+Either factor equals zero:
+Case 1: 5x+6=0⇒x=−655x + 6 = 0 \Rightarrow x = -\dfrac{6}{5}
+5x+6=0⇒x=−56​ ✓
+Case 2: 8x−5=0⇒x=588x - 5 = 0 \Rightarrow x = \dfrac{5}{8}
+8x−5=0⇒x=85​
+−65-\dfrac{6}{5}
+−56​ is listed as choice B.
+Why the Incorrect Answers are Wrong:
+
+A (−8/5-8/5
+−8/5): Comes from incorrectly applying the zero product rule to get x=−8/5x = -8/5
+x=−8/5 — a sign or coefficient error.
+C (−5/6-5/6
+−5/6): Inverts the fraction from Case 1.
+D (−5/8-5/8
+−5/8): Negates the solution from Case 2 — a sign error.
+
+
+Question 5 — Answer: −9
+Core Mathematical Concept: Slope of a linear equation (Heart of Algebra)
+Step-by-Step Proof:Answer is −9\mathbf{-9}
+−9.
+9x+y=169x + y = 169x+y=16
+y=−9x+16y = -9x + 16y=−9x+16
+Slope =−9= -9
+=−9.
+
+Question 6 — Answer: B (−56)
+Core Mathematical Concept: Systems of equations — nonlinear (Advanced Math)
+Step-by-Step Proof:
+Choice B is correct.
+From y−8x=0⇒y=8xy - 8x = 0 \Rightarrow y = 8x
+y−8x=0⇒y=8x.
+Substitute into x2+y2=3185x^2 + y^2 = 3185
+x2+y2=3185:
+x2+(8x)2=3185x^2 + (8x)^2 = 3185x2+(8x)2=3185
+x2+64x2=3185x^2 + 64x^2 = 3185x2+64x2=3185
+65x2=318565x^2 = 318565x2=3185
+x2=49x^2 = 49x2=49
+x=±7x = \pm 7x=±7
+Since x<0x < 0
+x<0: x=−7x = -7
+x=−7.
+y=8(−7)=−56y = 8(-7) = \mathbf{-56}y=8(−7)=−56
+Alternative / Desmos Method:Graph x2+y2=3185x^2 + y^2 = 3185
+x2+y2=3185 (a circle) and y=8xy = 8x
+y=8x (a line). The two intersections occur at approximately (−7,−56)(-7, -56)
+(−7,−56) and (7,56)(7, 56)
+(7,56). Since x<0x < 0
+x<0, take y=−56y = -56
+y=−56.
+Why the Incorrect Answers are Wrong:
+
+A (−392): Results from computing y=8x2y = 8x^2
+y=8x2 instead of y=8xy = 8x
+y=8x.
+C (−8): Confuses xx
+x with yy
+y.
+D (−7): This is xx
+x, not yy
+y.
+
+
+Question 7 — Answer: A (−86)
+Core Mathematical Concept: Function evaluation / Solving for a constant (Advanced Math)
+Step-by-Step Proof:
+Choice A is correct.
+f(x)=x+115,f(a)=−15f(x) = \frac{x + 11}{5}, \quad f(a) = -15f(x)=5x+11​,f(a)=−15
+a+115=−15\frac{a + 11}{5} = -155a+11​=−15
+a+11=−75a + 11 = -75a+11=−75
+a=−86a = \mathbf{-86}a=−86
+Why the Incorrect Answers are Wrong:
+
+B (−64): Results from solving a+11=−75a + 11 = -75
+a+11=−75 incorrectly, getting a=−64a = -64
+a=−64 (off by 22).
+C (−64/5-64/5
+−64/5): Divides by 5 without first multiplying both sides — order-of-operations error.
+D (−4/5-4/5
+−4/5): Results from a/5=−15a/5 = -15
+a/5=−15 and ignoring the +11+11
++11 in the numerator.
+
+
+Question 8 — Answer: B
+Core Mathematical Concept: Vertex form of a quadratic / Real-world interpretation (Advanced Math)
+Step-by-Step Proof:
+Choice B is correct.
+y=−4.9(x−8.9)2+12,400y = -4.9(x - 8.9)^2 + 12{,}400y=−4.9(x−8.9)2+12,400
+This is in vertex form y=a(x−h)2+ky = a(x-h)^2 + k
+y=a(x−h)2+k, where the vertex is (h,k)=(8.9, 12,400)(h, k) = (8.9,\ 12{,}400)
+(h,k)=(8.9, 12,400).
+
+x=8.9x = 8.9
+x=8.9 seconds → time elapsed
+y=12,400y = 12{,}400
+y=12,400 meters → height at that moment
+a=−4.9<0a = -4.9 < 0
+a=−4.9<0 → parabola opens downward → vertex is a maximum
+
+The plane reached an estimated maximum height of 12,400 meters, 8.9 seconds after starting the maneuver.
+Why the Incorrect Answers are Wrong:
+
+A: Reverses the numbers — says maximum height of 12,400 m at 4.9 seconds (4.9 is the coefficient, not a time value).
+C: Claims maximum height of 4.9 m — confuses the coefficient with the height.
+D: Claims the height is 8.9 m — confuses the time value with the height.
+
+
+Question 9 — Answer: C (7)
+Core Mathematical Concept: Linear equations / Conditions for unique vs. infinite solutions (Advanced Math)
+Step-by-Step Proof:
+Choice C is correct.
+a(4−x)=28−7xa(4 - x) = 28 - 7xa(4−x)=28−7x
+4a−ax=28−7x4a - ax = 28 - 7x4a−ax=28−7x
+4a−ax+7x=284a - ax + 7x = 284a−ax+7x=28
+4a+x(7−a)=284a + x(7 - a) = 284a+x(7−a)=28
+For exactly one solution, the coefficient of xx
+x must be non-zero: 7−a≠07 - a \neq 0
+7−a=0, giving x=28−4a7−ax = \dfrac{28 - 4a}{7 - a}
+x=7−a28−4a​.
+If a=7a = 7
+a=7: 4(7)+x(7−7)=28⇒28=28\quad 4(7) + x(7-7) = 28 \Rightarrow 28 = 28
+4(7)+x(7−7)=28⇒28=28
+This is true for all values of xx
+x → infinitely many solutions, not exactly one.
+Therefore, aa
+a cannot be 7\mathbf{7}
+7.
+Why the Incorrect Answers are Wrong:
+
+A (1): 4(1)+x(6)=28⇒x=44(1) + x(6) = 28 \Rightarrow x = 4
+4(1)+x(6)=28⇒x=4 — exactly one solution. ✓ (So a=1a=1
+a=1 is allowed.)
+B (4): 4(4)+x(3)=28⇒x=44(4) + x(3) = 28 \Rightarrow x = 4
+4(4)+x(3)=28⇒x=4 — exactly one solution. ✓
+D (28): 4(28)+x(−21)=28⇒x=44(28) + x(-21) = 28 \Rightarrow x = 4
+4(28)+x(−21)=28⇒x=4 — exactly one solution. ✓
+
+
+Question 10 — Answer: 312
+Core Mathematical Concept: Nonlinear functions / Finding constants (Advanced Math)
+Step-by-Step Proof:Answer is 312\mathbf{312}
+312.
+The graph passes through (24,0)(24, 0)
+(24,0), so g(24)=0g(24) = 0
+g(24)=0:
+(24+13)(t−24)=0(24 + 13)(t - 24) = 0(24+13)(t−24)=0
+37⋅(t−24)=037 \cdot (t - 24) = 037⋅(t−24)=0
+t=24(since 37≠0)t = 24 \quad (\text{since } 37 \neq 0)t=24(since 37=0)
+Now evaluate g(0)g(0)
+g(0) with t=24t = 24
+t=24:
+g(0)=(0+13)(24−0)=13×24=312g(0) = (0 + 13)(24 - 0) = 13 \times 24 = \mathbf{312}g(0)=(0+13)(24−0)=13×24=312
+
+Question 11 — Answer: D (23/sin Q)
+Core Mathematical Concept: Trigonometry / SOH-CAH-TOA in right triangles (Geometry)
+Step-by-Step Proof:
+Choice D is correct. Right angle is at RR
+R.
+In right triangle QRSQRS
+QRS:
+
+Hypotenuse = QSQS
+QS (opposite the right angle)
+Side RS=23RS = 23
+RS=23 is opposite angle QQ
+Q
+Side QRQR
+QR is adjacent to angle QQ
+Q
+
+Using sine:
+sin⁡Q=oppositehypotenuse=RSQS=23QS\sin Q = \frac{\text{opposite}}{\text{hypotenuse}} = \frac{RS}{QS} = \frac{23}{QS}sinQ=hypotenuseopposite​=QSRS​=QS23​
+QS=23sin⁡QQS = \frac{23}{\sin Q}QS=sinQ23​
+Why the Incorrect Answers are Wrong:
+
+A (23cos⁡Q23\cos Q
+23cosQ): This would give QRQR
+QR (adjacent side), not QSQS
+QS.
+B (23sin⁡Q23\sin Q
+23sinQ): This gives RSRS
+RS itself — circular.
+C (23/cos⁡Q23/\cos Q
+23/cosQ): This equals 23/cos⁡Q23/\cos Q
+23/cosQ, which would apply if 23 were the adjacent side. Since 23 = RSRS
+RS is the opposite side, cosine doesn't apply here.
+
+
+Question 12 — Answer: A (−8)
+Core Mathematical Concept: Exponential functions / Graph interpretation (Advanced Math)
+Step-by-Step Proof:
+Choice A is correct.
+y=5x+ky = 5^x + ky=5x+k
+At x=0x = 0
+x=0: y=50+k=1+ky = 5^0 + k = 1 + k
+y=50+k=1+k.
+From the graph, the y-intercept is at y=−7y = -7
+y=−7:
+1+k=−71 + k = -71+k=−7
+k=−8k = \mathbf{-8}k=−8
+Alternative / Desmos Method:Type y=5x+ky = 5^x + k
+y=5x+k and adjust kk
+k until the curve matches the graph's y-intercept of −7-7
+−7. This gives k=−8k = -8
+k=−8.
+Why the Incorrect Answers are Wrong:
+
+B (−7): This reads the y-intercept as kk
+k directly, forgetting that y=1+ky = 1 + k
+y=1+k at x=0x = 0
+x=0.
+C (7): Applies the wrong sign.
+D (8): 1+8=91 + 8 = 9
+1+8=9, which would place the y-intercept at 9, far above the x-axis.
+
+
+Question 13 — Answer: C (p(w) = 1,620 − 180w)
+Core Mathematical Concept: Linear modeling / Piecewise functions (Heart of Algebra)
+Step-by-Step Proof:
+Choice C is correct.
+First 2 weeks: Population grows at 120 bees/week.
+After 2 weeks: 1800+120(2)=20401800 + 120(2) = 2040
+1800+120(2)=2040 bees.
+From week 3 onward: Population grows at 180 bees/week.
+After week w>2w > 2
+w>2, population =2040+180(w−2)=2040+180w−360=1680+180w= 2040 + 180(w - 2) = 2040 + 180w - 360 = 1680 + 180w
+=2040+180(w−2)=2040+180w−360=1680+180w.
+Bees still needed =3300−(1680+180w)=1620−180w= 3300 - (1680 + 180w) = \mathbf{1620 - 180w}
+=3300−(1680+180w)=1620−180w.
+Why the Incorrect Answers are Wrong:
+
+A (3300−180w3300 - 180w
+3300−180w): Ignores the 2-week head start at 120/week — subtracts too little from 3,300.
+B (3180+180w3180 + 180w
+3180+180w): An increasing function — impossible since the gap should shrink as bees are added.
+D (−120+180w-120 + 180w
+−120+180w): Results from miscalculating the post-week-2 starting point.
+
+
+Question 14 — Answer: D (81)
+Core Mathematical Concept: Exponential decay / Percentage decrease (Advanced Math)
+Step-by-Step Proof:
+Choice D is correct.
+f(x)=55(0.19)xf(x) = 55(0.19)^xf(x)=55(0.19)x
+Compute the ratio of consecutive integer values:
+f(n)f(n−1)=55(0.19)n55(0.19)n−1=0.19\frac{f(n)}{f(n-1)} = \frac{55(0.19)^n}{55(0.19)^{n-1}} = 0.19f(n−1)f(n)​=55(0.19)n−155(0.19)n​=0.19
+So f(n)=0.19×f(n−1)f(n) = 0.19 \times f(n-1)
+f(n)=0.19×f(n−1).
+The decrease from f(n−1)f(n-1)
+f(n−1) to f(n)f(n)
+f(n):
+f(n−1)−f(n)=f(n−1)−0.19⋅f(n−1)=0.81⋅f(n−1)f(n-1) - f(n) = f(n-1) - 0.19 \cdot f(n-1) = 0.81 \cdot f(n-1)f(n−1)−f(n)=f(n−1)−0.19⋅f(n−1)=0.81⋅f(n−1)
+f(n)f(n)
+f(n) is 81%81\%
+81% less than f(n−1)f(n-1)
+f(n−1). Therefore p=81p = \mathbf{81}
+p=81.
+Why the Incorrect Answers are Wrong:
+
+A (19): This is the base (0.19 → 19%), which represents how much remains, not the percentage decrease.
+B (45): No mathematical basis.
+C (55): This is the initial coefficient, not a percentage.
+
+
+Question 15 — Answer: 2
+Core Mathematical Concept: Polynomial multiplication / Factoring (Advanced Math)
+Step-by-Step Proof:Answer is 2\mathbf{2}
+2.
+r(x)⋅s(x)=13(x4−16)r(x) \cdot s(x) = 13(x^4 - 16)r(x)⋅s(x)=13(x4−16)
+13(x−2)⋅s(x)=13(x4−16)13(x - 2) \cdot s(x) = 13(x^4 - 16)13(x−2)⋅s(x)=13(x4−16)
+(x−2)⋅s(x)=x4−16(x - 2) \cdot s(x) = x^4 - 16(x−2)⋅s(x)=x4−16
+Factor the right side:
+x4−16=(x2−4)(x2+4)=(x−2)(x+2)(x2+4)x^4 - 16 = (x^2 - 4)(x^2 + 4) = (x - 2)(x + 2)(x^2 + 4)x4−16=(x2−4)(x2+4)=(x−2)(x+2)(x2+4)
+Therefore:
+s(x)=(x+2)(x2+4)=x3+2x2+4x+8s(x) = (x + 2)(x^2 + 4) = x^3 + 2x^2 + 4x + 8s(x)=(x+2)(x2+4)=x3+2x2+4x+8
+Compare with s(x)=x3+nx2+2nx+8s(x) = x^3 + nx^2 + 2nx + 8
+s(x)=x3+nx2+2nx+8:
+n=2and2n=4⇒n=2 ✓n = 2 \quad \text{and} \quad 2n = 4 \Rightarrow n = 2 \text{ ✓}n=2and2n=4⇒n=2 ✓
+
+Question 16 — Answer: C (1 < x < 21)
+Core Mathematical Concept: Triangle Inequality Theorem (Geometry)
+Step-by-Step Proof:
+Choice C is correct. Apply the triangle inequality to all three pairs:
+Condition 1: 10+11>x⇒x<2110 + 11 > x \Rightarrow x < 21
+10+11>x⇒x<21
+Condition 2: x+10>11⇒x>1x + 10 > 11 \Rightarrow x > 1
+x+10>11⇒x>1
+Condition 3: x+11>10⇒x>−1x + 11 > 10 \Rightarrow x > -1
+x+11>10⇒x>−1 (automatically satisfied for any positive length)
+Combined: 1<x<21\mathbf{1 < x < 21}
+1<x<21.
+Why the Incorrect Answers are Wrong:
+
+A (x<21x < 21
+x<21): Incomplete — doesn't capture the lower bound from Condition 2.
+B (x>21x > 21
+x>21): Reverses Condition 1 — if x>21x > 21
+x>21, the triangle would be impossible.
+**D (x<1x < 1
+x<1 or x>21x > 21
+x>21):** These are the values where a triangle is *impossible*, not possible.
+
+
+Question 17 — Answer: 198.9
+Core Mathematical Concept: Unit conversion / Dimensional analysis (Problem Solving & Data Analysis)
+Step-by-Step Proof:Answer is 198.9\mathbf{198.9}
+198.9.
+Converting square nautical miles to square kilometers requires squaring the conversion factor:
+k=58.00×(1.852)2=58.00×3.430104=198.9 km2k = 58.00 \times (1.852)^2 = 58.00 \times 3.430104 = 198.9 \text{ km}^2k=58.00×(1.852)2=58.00×3.430104=198.9 km2
+Rounded to the nearest tenth: k=198.9k = \mathbf{198.9}
+k=198.9.
+
+Question 18 — Answer: 72/7
+Core Mathematical Concept: Linear equations / Three collinear points (Heart of Algebra)
+Step-by-Step Proof:Answer is 727\dfrac{72}{7}
+772​.
+Find the slope using (9,1)(9, 1)
+(9,1) and (0,8)(0, 8)
+(0,8):
+m=1−89−0=−79m = \frac{1 - 8}{9 - 0} = -\frac{7}{9}m=9−01−8​=−97​
+y-intercept from (0,8)(0, 8)
+(0,8): b=8b = 8
+b=8.
+Equation of the line: y=−79x+8y = -\dfrac{7}{9}x + 8
+y=−97​x+8.
+Substitute (c,0)(c, 0)
+(c,0):
+0=−79c+80 = -\frac{7}{9}c + 80=−97​c+8
+7c9=8\frac{7c}{9} = 897c​=8
+c=727c = \frac{72}{7}c=772​
+
+Question 19 — Answer: D (2/63)
+Core Mathematical Concept: Equation interpretation / Fractions (Problem Solving & Data Analysis)
+Step-by-Step Proof:
+Choice D is correct.
+The total resistance equation is xa+yb=4163xa + yb = \dfrac{41}{63}
+xa+yb=6341​, where aa
+a = resistance per type-A resistor, bb
+b = resistance per type-B resistor.
+Rewrite the given equation: x7+y9=4163=x⋅17+y⋅19\dfrac{x}{7} + \dfrac{y}{9} = \dfrac{41}{63} = x \cdot \dfrac{1}{7} + y \cdot \dfrac{1}{9}
+7x​+9y​=6341​=x⋅71​+y⋅91​
+Matching: a=17a = \dfrac{1}{7}
+a=71​ and b=19b = \dfrac{1}{9}
+b=91​.
+∣a−b∣=∣17−19∣=∣963−763∣=263|a - b| = \left|\frac{1}{7} - \frac{1}{9}\right| = \left|\frac{9}{63} - \frac{7}{63}\right| = \mathbf{\frac{2}{63}}∣a−b∣=​71​−91​​=​639​−637​​=632​
+Why the Incorrect Answers are Wrong:
+
+A (41): The numerator of the total resistance — not a difference.
+B (2): Results from computing 9−7=29 - 7 = 2
+9−7=2 without putting it over 63.
+C (41/6341/63
+41/63): This is the total resistance itself, not the difference between aa
+a and bb
+b.
+
+
+Question 20 — Answer: D (440)
+Core Mathematical Concept: Similar figures / Proportional scaling (Geometry)
+Step-by-Step Proof:
+Choice D is correct.
+For Rectangle A, let sides be LL
+L and WW
+W:
+
+LW=660and2(L+W)=220⇒L+W=110LW = 660 \quad \text{and} \quad 2(L+W) = 220 \Rightarrow L + W = 110LW=660and2(L+W)=220⇒L+W=110
+Scale factor between similar rectangles:
+
+k2=AreaBAreaA=2640660=4⇒k=2k^2 = \frac{\text{Area}_B}{\text{Area}_A} = \frac{2640}{660} = 4 \Rightarrow k = 2k2=AreaA​AreaB​​=6602640​=4⇒k=2
+Perimeters scale by kk
+k:
+
+n=220×2=440n = 220 \times 2 = \mathbf{440}n=220×2=440
+Alternative / Desmos Method:Solve L+W=110L + W = 110
+L+W=110 and LW=660LW = 660
+LW=660: L=55±3025−660=55±2365L = 55 \pm \sqrt{3025-660} = 55 \pm \sqrt{2365}
+L=55±3025−660​=55±2365​. Rectangle B sides are twice as long, so perimeter = 4(L+W)=4×110=4404(L+W) = 4 \times 110 = 440
+4(L+W)=4×110=440.
+Why the Incorrect Answers are Wrong:
+
+A (2,200): Multiplies perimeter by k2=4k^2 = 4
+k2=4 instead of k=2k = 2
+k=2.
+B (1,760): No clear mathematical derivation.
+C (880): Multiplies by k2/2k^2/2
+k2/2 — a mixed error.
+
+
+Question 21 — Answer: C (0.8423)
+Core Mathematical Concept: Percent increase / Ratio of earnings (Problem Solving & Data Analysis)
+Step-by-Step Proof:
+Choice C is correct. Let 2004 earnings =1= 1
+=1.
+2005 earnings=1×1.12=1.12\text{2005 earnings} = 1 \times 1.12 = 1.122005 earnings=1×1.12=1.12
+2006 earnings=1.12×1.06=1.1872\text{2006 earnings} = 1.12 \times 1.06 = 1.18722006 earnings=1.12×1.06=1.1872
+The problem asks for yy
+y where 2004 earnings =y×= y \times
+=y× 2006 earnings:
+y=11.1872≈0.8423y = \frac{1}{1.1872} \approx \mathbf{0.8423}y=1.18721​≈0.8423
+Why the Incorrect Answers are Wrong:
+
+A (0.5000): This would mean 2006 earnings are double 2004's — far too large an increase.
+B (0.7200): Results from using the wrong combined factor.
+D (1.1872): This is the 2006/2004 ratio — the inverse of what was asked.
+
+
+Question 22 — Answer: D (y + 6x − 54)
+Core Mathematical Concept: Polynomial factoring / Difference of squares (Advanced Math)
+Step-by-Step Proof:
+Choice D is correct.
+y2(x−9)−36(x−9)3y^2(x-9) - 36(x-9)^3y2(x−9)−36(x−9)3
+Factor out (x−9)(x-9)
+(x−9):
+=(x−9)[y2−36(x−9)2]= (x-9)\left[y^2 - 36(x-9)^2\right]=(x−9)[y2−36(x−9)2]
+Apply the difference of squares A2−B2=(A−B)(A+B)A^2 - B^2 = (A-B)(A+B)
+A2−B2=(A−B)(A+B) with A=yA = y
+A=y and B=6(x−9)B = 6(x-9)
+B=6(x−9):
+=(x−9)[y−6(x−9)][y+6(x−9)]= (x-9)\left[y - 6(x-9)\right]\left[y + 6(x-9)\right]=(x−9)[y−6(x−9)][y+6(x−9)]
+=(x−9)(y−6x+54)(y+6x−54)= (x-9)(y - 6x + 54)(y + 6x - 54)=(x−9)(y−6x+54)(y+6x−54)
+The factors are: (x−9)(x-9)
+(x−9), (y−6x+54)(y - 6x + 54)
+(y−6x+54), and (y+6x−54)\mathbf{(y + 6x - 54)}
+(y+6x−54).
+Choice D: y+6x−54y + 6x - 54
+y+6x−54 is a factor. ✓
+Why the Incorrect Answers are Wrong:
+
+A (y(x−9)y(x-9)
+y(x−9)): Not a factor. You can verify by polynomial division — it doesn't divide evenly.
+B ((x−9)(x−6)(x-9)(x-6)
+(x−9)(x−6)): There's no (x−6)(x-6)
+(x−6) term in the factored form.
+C (y+x−9y + x - 9
+y+x−9): Close to a real factor but missing the coefficient of 6 on xx
+x.
+End of SAT Math.

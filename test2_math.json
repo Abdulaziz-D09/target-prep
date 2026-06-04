@@ -1,0 +1,463 @@
+[
+  {
+    "questions": [
+      {
+        "id": "pt2-math-m1-q1",
+        "num": 1,
+        "type": "Math (SPR)",
+        "question": "y=9zxr+ 19\n\nOne of the two equations in a system of linear equations is given. The system has infinitely\nmany solutions. If the second equation in this system is y = ma + b, where m and b are\nconstants, what is the value of b?",
+        "options": [],
+        "answer": "19",
+        "difficulty": "Medium"
+      },
+      {
+        "id": "pt2-math-m1-q2",
+        "num": 2,
+        "type": "Math",
+        "question": "lf 5a + 2 = 32, what is the value of 50x\u201d + 20?",
+        "options": [
+          "6",
+          "60",
+          "70",
+          "320"
+        ],
+        "answer": 3,
+        "difficulty": "Medium"
+      },
+      {
+        "id": "pt2-math-m1-q3",
+        "num": 3,
+        "type": "Math",
+        "question": "In each of the following data sets of 5 values, p is a constant. Which of these data sets has\nthe largest standard deviation?",
+        "options": [
+          "p\u20144,p,p,p,p+4",
+          "p\u20141,p-\u20141,p,p+1,p+1",
+          "PPP. Pi P",
+          "p\u20145,p\u20144,p,pt+4,p+5\n\nA jar has 430 marbles, and 20% of these marbles are blue. How many marbles in the jar are\nblue?\n\nA. 86\nB. 172\nC. 215\n\nD. 410\n\n\nr+g< 56\n\nFor which of the following tables are all the values of 7 and their corresponding values of g\nsolutions to the given inequality?\n\nA.\n\n[ele\n=]2]4/>|\n\n~[=] [>]\nBBS\n\nlelel\nelele|>\n\n=] >[e]>]\n\n\nAnnual sales\n(in millions of dollars)\n\nSquare footage of store\n(in thousands of square feet)\n\nThe scatterplot shows the relationship between the square footage of 12 clothing stores and\ntheir annual sales, in millions of dollars. According to the trend shown by the data, which of\nthe following is the best prediction for the annual sales, in millions of dollars, of a clothing\nstore that is 4 thousand square feet?\n\nA. 4.1\nB. 5.4\nC. 7.5\n\nD. 10.2\n\nx+y= 165\netyty=185\n\nThe solution to the given system of equations is (a, y). What is the value of y?"
+        ],
+        "answer": 3,
+        "difficulty": "Medium"
+      },
+      {
+        "id": "pt2-math-m1-q4",
+        "num": 4,
+        "type": "Math",
+        "question": "The function f is defined by f(z) = 62 \u2014 + What is the y-intercept of the graph of\ny = f(z) in the xy-plane?",
+        "options": [],
+        "answer": 0,
+        "difficulty": "Medium"
+      },
+      {
+        "id": "pt2-math-m1-q5",
+        "num": 5,
+        "type": "Math (SPR)",
+        "question": "A total of 50 people attended a conference and were offered a choice of 4 types of entrees.\nThe table shows the number of people who chose each type of entree.\n\nType of entree | Number of people\nchicken \u00ab(| \u2014\u00ab20\n\nith\n\n| Total | 50\n\nIf one of these people is selected at random, what is the probability of selecting a person\nwho chose a vegetarian entree? (Express your answer as a decimal or fraction, not as a\npercent.)",
+        "options": [],
+        "answer": "0.18",
+        "difficulty": "Medium"
+      },
+      {
+        "id": "pt2-math-m1-q6",
+        "num": 6,
+        "type": "Math",
+        "question": "Note: Figure not drawn to scale.\n\nIn the figure shown, lines @ and k are parallel and line \u00a2 intersects both lines. If 2 > 116,\nwhich of the following must be true?",
+        "options": [
+          "y < 64",
+          "y > 64",
+          "x+y< 180",
+          "z+y> 180"
+        ],
+        "answer": 0,
+        "difficulty": "Medium"
+      },
+      {
+        "id": "pt2-math-m1-q7",
+        "num": 7,
+        "type": "Math",
+        "question": "In the xy-plane, the graph of y = 2z intersects the graph of y = x\u201d \u2014 35 at two points.\nWhat is the sum of the x-coordinates of the two points of intersection?",
+        "options": [
+          "\u201435",
+          "\u20145",
+          "2",
+          "7"
+        ],
+        "answer": 2,
+        "difficulty": "Medium"
+      },
+      {
+        "id": "pt2-math-m1-q8",
+        "num": 8,
+        "type": "Math (SPR)",
+        "question": "The function f is defined by f(x) = 3(4 \u2014 x)\u201d + 3B. What is the value of f(4)?",
+        "options": [],
+        "answer": "13/4",
+        "difficulty": "Medium"
+      },
+      {
+        "id": "pt2-math-m1-q9",
+        "num": 9,
+        "type": "Math",
+        "question": "tL\n\n[}_1_+_1__1___1__}_ 1} 1} 1} 1\n32 34 36 38 40 42 44 46 48 50\nShoal bass length (cm)\n\nA marine biologist is studying a habitat that contains shoal bass, a species of freshwater fish.\nThe box plot shown summarizes the lengths, in centimeters (cm), of a sample of 70 shoal\nbass from this habitat. What is the range, in cm, of the lengths of the shoal bass in the\nsample?",
+        "options": [
+          "10",
+          "15",
+          "29",
+          "41"
+        ],
+        "answer": 1,
+        "difficulty": "Medium"
+      },
+      {
+        "id": "pt2-math-m1-q10",
+        "num": 10,
+        "type": "Math",
+        "question": "A LI C\n10 cm\n\nNote: Figure not drawn to scale.\n\nThe area of triangle ABC is 150 square centimeters. What is the height h, in centimeters, of\nthis triangle?",
+        "options": [
+          "10",
+          "15",
+          "30",
+          "60"
+        ],
+        "answer": 2,
+        "difficulty": "Medium"
+      },
+      {
+        "id": "pt2-math-m1-q11",
+        "num": 11,
+        "type": "Math",
+        "question": "x? \u2014 2a = 29\nWhat is one of the solutions to the given equation?",
+        "options": [
+          "/29",
+          "1+ /30",
+          "30",
+          "29+ /2"
+        ],
+        "answer": 1,
+        "difficulty": "Medium"
+      },
+      {
+        "id": "pt2-math-m1-q12",
+        "num": 12,
+        "type": "Math (SPR)",
+        "question": "Circle A in the xy-plane has the equation (a + 8)\u201d + (y \u2014 8)\u201d = 25. Circle B has the same\ncenter as circle A. The radius of circle B is two times the radius of circle A. The equation\ndefining circle B in the xy-plane is (a + 8)\u201d + (y \u2014 8)\u201d = k, where k is a constant. What is\nthe value of k?",
+        "options": [],
+        "answer": "100",
+        "difficulty": "Medium"
+      },
+      {
+        "id": "pt2-math-m1-q13",
+        "num": 13,
+        "type": "Math",
+        "question": "The graph of y = f(a) is shown in the xy-plane. For what value of x does f(x) = 0?",
+        "options": [
+          "\u20144",
+          "0",
+          "1",
+          "4"
+        ],
+        "answer": 3,
+        "difficulty": "Medium"
+      },
+      {
+        "id": "pt2-math-m1-q14",
+        "num": 14,
+        "type": "Math",
+        "question": "32\u201430|+3\nBe 30 \u20145\n\nWhat is the sum of the solutions to the given equation?",
+        "options": [
+          "1",
+          "19",
+          "20",
+          "30"
+        ],
+        "answer": 2,
+        "difficulty": "Medium"
+      },
+      {
+        "id": "pt2-math-m1-q15",
+        "num": 15,
+        "type": "Math",
+        "question": "Line h is defined by 5a + zy \u2014 40 = 0. Line 7 is perpendicular to line h in the xy-plane.\nWhat is the slope of line 7?",
+        "options": [
+          "\u2014\n\nrolor",
+          "\u2014\n\nofr",
+          "dolor",
+          "op"
+        ],
+        "answer": 3,
+        "difficulty": "Medium"
+      },
+      {
+        "id": "pt2-math-m1-q16",
+        "num": 16,
+        "type": "Math",
+        "question": "The width of a rectangle is 16 inches less than 2 times its length, in inches. The area of the\nrectangle is 130 square inches. What is the width, in inches, of the rectangle?",
+        "options": [
+          "5",
+          "10",
+          "13",
+          "18"
+        ],
+        "answer": 1,
+        "difficulty": "Medium"
+      },
+      {
+        "id": "pt2-math-m1-q17",
+        "num": 17,
+        "type": "Math",
+        "question": "A machine makes 8-inch, 9-inch, and 3-inch parts. During a certain day, the number of 8-\ninch parts that the machine makes is 5 times the number n of 9-inch parts, and the number\nof 3-inch parts is 4. During this day, the machine makes 100 parts total. Which equation\nrepresents this situation?",
+        "options": [
+          "8(5n) +9n+ 3(4) = 100",
+          "82 + 9n + 3n = 100",
+          "5n+4= 100",
+          "6n + 4 = 100"
+        ],
+        "answer": 3,
+        "difficulty": "Medium"
+      },
+      {
+        "id": "pt2-math-m1-q18",
+        "num": 18,
+        "type": "Math",
+        "question": "An exponential model for the number of squirrels in a certain area estimates that there were\n200 squirrels in the area in the year 2003, and that at the end of each 4-year period for the\nnext 20 years, the number of squirrels in the area was 120% more than the number at the\nend of the previous 4-year period. Which of the following equations represents this model,\nwhere N is the estimated number of squirrels in this area t years after 2003, and\n\n0<t< 20?\n\nA. N = 200(2.20)*\nAt\n\nB. N = 200(1.20)\n\nC. N = 200(1.20)#\n\nb. N = 200(2.20)#",
+        "options": [],
+        "answer": 3,
+        "difficulty": "Medium"
+      }
+    ]
+  },
+  {
+    "questions": [
+      {
+        "id": "pt2-math-m2-q1",
+        "num": 1,
+        "type": "Math (SPR)",
+        "question": "A line passes through the points (4, 7) and (18, 28) in the xy-plane. What is the slope of the\nline?",
+        "options": [],
+        "answer": "3/2",
+        "difficulty": "Hard"
+      },
+      {
+        "id": "pt2-math-m2-q2",
+        "num": 2,
+        "type": "Math",
+        "question": "The length of a rectangle's diagonal is 1/106, and the length of one of the rectangle's sides\nis 9. What is the perimeter of the rectangle?",
+        "options": [
+          "106",
+          "45",
+          "28",
+          "14\n\n\n(5a + 6)(8a \u2014 5) =0\nWhich of the following is a solution to the given equation?\n\n8\nA. \u2014=\nis)\n|\noa\n\nc. \u20143\n\n5\nD. se"
+        ],
+        "answer": 2,
+        "difficulty": "Hard"
+      },
+      {
+        "id": "pt2-math-m2-q3",
+        "num": 3,
+        "type": "Math",
+        "question": "The graph of 92 + y = 16 in the xy-plane is a line. What is the slope of the line?\n\nAnswer: -9\n\nx? + y* = 3,185\ny\u2014 8x =0\n\nA solution to the given system of equations is (a, y), where x < 0. What is the value of y?",
+        "options": [
+          "\u2014392",
+          "\u201456",
+          "\u20148",
+          "\u20147\n\nAnswer: B"
+        ],
+        "answer": "-9",
+        "difficulty": "Hard"
+      },
+      {
+        "id": "pt2-math-m2-q4",
+        "num": 4,
+        "type": "Math",
+        "question": "The function f is defined by f(z) = 244, and f(a) = \u201415, where ais a constant. What is\n\nthe value of a?\n\nA. \u201486\nB. \u201464\n\n64\nc, \u2014\n\n4\nD. \u2014=",
+        "options": [],
+        "answer": 0,
+        "difficulty": "Hard"
+      },
+      {
+        "id": "pt2-math-m2-q5",
+        "num": 5,
+        "type": "Math",
+        "question": "The equation y = \u20144.9(a \u2014 8.9) + 12,400 gives the estimated height above ground, y, in\nmeters, of a plane, where \u00abx is the number of seconds since it started a parabolic maneuver.\nIf this equation is graphed in the xy-plane, which of the following is the best interpretation of\nthe vertex of the graph?",
+        "options": [
+          "The plane reached an estimated maximum height of 12,400 meters 4.9 seconds after it\nstarted the parabolic maneuver.",
+          "The plane reached an estimated maximum height of 12,400 meters 8.9 seconds after it\nstarted the parabolic maneuver.",
+          "The plane reached an estimated maximum height of 4.9 meters 12,400 seconds after it\nstarted the parabolic maneuver.",
+          "The plane reached an estimated maximum height of 8.9 meters 12,400 seconds after it\nstarted the parabolic maneuver.\n\n\na(4 \u2014 x) = 28 \u2014 7x\n\nIn the given equation, a is a constant. The equation has exactly one solution. Which of the\nfollowing CANNOT be the value of a?\n\nA.1\nB.4\nC.7\n\nD. 28"
+        ],
+        "answer": 1,
+        "difficulty": "Hard"
+      },
+      {
+        "id": "pt2-math-m2-q6",
+        "num": 6,
+        "type": "Math (SPR)",
+        "question": "The function g is defined by g(x) = (a + 13)(t \u2014 x), where t is a constant. In the xy-plane,\nthe graph of y = g(x) passes through the point (24, 0). What is the value of g(0)?",
+        "options": [],
+        "answer": "312",
+        "difficulty": "Hard"
+      },
+      {
+        "id": "pt2-math-m2-q7",
+        "num": 7,
+        "type": "Math",
+        "question": "s 23\nNote: Figure not drawn to scale.\nIn triangle QRS shown, QR < RS. Which expression represents the length of QS?",
+        "options": [
+          "23 cosQ",
+          "23 sinQ",
+          ">\n\n23",
+          "sin Q"
+        ],
+        "answer": 3,
+        "difficulty": "Hard"
+      },
+      {
+        "id": "pt2-math-m2-q8",
+        "num": 8,
+        "type": "Math",
+        "question": "10\n\nNA+ OA 0\n\nThe graph of the equation y = 5\u201d + k is shown, where k is a constant. What is the value of\n\nk?",
+        "options": [
+          "\u20148",
+          "\u20147",
+          "7",
+          "8"
+        ],
+        "answer": 0,
+        "difficulty": "Hard"
+      },
+      {
+        "id": "pt2-math-m2-q9",
+        "num": 9,
+        "type": "Math",
+        "question": "A beekeeper's initial observation of the population of a certain bee colony was 1,800 bees.\nThe beekeeper set a goal to increase the population to 3,300 bees. The beekeeper uses a\nmodel that predicts the population of this bee colony begins at 1,800 and increases by 120\nbees per week in the first two weeks after the initial observation, and then increases by 180\nbees per week until the beekeeper's goal is reached. According to this model, at the end of\nweek w after the initial observation, where w > 2, which of the following functions gives the\npredicted number of bees still needed to reach the beekeeper\u2019s goal?",
+        "options": [
+          "p(w) = 3,300 \u2014 180w",
+          "p(w) = 3,180 + 180w",
+          "p(w) = 1,620 \u2014 180w",
+          "p(w) = \u2014120 + 180w"
+        ],
+        "answer": 2,
+        "difficulty": "Hard"
+      },
+      {
+        "id": "pt2-math-m2-q10",
+        "num": 10,
+        "type": "Math",
+        "question": "The function f is defined by f(a) = 55(0.19)\u201d. For any positive integer n, the value of\nf() is p% less than the value of f(m \u2014 1). What is the value of p?",
+        "options": [
+          "19",
+          "45",
+          "55",
+          "81"
+        ],
+        "answer": 3,
+        "difficulty": "Hard"
+      },
+      {
+        "id": "pt2-math-m2-q11",
+        "num": 11,
+        "type": "Math (SPR)",
+        "question": "r(x) = 13(a \u2014 2)\ns(x) =7\u00b0+ nx? +2nzxr+8\n\nFor the given functions r and s, n is a constant. If r(z) . s(x) = 13(x* \u2014 16), what is the\nvalue of n?",
+        "options": [],
+        "answer": "2",
+        "difficulty": "Hard"
+      },
+      {
+        "id": "pt2-math-m2-q12",
+        "num": 12,
+        "type": "Math",
+        "question": "The triangle inequality theorem states that the sum of any two sides of a triangle must be\ngreater than the length of the third side. If a triangle has side lengths of 10 and 11, which\ninequality represents the possible lengths, x, of the third side of the triangle?",
+        "options": [
+          "xz < 21",
+          "xz > 21",
+          "1l<a2< 21",
+          "2<lorz> 21"
+        ],
+        "answer": 2,
+        "difficulty": "Hard"
+      },
+      {
+        "id": "pt2-math-m2-q13",
+        "num": 13,
+        "type": "Math (SPR)",
+        "question": "An area of 58.00 square nautical miles is equivalent to k square kilometers. To the nearest\ntenth, what is the value of k? (1 nautical mile = 1.852 kilometers)",
+        "options": [],
+        "answer": "198.9",
+        "difficulty": "Hard"
+      },
+      {
+        "id": "pt2-math-m2-q14",
+        "num": 14,
+        "type": "Math (SPR)",
+        "question": "A line in the xy-plane passes through the points (9, 1), (0, 8), and (c, 0). What is the value\nof c?",
+        "options": [],
+        "answer": "72/7",
+        "difficulty": "Hard"
+      },
+      {
+        "id": "pt2-math-m2-q15",
+        "num": 15,
+        "type": "Math",
+        "question": "zy y _ Al\n7 +9 = $3\n\nAn engineer connects resistors in series, where the resistors in the series have a total\nresistance of ae ohms. In this series, there are x resistors of type A, which each have a\nresistance of a ohms, and y resistors of type B, which each have a resistance of b ohms. The\ngiven equation represents this situation. According to this equation, what is the positive\ndifference between the value of a and the value of b?",
+        "options": [
+          "41",
+          "2\n41",
+          "63\n\n2",
+          "%"
+        ],
+        "answer": 3,
+        "difficulty": "Hard"
+      },
+      {
+        "id": "pt2-math-m2-q16",
+        "num": 16,
+        "type": "Math",
+        "question": "The table gives the areas and perimeters of two similar rectangles, where n is a constant.\nArea (square inches) || Perimeter (inches)\nRectangle B 2,640 n\n\nWhat is the value of n?\n\ni\ni",
+        "options": [
+          "2,200",
+          "1,760",
+          "880",
+          "440"
+        ],
+        "answer": 3,
+        "difficulty": "Hard"
+      },
+      {
+        "id": "pt2-math-m2-q17",
+        "num": 17,
+        "type": "Math",
+        "question": "In 2005, Aster earned 12% more than in 2004, and in 2006 Aster earned 6% more than in",
+        "options": [],
+        "answer": -1,
+        "difficulty": "Hard"
+      },
+      {
+        "id": "pt2-math-m2-q18",
+        "num": 18,
+        "type": "Math",
+        "question": "If Aster earned y times as much in 2004 as in 2006, which of the following is closest\nto the value of y?",
+        "options": [
+          "0.5000",
+          "0.7200",
+          "0.8423",
+          "1.1872"
+        ],
+        "answer": 2,
+        "difficulty": "Hard"
+      },
+      {
+        "id": "pt2-math-m2-q19",
+        "num": 19,
+        "type": "Math",
+        "question": "Which expression is a factor of y?(a \u2014 9) \u2014 36(a \u2014 9)\u00b0?",
+        "options": [
+          "y(z \u2014 9)",
+          "(x \u2014 9)(x \u2014 6)",
+          "yt+ax\u20149",
+          "y+ 6x \u2014 54"
+        ],
+        "answer": 3,
+        "difficulty": "Hard"
+      }
+    ]
+  }
+]

@@ -1,8 +1,8 @@
 'use client';
-import { usePathname } from 'next/navigation';
+import { usePathname, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Home, FileText, BarChart2, BookOpen, Menu, X, LayoutGrid, SunMedium, Moon, CircleUserRound, GraduationCap, ClipboardList, Map, Rocket, LogOut, Settings } from 'lucide-react';
+import { Home, FileText, BarChart2, BookOpen, Menu, X, LayoutGrid, SunMedium, Moon, CircleUserRound, GraduationCap, ClipboardList, Map, Rocket, LogOut, Settings, Plus } from 'lucide-react';
 import { useEffect, useRef, useState, useSyncExternalStore, type MouseEvent } from 'react';
 import { AnimatePresence, LayoutGroup, motion, useReducedMotion } from 'framer-motion';
 import { itemRevealVariants, siteEase } from '@/components/SiteMotion';
@@ -16,12 +16,18 @@ type NavItem = { href: string; label: string; icon: React.ComponentType<{ classN
 
 const studentNavItems: NavItem[] = [
     { href: '/dashboard', label: 'Home', icon: Home },
-    { href: '/study-plan', label: 'Study Plan', icon: Map },
+    { href: '/study-plan', label: 'Study Vault', icon: Map },
     { href: '/practice', label: 'Practice Tests', icon: FileText },
     { href: '#', label: 'SAT Go!', icon: Rocket, badge: 'Soon' },
     { href: '/question-bank', label: 'Question Bank', icon: LayoutGrid },
     { href: '/classroom', label: 'Classroom', icon: GraduationCap },
     { href: '/progress', label: 'Progress', icon: BarChart2 },
+];
+
+const studentMockNavItems: NavItem[] = [
+    { href: '/dashboard/mocks', label: 'Active Mocks', icon: FileText },
+    { href: '/dashboard/mocks/history', label: 'Mock History', icon: BookOpen },
+    { href: '/dashboard/mocks/analytics', label: 'Analytics', icon: BarChart2 },
 ];
 
 const teacherNavItems: NavItem[] = [
@@ -31,10 +37,23 @@ const teacherNavItems: NavItem[] = [
     { href: '/teacher/analytics', label: 'Analytics', icon: BarChart2 },
 ];
 
+const teacherMockNavItems: NavItem[] = [
+    { href: '/teacher/mocks', label: 'Active Mocks', icon: FileText },
+    { href: '/teacher/mocks/create', label: 'Create Mock', icon: Plus },
+    { href: '/teacher/mocks/history', label: 'Completed Mocks', icon: BookOpen },
+    { href: '/teacher/mocks/analytics', label: 'Analytics', icon: BarChart2 },
+];
+
 export default function Sidebar() {
     const pathname = usePathname();
+    const searchParams = useSearchParams();
     const isTeacherMode = pathname.startsWith('/teacher');
-    const currentNavItems = isTeacherMode ? teacherNavItems : studentNavItems;
+    const isMockMode = pathname.includes('/mocks') || (pathname === '/progress/review' && searchParams.get('mockId') !== null);
+    
+    let currentNavItems = isTeacherMode ? teacherNavItems : studentNavItems;
+    if (isMockMode) {
+        currentNavItems = isTeacherMode ? teacherMockNavItems : studentMockNavItems;
+    }
     
     const [mobileOpen, setMobileOpen] = useState(false);
     const [isTemporarilyHidden, setIsTemporarilyHidden] = useState(false);
@@ -58,13 +77,18 @@ export default function Sidebar() {
         supabase.auth.getUser().then(({ data }) => {
             setUser(data?.user);
             if (data?.user) {
+                const metadata = data.user.user_metadata;
                 setProfileForm({
-                    first_name: data.user.user_metadata?.first_name || '',
-                    last_name: data.user.user_metadata?.last_name || data.user.user_metadata?.surname || '',
-                    birthdate: data.user.user_metadata?.birthdate || '',
-                    school: data.user.user_metadata?.school || '',
-                    graduation_date: data.user.user_metadata?.graduation_date || ''
+                    first_name: metadata?.first_name || '',
+                    last_name: metadata?.last_name || metadata?.surname || '',
+                    birthdate: metadata?.birthdate || '',
+                    school: metadata?.school || '',
+                    graduation_date: metadata?.graduation_date || ''
                 });
+                
+                if (metadata?.site_tone && metadata.site_tone !== readSiteTone()) {
+                    applySiteTone(metadata.site_tone);
+                }
             }
         });
     }, []);
@@ -111,7 +135,10 @@ export default function Sidebar() {
     }, [siteTone]);
 
     const isActive = (href: string) => {
-        if (href === '/dashboard' || href === '/teacher') return pathname === href;
+        if (href === '/dashboard/mocks/history') {
+            return pathname.startsWith(href) || (pathname === '/progress/review' && searchParams.get('mockId') !== null);
+        }
+        if (href === '/dashboard' || href === '/teacher' || href === '/dashboard/mocks' || href === '/teacher/mocks') return pathname === href;
         return pathname.startsWith(href);
     };
 
@@ -170,6 +197,37 @@ export default function Sidebar() {
                     </div>
                 </motion.div>
             </motion.div>
+
+            <div className="px-5 pb-4">
+                <div className={`relative flex w-full items-center p-1 overflow-hidden rounded-xl border ${
+                    isLightTone 
+                        ? 'border-slate-200 bg-slate-100/50' 
+                        : 'border-white/10 bg-white/5'
+                }`}>
+                    <Link
+                        href={isTeacherMode ? '/teacher' : '/dashboard'}
+                        className={`relative flex-1 flex items-center justify-center gap-2 rounded-[10px] py-1.5 text-[13px] font-bold transition-colors z-10 ${
+                            !isMockMode ? (isLightTone ? 'text-slate-900' : 'text-white') : (isLightTone ? 'text-slate-500 hover:text-slate-700' : 'text-slate-400 hover:text-slate-200')
+                        }`}
+                    >
+                        {!isMockMode && (
+                            <motion.div layoutId="program-active" className={`absolute inset-0 rounded-[10px] shadow-sm border ${isLightTone ? 'bg-white border-slate-200/60' : 'bg-blue-600 border-blue-500'}`} transition={{ type: 'spring', stiffness: 350, damping: 25 }} />
+                        )}
+                        <span className="relative z-10 tracking-tight">SAT</span>
+                    </Link>
+                    <Link
+                        href={isTeacherMode ? '/teacher/mocks' : '/dashboard/mocks'}
+                        className={`relative flex-1 flex items-center justify-center gap-2 rounded-[10px] py-1.5 text-[13px] font-bold transition-colors z-10 ${
+                            isMockMode ? (isLightTone ? 'text-slate-900' : 'text-white') : (isLightTone ? 'text-slate-500 hover:text-slate-700' : 'text-slate-400 hover:text-slate-200')
+                        }`}
+                    >
+                        {isMockMode && (
+                            <motion.div layoutId="program-active" className={`absolute inset-0 rounded-[10px] shadow-sm border ${isLightTone ? 'bg-white border-slate-200/60' : 'bg-blue-600 border-blue-500'}`} transition={{ type: 'spring', stiffness: 350, damping: 25 }} />
+                        )}
+                        <span className="relative z-10 tracking-tight">Mock</span>
+                    </Link>
+                </div>
+            </div>
 
             <LayoutGroup id="sidebar-nav">
             <nav className="relative flex-1 space-y-2 px-4 overflow-y-auto min-h-0">
@@ -253,7 +311,10 @@ export default function Sidebar() {
                 }`}>
                     <button
                         type="button"
-                        onClick={() => applySiteTone('light')}
+                        onClick={() => {
+                            applySiteTone('light');
+                            if (user) createClient().auth.updateUser({ data: { site_tone: 'light' } });
+                        }}
                         className={`relative flex-1 flex items-center justify-center gap-2 rounded-xl py-2 text-sm font-semibold transition-colors z-10 ${
                             isLightTone ? 'text-slate-900' : 'text-slate-400 hover:text-slate-200'
                         }`}
@@ -266,7 +327,10 @@ export default function Sidebar() {
                     </button>
                     <button
                         type="button"
-                        onClick={() => applySiteTone('dark')}
+                        onClick={() => {
+                            applySiteTone('dark');
+                            if (user) createClient().auth.updateUser({ data: { site_tone: 'dark' } });
+                        }}
                         className={`relative flex-1 flex items-center justify-center gap-2 rounded-xl py-2 text-sm font-semibold transition-colors z-10 ${
                             !isLightTone ? 'text-white' : 'text-slate-500 hover:text-slate-700'
                         }`}
@@ -347,8 +411,8 @@ export default function Sidebar() {
                         <motion.aside
                             className={`fixed left-0 top-0 bottom-0 w-[280px] flex flex-col z-50 backdrop-blur-3xl ${
                                 isLightTone
-                                    ? 'bg-white/95'
-                                    : 'bg-[#090a0f]/95'
+                                    ? 'bg-[var(--site-shell-bg)]'
+                                    : 'bg-[var(--site-shell-bg)]'
                             }`}
                             initial={shouldReduceMotion ? undefined : { x: -24, opacity: 0.92 }}
                             animate={shouldReduceMotion ? undefined : { x: 0, opacity: 1 }}

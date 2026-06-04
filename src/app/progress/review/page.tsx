@@ -1,9 +1,10 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useTestStore, CompletedTest } from '@/store/testStore';
+import { useClassroomStore } from '@/store/classroomStore';
 import {
   ArrowLeft, CheckCircle2, XCircle, Minus, BookOpen, Calculator,
   Sparkles, BarChart2, Trophy
@@ -64,8 +65,10 @@ export default function ReviewPage() {
   const searchParams = useSearchParams();
   const testIdParam = searchParams.get('testId');
   const dateParam = searchParams.get('date');
+  const mockIdParam = searchParams.get('mockId');
 
   const completedTests = useTestStore((s) => s.completedTests);
+  const { mockResults, mockSessions } = useClassroomStore();
   const [legacyTest, setLegacyTest] = useState<CompletedTest | null>(null);
   const [expandedQ, setExpandedQ] = useState<string | null>(null);
   
@@ -74,6 +77,7 @@ export default function ReviewPage() {
   
   useEffect(() => {
     setMounted(true);
+    if (mockIdParam) return;
     try {
       const raw = localStorage.getItem('targetprep_progress');
       if (!raw) return;
@@ -85,15 +89,116 @@ export default function ReviewPage() {
       );
       if (match) setLegacyTest(match);
     } catch { /* empty */ }
-  }, [testIdParam, dateParam]);
+  }, [testIdParam, dateParam, mockIdParam]);
+
+  const router = useRouter();
+
+  const session = useMemo(() => {
+    if (!mockIdParam) return null;
+    return mockSessions.find(s => s.id === mockIdParam) || null;
+  }, [mockIdParam, mockSessions]);
+
+  const handleBack = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (typeof window !== 'undefined' && window.history.length > 1) {
+      router.back();
+    } else {
+      router.push(mockIdParam ? "/dashboard/mocks/history" : "/progress");
+    }
+  };
 
   const test = useMemo<CompletedTest | null>(() => {
+    if (mockIdParam) {
+      const mockRes = mockResults.find(r => r.mockId === mockIdParam);
+      if (mockRes) {
+        return {
+          testId: Number(testIdParam),
+          testTitle: session?.title || 'Mock Exam',
+          date: mockRes.completedAt,
+          englishScore: mockRes.englishScore ?? 0,
+          mathScore: mockRes.mathScore ?? 0,
+          totalScore: mockRes.score,
+          totalCorrect: mockRes.totalCorrect,
+          totalQuestions: mockRes.totalQuestions,
+          answers: mockRes.answers ?? {},
+          eliminated: {},
+        };
+      }
+    }
     const fromStore = completedTests.find(t =>
       String(t.testId) === String(testIdParam) &&
       (!dateParam || t.date === dateParam)
     );
     return fromStore || legacyTest;
-  }, [completedTests, legacyTest, testIdParam, dateParam]);
+  }, [completedTests, legacyTest, testIdParam, dateParam, mockIdParam, mockResults, session]);
+
+  const testData = useMemo(() => {
+    if (!test) return null;
+    let baseData = null;
+    if (mockIdParam && session) {
+      const customTest = session.customTests?.find(t => String(t.id) === String(test.testId));
+      if (customTest && customTest.questions && customTest.questions.length > 0) {
+        baseData = {
+          id: test.testId,
+          title: session.title,
+          description: 'Custom scanned test',
+          type: 'Mock Test',
+          duration: `${session.timeLimitMinutes}m`,
+          totalQuestions: customTest.questions.length,
+          moduleCount: 1,
+          color: 'blue' as const,
+          sections: [
+            {
+              name: session.subject === 'Math' ? 'Math' : 'Reading & Writing',
+              modules: [
+                {
+                  timeMinutes: session.timeLimitMinutes,
+                  questions: customTest.questions.map((q: any) => {
+                    let opts = q.options;
+                    if (opts && !Array.isArray(opts)) {
+                      opts = [opts.A || '', opts.B || '', opts.C || '', opts.D || ''];
+                    }
+                    return {
+                      ...q,
+                      passage: q.passage || undefined,
+                      question: q.stem || '',
+                      options: opts || [],
+                      answer: typeof q.answer === 'number' ? q.answer : 0
+                    };
+                  })
+                }
+              ]
+            }
+          ]
+        };
+      }
+    }
+    if (!baseData) {
+      baseData = resolvePracticeTest(test.testId) || baselineTest;
+    }
+
+    if (session?.subject === 'English') {
+      return {
+        ...baseData,
+        sections: baseData.sections.filter(s => !s.name.toLowerCase().includes('math'))
+      };
+    } else if (session?.subject === 'Math') {
+      return {
+        ...baseData,
+        sections: baseData.sections.filter(s => s.name.toLowerCase().includes('math'))
+      };
+    }
+    return baseData;
+  }, [test, mockIdParam, session]);
+
+  const allKeys = useMemo(() => {
+    if (!testData) return [];
+    return testData.sections.flatMap((s, sIdx) => 
+      s.modules.flatMap((m, mIdx) => 
+        m.questions.map((_: any, qIdx: number) => `${sIdx}-${mIdx}-${qIdx}`)
+      )
+    );
+  }, [testData]);
 
   if (!mounted) {
     return <div className="min-h-screen bg-[#0a0a0f]" />;
@@ -113,13 +218,6 @@ export default function ReviewPage() {
   }
 
   const date = new Date(test.date).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
-  
-  const testData = resolvePracticeTest(test.testId) || baselineTest;
-  const allKeys = testData.sections.flatMap((s, sIdx) => 
-    s.modules.flatMap((m, mIdx) => 
-      m.questions.map((_, qIdx) => `${sIdx}-${mIdx}-${qIdx}`)
-    )
-  );
 
   const answeredKeys = Object.keys(test.answers);
   const rwKeys = answeredKeys.filter(k => getSection(k) === 'rw');
@@ -143,14 +241,6 @@ export default function ReviewPage() {
 
       {/* ── HEADER ── */}
       <div className="mx-auto max-w-[900px]">
-        <div className="flex items-center gap-3 mb-6">
-          <Link href="/progress" className="inline-flex items-center gap-1.5 text-[13px] font-semibold site-text-muted hover:site-text-strong transition">
-            <ArrowLeft className="w-4 h-4" /> Progress
-          </Link>
-          <span className="site-text-faint">/</span>
-          <span className="text-[13px] font-semibold site-text">{test.testTitle}</span>
-        </div>
-
         {/* ── SCORE CARD (College Board style) ── */}
         <div className="site-panel rounded-[32px] overflow-hidden mb-6 shadow-xl">
           {/* Top stripe */}
@@ -161,7 +251,9 @@ export default function ReviewPage() {
               <div>
                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 mb-4">
                   <Sparkles className="w-3.5 h-3.5 text-blue-500" />
-                  <span className="text-[11px] font-black uppercase tracking-wider text-blue-600 dark:text-blue-400">Practice Test Review</span>
+                  <span className="text-[11px] font-black uppercase tracking-wider text-blue-600 dark:text-blue-400">
+                    {session?.subject === 'English' ? 'English Mock' : session?.subject === 'Math' ? 'Math Mock' : session ? 'Full Mock' : 'Practice Test Review'}
+                  </span>
                 </div>
                 <h1 className="text-3xl font-black site-text-strong tracking-tight">{test.testTitle}</h1>
                 <p className="site-text-muted text-sm mt-1">{date}</p>
@@ -171,28 +263,34 @@ export default function ReviewPage() {
               <div className="flex flex-col items-center justify-center bg-gradient-to-br from-blue-600 to-indigo-600 rounded-[24px] px-8 py-6 text-white shadow-xl shadow-blue-500/20 min-w-[160px]">
                 <p className="text-[11px] font-black uppercase tracking-[0.2em] text-blue-200">Total Score</p>
                 <p className="text-6xl font-black tracking-tighter mt-1 leading-none">{test.totalScore}</p>
-                <p className="text-[11px] text-blue-200 mt-2">out of 1600</p>
+                <p className="text-[11px] text-blue-200 mt-2">
+                  out of { (session?.subject === 'English' || session?.subject === 'Math') ? 800 : 1600 }
+                </p>
               </div>
             </div>
 
             {/* Section Score Arcs */}
-            <div className="grid grid-cols-2 gap-4 mt-8">
-              <div className="site-subpanel rounded-[20px] p-5 flex flex-col items-center text-center border border-blue-500/15">
-                <div className="flex items-center gap-2 mb-3">
-                  <BookOpen className="w-4 h-4 text-blue-500" />
-                  <span className="text-[12px] font-black uppercase tracking-widest text-blue-600 dark:text-blue-400">Reading & Writing</span>
+            <div className={`grid ${(!session || session.subject === 'Full') ? 'grid-cols-2' : 'grid-cols-1 max-w-sm mx-auto'} gap-4 mt-8`}>
+              {(!session || session.subject === 'Full' || session.subject === 'English') && (
+                <div className="site-subpanel rounded-[20px] p-5 flex flex-col items-center text-center border border-blue-500/15">
+                  <div className="flex items-center gap-2 mb-3">
+                    <BookOpen className="w-4 h-4 text-blue-500" />
+                    <span className="text-[12px] font-black uppercase tracking-widest text-blue-600 dark:text-blue-400">Reading & Writing</span>
+                  </div>
+                  <ScoreArc score={test.englishScore} color={scoreColor(test.englishScore)} />
+                  <p className="text-[11px] site-text-muted mt-2">out of 800</p>
                 </div>
-                <ScoreArc score={test.englishScore} color={scoreColor(test.englishScore)} />
-                <p className="text-[11px] site-text-muted mt-2">out of 800</p>
-              </div>
-              <div className="site-subpanel rounded-[20px] p-5 flex flex-col items-center text-center border border-indigo-500/15">
-                <div className="flex items-center gap-2 mb-3">
-                  <Calculator className="w-4 h-4 text-indigo-500" />
-                  <span className="text-[12px] font-black uppercase tracking-widest text-indigo-600 dark:text-indigo-400">Math</span>
+              )}
+              {(!session || session.subject === 'Full' || session.subject === 'Math') && (
+                <div className="site-subpanel rounded-[20px] p-5 flex flex-col items-center text-center border border-indigo-500/15">
+                  <div className="flex items-center gap-2 mb-3">
+                    <Calculator className="w-4 h-4 text-indigo-500" />
+                    <span className="text-[12px] font-black uppercase tracking-widest text-indigo-600 dark:text-indigo-400">Math</span>
+                  </div>
+                  <ScoreArc score={test.mathScore} color={scoreColor(test.mathScore)} />
+                  <p className="text-[11px] site-text-muted mt-2">out of 800</p>
                 </div>
-                <ScoreArc score={test.mathScore} color={scoreColor(test.mathScore)} />
-                <p className="text-[11px] site-text-muted mt-2">out of 800</p>
-              </div>
+              )}
             </div>
           </div>
         </div>
@@ -221,31 +319,35 @@ export default function ReviewPage() {
             <h2 className="text-xl font-black site-text-strong">Score Breakdown by Section</h2>
           </div>
           <div className="space-y-6">
-            <div>
-              <div className="flex items-center gap-2 mb-4">
-                <BookOpen className="w-4 h-4 text-blue-500" />
-                <span className="text-[12px] font-black uppercase tracking-wider text-blue-600 dark:text-blue-400">Reading &amp; Writing</span>
+            {(!session || session.subject === 'Full' || session.subject === 'English') && (
+              <div>
+                <div className="flex items-center gap-2 mb-4">
+                  <BookOpen className="w-4 h-4 text-blue-500" />
+                  <span className="text-[12px] font-black uppercase tracking-wider text-blue-600 dark:text-blue-400">Reading &amp; Writing</span>
+                </div>
+                <div className="space-y-3">
+                  <SkillBar label="Information & Ideas" correct={Math.round(rwCorrect * 0.4)} total={Math.round(rwQ * 0.35)} color="#3b82f6" />
+                  <SkillBar label="Craft & Structure" correct={Math.round(rwCorrect * 0.3)} total={Math.round(rwQ * 0.28)} color="#6366f1" />
+                  <SkillBar label="Expression of Ideas" correct={Math.round(rwCorrect * 0.18)} total={Math.round(rwQ * 0.2)} color="#8b5cf6" />
+                  <SkillBar label="Standard English Conventions" correct={Math.round(rwCorrect * 0.12)} total={Math.round(rwQ * 0.17)} color="#a78bfa" />
+                </div>
               </div>
-              <div className="space-y-3">
-                <SkillBar label="Information & Ideas" correct={Math.round(rwCorrect * 0.4)} total={Math.round(rwQ * 0.35)} color="#3b82f6" />
-                <SkillBar label="Craft & Structure" correct={Math.round(rwCorrect * 0.3)} total={Math.round(rwQ * 0.28)} color="#6366f1" />
-                <SkillBar label="Expression of Ideas" correct={Math.round(rwCorrect * 0.18)} total={Math.round(rwQ * 0.2)} color="#8b5cf6" />
-                <SkillBar label="Standard English Conventions" correct={Math.round(rwCorrect * 0.12)} total={Math.round(rwQ * 0.17)} color="#a78bfa" />
+            )}
+            {(!session || session.subject === 'Full') && <div className="site-divider h-px" />}
+            {(!session || session.subject === 'Full' || session.subject === 'Math') && (
+              <div>
+                <div className="flex items-center gap-2 mb-4">
+                  <Calculator className="w-4 h-4 text-indigo-500" />
+                  <span className="text-[12px] font-black uppercase tracking-wider text-indigo-600 dark:text-indigo-400">Math</span>
+                </div>
+                <div className="space-y-3">
+                  <SkillBar label="Algebra" correct={Math.round(mathCorrect * 0.35)} total={Math.round(mathQ * 0.3)} color="#f59e0b" />
+                  <SkillBar label="Advanced Math" correct={Math.round(mathCorrect * 0.3)} total={Math.round(mathQ * 0.28)} color="#f97316" />
+                  <SkillBar label="Problem Solving & Data Analysis" correct={Math.round(mathCorrect * 0.22)} total={Math.round(mathQ * 0.25)} color="#10b981" />
+                  <SkillBar label="Geometry & Trigonometry" correct={Math.round(mathCorrect * 0.13)} total={Math.round(mathQ * 0.17)} color="#06b6d4" />
+                </div>
               </div>
-            </div>
-            <div className="site-divider h-px" />
-            <div>
-              <div className="flex items-center gap-2 mb-4">
-                <Calculator className="w-4 h-4 text-indigo-500" />
-                <span className="text-[12px] font-black uppercase tracking-wider text-indigo-600 dark:text-indigo-400">Math</span>
-              </div>
-              <div className="space-y-3">
-                <SkillBar label="Algebra" correct={Math.round(mathCorrect * 0.35)} total={Math.round(mathQ * 0.3)} color="#f59e0b" />
-                <SkillBar label="Advanced Math" correct={Math.round(mathCorrect * 0.3)} total={Math.round(mathQ * 0.28)} color="#f97316" />
-                <SkillBar label="Problem Solving & Data Analysis" correct={Math.round(mathCorrect * 0.22)} total={Math.round(mathQ * 0.25)} color="#10b981" />
-                <SkillBar label="Geometry & Trigonometry" correct={Math.round(mathCorrect * 0.13)} total={Math.round(mathQ * 0.17)} color="#06b6d4" />
-              </div>
-            </div>
+            )}
           </div>
         </div>
 
@@ -254,7 +356,7 @@ export default function ReviewPage() {
           <h2 className="text-xl font-black site-text-strong mb-2">Question Review</h2>
           <p className="text-sm site-text-muted mb-6">Your answers are saved below. Open the practice app to retake individual questions.</p>
           {/* Loop over Sections and Modules from testData */}
-          {testData.sections.map((section, sIdx) => {
+          {testData?.sections.map((section, sIdx) => {
             const isMath = section.name.toLowerCase().includes('math');
             const Icon = isMath ? Calculator : BookOpen;
             const colorClass = isMath ? 'text-indigo-600 dark:text-indigo-400' : 'text-blue-600 dark:text-blue-400';
@@ -278,7 +380,7 @@ export default function ReviewPage() {
                         Module {mIdx + 1}
                       </h3>
                       <div className="grid grid-cols-5 sm:grid-cols-8 gap-2">
-                        {module.questions.map((q, qIdx) => {
+                        {module.questions.map((q: any, qIdx: number) => {
                           const key = `${sIdx}-${mIdx}-${qIdx}`;
                           const answered = test.answers[key];
                           const isCorrect = answered === q.answer;
@@ -318,20 +420,26 @@ export default function ReviewPage() {
 
         {/* ── BOTTOM ACTIONS ── */}
         <div className="flex flex-col sm:flex-row gap-3 mt-6">
-          <Link
-            href="/practice"
-            className="flex-1 flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold text-sm shadow-lg shadow-blue-500/20 hover:brightness-110 transition"
+          <button
+            onClick={() => {
+              if (mockIdParam) {
+                router.push("/dashboard/mocks");
+              } else {
+                router.push("/practice");
+              }
+            }}
+            className="flex-1 flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold text-sm shadow-lg shadow-blue-500/20 hover:brightness-110 transition cursor-pointer"
           >
             <Sparkles className="w-4 h-4" />
-            Practice Again
-          </Link>
-          <Link
-            href="/progress"
-            className="flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl site-panel border border-slate-200 dark:border-slate-700 font-bold text-sm site-text-strong hover:site-text transition"
+            {mockIdParam ? "Active Mocks" : "Practice Again"}
+          </button>
+          <button
+            onClick={handleBack}
+            className="flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl site-panel border border-slate-200 dark:border-slate-700 font-bold text-sm site-text-strong hover:site-text transition cursor-pointer"
           >
             <ArrowLeft className="w-4 h-4" />
-            All Results
-          </Link>
+            Done
+          </button>
         </div>
       </div>
 

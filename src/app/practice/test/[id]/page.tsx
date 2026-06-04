@@ -434,7 +434,7 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
                                                                 <img src={q.image} alt="Question figure" className="max-w-full max-h-[280px] object-contain p-2" />
                                                             </div>
                                                         )}
-                                                        <h4 className="text-lg font-medium text-slate-900 mb-6">{cleanOCR(q.question)}</h4>
+                                                        <h4 className="text-lg font-medium text-slate-900 mb-6">{cleanOCR(q.question || '')}</h4>
 
                                                         <div className="space-y-3 mb-6">
                                                             {q.options.map((opt, oIdx) => {
@@ -453,7 +453,7 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
                                                                         <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold border ${isThisCorrect ? 'bg-emerald-500 border-emerald-600 text-white' : isThisSelected ? 'bg-red-500 border-red-600 text-white' : 'bg-slate-100 border-slate-300'}`}>
                                                                             {String.fromCharCode(65 + oIdx)}
                                                                         </div>
-                                                                        <span className="font-medium">{cleanOCR(opt)}</span>
+                                                                        <span className="font-medium">{cleanOCR(opt || '')}</span>
                                                                         {isThisCorrect && (
                                                                             <span className="ml-auto flex items-center gap-1 text-emerald-600 text-sm font-bold">
                                                                                 <Check className="w-5 h-5" /> {isCorrect ? '' : 'Correct Answer'}
@@ -469,7 +469,7 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
                                                             <h5 className="flex items-center gap-2 text-blue-800 font-bold mb-2">
                                                                 <BookOpen className="w-4 h-4" /> Explanation
                                                             </h5>
-                                                            <p className="text-blue-900/80 leading-relaxed text-sm">{cleanOCR(q.explanation)}</p>
+                                                            <p className="text-blue-900/80 leading-relaxed text-sm">{cleanOCR(q.explanation || '')}</p>
                                                         </div>
                                                     </div>
                                                 );
@@ -752,7 +752,7 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
             className="h-[100dvh] flex flex-col bg-slate-50 font-[system-ui,-apple-system,BlinkMacSystemFont,'Segoe_UI',Roboto,sans-serif] overflow-hidden"
         >
             {/* Bluebook Official Header */}
-            <header className="bg-white/90 backdrop-blur-xl border-b border-slate-200/80 px-6 py-3 flex items-center justify-between z-30 shrink-0 relative shadow-[0_2px_10px_rgba(0,0,0,0.02)]">
+            <header className="bg-white/90 backdrop-blur-xl border-b border-slate-200/80 px-6 py-2.5 flex items-center justify-between z-30 shrink-0 relative shadow-[0_2px_10px_rgba(0,0,0,0.02)]">
                 {/* Left: Directions Dropdown */}
                 <div className="flex-1">
                     <div className="flex flex-col ml-4">
@@ -959,26 +959,26 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
                             <div className="w-full max-w-[800px] flex flex-col">
 
                                 {/* Header: Connected Question Number & Mark for Review & ABC */}
-                                <div className="flex mb-6 mt-4 shadow-sm w-full">
+                                <div className="flex items-center mb-6 mt-4 w-full  bg-white border border-[#E5E7EB] rounded-[12px] shadow-sm h-[44px]">
                                     {/* Number */}
-                                    <div className="bg-[#111827] text-white font-bold text-[15px] w-[50px] flex flex-shrink-0 items-center justify-center">
+                                    <div className="bg-[#111827] text-white font-bold text-[15px] w-[58px] h-[44px] flex flex-shrink-0 items-center justify-center rounded-l-[11px]">
                                         {currentQuestionIndex + 1}
                                     </div>
 
                                     {/* Mark for Review (Middle) */}
                                     <button
                                         onClick={() => toggleFlag(questionKey)}
-                                        className="flex flex-1 items-center gap-2 px-4 py-2.5 bg-white border-b border-[#E5E7EB] group/mfr text-[#4B5563] text-[15px] transition-colors justify-start"
+                                        className="flex flex-1 items-center gap-2 px-4 h-full text-[#4B5563] text-[15px] transition-colors justify-start bg-transparent group/mfr hover:bg-slate-50"
                                     >
-                                        <Bookmark className={`w-[14px] h-[14px] transition-colors ${flaggedQuestions[questionKey] ? 'fill-slate-600 text-slate-600' : 'text-slate-400 group-hover/mfr:text-slate-600'}`} />
+                                        <Bookmark className={`w-[16px] h-[16px] transition-colors ${flaggedQuestions[questionKey] ? 'fill-slate-600 text-slate-600' : 'text-slate-400 group-hover/mfr:text-slate-600'}`} />
                                         <span className={flaggedQuestions[questionKey] ? 'font-bold' : 'font-medium group-hover/mfr:font-bold'}>Mark for Review</span>
                                     </button>
 
                                     {/* ABC Elimination (Right) */}
-                                    <div className="bg-[#F3F4F6] flex items-center pr-2">
+                                    <div className="w-[58px] h-[44px] flex flex-shrink-0 items-center justify-center border-l border-[#E5E7EB] rounded-r-[11px] bg-transparent">
                                         <button
                                             onClick={() => setIsEliminationMode(!isEliminationMode)}
-                                            className={`flex items-center justify-center px-3 py-1 ml-2 font-bold text-[14px] transition-colors rounded ${isEliminationMode ? 'bg-[#111827] text-white' : 'bg-transparent text-slate-700 hover:bg-slate-200'}`}
+                                            className={`flex items-center justify-center w-full h-full font-bold text-[14px] transition-colors rounded-r-[11px] ${isEliminationMode ? 'bg-[#111827] text-white' : 'text-slate-700 hover:bg-slate-50'}`}
                                         >
                                             <span className="line-through decoration-[#ef4444] decoration-[2px]">ABC</span>
                                         </button>
@@ -1025,7 +1025,7 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
                                                         }
                                                     }}
                                                     htmlFor={`opt-${i}`}
-                                                    className={`relative flex-1 p-3 px-4 border min-h-[58px] rounded-[10px] flex items-center cursor-pointer transition-all duration-200 overflow-hidden ${isSelected ? 'border-indigo-600 shadow-[inset_0_0_0_1px_#4f46e5,0_2px_8px_rgba(79,70,229,0.15)] bg-indigo-50/30' : 'border-slate-300 hover:border-slate-400 bg-white hover:bg-slate-50 hover:shadow-sm'}`}
+                                                    className={`relative flex-1 border min-h-[44px] rounded-[12px] flex items-stretch cursor-pointer transition-all duration-200 overflow-hidden ${isSelected ? 'border-indigo-600 shadow-[inset_0_0_0_1px_#4f46e5,0_2px_8px_rgba(79,70,229,0.15)] bg-indigo-50/30' : 'border-[#E5E7EB] hover:border-slate-400 bg-white hover:bg-slate-50 shadow-sm'}`}
                                                 >
                                                     <input
                                                         type="radio"
@@ -1038,15 +1038,17 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
                                                         }}
                                                     />
 
-                                                    {/* Letter Circle inside the box */}
-                                                    <div className={`w-[28px] h-[28px] rounded-full border-[1.5px] flex-shrink-0 flex items-center justify-center font-bold text-[13px] mr-4 transition-colors ${isSelected ? 'border-indigo-600 text-white bg-indigo-600 shadow-sm' : 'border-slate-400 text-slate-700'}`}>
+                                                    {/* Letter Box (Flush to edges) */}
+                                                    <div className={`w-[50px] flex-shrink-0 flex items-center justify-center font-bold text-[15px] border-r transition-colors ${isSelected ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-[#F9FAFB] text-[#4B5563] border-[#E5E7EB] group-hover:bg-[#F3F4F6]'}`}>
                                                         {letter}
                                                     </div>
 
                                                     {/* Answer Text */}
-                                                    <span className={`text-[17px] font-sans flex-1 ${isEliminated ? 'text-slate-400' : 'text-[#111827]'}`}>
-                                                        {cleanOCR(opt)}
-                                                    </span>
+                                                    <div className="flex-1 p-4 flex items-center">
+                                                        <span className={`text-[17px] font-sans ${isEliminated ? 'text-slate-400' : 'text-[#111827]'}`}>
+                                                            {cleanOCR(opt || '')}
+                                                        </span>
+                                                    </div>
 
                                                     {/* Strike-through line */}
                                                     {isEliminated && (

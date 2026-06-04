@@ -2,6 +2,7 @@
 
 import { usePathname } from 'next/navigation';
 import Sidebar from '@/components/Sidebar';
+import { Suspense } from 'react';
 
 export default function SidebarWrapper() {
   const pathname = usePathname();
@@ -13,10 +14,15 @@ export default function SidebarWrapper() {
     pathname.startsWith('/signup') || 
     pathname.startsWith('/forgot-password') || 
     pathname.startsWith('/verify-code') ||
+    pathname.startsWith('/verify-reset-code') ||
     pathname.startsWith('/practice/test')
   ) {
     return null;
   }
   
-  return <Sidebar />;
+  return (
+    <Suspense fallback={null}>
+      <Sidebar />
+    </Suspense>
+  );
 }

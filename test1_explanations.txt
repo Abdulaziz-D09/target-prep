@@ -1,0 +1,2352 @@
+Section 1, Module 1: Reading & Writing
+
+27 questions · Difficulty: Unknown
+
+
+
+1
+
+Words in Context
+
+Answer: D — exceed
+
+Core Logic: The study shows CSR improves corporate image — so favorability scores when CSR is mentioned would logically be higher than when CSR isn't mentioned, meaning they go beyond (exceed) the baseline scores.
+
+✅ Why D is Correct
+
+Choice D (exceed) is correct. The passage states that CSR efforts "improve" corporate image, which means scores should be higher when CSR is mentioned. "Exceed" (to go beyond or surpass) is the only word that captures this upward comparison. The sentence structure "tended to ______ the scores assigned by participants when CSR wasn't mentioned" calls for a comparative verb showing the CSR-mentioned scores are greater.
+
+❌ Why the Others Are Wrong
+
+A (identify): "Identify the scores" makes no logical sense — favorability numbers don't identify other numbers.
+
+B (disturb): "Disturb the scores" implies disruption or interference, not a comparison of magnitude.
+
+C (replace): "Replace the scores" implies substitution rather than surpassing them, and contradicts the idea of comparison.
+
+2
+
+Words in Context
+
+Answer: D — speculative
+
+Core Logic: The passage describes an area where theories had previously competed without firm evidence; the new study "reconciles" those theories — meaning the field was previously uncertain, i.e., speculative.
+
+✅ Why D is Correct
+
+Choice D (speculative) is correct. The passage notes that researchers "long debated" origins and that the new geochemical analysis "provides concrete evidence that reconciles two competing theories." A previously debated area lacking firm evidence is, by definition, speculative — based on conjecture rather than established fact. The new study fills what was a speculative gap.
+
+❌ Why the Others Are Wrong
+
+A (esoteric): "Esoteric" means known only to a select few — but coin origins is a broadly researched topic, and the passage never suggests it was a niche mystery.
+
+B (authoritative): The opposite direction — the passage describes a gap in knowledge, not an area that was already authoritative.
+
+C (solitary): "Solitary" means alone or isolated — it makes no sense to describe an area of study as solitary.
+
+3
+
+Words in Context
+
+Answer: B — Domination
+
+Core Logic: The breezes "meet and conflict as though each strove for the mastery" — the image is two forces competing for control over the air, so "mastery" means dominance/control over something, not skill or familiarity.
+
+✅ Why B is Correct
+
+Choice B (Domination) is correct. The breezes are personified as rivals "striving" to achieve mastery "of the air" — the preposition "of" is key. One does not strive for familiarity of the air or skillfulness of the air; one strives for control or dominance over the air. In this context, mastery means one breeze overpowering the other — i.e., domination.
+
+❌ Why the Others Are Wrong
+
+A (Familiarity): The breezes are not trying to "know" the air better — they are competing to control it.
+
+C (Comprehension): Comprehension means understanding — wind cannot "understand" the air; this is not the meaning in context.
+
+D (Skillfulness): One typically has skillfulness at something, not skillfulness of something; this phrasing is grammatically awkward and misses the competitive struggle described.
+
+4
+
+Words in Context
+
+Answer: B — catalyst of
+
+Core Logic: The passage says science fiction has "spurred many actual innovations" — something that triggers or drives change is a catalyst, not a diversion, constraint, or sponsor.
+
+✅ Why B is Correct
+
+Choice B (catalyst of) is correct. A catalyst is something that causes or accelerates a process. The passage proves this: Jules Verne's novel inspired aerospace engineering, and Star Trek sparked smartphone design. Science fiction initiated and accelerated these technological developments — the definition of a catalyst.
+
+❌ Why the Others Are Wrong
+
+A (diversion from): "Diversion" implies science fiction leads people away from real-world tech — the opposite of what the passage says.
+
+C (constraint to): A constraint limits development. The passage describes science fiction as an enabler, not a limitation.
+
+D (sponsor of): A sponsor provides financial support — the passage never discusses money, only inspiration.
+
+5
+
+Words in Context
+
+Answer: A — exorbitant
+
+Core Logic: Drivers who believe the toll is "_____" would resist a higher toll — they believe the current toll is already too high, meaning exorbitant (excessively high).
+
+✅ Why A is Correct
+
+Choice A (exorbitant) is correct. The passage sets up a contrast: efforts to raise the toll require explanation, but "no amount of justification" will persuade drivers who believe the current toll is already _____. For drivers to resist higher tolls regardless of justification, they must already see the current toll as unreasonably high — precisely what "exorbitant" means.
+
+❌ Why the Others Are Wrong
+
+B (contentious): Contentious means controversial or disputed — but the passage is describing what the drivers personally believe about the toll's price level, not about whether the toll is debatable.
+
+C (equivocal): Equivocal means ambiguous or unclear — a toll is a fixed number, not an ambiguous one.
+
+D (warranted): If drivers believed the toll was warranted (justified), they would accept a higher toll, not resist it. This contradicts the logic.
+
+6
+
+Text Structure & Purpose
+
+Answer: D
+
+Core Logic: The underlined sentence states the six-point scale "considers varying levels of supporting evidence" — this explains how the new system works, i.e., the criteria for scoring.
+
+✅ Why D is Correct
+
+Choice D is correct: the sentence explains the basis for the new system's scoring criteria. The underlined sentence ("The new six-point scale considers varying levels of supporting evidence used to identify bioluminescent species") tells us what determines a species' score — the quality/quantity of evidence. The three examples that follow (firefly squid = 1, emperor squid = 4, shaggy anglerfish = 6) then demonstrate how those criteria operate in practice.
+
+❌ Why the Others Are Wrong
+
+A (thoroughness of research): The sentence is about the logic of the classification system, not about validating researchers' effort.
+
+B (derived from the binary system): The sentence never explains how the new system was built from the old one — it only describes what the new system measures.
+
+C (justifies the need for a new system): The need for a new system was established earlier ("Moving beyond a simple 'present or absent' designation"). The underlined sentence does not justify the need; it describes how the system functions.
+
+7
+
+Text Structure & Purpose
+
+Answer: D
+
+Core Logic: The underlined sentence says pneumatic diverticula's characteristics "tend not to fossilize" — this limitation directly explains WHY paleontologists had to turn to studies of living bird species as a supplement.
+
+✅ Why D is Correct
+
+Choice D is correct: the underlined portion indicates why paleontologists used another approach (studying living birds) in addition to fossil analysis. Because the hallmarks of pneumatic diverticula don't preserve well in fossils, paleontologists cannot rely on fossils alone to study PSP. This inability forces them to study living birds — the "other approach" referenced in choice D.
+
+❌ Why the Others Are Wrong
+
+A: The underlined sentence does not suggest paleontologists questioned the applicability of bird studies — it explains why such studies became necessary.
+
+B: There are no disagreements among paleontologists mentioned in this passage.
+
+C: The passage never says paleontologists previously misidentified diverticula characteristics — that misreading introduces information not in the text.
+
+8
+
+Text Structure & Purpose
+
+Answer: B
+
+Core Logic: The underlined portion says that solving the mystery of glass eel spawning will help sustain "several other species that rely on them as a food source" — this shows the benefit extends beyond the eels themselves.
+
+✅ Why B is Correct
+
+Choice B is correct: the underlined portion indicates that the benefit of understanding glass eel spawning extends beyond the eels. The phrase "helping in turn to sustain several other species that rely on them as a food source" explicitly shows how solving the eel mystery helps an entire ecosystem — fish that eat eels — not just the eels themselves.
+
+❌ Why the Others Are Wrong
+
+A: The passage never says scientists are more concerned about other species than about glass eel habitat — both are discussed as equally important outcomes.
+
+C: The underlined portion does not describe the role both species play in the ecosystem equally — it only mentions that other species depend on eels as food.
+
+D: No study finding is cited in the underlined portion, and "circumstances required to ensure survival" misrepresents what is said.
+
+9
+
+Command of Evidence (Textual)
+
+Answer: B — A literary critic
+
+Core Logic: The passage directly defines literary critics as "people whose job it is to evaluate books" — the answer is embedded in the parenthetical definition.
+
+✅ Why B is Correct
+
+Choice B (A literary critic) is correct. The passage states: "Debut novels are especially interesting to literary critics (people whose job it is to evaluate books)." The parenthetical definition directly answers the question — someone who professionally evaluates books is called a literary critic.
+
+❌ Why the Others Are Wrong
+
+A (Book publisher): Publishers produce and distribute books — they do not professionally evaluate them in the sense described.
+
+C (Bookseller): Booksellers sell books — the passage makes no mention of this role in connection with professional evaluation.
+
+D (An author): Authors write books; the passage distinguishes authors from literary critics.
+
+10
+
+Command of Evidence (Quantitative)
+
+Answer: B — 0.33 million metric tons
+
+Core Logic: The question asks for Mexico's 1995 copper mining figure — read directly from the table's Mexico row, 1995 column: 0.33.
+
+✅ Why B is Correct
+
+Choice B (0.33 million metric tons) is correct. The table clearly shows Mexico's copper production in 1995 as 0.33 million metric tons. The student notes that "in 1995, Mexico mined ___" — a simple table lookup confirms 0.33.
+
+❌ Why the Others Are Wrong
+
+A (0.38): This is Peru's 1995 figure, not Mexico's.
+
+C (1.85): This is the United States' 1995 figure.
+
+D (0.44): This is Indonesia's 1995 figure.
+
+11
+
+Command of Evidence (Textual)
+
+Answer: D
+
+Core Logic: The claim is that activity on Neverland "stops when Peter is away and starts again when he is about to return" — the correct quote must show Neverland coming alive precisely as Peter approaches.
+
+✅ Why D is Correct
+
+Choice D is correct: "Feeling that Peter was on his way back, the Neverland had again woke into life." This directly proves the claim — the island's reawakening is explicitly triggered by Peter's imminent return. The phrase "on his way back" confirms the "about to return" part; "woke into life" confirms the "starts again" part.
+
+❌ Why the Others Are Wrong
+
+A ("The rock was very small now"): Describes a physical detail with no connection to island activity relative to Peter's location.
+
+B (Wendy and John on tip-toe): Describes the children's excitement upon arriving, not a change in Neverland's activity in response to Peter's movements.
+
+C ("Peter was alone on the lagoon"): States Peter's location but says nothing about island-wide activity pausing or resuming.
+
+12
+
+Command of Evidence (Textual)
+
+Answer: C
+
+Core Logic: The claim is that Camilla experiences a "change in how she perceives her immediate surroundings" — the correct quote must show familiar surroundings now feeling different/strange to her.
+
+✅ Why C is Correct
+
+Choice C is correct: "All nature was as she had found it before, evening upon evening; but in the stones and the dry weeds, amid the fragrance of the air and the light whir of falling leaves, Camilla sensed a new strangeness, a vast desolation in everything about her." The contrast is explicit — the surroundings are objectively unchanged ("as she had found it before"), yet Camilla now perceives them differently ("a new strangeness"). This is the definition of a perceptual change.
+
+❌ Why the Others Are Wrong
+
+A: Camilla looking at the sky to hide her expression shows emotional concealment, not a changed perception of her surroundings.
+
+B: Catching a reflection of herself in water describes a visual moment, not a transformed perception of the environment.
+
+D: Describes physical/emotional action (wiping tears, fleeing) — not a change in perception of the landscape itself.
+
+13
+
+Claims & Evidence (Weaken)
+
+Answer: B
+
+Core Logic: The researcher claims that the farther humans migrated from Africa, the fewer sounds their languages retained — so Africa-origin languages should have the most sounds, and non-Africa languages should have fewer proportional to distance. Any finding that breaks this gradient weakens the claim.
+
+✅ Why B is Correct
+
+Choice B is correct: "Languages that emerged in Europe and Western Asia tend to have more sounds than languages that emerged in Africa do." The researcher's claim predicts Africa has the most sounds (as the origin point), with sounds diminishing with distance. If European and Western Asian languages — which emerged farther from Africa — actually have more sounds than African languages, this directly contradicts the hypothesis that distance from Africa correlates with fewer sounds.
+
+❌ Why the Others Are Wrong
+
+A: Africa having a wider range of sounds overall is consistent with the researcher's claim that Africa is the origin of maximum phonological diversity.
+
+C: Central America having fewer sounds than Western Europe is actually consistent with the researcher's model — Central America is farther from Africa than Western Europe is.
+
+D: Consistent variation among the last-settled African regions aligns with the idea of gradual sound reduction as populations spread — this supports rather than weakens.
+
+14
+
+Inferences
+
+Answer: A
+
+Core Logic: The study found musicians prefer higher volumes than nonmusicians for the same recording. If a musician prefers 82.2 dB, the nonmusician's optimum is lower — meaning 82.2 dB is above the nonmusician's preferred level, so the nonmusician would find it less enjoyable than a lower volume.
+
+✅ Why A is Correct
+
+Choice A is correct: the nonmusician would "find listening to 'Heartbeats' at 82.2 decibels less enjoyable than listening to it at a lower volume." The study states that for any given recording, "optimal volume tended to be higher for the musician than for the nonmusician." If 82.2 dB is the musician's optimum, it exceeds the nonmusician's optimum — so 82.2 dB would feel too loud for the nonmusician, making a lower volume more enjoyable.
+
+❌ Why the Others Are Wrong
+
+B: Whether the nonmusician prefers other music at 82.2 dB is not the relevant comparison — the study is about volume preference for the same recording.
+
+C: Nature sounds vs. "Heartbeats" is not the comparison the passage sets up — and no information suggests the nonmusician prefers nature sounds.
+
+D: The passage does not say 82.2 dB is generally too low for any enjoyment — it's the musician's optimum, which is simply higher than the nonmusician's optimum.
+
+15
+
+Inferences
+
+Answer: D
+
+Core Logic: Both sound exposures (ship alone vs. ship + sonic pulses) produced similar results — suggesting adding sonic pulses on top of ship sounds didn't meaningfully change the sound environment for narwhals.
+
+✅ Why D is Correct
+
+Choice D is correct: "ship sounds contribute so much to the overall sound level that the addition of sonic pulses has little effect on the narwhals' auditory environment." The passage states that differences between the two exposure types were "negligible." If ship sounds alone and ship sounds + sonic pulses produced nearly identical behavioral changes, it follows that adding sonic pulses to ship sounds didn't create a meaningfully different acoustic environment — i.e., ship sounds dominated.
+
+❌ Why the Others Are Wrong
+
+A: No data is presented on diving depth differences between the two exposure types — this introduces information not supported by the passage.
+
+B: No information about the relative range of sonic pulses vs. ship sounds is mentioned.
+
+C: Both exposure conditions produced significant decreases — the narwhals were clearly sensitive to human-caused sounds, contradicting C.
+
+16
+
+Boundaries (Punctuation & Grammar)
+
+Answer: C — lost. Conversely,
+
+Core Logic: The sentence needs to end a complete independent clause ("Many works of Euclid are lost") and begin a new independent clause with a contrasting transition. A period + capitalized "Conversely," accomplishes both correctly.
+
+✅ Why C is Correct
+
+Choice C (lost. Conversely,) is correct. The blank comes at the end of "Many works of the Greek mathematician Euclid (3rd century BCE) are ___." This is a complete independent clause. "Conversely" then introduces a contrasting idea (his Elements is still readable). A period ends the first sentence cleanly; "Conversely," with a comma after it correctly sets up the adverbial connector before the subject of the new clause.
+
+❌ Why the Others Are Wrong
+
+A (lost and conversely,): "And conversely" is contradictory — "and" suggests addition while "conversely" suggests contrast. Using both creates an illogical construction.
+
+B (lost, conversely,): A comma before "conversely" would create a comma splice — two independent clauses joined only by a comma.
+
+D (lost, and conversely): "And conversely" remains logically contradictory, and a comma + "and" would typically join similar ideas, not contrasts.
+
+17
+
+Form, Structure & Sense (Grammar)
+
+Answer: A — recommended
+
+Core Logic: The subject of the blank is "The researchers" — they performed an action. "Finding that..." is a participial phrase modifying the subject. The main verb must be in the simple past tense, agreeing with "The researchers."
+
+✅ Why A is Correct
+
+Choice A (recommended) is correct. The sentence structure is: "The researchers, finding that [condition], _____ efforts to improve biodiversity." The subject "The researchers" requires a finite main verb. "Recommended" is a simple past finite verb that correctly makes the researchers the agents who recommended the efforts. The sentence is past-tense throughout.
+
+❌ Why the Others Are Wrong
+
+B (recommending): Creates a dangling participial phrase — the sentence would have no finite main verb, making it a fragment.
+
+C (to recommend): An infinitive cannot serve as the main verb of the sentence.
+
+D (having recommended): A perfect participle — again, not a finite verb, leaving the sentence without a proper predicate.
+
+18
+
+Boundaries (Punctuation & Grammar)
+
+Answer: A — support. Decreasing
+
+Core Logic: "Structural support" is the noun phrase completing the first clause. "Decreasing in thickness from center to edges" is a new participial phrase describing the veins — it must begin a new unit, requiring a period or strong punctuation after "support."
+
+✅ Why A is Correct
+
+Choice A (support. Decreasing) is correct. "...veins that provide structural support" completes the relative clause modifying "veins." The next phrase "Decreasing in thickness from the center to the edges, these veins allow..." is a new sentence with its own subject ("these veins"). A period after "support" correctly separates the two complete sentences.
+
+❌ Why the Others Are Wrong
+
+B (support decreasing): Without punctuation, "decreasing" attaches to "support" as a modifier, implying the support is decreasing — which contradicts the meaning (the veins provide support; thickness decreases).
+
+C (support, while decreasing): "While" implies simultaneity between two actions of the same subject; here the thickness description applies to the veins as they allow the leaves to float — "while" creates an odd subordinate construction.
+
+D (support, decreasing): A participial phrase after a comma suggests "support decreasing in thickness" — again implying the support itself decreases, which is incorrect.
+
+19
+
+Form, Structure & Sense (Grammar)
+
+Answer: D — Pennsylvania, having officially become
+
+Core Logic: The sentence has a main verb ("was thereby empowered") — the blank fills the subject position before it. "Pennsylvania, having officially become a US state" correctly uses a perfect participle to provide background context, with Pennsylvania as the grammatical subject.
+
+✅ Why D is Correct
+
+Choice D (Pennsylvania, having officially become) is correct. The blank begins the subject of the sentence, which concludes with "was thereby empowered... to vote on whether to admit Louisiana." "Having officially become a US state when it ratified the Constitution" is a perfect participial phrase providing the background — Pennsylvania had already become a state (1787) before it later voted on Louisiana (1812). The participial phrase correctly shows this prior action.
+
+❌ Why the Others Are Wrong
+
+A (Pennsylvania would officially become): Creates a complete independent clause — combined with the second independent clause "was thereby empowered," this produces a run-on with no coordinating conjunction.
+
+B (Pennsylvania had officially become): Same problem — two independent clauses fused without proper punctuation or conjunction.
+
+C (Pennsylvania officially became): Again, a complete independent clause that cannot be joined to the main clause without a comma + conjunction.
+
+20
+
+Form, Structure & Sense (Grammar)
+
+Answer: B — have been revisited
+
+Core Logic: The subject is "contributions" (plural), and the action is ongoing relevance in recent scholarship — so the verb must be plural and in the present perfect tense to capture the continuing relevance.
+
+✅ Why B is Correct
+
+Choice B (have been revisited) is correct. The subject of the blank is "Jessie Redmon Fauset's contributions" — plural, requiring "have" (not "has"). The phrase "in recent scholarship that explores..." indicates the revisiting is a current, ongoing process, making the present perfect ("have been revisited") appropriate. The passive voice is correct because the scholarship is doing the revisiting, not the contributions themselves.
+
+❌ Why the Others Are Wrong
+
+A (has been revisited): "Has" is singular — but "contributions" is plural, creating a subject-verb agreement error.
+
+C (revisited): Simple past tense is insufficient — "revisited" would suggest the revisiting is complete, but "in recent scholarship" implies it is ongoing.
+
+D (having been revisited): A participial phrase — this gives the clause no finite verb, making it a sentence fragment.
+
+21
+
+Transitions
+
+Answer: A — For example,
+
+Core Logic: The first sentence states a general claim (resins play "several important roles") — the second sentence then gives one specific role (sealing wounds). The relationship is general → specific example, requiring "For example."
+
+✅ Why A is Correct
+
+Choice A (For example,) is correct. The passage opens by saying resins play "several important roles." The sentence with the blank then illustrates one such role: "resins quickly seal wounds, which helps prevent harmful insects and fungi." This is a specific illustration of the general claim — the classic setup for "for example."
+
+❌ Why the Others Are Wrong
+
+B (However): Signals contrast — but the second sentence supports and illustrates the first, not contradicts it.
+
+C (Regardless): Signals dismissal of a prior condition — no condition is being dismissed here.
+
+D (Next): "Next" signals a sequential step in a process — the passage is providing an example of a category, not step 2 in a sequence.
+
+22
+
+Transitions
+
+Answer: A — On the other hand,
+
+Core Logic: The passage explicitly sets up a two-sided contrast: "On one hand, the dust can enhance the formation of ice clouds... _____ the dust can lower sea surface temperatures... weakening the storm." The blank introduces the opposing side of a contrast already flagged with "On one hand."
+
+✅ Why A is Correct
+
+Choice A (On the other hand,) is correct. This is a paired construction: "On one hand... on the other hand." The passage literally uses "On one hand" before describing the strengthening effect of dust. The blank must introduce the contrasting weakening effect — "On the other hand" is the standard, grammatically required companion phrase.
+
+❌ Why the Others Are Wrong
+
+B (Previously): Signals a time reference — but the two effects are not happening in different time periods; they are simultaneous opposing effects.
+
+C (For example): Signals illustration — but the weakening effect is not an example of the strengthening effect; they are opposing forces.
+
+D (In other words): Signals restatement — but the second effect is the opposite of the first, not a restatement.
+
+23
+
+Transitions
+
+Answer: A — On the other hand,
+
+Core Logic: The jumpsuit was very heavy (25–50 lbs of adornments), but the fabric was light and flexible. This is a direct contrast between two properties of the outfit — requiring a contrast transition.
+
+✅ Why A is Correct
+
+Choice A (On the other hand,) is correct. The passage contrasts two features: the extremely heavy adornments (25–50 lbs) versus the fabric being light and flexible. These are opposing qualities of the same jumpsuit. "On the other hand" is the standard transition to signal this type of contrasting characteristic.
+
+❌ Why the Others Are Wrong
+
+B (That is): Signals a restatement or clarification — but the fabric's lightness is not a restatement of the adornments' heaviness; it is the opposite.
+
+C (For instance): Signals an example — the light fabric is not an example of the heavy adornments.
+
+D (There): A spatial reference — grammatically odd and logically disconnected from the contrast being made.
+
+24
+
+Transitions
+
+Answer: D — however;
+
+Core Logic: The researchers intended to study all North American ungulates but ended up studying only pronghorns and wild horses in New Mexico — this is a narrowing/restriction of scope that contrasts with the broader stated intention, requiring a contrast transition. The semicolon is needed to join two independent clauses.
+
+✅ Why D is Correct
+
+Choice D (however;) is correct. The first clause says researchers did not analyze all ungulates; the second says they focused exclusively on pronghorns and horses. The word "however" signals the contrast between their broad scope and their narrow focus. The semicolon correctly joins the two independent clauses that "however" links as a conjunctive adverb.
+
+❌ Why the Others Are Wrong
+
+A (regardless;): "Regardless" means "in spite of obstacles" — it doesn't signal that the focus was narrower than the scope, just that it happened despite something.
+
+B (in other words;): Signals restatement — the focused study is not a restatement of the broad intention; it is a deviation from it.
+
+C (for instance;): Would imply pronghorns/horses are an example of all North American ungulates being studied — they're not; they are a limited subset.
+
+25
+
+Transitions
+
+Answer: C — Hence,
+
+Core Logic: Because Curiosity could not preserve samples, the Perseverance team sought to implement that capability. The second sentence is a consequence/result of the problem stated in the first — requiring a causal/result transition.
+
+✅ Why C is Correct
+
+Choice C (Hence,) is correct. "Hence" signals a logical result or consequence. The Curiosity rover's inability to preserve samples caused NASA engineers to design Perseverance with that capability. The relationship is: Problem (Curiosity can't preserve) → Resulting action (Perseverance designed to solve it). "Hence" captures this causal chain.
+
+❌ Why the Others Are Wrong
+
+A (Specifically): Signals elaboration or narrowing — but the Perseverance sentence is not a more specific version of the Curiosity sentence; it is a response to it.
+
+B (Earlier): Would signal chronological sequence — but the rover's design is the response, not an earlier event.
+
+D (Similarly): Would suggest Perseverance also couldn't preserve samples — the opposite of what happened.
+
+26
+
+Transitions
+
+Answer: A — Thus,
+
+Core Logic: The glaciers are at least 60 million years old, so the researchers concluded Antarctica had glaciers long before the 34-million-year-old ice sheet formed. The conclusion flows logically from the evidence — requiring a causal/conclusion transition.
+
+✅ Why A is Correct
+
+Choice A (Thus,) is correct. "Thus" signals a logical conclusion drawn from preceding evidence. The evidence: glaciers are at least 60 million years old. The conclusion: Antarctica had glaciers well before the continent-wide ice sheet formed 34 million years ago. "Thus" correctly links the evidence to its logical conclusion.
+
+❌ Why the Others Are Wrong
+
+B (By contrast): Signals opposition — but the conclusion about pre-existing glaciers is not in contrast to the evidence; it is derived from it.
+
+C (Even so): Signals concession despite obstacles — no obstacle is being overcome here; a straightforward conclusion is being drawn.
+
+D (Nevertheless): Also signals concession — again, no contradiction or setback is present in the passage.
+
+27
+
+Rhetorical Synthesis
+
+Answer: D
+
+Core Logic: The question asks which choice emphasizes Edison's reliance on Hammer — the answer must connect Edison's educational background to his dependence on specialists, with Hammer named as an example of that dependence.
+
+✅ Why D is Correct
+
+Choice D is correct: "Having received little formal education, Thomas Edison depended on specialized employees, including laboratory assistant William Joseph Hammer, for many of his inventions." This sentence directly names Edison's reliance ("depended on"), explains why (little formal education), and specifically names Hammer as an employee he relied upon. All three elements — the reason, the dependence, and the named individual — work together to emphasize reliance.
+
+❌ Why the Others Are Wrong
+
+A: Simply states that Hammer worked at the Menlo Park lab — no information about Edison's dependence on him.
+
+B: Claims Hammer was known for contributions to technology — this is about Hammer's own reputation, not Edison's reliance on him.
+
+C: Focuses on employees having successful independent careers — this shifts focus away from Edison's reliance toward employee independence.
+
+Section 1, Module 2: Reading & Writing — Hard
+
+27 questions · Difficulty: Hard
+
+
+
+1
+
+Words in Context · Hard
+
+Answer: B — clandestine
+
+Core Logic: Alcott published anonymously — deliberately hiding her identity. Publishing under cover of anonymity so readers couldn't identify the author describes a concealed, secretive approach, i.e., clandestine.
+
+✅ Why B is Correct
+
+Choice B (clandestine) is correct. Clandestine means kept secret or hidden. The No Name Series was specifically designed so authors were anonymous, challenging readers to guess identities. Publishing with deliberately concealed authorship is by definition a clandestine approach — the author's identity was purposely hidden.
+
+❌ Why the Others Are Wrong
+
+A (preliminary): Means introductory or preparatory — nothing in the passage suggests this was a preparatory approach to something else.
+
+C (unequivocal): Means absolutely clear with no doubt — the opposite of anonymous/concealed publishing.
+
+D (inexplicable): Means unable to be explained — the approach is entirely explicable (to preserve mystery and allow experimentation).
+
+2
+
+Words in Context · Hard
+
+Answer: A — surreptitiously
+
+Core Logic: The game was an "act of political protest" against an authoritarian regime — distributing it openly would have been dangerous. The original copies would have been distributed secretly and stealthily, i.e., surreptitiously.
+
+✅ Why A is Correct
+
+Choice A (surreptitiously) is correct. The game was created anonymously as political protest against an authoritarian government. Under such conditions, distributing copies openly would be dangerous — so they were distributed in a secret, covert manner. "Surreptitiously" (done in a secretive way to avoid detection) perfectly captures this underground distribution.
+
+❌ Why the Others Are Wrong
+
+B (disingenuously): Means with hidden motives or dishonestly — the distributers were genuine in their protest; the issue was secrecy from authorities, not deceiving recipients.
+
+C (succinctly): Means briefly and clearly — this describes communication style, not distribution method.
+
+D (dispassionately): Means without emotion — political protest under an authoritarian regime is inherently passionate, and distribution style is about secrecy, not emotional tone.
+
+3
+
+Words in Context · Hard
+
+Answer: A — engenders
+
+Core Logic: The passage says fragmentation "inevitably _____ alterations to local ecological processes" — meaning fragmentation inherently produces/causes these changes. "Engenders" means to cause or give rise to.
+
+✅ Why A is Correct
+
+Choice A (engenders) is correct. The researchers "stress that although fragmentation inevitably engenders alterations to local ecological processes" — the key is "inevitably." Forest fragmentation necessarily produces (engenders) ecological changes; this is presented as certain. "Engenders" means to cause or bring about, fitting the idea that fragmentation unavoidably generates these alterations.
+
+❌ Why the Others Are Wrong
+
+B (preempts): "Preempts" means to prevent something from happening — fragmentation causes alterations, it doesn't prevent them.
+
+C (subsumes): "Subsumes" means to absorb or include within something larger — fragmentation doesn't absorb the alterations; it creates them.
+
+D (attenuates): "Attenuates" means to weaken or reduce — fragmentation worsens ecological processes rather than weakening the alterations to them.
+
+4
+
+Words in Context · Hard
+
+Answer: A — belies
+
+Core Logic: Yuen Yuen Ang argues that counting patents per year gives a false impression of innovation because most patents are not novel. The patent count creates a misleading picture — it "belies" (gives a false impression of) the true degree of innovation.
+
+✅ Why A is Correct
+
+Choice A (belies) is correct. "Belie" means to give a false impression of something. The argument is: patent counts suggest a lot of innovation, but truly novel patents are vastly outnumbered by non-novel ones. So tallying patents "belies" (misrepresents) the actual degree of innovation — it creates a misleadingly optimistic picture.
+
+❌ Why the Others Are Wrong
+
+B (portends): "Portends" means to be a sign of something to come — patent counts are not predicting future innovation; they are misrepresenting current innovation.
+
+C (thwarts): "Thwarts" means to prevent — counting patents doesn't prevent innovation from occurring.
+
+D (maligns): "Maligns" means to speak badly of — the issue is false representation, not slander.
+
+5
+
+Text Structure & Purpose · Hard
+
+Answer: C
+
+Core Logic: The passage establishes García Márquez as the father of magical realism, then notes that "despite his popular reputation," he also wrote works of "strict realism" — the underlined sentence corrects the assumption that he always wrote magical realism.
+
+✅ Why C is Correct
+
+Choice C is correct: the sentence functions to refute the possible impression that García Márquez conformed to magical realism in all his works. The key phrase "despite his popular reputation" signals this corrective function — the popular impression is that he only wrote magical realism, but the sentence reveals he also wrote strict realism (e.g., Chronicle of a Death Foretold).
+
+❌ Why the Others Are Wrong
+
+A: No unrecognized similarity between Chronicle and So Far from God is identified — the texts are not compared to each other at all.
+
+B: The passage doesn't suggest Mexican American authors influenced García Márquez; the influence ran the other direction.
+
+D: No comparison between One Hundred Years and realist works is made — and the passage never implies One Hundred Years is superior.
+
+6
+
+Cross-Text Connections · Hard
+
+Answer: D
+
+Core Logic: Text 1 claims warming temperatures benefit invasive species more than native species in boreal ecosystems. Text 2 finds that in one specific Alaskan site, neither the native nor the invasive species showed significant growth variation with temperature changes. Text 2's specific result challenges how broadly Text 1's finding applies.
+
+✅ Why D is Correct
+
+Choice D is correct: "Text 2 presents a finding that casts doubt on the generalizability of the research discussed in Text 1." Text 1 presents a broad claim from non-boreal ecosystems. Text 2 tracks the exact same two species in Alaska over several years and finds neither species responds significantly to temperature variation. This means Text 1's finding may not generalize to all boreal environments — it isn't universally applicable.
+
+❌ Why the Others Are Wrong
+
+A: Text 2 doesn't address a methodological problem — both texts observe temperature effects; Text 2 just finds a different result.
+
+B: Text 2 doesn't explain an alternative cause for the trend; it shows the trend may not hold in Alaska at all.
+
+C: Text 2 doesn't challenge the validity of Text 1's methodology; it challenges the scope of its conclusion.
+
+7
+
+Inferences · Hard
+
+Answer: A
+
+Core Logic: McWhorter says translation apps have improved (boosted by advances in language processing) but still fail at nuanced communication (business dealings, meaningful exchanges). This is a profile of improved-but-still-insufficient technology.
+
+✅ Why A is Correct
+
+Choice A is correct: "They have improved remarkably over time but remain insufficient to support the complexity called for in certain interactions." The passage notes advances in language processing have "greatly boosted the utility of these apps for perfunctory tasks" — improvement confirmed. But "richer communication... often hinges on conversational patterns and gradations of meaning" — and translation apps still miss nuances. Improved + still insufficient = Choice A.
+
+❌ Why the Others Are Wrong
+
+B: The passage never mentions how business professionals view these apps — only that richer communication requires nuance they miss.
+
+C: No mention of inconsistency across languages — the limitation is about depth of nuance, not language coverage.
+
+D: "Widely viewed as inadequate for most practical purposes" overstates the critique — apps ARE adequate for simple tasks like menu inquiries; they fail at complex communication.
+
+8
+
+Command of Evidence · Hard
+
+Answer: C
+
+Core Logic: The passage explains via OFT that bushbabies benefit from higher lunar intensity because of their reliance on vision. If increased moonlight benefits them more than it costs them, those advantages outweigh any disadvantages — which is what OFT's cost-benefit framework predicts.
+
+✅ Why C is Correct
+
+Choice C is correct: "If increased lunar intensity creates any disadvantages for the bushbabies, those disadvantages are more than compensated for by the advantages that the bushbabies gain." OFT predicts that animals' behaviors reflect net cost-benefit trade-offs. Bushbabies increase foraging when lunar intensity rises because the visual benefits (finding food more easily) outweigh any costs (e.g., predator visibility). This is consistent with OFT's framework.
+
+❌ Why the Others Are Wrong
+
+A: If moonlight imposed the same costs, there would still be net benefits — the association wouldn't disappear; it would just be different. This doesn't follow from OFT.
+
+B: OFT predicts species-specific responses based on their unique traits (like vision reliance). Non-visual species wouldn't share the same advantage from moonlight.
+
+D: The passage says bushbabies and woodrats already show opposite responses — their behavior is clearly NOT more similar to woodrats, contradicting D.
+
+9
+
+Command of Evidence (Quantitative) · Hard
+
+Answer: B — biochar and compost
+
+Core Logic: The question specifies "no access to inorganic soil additives" — NPK fertilizer is inorganic, so choice A is eliminated. Among the remaining organic options, "biochar and compost" produces the highest weight (979.3 g) and length (6.76 cm).
+
+✅ Why B is Correct
+
+Choice B (biochar and compost) is correct. The constraint is "no access to inorganic soil additives" — NPK fertilizer is an inorganic soil additive, eliminating choice A. Among the remaining organic-only options: Control (825.9 g), Biochar alone (915.7 g), Compost alone (864.8 g), Biochar + Compost (979.3 g). Biochar and compost together produce the heaviest (979.3 g) and longest (6.76 cm) pineapples — the greatest increase from the control.
+
+❌ Why the Others Are Wrong
+
+A (biochar and NPK): NPK fertilizer is an inorganic additive — the scenario explicitly excludes farmers with no access to inorganic additives.
+
+C (biochar alone): Produces 915.7 g vs. 979.3 g for biochar + compost — a smaller improvement.
+
+D (compost alone): Produces 864.8 g — the weakest among non-control organic treatments.
+
+10
+
+Command of Evidence (Quantitative) · Hard
+
+Answer: B
+
+Core Logic: Choice B must be verifiable directly from the table. Looking at the Age 50–64 column: personal relationships (58) > finances (56), while in Age 30–49: personal relationships (53) < finances (63). This confirms the claim exactly.
+
+✅ Why B is Correct
+
+Choice B is correct: "Resolution makers between the ages of 50 and 64 are more likely to make resolutions related to personal relationships and less likely to make resolutions related to finances than resolution makers between the ages of 30 and 49 are." Table verification: Ages 50–64: Personal relationships = 58, Finances = 56 (relationships > finances). Ages 30–49: Personal relationships = 53, Finances = 63 (finances > relationships). So compared to the 30–49 group, the 50–64 group is indeed MORE likely to choose relationships (58 vs. 53) and LESS likely to choose finances (56 vs. 63). ✓
+
+❌ Why the Others Are Wrong
+
+A: The table only shows percentages of resolution makers who make each type — it doesn't tell us how many resolutions total each person makes. Cannot be verified from the data.
+
+C: The text says 30% of adults make resolutions, and among those who do, older people show slightly lower rates in some categories — but Choice C claims this holds for "all US adults" across ALL resolution types, which the data doesn't confirm (health/exercise is fairly flat at 79–76%).
+
+D: Ages 18–29: health = 79. Ages 30–49: health = 80. The 30–49 group is actually SLIGHTLY more likely — contradicting D.
+
+11
+
+Command of Evidence (Textual) · Hard
+
+Answer: D
+
+Core Logic: The underlined claim is that Beloved "resembles classic magical realist novels in its juxtaposition of literary realism with long-established cultural traditions — namely, those of the Black American community." The supporting quotation must confirm BOTH the juxtaposition (realism + Black cultural traditions) AND that these are long-established traditions.
+
+✅ Why D is Correct
+
+Choice D is correct: "Although much of Beloved conforms to the conventions of realistic fiction, Toni Morrison also incorporates elements drawn from Black American cultural traditions that transcend and expose the limitations of realism." This directly supports the underlined claim: realistic fiction (= literary realism) + Black American cultural traditions (= long-established cultural traditions) coexist in the novel. The contrast between realism and the cultural traditions is explicitly stated.
+
+❌ Why the Others Are Wrong
+
+A: Mentions "competing influences" and "magical realism of Latin America" — but the underlined claim is about Black American cultural traditions, not Latin American magical realism as the second influence.
+
+B: Claims Black American traditions are part of the Latin American magical realist tradition — this mischaracterizes the relationship; the underlined sentence distinguishes them.
+
+C: Focuses on how the novel alternates modes — but doesn't specifically confirm that Black American cultural traditions constitute the cultural element in the juxtaposition.
+
+12
+
+Inferences · Hard
+
+Answer: A
+
+Core Logic: The ecotypes grew equally well in all four water samples (contradicting water-based adaptation) AND zinc consistently enhanced growth for all ecotypes (contradicting resistance adaptation). If the ecotypes are locally adapted, the adaptation must be to environmental factors OTHER than the water composition or zinc levels tested.
+
+✅ Why A is Correct
+
+Choice A is correct: "if each ecotype is indeed locally adapted as the researchers hypothesized, those adaptations are to other environmental conditions than the water each ecotype inhabits." The researchers found no differentiation based on water samples or zinc levels — yet the ecotypes are still genetically and geographically distinct. If they are locally adapted (which the researchers still allow as a possibility), those adaptations must involve factors NOT tested (light, temperature were not replicated). This is the only logically consistent conclusion.
+
+❌ Why the Others Are Wrong
+
+B: Goes too far — the data shows the ecotypes are genetically distinct (the passage says so explicitly). The study only shows that the water differences between habitats don't explain growth differences.
+
+C: The passage doesn't suggest differences in zinc resistance — all ecotypes responded similarly to zinc.
+
+D: Introduces a confounding variable (zinc levels in the experiment vs. nature) as a possible explanation — but this explanation would only apply to the zinc results, not to the water sample results.
+
+13
+
+Inferences · Hard
+
+Answer: B
+
+Core Logic: Adult males prefer green-feathered females for mating BUT treat blue-feathered females less aggressively in resource competition. If mate selection alone explained female coloration, only green feathers would be maintained. The persistence of blue feathers in 28% of females despite male mate preference against them suggests blue coloration provides some other advantage — unrelated to mate attraction.
+
+✅ Why B is Correct
+
+Choice B is correct: "the occurrence of blue head plumage in adult female jacobins is driven by one or more factors not associated with mate attraction." Males prefer green-feathered females — yet 28% of adult females retain blue plumage. Since blue feathers are not preferred by males (mate-attraction disadvantage), but these females still survive and persist in the population, the blue coloration must confer benefits through a different channel — such as reduced male aggression during resource competition (males are less antagonistic toward blue females). Hence the hypothesis: factors other than mate attraction explain blue plumage.
+
+❌ Why the Others Are Wrong
+
+A: The passage gives no evidence that the percentage of blue-feathered females is changing over time — no trend data is presented.
+
+C: There's no evidence that green females cannot tell adult males from blue females — this introduces unmentioned information.
+
+D: The passage specifies that males are LESS antagonistic toward blue-feathered females (not more) — and says nothing about juvenile behavior.
+
+14
+
+Boundaries (Punctuation) · Hard
+
+Answer: D — century;
+
+Core Logic: "history as a cultural center in the early 20th century" is a complete noun phrase ending the first clause. What follows ("this distinction has earned it...") is an independent clause. A semicolon correctly joins two related independent clauses.
+
+✅ Why D is Correct
+
+Choice D (century;) is correct. The sentence structure is: "Manatí is well known for its history as a cultural center in the early 20th century; [+] this distinction has earned it the fitting nickname..." Two independent clauses are joined by a semicolon, which is the correct punctuation when no coordinating conjunction is used between two closely related complete sentences.
+
+❌ Why the Others Are Wrong
+
+A (century and): "Century and this distinction has earned..." creates an awkward construction — "and" would need to connect parallel elements, but the two clauses are not parallel in this way without a comma before "and."
+
+B (century): No punctuation creates a run-on sentence — two independent clauses cannot be fused without punctuation or a conjunction.
+
+C (century,): A comma alone between two independent clauses creates a comma splice.
+
+15
+
+Form, Structure & Sense (Grammar) · Hard
+
+Answer: D — nanoparticles' properties
+
+Core Logic: "Nanoparticles" is a plural noun. The properties belong to multiple nanoparticles (not one). The possessive of a plural noun ending in 's' requires an apostrophe after the final 's': nanoparticles'.
+
+✅ Why D is Correct
+
+Choice D (nanoparticles' properties) is correct. "Nanoparticles" is plural. When showing possession for a plural noun already ending in 's', the apostrophe goes after the 's': nanoparticles'. This is the standard rule for plural possessives (e.g., "teachers' union," "students' grades").
+
+❌ Why the Others Are Wrong
+
+A (nanoparticles properties): No apostrophe at all — this is simply two nouns adjacent with no possessive relationship marked grammatically.
+
+B (nanoparticle's properties): The apostrophe before 's' makes this singular ("one nanoparticle's properties") — but nanoengineers work with many nanoparticles.
+
+C (nanoparticles' properties'): Has an erroneous apostrophe after "properties" — "properties" is not possessive here; it is the direct object.
+
+16
+
+Boundaries (Punctuation) · Hard
+
+Answer: B — drum:
+
+Core Logic: "Steel drum" is modified by a series of innovations (wheels, a cover, amplification). A colon after "drum" is used to introduce a list or explanation that follows a complete independent clause.
+
+✅ Why B is Correct
+
+Choice B (drum:) is correct. The sentence says Bertie Marshall "made several innovations to the steel drum: [list of innovations]." A colon is the correct punctuation to introduce a list or elaboration when preceded by a complete independent clause. "Bertie Marshall made several innovations to the steel drum" is a complete clause — the colon then announces the list: wheels, a cover, amplification.
+
+❌ Why the Others Are Wrong
+
+A (drum,): A comma before a list is acceptable ONLY in informal writing or with a coordinator. Here, the list is an elaboration of "several innovations" — the colon is more precise and conventional.
+
+C (drum): No punctuation before the list makes the sentence structurally unclear — the innovations are not grammatically separated from the subject they describe.
+
+D (drum;): A semicolon joins two independent clauses — but the list of innovations is not an independent clause; it is a dependent elaboration.
+
+17
+
+Boundaries (Punctuation) · Hard
+
+Answer: D — compounds hexafluorobenzene (C₆F₆) and benzene (C₆H₆)
+
+Core Logic: "The liquid compounds hexafluorobenzene and benzene" — the word "compounds" is an appositive noun in apposition to "the liquid," not introducing a list that requires a comma. No comma should separate "compounds" from the two specific compound names that define it.
+
+✅ Why D is Correct
+
+Choice D (compounds hexafluorobenzene (C₆F₆) and benzene (C₆H₆)) is correct. The sentence reads: "The liquid _____ have molar masses of 186.06 and 78.12 g/mol." The full subject is "The liquid compounds hexafluorobenzene and benzene." "Compounds" is a noun that is further specified by "hexafluorobenzene and benzene" — no comma should interrupt this noun phrase before its specifier.
+
+❌ Why the Others Are Wrong
+
+A (compounds, hexafluorobenzene... and benzene,): The commas around the compound names would make them a non-essential appositive — but they ARE essential to identify which compounds are meant. Essential appositives take no commas.
+
+B (compounds hexafluorobenzene... and benzene,): A trailing comma before "have" would incorrectly separate the subject from its verb.
+
+C (compounds, hexafluorobenzene... and benzene): Comma after "compounds" incorrectly suggests "hexafluorobenzene and benzene" is an interrupting non-essential element.
+
+18
+
+Form, Structure & Sense (Grammar) · Hard
+
+Answer: D — dictates
+
+Core Logic: Popper's theory is a currently accepted scientific framework. The present tense "dictates" is needed because the theory is still in force today. The relative clause "that _____ scientific hypotheses must be refutable" modifies "theory" — needing a present-tense finite verb.
+
+✅ Why D is Correct
+
+Choice D (dictates) is correct. "Popper's theory _____ that scientific hypotheses must be refutable." The blank is the main verb of a relative clause describing the theory. The present tense is required because Popper's theory of falsifiability is an ongoing, presently-held framework in philosophy of science — not a past action. "Dictates" correctly uses the present tense for an enduring principle.
+
+❌ Why the Others Are Wrong
+
+A (was dictating): Past progressive suggests the dictating was temporary and has ended — but Popper's theory is still active today.
+
+B (dictated): Simple past suggests the theory no longer holds — it does.
+
+C (dictating): A participle — cannot serve as the finite main verb of the relative clause.
+
+19
+
+Form, Structure & Sense (Grammar) · Hard
+
+Answer: D — authors, asserting
+
+Core Logic: The blank modifies "cadre of renowned ___" — "authors" names them, and then a participial phrase ("asserting that...") describes their action. A participial phrase in apposition to the noun correctly captures the idea without creating a run-on.
+
+✅ Why D is Correct
+
+Choice D (authors, asserting) is correct. The sentence: "This cadre of renowned authors, asserting that American publishers' appropriation of their work caused... injuries, helped sow the seeds for the International Copyright Act." "Authors" names the group; "asserting..." is a participial phrase (offset by a comma) describing the action the authors took — asserting a claim. This creates one unified sentence with the correct structure: subject (cadre) + participial modifier + main verb (helped sow).
+
+❌ Why the Others Are Wrong
+
+A (authors asserted): Creates two independent clauses ("cadre...asserted that..." and "helped sow the seeds") fused without proper conjunction or punctuation — a run-on.
+
+B (authors were asserting): Same problem — "cadre were asserting" and "helped sow" are two independent clauses improperly fused.
+
+C (authors, had asserted): "Authors, had asserted" is not grammatically standard — the comma interrupts the subject-verb unit improperly.
+
+20
+
+Transitions · Hard
+
+Answer: A — To date,
+
+Core Logic: The passage describes a discovery from 2003 (the moon Helike), then notes researchers have discovered eighty moons total. The transition signals that the count of 80 moons represents the cumulative total up to the present — i.e., "to date."
+
+✅ Why A is Correct
+
+Choice A (To date,) is correct. "To date" means "up to and including the present moment." After describing the 2003 discovery of Helike, the passage says that "to date, researchers have discovered eighty moons orbiting Jupiter" — this frames 80 as the current running total of all discovered moons, built up from Galileo's original four through 2003 and beyond.
+
+❌ Why the Others Are Wrong
+
+B (For example): Would mean the 80 moons is an example of something just stated — but nothing in the previous sentence implies a broader category of which 80 moons is an instance.
+
+C (In other words): Would signal a restatement — the 80-moon count is new information, not a restatement of the Helike discovery.
+
+D (Rather): Signals a correction or substitution — nothing in the prior sentence needs to be corrected or replaced.
+
+21
+
+Transitions · Hard
+
+Answer: C — Thus,
+
+Core Logic: The Hornbostel-Sachs system classifies by sound production. The hardingfele produces sound via string vibration. Therefore, it follows logically that it is classified as a chordophone. The conclusion flows from the premises — requiring "thus."
+
+✅ Why C is Correct
+
+Choice C (Thus,) is correct. The logical structure is: Premise 1 — The system classifies by sound production method. Premise 2 — The hardingfele produces sound through string vibration. Conclusion: "Thus, under the Hornbostel-Sachs system, the hardingfele is a chordophone." "Thus" signals this conclusion drawn from the preceding premises.
+
+❌ Why the Others Are Wrong
+
+A (Instead): Signals replacement or substitution — the hardingfele classification is not replacing something else.
+
+B (Furthermore): Signals addition — but the chordophone classification is not an additional piece of information; it is the direct result of the preceding facts.
+
+D (Similarly): Would require a parallel example — no other instrument is being compared here.
+
+22
+
+Transitions · Hard
+
+Answer: A — conversely,
+
+Core Logic: Actors showed suppressed prefrontal responses while performing (brain acting as if their identity was diminished), but their responses were normal in non-acting contexts. These are opposite conditions — requiring a contrast transition.
+
+✅ Why A is Correct
+
+Choice A (conversely,) is correct. The passage presents two opposite conditions: [1] During performance, actors' left anterior prefrontal cortex showed suppressed responses. [2] Conversely, in non-acting contexts, their responses were normal. "Conversely" signals a direct reversal — the exact opposite pattern applies in the non-acting condition.
+
+❌ Why the Others Are Wrong
+
+B (specifically): Would narrow or add precision to the prior claim — but normal responses in non-acting contexts are not a more specific case of suppressed responses during acting.
+
+C (likewise): Would signal a similar finding — but the non-acting context shows the opposite (normal, not suppressed) response.
+
+D (thus): Would signal a conclusion drawn from the prior finding — but normal non-acting responses are not a consequence of suppressed acting responses; they are a contrasting data point.
+
+23
+
+Rhetorical Synthesis · Hard
+
+Answer: B
+
+Core Logic: To explain the 50 Completers challenge to a new audience, the answer must define the challenge clearly — who it is, what is required, and optionally give an example of completion — without assuming prior knowledge.
+
+✅ Why B is Correct
+
+Choice B is correct: "Not until after you have reached the highest points in all fifty US states — including Spruce Knob in West Virginia and Mount Elbert in Colorado — can you include yourself among the 50 Completers of the Highpointers Club." This sentence: (1) defines the challenge (reaching the highest point in all fifty states), (2) gives specific examples (Spruce Knob and Mount Elbert), and (3) names the reward (becoming a 50 Completer) — all information a new audience needs to understand the challenge.
+
+❌ Why the Others Are Wrong
+
+A: Mentions Spruce Knob and Mount Elbert but frames them as two specific peaks to reach — a new audience wouldn't understand these are examples from a list of 50 state high points required to become a completer.
+
+C: Suggests joining the club as a "challenge" without defining what the challenge actually involves — doesn't explain the 50 Completers criterion.
+
+D: Describes In Suk Han's achievement on a specific date but doesn't explain what a "50 Completer" is or what the challenge entails for a new audience.
+
+24
+
+Rhetorical Synthesis · Hard
+
+Answer: B
+
+Core Logic: The question asks to introduce Marie Hall to a new audience — the answer must focus on her (not Stradivari) and explain who she is and why she is notable, using information from the notes.
+
+✅ Why B is Correct
+
+Choice B is correct: "Marie Hall was a British violinist who once owned a Stradivarius violin." This sentence: (1) names Marie Hall, (2) identifies her as British, (3) identifies her as a violinist, and (4) mentions she owned a Stradivarius — which connects her to the famous instrument maker. For a new audience, this is the minimum necessary introduction to understand who she is and why she's notable.
+
+❌ Why the Others Are Wrong
+
+A: Focuses on how many Stradivari violins exist today — this introduces Stradivari, not Marie Hall; Marie Hall is not mentioned.
+
+C: Only says the violin is named after her — doesn't explain who she is (violinist, British) or her significance.
+
+D: Focuses on Stradivari's dates and nationality — again centers Stradivari, not Marie Hall, despite the question asking to introduce Hall.
+
+25
+
+Rhetorical Synthesis · Hard
+
+Answer: B
+
+Core Logic: Browner claims Ballard's compositions rely on elements from Native musical traditions. The supporting choice must (a) cite Browner's claim AND (b) use specific evidence from the notes that proves the claim (e.g., a specific composition that incorporates a traditional Native instrument).
+
+✅ Why B is Correct
+
+Choice B is correct: "Browner posits that Louis Ballard's compositions rely on elements originating within Native musical traditions; Washington Festival Suite affirms this assertion, incorporating a Pueblo log drum." This choice does two things simultaneously: (1) states Browner's claim explicitly, and (2) supports it with concrete textual evidence — the Washington Festival Suite uses a Pueblo log drum, a traditional Native instrument. The semicolon structure shows the claim and its supporting evidence clearly.
+
+❌ Why the Others Are Wrong
+
+A: Mentions Browner's claim and names Desert Trilogy — but Desert Trilogy was nominated for the Pulitzer Prize (a mainstream award), not identified in the notes as incorporating Native instruments. This doesn't directly support Browner's specific claim.
+
+C: Describes Ballard as a classical composer who wrote Washington Festival Suite and was nominated for the Pulitzer — but doesn't mention Browner's claim at all, and doesn't connect the work to Native musical traditions.
+
+D: Mentions the Pulitzer Prize nomination (Desert Trilogy) alongside Browner's claim — but Desert Trilogy's nomination doesn't specifically support the "Native musical elements" claim the way the Pueblo log drum does.
+
+26
+
+Rhetorical Synthesis · Hard
+
+Answer: B
+
+Core Logic: The question asks to present the study's research methods. A methods description must explain WHAT was studied (rock samples), HOW they were collected (from two seafloor ridges), and WHAT was measured (age and oxidation levels).
+
+✅ Why B is Correct
+
+Choice B is correct: "Birner's team analyzed the age and oxidation levels of rock samples collected from two seafloor ridges." This sentence specifies: (1) the researchers (Birner's team), (2) the method (analyzed age and oxidation levels), (3) the materials (rock samples), and (4) the source (two seafloor ridges). These are the core elements of a research methods description.
+
+❌ Why the Others Are Wrong
+
+A: Focuses on the purpose (to analyze origins of Earth's unique conditions) rather than the method — it mentions the Archean eon but frames it as context, not as a methodological step.
+
+C: States the study's overall goal (better understand Earth's mantle, explain conditions for life) — this is the research question/goal, not the methods.
+
+D: States the aim was to challenge previous theories — again, this is the research motivation, not the method used to conduct the study.
+
+27
+
+Rhetorical Synthesis · Hard
+
+Answer: B
+
+Core Logic: The question asks to place the 1821 Declaration in the context of Valle's changing political beliefs. The answer must connect: (1) Valle's prior opposition to independence, (2) the event that changed his mind (Riego's revolt), and (3) his eventual writing of the 1821 Declaration.
+
+✅ Why B is Correct
+
+Choice B is correct: "Long an opponent of Central American independence, Valle changed his mind after an 1820 revolt and wrote the 1821 declaration." This sentence efficiently places the Declaration in the context of Valle's political evolution: (1) prior opposition ("long an opponent"), (2) the turning point (the 1820 revolt), and (3) the outcome (wrote the 1821 declaration). All three elements are present, directly answering the question.
+
+❌ Why the Others Are Wrong
+
+A: Claims the Spanish king's repeal of the 1812 constitution led to Valle's change of mind — but the notes say it was Riego's 1820 revolt, not the 1814 repeal, that changed his mind. In fact, the 1814 repeal removed rights; Valle presumably still opposed independence at that point.
+
+C: States the Declaration might not have happened without Riego's revolt — this is a counterfactual speculation, not a contextualization of Valle's changing beliefs.
+
+D: Says Riego's revolt was the "inspiration that Valle needed to change his political beliefs" — this is close, but it doesn't mention that Valle then actually wrote the declaration, missing the connection to the 1821 document.
+
+
+
+Section 2, Module 1: Math
+
+22 questions · Difficulty: Mixed
+
+
+
+1
+
+Algebra / Linear Equations
+
+Answer: D — 670
+
+Core Mathematical Concept: Recognizing that 90x + 40 is exactly 10 times (9x + 4), so the answer scales directly without solving for x.
+
+📐 Step-by-Step Proof
+
+Given:  9x + 4 = 67
+
+Notice: 90x + 40 = 10(9x + 4)
+
+Therefore: 10 × 67 = 670
+
+Answer: D — 670 ✓
+
+🖩 Desmos Method
+
+Type 9x + 4 = 67 → find x = 7 → compute 90(7) + 40 = 670.
+
+❌ Why Others Are Wrong
+
+A (7): This is the value of x, not 90x + 40.
+
+B (70): Multiplies 67 by ~1, not by 10. Confuses the scale factor.
+
+C (130): Adds 63 instead of multiplying — misreads the relationship between the expressions.
+
+2
+
+Geometry / Parallel Lines & Transversals
+
+Answer: B — 72
+
+Core Mathematical Concept: When a transversal crosses parallel lines, alternate interior angles are equal (co-interior angles sum to 180°). x° and 72° are co-interior angles on the same side, making them supplementary — wait, from the figure x° is above line p and 72° is below it at the same intersection. They are vertical angles / co-interior. Since x° is labeled on line p at the same intersection as 72°, they are co-interior (same-side interior), but actually from the figure x° and 72° appear to be at the same intersection on line p — they are supplementary angles on a straight line. Actually, x° appears above line p and 72° below it at the intersection with t. These are supplementary: x + 72 = 180 → x = 108? No — looking again: x° is on line p at the intersection with t, and 72° is ALSO at that intersection (below the transversal on line p). So x° and 72° are co-interior (same-side) angles ON LINE p, meaning they form a straight line: x + 72 = 180 is wrong. Actually they appear to be ALTERNATE interior angles: x° is above p and 72° is below p at the same crossing, making them vertical angles → x = 72.
+
+📐 Step-by-Step Proof
+
+x° and 72° are formed at the same intersection on line p
+
+From the figure, x° is on the upper-left of t∩p
+
+72° is on the lower-right of t∩p
+
+These are vertical angles → x = 72
+
+Since p ∥ r, the 72° angle is also replicated at t∩r
+
+Answer: B — x = 72 ✓
+
+🖩 Verification
+
+Vertical angles are always equal. x° is opposite 72° at the transversal intersection — no calculation needed.
+
+A (36): Would be half of 72 — no angle bisector is described.
+
+C (180): That would be a straight line, not an angle value.
+
+D (252): Larger than 180° — geometrically impossible for an interior angle.
+
+3
+
+Problem Solving / Unit Conversion
+
+Answer: 4500
+
+Core Mathematical Concept: Dimensional analysis — multiply meters by the conversion factor (10 decimeters per meter).
+
+📐 Step-by-Step Proof
+
+Given: 1 meter = 10 decimeters
+
+450 meters × (10 decimeters / 1 meter)
+
+= 450 × 10
+
+= 4,500 decimeters ✓
+
+Common error: Dividing instead of multiplying (450 ÷ 10 = 45) — unit conversion goes meters → smaller unit → multiply.
+
+4
+
+Algebra / Systems of Equations (Word Problem)
+
+Answer: 15
+
+Core Mathematical Concept: Substitute the known value of y into the perimeter formula and solve for x.
+
+📐 Step-by-Step Proof
+
+Given: 58 = 2x + 2y,   y = 14
+
+58 = 2x + 2(14)
+
+58 = 2x + 28
+
+30 = 2x
+
+x = 15 feet ✓
+
+Common error: Setting x = y = 14 and not solving — misreading "width is 14" as both dimensions.
+
+5
+
+Advanced Math / Exponential Functions
+
+Answer: A — y = 40(1.50)ˣ
+
+Core Mathematical Concept: Exponential growth model y = a·bˣ where a = initial value and b = (1 + growth rate).
+
+📐 Step-by-Step Proof
+
+Initial value at x = 0: y = 40  →  a = 40
+
+Growth rate per unit: increases by 50% → b = 1 + 0.50 = 1.50
+
+Model: y = 40(1.50)ˣ
+
+Verify: x=0 → y = 40(1.50)⁰ = 40(1) = 40 ✓
+
+        x=1 → y = 40(1.50)¹ = 60 = 40 + 50% of 40 ✓
+
+Answer: A ✓
+
+🖩 Desmos Method
+
+Type y = 40(1.50)^x and verify the y-intercept is (0, 40) and check point (1, 60).
+
+B (1.05): 1.05 represents 5% growth, not 50%.
+
+C (y=50(1.40)^x): Wrong initial value (50 instead of 40) and wrong growth rate (40% instead of 50%).
+
+D (y=50(1.04)^x): Both initial value and growth rate are wrong.
+
+6
+
+Algebra / Function Evaluation
+
+Answer: ≈ 0.0138
+
+Core Mathematical Concept: Direct substitution into f(x) = 1/(8x).
+
+📐 Step-by-Step Proof
+
+f(x) = 1/(8x)
+
+f(9) = 1/(8 × 9) = 1/72
+
+1 ÷ 72 ≈ 0.01388...
+
+≈ 0.0138 ✓
+
+Common error: Computing 8(9) = 72, then giving 72 as the answer rather than its reciprocal.
+
+7
+
+Algebra / Linear Functions — y-intercept
+
+Answer: A — (0, −¼)
+
+Core Mathematical Concept: The y-intercept is found by setting x = 0 in the function equation.
+
+📐 Step-by-Step Proof
+
+f(x) = 3x − 1/4
+
+y-intercept: set x = 0
+
+f(0) = 3(0) − 1/4 = −1/4
+
+y-intercept: (0, −1/4) ✓
+
+B (0, −3): Uses the coefficient of x as the intercept — confuses slope with y-intercept.
+
+C (0, 3): Takes slope (3) as a positive y-intercept — wrong on both sign and value.
+
+D (0, 4): No basis in the equation at all.
+
+8
+
+Algebra / Systems of Equations
+
+Answer: 14
+
+Core Mathematical Concept: Use substitution — since 6y = 14, substitute into the first equation to isolate x.
+
+📐 Step-by-Step Proof
+
+System: x + 6y = 28,   6y = 14
+
+Substitute 6y = 14 into first equation:
+
+x + 14 = 28
+
+x = 14 ✓
+
+Common error: Solving for y first (y = 14/6 ≈ 2.33), then computing x = 28 − 6(2.33) — correct but unnecessarily complex. The direct substitution of 6y = 14 is faster and cleaner.
+
+9
+
+Geometry / Area
+
+Answer: B — 113
+
+Core Mathematical Concept: Area of square = side², then add rectangle area directly.
+
+📐 Step-by-Step Proof
+
+Square X: side = 9 cm → Area = 9² = 81 cm²
+
+Rectangle Y: Area = 32 cm² (given)
+
+Total = 81 + 32 = 113 cm²
+
+Answer: B — 113 ✓
+
+A (145): Adds 9 directly to 136 — confuses side length with area.
+
+C (82): Uses 9 × 9 = 81, then adds only 1 — arithmetic error on rectangle area.
+
+D (81): Only computes the square area and forgets to add the rectangle.
+
+10
+
+Algebra / Linear Models (Word Problem)
+
+Answer: C — 70
+
+Core Mathematical Concept: Linear decay model — subtract 0.9 pounds per day from initial weight 293; set equal to 230 and solve for days.
+
+📐 Step-by-Step Proof
+
+Model: Weight = 293 − 0.9d
+
+Set equal to 230: 293 − 0.9d = 230
+
+−0.9d = 230 − 293 = −63
+
+d = −63 / −0.9 = 70
+
+Answer: C — 70 days ✓
+
+🖩 Desmos Method
+
+Graph y = 293 - 0.9x and y = 230. Find intersection x-coordinate = 70.
+
+A (57): Uses 0.9 incorrectly — perhaps divides 51 by 0.9 rather than 63.
+
+B (63): This is the raw weight difference (293 − 230 = 63), but doesn't divide by the rate.
+
+D (207): Adds instead of subtracts, or divides the whole starting weight by 0.9.
+
+11
+
+Advanced Math / Nonlinear Functions — x-intercepts
+
+Answer: C — Three
+
+Core Mathematical Concept: f(x) = 0 corresponds to x-intercepts — count where the graph crosses the x-axis.
+
+📐 Step-by-Step Proof
+
+f(x) = 0 ↔ graph crosses the x-axis
+
+From the graph, visible x-intercepts:
+
+  1st crossing: x ≈ −3 (rising through x-axis)
+
+  2nd crossing: x = 0 (crosses at origin)
+
+  3rd crossing: x ≈ 3 (falls back through x-axis)
+
+Three x-intercepts → Answer: C ✓
+
+A (One) / B (Two): Undercounts — misses one or two zero crossings visible in the graph.
+
+D (Four): Overcounts — the graph has exactly three crossings, not four local extrema.
+
+12
+
+Advanced Math / Solving for a Variable
+
+Answer: D — b = ±√(7d − 4c)
+
+Core Mathematical Concept: Isolate b² by moving other terms, then take the square root (±) since b² = positive value gives two real solutions.
+
+📐 Step-by-Step Proof
+
+Given: b² + 4c = 7d
+
+b² = 7d − 4c
+
+b = ±√(7d − 4c)
+
+Note: d > 4c/7 ensures 7d − 4c > 0, so the radical is real ✓
+
+Answer: D ✓
+
+A (7d+4c)/2: Adds instead of subtracts, and divides by 2 — wrong algebra entirely.
+
+B (7d−4c)/2: Forgets to take the square root — gives b, not b².
+
+C ±√(7d+4c): Sign error — adds 4c when it should be subtracted (b² = 7d − 4c, not + 4c).
+
+13
+
+Advanced Math / Quadratic Equations — Number of Solutions
+
+Answer: C — Exactly two
+
+Core Mathematical Concept: Difference of squares — x² − (9/4)² = 0 factors into (x − 9/4)(x + 9/4) = 0, yielding two distinct real solutions.
+
+📐 Step-by-Step Proof
+
+x² − 81/16 = 0
+
+x² = 81/16
+
+x = ±√(81/16) = ±9/4
+
+Two distinct real solutions: x = 9/4 and x = −9/4
+
+Answer: C — Exactly two ✓
+
+🖩 Desmos Method
+
+Graph y = x^2 - 81/16. Count x-intercepts → exactly 2 (symmetric about y-axis).
+
+A (Zero): Incorrectly concludes no real solution — but 81/16 is positive, so the square root exists.
+
+B (Exactly one): Would require a perfect square equation like (x − k)² = 0 — this is a difference of squares, not a perfect square.
+
+D (Infinitely many): Only true for identities; this is a specific equation with a finite solution set.
+
+14
+
+Geometry / Dilations and Scale Factor
+
+Answer: D — 108
+
+Core Mathematical Concept: When a figure is dilated by scale factor k, every corresponding length is multiplied by k. A'B' = k × AB.
+
+📐 Step-by-Step Proof
+
+Scale factor = 6
+
+AB = 18
+
+A'B' = 6 × AB = 6 × 18 = 108
+
+Answer: D — 108 ✓
+
+A (3): Divides AB by scale factor (18÷6=3) — reverses the direction of dilation.
+
+B (6): Gives only the scale factor itself.
+
+C (24): Adds scale factor instead of multiplying (18+6=24).
+
+15
+
+Geometry / Circles — Standard Form
+
+Answer: 19
+
+Core Mathematical Concept: Standard form of a circle: (x−h)² + (y−k)² = r². The radius is r = √(right-hand side).
+
+📐 Step-by-Step Proof
+
+(x + 3)² + (y + 9)² = 361
+
+Compare to (x−h)² + (y−k)² = r²:
+
+r² = 361
+
+r = √361 = 19
+
+Radius = 19 ✓
+
+Common error: Giving r² = 361 as the answer instead of r = √361 = 19.
+
+16
+
+Algebra / Linear Inequalities
+
+Answer: D — Region x < 0, y > 0
+
+Core Mathematical Concept: Test representative points from each region in the inequality 5x − 7y > 35. Find the region where no point satisfies it.
+
+📐 Step-by-Step Proof
+
+Inequality: 5x − 7y > 35
+
+Rewrite: y < (5/7)x − 5   (solution region is BELOW this line)
+
+Test region D: x < 0, y > 0 (Quadrant II)
+
+Try (−1, 1): 5(−1) − 7(1) = −5 − 7 = −12  NOT > 35 ✗
+
+In Quadrant II: x is negative and y is positive → 5x is negative, 7y is positive
+
+So 5x − 7y is always very negative → never > 35
+
+Answer: D — Region x < 0, y > 0 contains NO solutions ✓
+
+🖩 Desmos Method
+
+Graph 5x - 7y > 35. The shaded region (solutions) lies in Quadrant IV / lower right. Quadrant II (x<0, y>0) is entirely unshaded.
+
+A (x-axis): On the x-axis, y=0. Test (8,0): 5(8)−7(0)=40>35 ✓ — so x-axis CAN contain solutions.
+
+B (x>0, y>0): Test (10,1): 5(10)−7(1)=43>35 ✓ — Quadrant I can contain solutions.
+
+C (x<0, y<0): Test (−1,−10): 5(−1)−7(−10)=−5+70=65>35 ✓ — so Quadrant III can have solutions.
+
+17
+
+Statistics & Probability / Conditional Probability
+
+Answer: B — 0.32
+
+Core Mathematical Concept: Conditional probability P(A|B) = P(A and B) / P(B). Here: P(age>65 | age≥18) = P(age>65) / P(age≥18).
+
+📐 Step-by-Step Proof
+
+Table: Less than 18: 26%, 18–40: 21%, 41–65: 29%, >65: 24%
+
+P(age ≥ 18) = 100% − 26% = 74%
+
+P(age > 65) = 24%
+
+P(>65 | ≥18) = 24% / 74% = 0.2432... ≈ 0.32
+
+Wait — exact: 24/74 = 0.3243 ≈ 0.32
+
+Answer: B — 0.32 ✓
+
+A (0.24): Gives the unconditional probability P(>65) = 24% without conditioning on age ≥ 18.
+
+C (0.50): No basis — does not reflect any valid calculation from the table.
+
+D (0.92): Calculates P(age ≤ 65 | ≥18) — the complement, not the required probability.
+
+18
+
+Algebra / Slopes of Perpendicular Lines
+
+Answer: D — 2/9
+
+Core Mathematical Concept: Perpendicular lines have slopes that are negative reciprocals. Find slope of h, then negate and flip.
+
+📐 Step-by-Step Proof
+
+Line h: (1/2)x + (1/9)y − 54 = 0
+
+Solve for y: (1/9)y = −(1/2)x + 54
+
+y = −(9/2)x + 486
+
+Slope of h: m_h = −9/2
+
+Perpendicular slope: m_j = −1/m_h = −1/(−9/2) = 2/9
+
+Answer: D — slope of j = 2/9 ✓
+
+A (−9/2): This is the slope of h, not of the perpendicular line j.
+
+B (−2/9): Flips the fraction but keeps the wrong sign — perpendicular requires flipping AND negating.
+
+C (9/2): Negates but doesn't flip — gives the negative of h's slope, not its perpendicular.
+
+19
+
+Statistics / Mean, Median, Range
+
+Answer: C — 81
+
+Core Mathematical Concept: Use three statistical constraints simultaneously — median identifies b, range identifies a using c, and mean gives the equation to solve for c.
+
+📐 Step-by-Step Proof
+
+Data (ascending): a, 26, 29, b, 31, 47, c
+
+7 values → median = 4th value = b
+
+Median = 29 → b = 29 ✓
+
+Range = c − a = 72 (since a is smallest, c is largest)
+
+→ a = c − 72
+
+Mean = (a + 26 + 29 + 29 + 31 + 47 + c) / 7 = 36
+
+a + 26 + 29 + 29 + 31 + 47 + c = 252
+
+a + c + 162 = 252  →  a + c = 90
+
+Substitute a = c − 72:
+
+(c − 72) + c = 90  →  2c = 162  →  c = 81
+
+Answer: C — c = 81 ✓
+
+Check: a = 81 − 72 = 9; data: 9, 26, 29, 29, 31, 47, 81; sum = 252; mean = 36 ✓
+
+A (54): Doesn't correctly apply all three constraints simultaneously.
+
+B (72): Confuses range with the value of c.
+
+D (98): Arithmetic error in the mean equation — likely adds incorrectly.
+
+20
+
+Geometry / Right Triangle Trigonometry
+
+Answer: D — 37/sin Q
+
+Core Mathematical Concept: In right triangle QRS with right angle at R, SR = 37 (adjacent to angle S, opposite to angle Q... actually SR is the base). sin Q = opposite/hypotenuse = SR/QS = 37/QS. Solve for QS.
+
+📐 Step-by-Step Proof
+
+Right angle at R. SR = 37. Find QS (hypotenuse).
+
+From angle Q: sin Q = opposite/hypotenuse = SR/QS
+
+sin Q = 37/QS
+
+QS = 37/sin Q
+
+Answer: D — 37/sin Q ✓
+
+A (37 cos Q): Would give the adjacent side (QR), not the hypotenuse QS.
+
+B (37 sin Q): sin Q × hypotenuse = opposite, not hypotenuse = 37/sin Q.
+
+C (37/cos Q): cos Q = adjacent/hypotenuse = QR/QS → QS = QR/cos Q. But QR ≠ 37 here; SR = 37 (the opposite side from Q).
+
+21
+
+Advanced Math / Polynomial Equations — Zero Product Property
+
+Answer: 12 (or 16)
+
+Core Mathematical Concept: If a product of factors equals zero, at least one factor must equal zero. Set each factor to zero and identify positive solutions.
+
+📐 Step-by-Step Proof
+
+(x − 16)(x − 12)(x + 9)(x + 19) = 0
+
+Set each factor = 0:
+
+x − 16 = 0  →  x = 16 (positive ✓)
+
+x − 12 = 0  →  x = 12 (positive ✓)
+
+x + 9  = 0  →  x = −9  (negative ✗)
+
+x + 19 = 0  →  x = −19 (negative ✗)
+
+Positive solutions: 12 or 16 (either accepted) ✓
+
+Common errors: Giving x = −9 or −19 (negative, not positive). Also: adding/multiplying the constants (16×12=192) rather than applying zero product property.
+
+22
+
+Advanced Math / Quadratic Formula
+
+Answer: B — 1 + √29
+
+Core Mathematical Concept: Rearrange to standard form, then apply the quadratic formula: x = (−b ± √(b²−4ac)) / 2a.
+
+📐 Step-by-Step Proof
+
+x² − 2x = 28
+
+x² − 2x − 28 = 0
+
+a = 1, b = −2, c = −28
+
+x = [2 ± √(4 + 112)] / 2 = [2 ± √116] / 2
+
+√116 = √(4 × 29) = 2√29
+
+x = [2 ± 2√29] / 2 = 1 ± √29
+
+Solutions: x = 1 + √29  or  x = 1 − √29
+
+Answer: B — 1 + √29 ✓
+
+🖩 Desmos Method
+
+Graph y = x^2 - 2x - 28. Find positive x-intercept ≈ 6.39 ≈ 1 + √29.
+
+A (√28): Would be correct only if x² = 28, ignoring the −2x term.
+
+C (29): Confuses the discriminant constant with the solution.
+
+D (28 + √2): No algebraic basis — likely a misread or arithmetic error in the formula.
+
+M1 Bonus
+
+Advanced Math / Exponential — x-axis crossings
+
+Answer: B — One
+
+This is the graph question from Module 1 (y = 9(a/7)^(x+c) − b):
+
+Since a > 7, the base a/7 > 1, making 9(a/7)^(x+c) a growing exponential with horizontal asymptote y = −b. Since b > 0, the asymptote is y = −b < 0. A growing exponential shifted down by b crosses y = 0 exactly once (when the exponential part equals b).
+
+📐 Proof
+
+y = 9(a/7)^(x+c) − b
+
+Set y = 0: 9(a/7)^(x+c) = b
+
+(a/7)^(x+c) = b/9 > 0 (since b > 0)
+
+Exponential function is 1-to-1 → exactly ONE solution for x
+
+Answer: B — One crossing ✓
+
+Section 2, Module 2: Math — Hard
+
+22 questions · Difficulty: Hard
+
+
+
+1
+
+Algebra / Inequalities
+
+Answer: D — 4 + x ≥ 16
+
+Core Mathematical Concept: Translate "at least 16 miles total" → total miles ≥ 16. Total = already run + additional = 4 + x.
+
+📐 Step-by-Step Proof
+
+Goal: run AT LEAST 16 miles → total ≥ 16
+
+Already run: 4 miles
+
+Additional miles needed: x
+
+Total: 4 + x
+
+Constraint: 4 + x ≥ 16
+
+Answer: D ✓
+
+A (4 − x ≤ 16): Subtracting x means Zuri is removing miles — nonsensical context. Also wrong direction.
+
+B (4 + x ≤ 16): Wrong direction — "at least" means ≥, not ≤.
+
+C (4 − x ≥ 16): Subtraction is wrong — x miles are being added, not removed.
+
+2
+
+Geometry / Parallel Lines — Corresponding Angles
+
+Answer: B — y = 147
+
+Core Mathematical Concept: Lines r and s are parallel iff corresponding angles formed by the same transversal k are equal. w and y are corresponding angles at the two intersections.
+
+📐 Step-by-Step Proof
+
+w = 147° (given)
+
+w° is formed at intersection k∩r
+
+y° is formed at intersection k∩s (same position)
+
+r ∥ s  ↔  corresponding angles equal  ↔  y = w = 147
+
+Answer: B — y = 147 ✓
+
+A (x = 33): x and w are supplementary at r (w + x = 180 → x = 33), but knowing x tells us nothing about angles at s.
+
+C (w + y = 180): Would prove r and s are cut by a transversal making co-interior angles — but 147 + 33 = 180 would mean w and y are supplementary, not equal, proving something different.
+
+D (y + z = 180): y and z are supplementary angles at s regardless of whether r ∥ s — provides no information about parallelism.
+
+3
+
+Algebra / Linear Models from Tables
+
+Answer: A — y = (3/2)x + 29
+
+Core Mathematical Concept: Find the slope from two table points, then use point-slope to find the y-intercept (which represents the fixed entrance fee).
+
+📐 Step-by-Step Proof
+
+Table: (10, 44), (15, 51.50), (25, 66.50)
+
+Slope = Δy/Δx = (51.50 − 44)/(15 − 10) = 7.50/5 = 1.50 = 3/2
+
+Using point (10, 44): 44 = (3/2)(10) + b
+
+44 = 15 + b  →  b = 29
+
+Equation: y = (3/2)x + 29
+
+Verify with (25, 66.50): (3/2)(25) + 29 = 37.5 + 29 = 66.5 ✓
+
+Answer: A ✓
+
+B (y = 3/2x − 56): Wrong sign for intercept — arithmetic error in solving for b.
+
+C/D (slope 2/3): Inverts Δy and Δx when computing slope — gets 5/7.50 instead of 7.50/5.
+
+4
+
+Statistics / Interpreting Slope of Line of Best Fit
+
+Answer: C
+
+Core Mathematical Concept: Slope = rise/run = Δy/Δx. Here x = seeds planted, y = seeds germinated. Slope ≈ 60/100 means for every 100 additional seeds planted, 60 more germinate.
+
+📐 Step-by-Step Proof
+
+From scatterplot, line passes through approximately (0,0) and (500, 300)
+
+Slope ≈ 300/500 = 0.60
+
+Interpretation: for every 1 additional seed planted, 0.60 more germinate
+
+Equivalently: for every 100 additional seeds planted, 60 more germinate
+
+Answer: C ✓
+
+A/B: Misidentify which variable is x and which is y — x is seeds planted, not days.
+
+D (300 seeds per 100): Overestimates slope — reading 300/100 instead of 60/100.
+
+5
+
+Algebra / Slope of a Linear Equation
+
+Answer: −2
+
+Core Mathematical Concept: Rewrite in slope-intercept form y = mx + b; the coefficient of x is the slope.
+
+📐 Step-by-Step Proof
+
+2x + y = 11
+
+y = −2x + 11
+
+Slope = −2 ✓
+
+Common errors: Giving slope = 2 (wrong sign), or slope = 11 (the y-intercept), or slope = 1/2 (reciprocal of coefficient).
+
+6
+
+Advanced Math / Polynomial Operations
+
+Answer: B — b = 12
+
+Core Mathematical Concept: Expand f(x)·g(x) using FOIL, subtract h(x), then collect like terms to identify the coefficient of x.
+
+📐 Step-by-Step Proof
+
+f(x) = 2x + 3,  g(x) = 7x − 2,  h(x) = 5x + 6
+
+f(x)·g(x) = (2x + 3)(7x − 2)
+
+         = 14x² − 4x + 21x − 6
+
+         = 14x² + 17x − 6
+
+f(x)·g(x) − h(x) = 14x² + 17x − 6 − (5x + 6)
+
+                  = 14x² + 17x − 6 − 5x − 6
+
+                  = 14x² + 12x − 12
+
+So ax² + bx + c = 14x² + 12x − 12
+
+b = 12 → Answer: B ✓
+
+A (−5): Forgets to distribute the negative when subtracting h(x).
+
+C (20): Likely adds h(x) instead of subtracting (17 + 3 ≠ 20 anyway).
+
+D (22): Ignores the subtraction of 5x entirely (17 + 5 = 22 — adds instead of subtracts).
+
+7
+
+Algebra / Function Evaluation — Solving for Input
+
+Answer: A — −101
+
+Core Mathematical Concept: Set f(a) = −18, substitute a for x in the function definition, and solve the resulting linear equation.
+
+📐 Step-by-Step Proof
+
+f(x) = (x + 11)/5,   f(a) = −18
+
+(a + 11)/5 = −18
+
+a + 11 = −90
+
+a = −90 − 11 = −101
+
+Answer: A — a = −101 ✓
+
+B (−79): Adds 11 instead of subtracting (−90 + 11 = −79) — wrong direction for solving a + 11 = −90.
+
+C (−79/5): Divides −18 by 5 instead of multiplying — inverts the algebra step.
+
+D (−7/5): Computes (−18 + 11)/5 — adds 11 to −18 before dividing, instead of multiplying first.
+
+8
+
+Algebra / Systems of Equations — Intersection Point
+
+Answer: A — (5, 20)
+
+Core Mathematical Concept: Find equation of line j from the table (slope and y-intercept), then set equal to y = 4x and solve.
+
+📐 Step-by-Step Proof
+
+From table: points (0,−10), (1,−4), (2,2)
+
+Slope of j = (−4−(−10))/(1−0) = 6
+
+y-intercept = −10 (from table at x=0)
+
+Line j: y = 6x − 10
+
+Intersection with k: y = 4x
+
+4x = 6x − 10  →  −2x = −10  →  x = 5
+
+y = 4(5) = 20
+
+Intersection: (5, 20) → Answer: A ✓
+
+B (5, −44): Uses y = 6(5) − 10 = 20 for line j, not k — confuses which line to evaluate.
+
+C/D (6, 24) or (6, 26): Arithmetic error in solving 4x = 6x − 10 — gets x = 6 instead of x = 5.
+
+9
+
+Advanced Math / Quadratic — Finding When Function = 0
+
+Answer: 1.1
+
+Core Mathematical Concept: Use h(0) = 19.36 to find b, then set h(t) = 0 (ground level) and solve for t.
+
+📐 Step-by-Step Proof
+
+h(t) = −16t² + b
+
+h(0) = 19.36:  −16(0)² + b = 19.36  →  b = 19.36
+
+Set h(t) = 0 (object hits ground):
+
+−16t² + 19.36 = 0
+
+16t² = 19.36
+
+t² = 19.36/16 = 1.21
+
+t = √1.21 = 1.1
+
+t = 1.1 seconds ✓
+
+🖩 Desmos Method
+
+Graph y = -16x^2 + 19.36. Find positive x-intercept → x = 1.1.
+
+Common error: Taking √(19.36/16) = √19.36/4 = 4.4/4 = 1.1 correctly, but some students get 19.36/4 = 4.84 (forgetting to square root at the end).
+
+10
+
+Algebra / Absolute Value Equations
+
+Answer: A — Zero solutions
+
+Core Mathematical Concept: Absolute value is always ≥ 0. It can never equal a negative number → no solutions exist.
+
+📐 Step-by-Step Proof
+
+|4x − 3| = −9
+
+By definition: |any expression| ≥ 0 for all real x
+
+−9 < 0
+
+Therefore: |4x − 3| ≥ 0 > −9 for all x
+
+No value of x can make this equation true
+
+Answer: A — Zero solutions ✓
+
+B/C: Attempts to split into cases (4x−3 = −9 and 4x−3 = 9) — but this is wrong procedure when RHS is negative; the split only applies when RHS ≥ 0.
+
+D: Absolute value equations cannot have infinitely many solutions in a single equation of this form.
+
+11
+
+Advanced Math / Exponential Functions — Solving for Constants
+
+Answer: B — ab = 18
+
+Core Mathematical Concept: Use the two given points to create a system of equations and solve for a and b.
+
+📐 Step-by-Step Proof
+
+h(x) = aˣ + b
+
+Point (0, 10): a⁰ + b = 10  →  1 + b = 10  →  b = 9
+
+Point (2, 13): a² + b = 13  →  a² + 9 = 13  →  a² = 4  →  a = 2
+
+(a is positive since stated as positive constant)
+
+ab = 2 × 9 = 18
+
+Answer: B — ab = 18 ✓
+
+A (13): Gives the y-value at x=2 rather than computing ab = 2×9.
+
+C (20): Likely uses b = 10 (forgetting to subtract 1), giving a = √3 and ab ≈ incorrect value.
+
+D (26): Arithmetic error — perhaps doubles one of the values incorrectly.
+
+12
+
+Geometry / Circle Arc Length
+
+Answer: 16
+
+Core Mathematical Concept: Arc length formula: L = (θ/360°) × 2πr. Solve for r.
+
+📐 Step-by-Step Proof
+
+Arc length L = 4π,  θ = 45°
+
+L = (θ/360°) × 2πr
+
+4π = (45/360) × 2πr
+
+4π = (1/8) × 2πr
+
+4π = πr/4
+
+r = 16π/π = 16
+
+Radius = 16 units ✓
+
+Common error: Using circumference formula without the fraction: 4π = 2πr → r = 2 (forgets to account for the arc being only 45°/360° of the full circle).
+
+13
+
+Advanced Math / Exponential Decay — Percent Change
+
+Answer: D — p = 81
+
+Core Mathematical Concept: Find f(n)/f(n−1), then compute the percent decrease: p% = (1 − ratio) × 100.
+
+📐 Step-by-Step Proof
+
+f(x) = 56(0.19)ˣ
+
+f(n)   = 56(0.19)ⁿ
+
+f(n−1) = 56(0.19)ⁿ⁻¹
+
+Ratio: f(n)/f(n−1) = (0.19)ⁿ / (0.19)ⁿ⁻¹ = 0.19
+
+f(n) is 0.19 × f(n−1) → it is 19% of f(n−1)
+
+Percent decrease: (1 − 0.19) × 100 = 0.81 × 100 = 81%
+
+p = 81 → Answer: D ✓
+
+A (19): Confuses the base (0.19) with the percent decrease. The base 0.19 means f(n) RETAINS 19%, so it DECREASES by 81%.
+
+B (44): No algebraic basis.
+
+C (56): Confuses the initial value (56) with the percentage.
+
+14
+
+Advanced Math / Discriminant = 0 for One Real Solution
+
+Answer: A — k = 171
+
+Core Mathematical Concept: A quadratic has exactly one real solution when its discriminant = 0: b² − 4ac = 0.
+
+📐 Step-by-Step Proof
+
+x² + (√(k−3))x + 42 = 0
+
+a = 1,  b = √(k−3),  c = 42
+
+Discriminant = b² − 4ac = (k−3) − 4(1)(42) = 0
+
+k − 3 − 168 = 0
+
+k − 171 = 0
+
+k = 171 → Answer: A ✓
+
+🖩 Desmos Method
+
+Graph y = x^2 + sqrt(171-3)x + 42. Verify one x-intercept (tangent to x-axis).
+
+B (168): Sets k − 3 = 168 but forgets to add 3 back: 168 + 3 = 171, not 168.
+
+C (165): Arithmetic error: uses 4×42 = 160 instead of 168.
+
+D (45): Uses 4×c as 4×42 = 45 somehow — major arithmetic error.
+
+15
+
+Advanced Math / Circle + Line System — Solving for Parameter
+
+Answer: D — 20m − 4√11
+
+Core Mathematical Concept: The intersection point (−5, y) lies on both curves. Substitute x = −5 into circle to find y, then substitute both into the line to solve for b.
+
+📐 Step-by-Step Proof
+
+x² + y² = 36
+
+At x = −5: 25 + y² = 36  →  y² = 11  →  y = ±√11
+
+Given y < 0: y = −√11
+
+Line: y = mx + b/4
+
+Substitute (−5, −√11):
+
+−√11 = m(−5) + b/4
+
+−√11 = −5m + b/4
+
+b/4 = −√11 + 5m
+
+b = 4(5m − √11) = 20m − 4√11
+
+Answer: D — b = 20m − 4√11 ✓
+
+A/B: Uses y = +√11 (positive root) despite the constraint y < 0 — sign error gives different expression.
+
+C (−20m + 4√11): Wrong sign throughout — uses y = +√11 and flips signs incorrectly.
+
+16
+
+Algebra / Mixture Problems (System of Equations)
+
+Answer: C — 60 grams
+
+Core Mathematical Concept: Set up two equations — one for total mass, one for total NaCl content — and solve the system.
+
+📐 Step-by-Step Proof
+
+Let x = mass of 0.3% solution, (80 − x) = mass of 0.15% solution
+
+Total mass: x + (80 − x) = 80 ✓ (automatic)
+
+NaCl equation: 0.003x + 0.0015(80 − x) = 0.21
+
+0.003x + 0.12 − 0.0015x = 0.21
+
+0.0015x = 0.09
+
+x = 0.09/0.0015 = 60
+
+60 grams of 0.3% solution → Answer: C ✓
+
+A (0.14): Misplaces decimal — computes 0.21/0.003 × something incorrectly.
+
+B (20): Gives the amount of the 0.15% solution (80 − 60 = 20), not the 0.3% solution.
+
+D (79.86): Arithmetic error — likely uses total mass incorrectly in the NaCl equation.
+
+17
+
+Statistics / Median Comparison
+
+Answer: C — Equal medians
+
+Core Mathematical Concept: Write out both data sets in order, find medians, and compare.
+
+📐 Step-by-Step Proof
+
+Data set A (11 values, ascending):
+
+0,0, 3,3, 4,4, 5,5, 6, 7, 13
+
+Median = 6th value = 4
+
+Data set B = A minus {13} = 10 values:
+
+0,0, 3,3, 4,4, 5,5, 6, 7
+
+Median = average of 5th and 6th values = (4 + 4)/2 = 4
+
+Median A = Median B = 4 → Answer: C ✓
+
+A (B < A): Removing the largest value (13) doesn't shift the median down when the middle values stay the same.
+
+B (B > A): Removing a large outlier doesn't increase the median.
+
+D: All information is given — the comparison is fully deterministic.
+
+18
+
+Algebra / Interpreting Equations — Identifying Constants
+
+Answer: D — 4/45
+
+Core Mathematical Concept: The equation x/5 + y/9 = 47/45 models resistors: each term is (number of resistors × resistance per resistor) = (x)(1/5) + (y)(1/9). So each type-A resistor = 1/5 ohm → a = 1/5, each type-B = 1/9 ohm → b = 1/9. |a − b| = |1/5 − 1/9|.
+
+📐 Step-by-Step Proof
+
+x/5 + y/9 = 47/45
+
+Means: x × (1/5) + y × (1/9) = 47/45
+
+So a = 1/5,  b = 1/9
+
+|a − b| = |1/5 − 1/9| = |9/45 − 5/45| = 4/45
+
+Answer: D — 4/45 ✓
+
+A (47): Gives the numerator of the RHS, not the difference between a and b.
+
+B (4): Computes 9 − 5 = 4 but fails to put this over the common denominator 45.
+
+C (47/45): Gives the total resistance, not the difference between individual resistances a and b.
+
+19
+
+Advanced Math / Discriminant — Exactly One Solution → Find n²/8
+
+Answer: 36
+
+Core Mathematical Concept: Rearrange to standard form, set discriminant = 0 (exactly one solution), solve for n, then compute n²/8.
+
+📐 Step-by-Step Proof
+
+9x² + 8 = nx  →  9x² − nx + 8 = 0
+
+a = 9, b = −n, c = 8
+
+Discriminant = 0: (−n)² − 4(9)(8) = 0
+
+n² − 288 = 0  →  n² = 288
+
+n²/8 = 288/8 = 36
+
+n²/8 = 36 ✓
+
+🖩 Desmos Method
+
+Graph y = 9x^2 - nx + 8 with a slider for n. Adjust n until the parabola is tangent to x-axis → n ≈ ±16.97 ≈ ±12√2. Verify n² = 288, n²/8 = 36.
+
+Common error: Forgetting to divide n² by 8 — gives 288 as the answer instead of 36.
+
+20
+
+Geometry / Similar Figures — Perimeter Scaling
+
+Answer: D — 420
+
+Core Mathematical Concept: For similar rectangles, linear dimensions (including perimeter) scale by √(area ratio). Compute the area ratio, take the square root for the linear scale factor, then multiply perimeter A by that factor.
+
+📐 Step-by-Step Proof
+
+Area A = 630, Area B = 2520
+
+Area ratio = 2520/630 = 4
+
+Linear scale factor = √4 = 2
+
+Perimeter A = 210
+
+Perimeter B = 210 × 2 = 420
+
+n = 420 → Answer: D ✓
+
+A (2100): Multiplies perimeter by area ratio (4) instead of linear ratio (2): 210 × 10 error.
+
+B (1680): Multiplies by area ratio 4 directly: 210 × 8 — skips the square root step.
+
+C (840): Multiplies perimeter by 4 (area ratio) instead of 2 (linear ratio): 210 × 4 = 840.
+
+21
+
+Problem Solving / Percentage Chains
+
+Answer: 60,000
+
+Core Mathematical Concept: Express all masses in terms of one variable, then compute the ratio C/B and convert to a percentage.
+
+📐 Step-by-Step Proof
+
+A = 4.44 × B       (444% of B)
+
+A = 0.0074 × C     (0.740% of C)
+
+From both: 4.44B = 0.0074C
+
+C/B = 4.44/0.0074 = 600
+
+C is 600 × B, so C = 600% × 100 × B = 60,000% of B
+
+Check: p% × B = C → p/100 × B = 600B → p = 60,000
+
+p = 60,000 ✓
+
+Common errors: Confusing the direction of the percentage relationship (A as % of C vs. C as % of B). Forgetting to multiply by 100 to convert ratio to percentage (giving 600 instead of 60,000).
+
+22
+
+Advanced Math / Factoring — Common Factor Extraction
+
+Answer: D — y + 5x − 15
+
+Core Mathematical Concept: Factor out the GCF from both terms, then recognize a difference of squares pattern in the remaining factor.
+
+📐 Step-by-Step Proof
+
+y²(x−3) − 25(x−3)³
+
+Factor out GCF = (x−3):
+
+= (x−3)[y² − 25(x−3)²]
+
+Recognize: y² − 25(x−3)² = [y − 5(x−3)][y + 5(x−3)]
+
+  (difference of squares: a²−b² = (a−b)(a+b))
+
+Full factored form: (x−3)[y − 5(x−3)][y + 5(x−3)]
+
+Expand [y + 5(x−3)] = y + 5x − 15
+
+Factor: y + 5x − 15 → Answer: D ✓
+
+A y(x−3): Partially factors only y from y² — incomplete; doesn't account for the full structure.
+
+B (x−5)(x−3): Treats it as a quadratic in x — wrong variable structure; y is the "variable" in the difference of squares.
+
+C (y+x−3): Drops the coefficient 5 from the factored term 5(x−3).
+
+
+

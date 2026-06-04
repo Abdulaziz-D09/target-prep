@@ -171,7 +171,7 @@ export default function HomePage() {
   }, []);
 
   const upcomingDates = useMemo(
-    () => satDates.filter((date) => new Date(date.target).getTime() >= PAGE_LOAD_TIME).slice(0, 4),
+    () => satDates.filter((date) => new Date(date.target).getTime() >= PAGE_LOAD_TIME),
     []
   );
 
@@ -329,7 +329,7 @@ export default function HomePage() {
                   href="/study-plan"
                   className="site-hero-secondary-btn inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-bold transition hover:scale-[1.02] shadow-sm"
                 >
-                  View Study Plan
+                  View Study Vault
                   <Map className="h-4 w-4" />
                 </Link>
               </div>
@@ -500,7 +500,7 @@ export default function HomePage() {
                     </>
                   ) : (
                     <p className="site-hero-body mt-2 text-sm leading-6">
-                      Set up your study plan to get a personalized daily focus topic and tips.
+                      Check out your daily focus topics and tips in the Study Vault.
                     </p>
                   )}
 
@@ -513,7 +513,7 @@ export default function HomePage() {
                           : 'bg-[linear-gradient(135deg,#10b981,#059669)] shadow-emerald-500/20'
                       }`}
                     >
-                      {hasPlan ? 'Go to Study Plan' : 'Set up your study plan'}
+                      {hasPlan ? 'Go to Study Vault' : 'Go to Study Vault'}
                       <ArrowRight className="h-4 w-4" />
                     </Link>
                   </div>
@@ -569,7 +569,7 @@ export default function HomePage() {
           </motion.div>
         </motion.section>
 
-        <motion.section className="mt-6 grid gap-6 xl:grid-cols-[1.08fr_0.92fr]" variants={sectionRevealVariants}>
+        <motion.section className="mt-6 grid gap-6 xl:grid-cols-[1fr_1fr]" variants={sectionRevealVariants}>
           <motion.div className="site-panel rounded-[32px] p-6 sm:p-7" variants={itemRevealVariants}>
             <div className="flex items-center justify-between gap-4">
               <div>
@@ -614,7 +614,7 @@ export default function HomePage() {
               <CalendarDays className="h-5 w-5 text-slate-400" />
             </div>
 
-            <motion.div className="mt-6 space-y-4" variants={staggerContainerVariants}>
+            <motion.div className="mt-6 space-y-3 max-h-[560px] overflow-y-auto" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }} variants={staggerContainerVariants}>
               {upcomingDates.map((date, index) => {
                 const isPrimary = date.date === nextTest.date;
                 return (
@@ -627,33 +627,31 @@ export default function HomePage() {
                         : 'site-subpanel border-slate-200 dark:border-slate-700'
                     }`}
                   >
-                    <div className="flex items-start justify-between gap-4">
-                      <div className="flex gap-4">
-                        <div
-                          className={`flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-[18px] text-sm font-black ${
-                            isPrimary ? 'bg-blue-600 text-white shadow-md' : 'bg-slate-100 text-slate-800 dark:bg-slate-800 dark:text-slate-200'
-                          }`}
-                        >
-                          {date.month}
-                        </div>
-                        <div>
-                          <div className="flex flex-wrap items-center gap-2">
-                            <p className="site-text-strong text-lg font-black tracking-[-0.03em]">{date.date}</p>
-                            {index === 0 && (
-                              <span className="rounded-full bg-sky-100 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-sky-700">
-                                Next
-                              </span>
-                            )}
-                          </div>
-                          <p className="site-text-muted mt-2 text-sm">
-                            Registration deadline: <span className="site-text font-semibold">{date.registrationDeadline}</span>
-                          </p>
-                          <p className="site-text-faint mt-1 text-sm">
-                            Late registration: {date.lateRegistrationDeadline}
-                          </p>
-                        </div>
-                        </div>
+                    <div className="flex gap-4">
+                      <div
+                        className={`flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-[18px] text-sm font-black ${
+                          isPrimary ? 'bg-blue-600 text-white shadow-md' : 'bg-slate-100 text-slate-800 dark:bg-slate-800 dark:text-slate-200'
+                        }`}
+                      >
+                        {date.month}
                       </div>
+                      <div>
+                        <div className="flex flex-wrap items-center gap-2">
+                          <p className="site-text-strong text-lg font-black tracking-[-0.03em]">{date.date}</p>
+                          {index === 0 && (
+                            <span className="rounded-full bg-sky-100 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-sky-700">
+                              Next
+                            </span>
+                          )}
+                        </div>
+                        <p className="site-text-muted mt-2 text-sm">
+                          Registration deadline: <span className="site-text font-semibold">{date.registrationDeadline}</span>
+                        </p>
+                        <p className="site-text-faint mt-1 text-sm">
+                          Late registration: {date.lateRegistrationDeadline}
+                        </p>
+                      </div>
+                    </div>
                   </motion.div>
                 );
               })}

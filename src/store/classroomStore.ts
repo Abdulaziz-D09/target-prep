@@ -11,15 +11,20 @@ export type Classroom = {
   createdAt: string;
 };
 
+
+
 export type Student = {
   id: string;
   name: string;
   classroomId: string;
   joinedAt: string;
   avatar: string; // initials color key: 'blue' | 'indigo' | 'rose' | 'emerald' | 'amber'
+  school?: string;
+  gradeLevel?: string;
   plannedExamDate?: string;
   scorePredictor?: string;
   history?: { date: string; accuracy: number }[];
+  mockSessionId?: string;
 };
 
 export type QuestionOption = { A: string; B: string; C: string; D: string };
@@ -41,6 +46,39 @@ export type Assignment = {
   timeLimitMinutes: number;
   allowExit?: boolean;
   createdAt: string;
+};
+
+
+export type MockSession = {
+  id: string;
+  title: string;
+  place: string;
+  date: string;
+  timeLimitMinutes: number;
+  maxStudents: number;
+  attachedTestIds: string[];
+  joinCode: string;
+  createdAt: string;
+  status: 'upcoming' | 'active' | 'completed';
+  strictMode?: boolean;
+  host?: string;
+  customTests?: { id: string; name: string; questions: any[] }[];
+  subject?: 'Full' | 'English' | 'Math';
+};
+
+export type MockResult = {
+  id: string;
+  mockId: string;
+  studentId: string;
+  assignedTestId: string;
+  score: number;
+  totalCorrect: number;
+  totalQuestions: number;
+  completedAt: string;
+  englishScore?: number;
+  mathScore?: number;
+  timeSpent?: number; // in seconds
+  answers?: Record<string, number>;
 };
 
 export type StudentProgress = {
@@ -128,6 +166,8 @@ type State = {
   students: Student[];
   assignments: Assignment[];
   progress: StudentProgress[];
+  mockSessions: MockSession[];
+  mockResults: MockResult[];
   joinedClassroomIds: string[];
   seeded: boolean;
 };
@@ -140,6 +180,13 @@ type Actions = {
   deleteAssignment: (id: string) => void;
   joinClassroom: (code: string) => boolean;
   leaveClassroom: (id: string) => void;
+  
+  createMockSession: (data: Omit<MockSession, 'id' | 'joinCode' | 'createdAt' | 'status'>) => MockSession;
+  updateMockSessionStatus: (id: string, status: MockSession['status']) => void;
+  deleteMockSession: (id: string) => void;
+  joinMock: (code: string, studentInfo: { name: string; school: string; grade: string }) => { success: boolean; error?: string; session?: MockSession; student?: Student; assignedTestId?: string };
+  submitMockResult: (result: Omit<MockResult, 'id' | 'completedAt'>) => void;
+  deleteMockResult: (id: string) => void;
 };
 
 function normalizeAssignmentTimeLimit(assignment: Assignment): Assignment {
@@ -158,6 +205,8 @@ export const useClassroomStore = create<State & Actions>()(
       students: [],
       assignments: [],
       progress: [],
+      mockSessions: [],
+      mockResults: [],
       joinedClassroomIds: [],
       seeded: false,
 
@@ -237,13 +286,90 @@ export const useClassroomStore = create<State & Actions>()(
         return true;
       },
 
+
+      createMockSession: (data) => {
+        const newSession: MockSession = {
+          ...data,
+          id: 'mock-' + Date.now(),
+          joinCode: randomCode(),
+          createdAt: new Date().toISOString(),
+          status: 'upcoming'
+        };
+        set((state) => ({ mockSessions: [...state.mockSessions, newSession] }));
+        return newSession;
+      },
+      updateMockSessionStatus: (id, status) => set((state) => ({
+        mockSessions: state.mockSessions.map(s => s.id === id ? { ...s, status } : s)
+      })),
+      joinMock: (code, studentInfo) => {
+        let result: any = { success: false };
+        set((state) => {
+            const session = state.mockSessions.find(s => s.joinCode === code);
+            if (!session) { result = { success: false, error: 'Invalid join code' }; return state; }
+            if (session.status !== 'active') { result = { success: false, error: 'Session is not active' }; return state; }
+            
+            let assignedTestId = '1';
+            if (session.customTests && session.customTests.length > 0) {
+                assignedTestId = session.customTests[Math.floor(Math.random() * session.customTests.length)].id;
+            } else if (session.attachedTestIds && session.attachedTestIds.length > 0) {
+                assignedTestId = session.attachedTestIds[Math.floor(Math.random() * session.attachedTestIds.length)];
+            }
+            
+            let student = state.students.find(s => s.name === studentInfo.name && s.school === studentInfo.school);
+            if (!student) {
+                student = {
+                    id: 'stu-' + Date.now(),
+                    name: studentInfo.name,
+                    school: studentInfo.school,
+                    gradeLevel: studentInfo.grade,
+                    classroomId: '', 
+                    joinedAt: new Date().toISOString(),
+                    avatar: 'blue',
+                    mockSessionId: session.id
+                };
+                result = { success: true, session, student, assignedTestId };
+                return { students: [...state.students, student] };
+            }
+            
+            const updatedStudents = state.students.map(s => 
+                s.id === student.id ? { ...s, mockSessionId: session.id } : s
+            );
+            result = { success: true, session, student: { ...student, mockSessionId: session.id }, assignedTestId };
+            return { students: updatedStudents };
+        });
+        return result;
+      },
+      submitMockResult: (result) => set((state) => {
+        const newResult: MockResult = {
+          ...result,
+          id: 'res-' + Date.now(),
+          completedAt: new Date().toISOString()
+        };
+        return { mockResults: [...state.mockResults, newResult] };
+      }),
+      deleteMockSession: (id) => set((state) => ({
+        mockSessions: state.mockSessions.filter(s => s.id !== id),
+        mockResults: state.mockResults.filter(r => r.mockId !== id)
+      })),
+      deleteMockResult: (id) => set((state) => ({
+        mockResults: state.mockResults.filter(r => r.id !== id)
+      })),
       leaveClassroom: (id) => {
         set((s) => ({ joinedClassroomIds: s.joinedClassroomIds.filter((cId) => cId !== id) }));
       },
     }),
     {
       name: 'targetprep-classrooms',
-      storage: createJSONStorage(() => localStorage),
+      storage: createJSONStorage(() => {
+        if (typeof window !== 'undefined') {
+          return window.localStorage;
+        }
+        return {
+          getItem: () => null,
+          setItem: () => {},
+          removeItem: () => {},
+        } as unknown as Storage;
+      }),
     }
   )
 );
@@ -253,5 +379,7 @@ export const useClassroomStore = create<State & Actions>()(
  * the first render, preventing blank-page flashes caused by async useEffect.
  */
 export function seedOnce() {
-  useClassroomStore.getState().seed();
+  if (typeof window !== 'undefined') {
+    useClassroomStore.getState().seed();
+  }
 }

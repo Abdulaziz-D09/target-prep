@@ -2,11 +2,12 @@ import { resetPassword } from '../login/actions'
 import { ArrowRight, ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
 
-export default function ForgotPasswordPage({
+export default async function ForgotPasswordPage({
   searchParams,
 }: {
-  searchParams: { message: string; success: string }
+  searchParams: Promise<{ message?: string; success?: string }>
 }) {
+  const unwrappedParams = await searchParams
   return (
     <div className="min-h-screen w-full flex bg-[#121826] text-white overflow-hidden relative selection:bg-indigo-500/30">
       
@@ -39,15 +40,15 @@ export default function ForgotPasswordPage({
               <p className="text-slate-400 text-sm">Enter your email and we'll send you a link to securely log in and reset your password.</p>
             </div>
 
-            {searchParams?.message && (
+            {unwrappedParams?.message && (
               <div className="mb-6 p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-500 text-sm text-center">
-                {searchParams.message}
+                {unwrappedParams.message}
               </div>
             )}
 
-            {searchParams?.success && (
+            {unwrappedParams?.success && (
               <div className="mb-6 p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 text-sm text-center">
-                {searchParams.success}
+                {unwrappedParams.success}
               </div>
             )}
 

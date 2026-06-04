@@ -2,24 +2,33 @@ import { NextRequest, NextResponse } from 'next/server';
 
 // ─── Prompt ───────────────────────────────────────────────────────────────────
 
-const SYSTEM_PROMPT = `You are an expert at extracting multiple-choice questions from educational texts.
+const SYSTEM_PROMPT = `You are an expert at extracting multiple-choice questions from educational texts, such as SAT practice tests.
 
-Extract ALL multiple-choice questions from the provided text. Each question should have exactly 4 answer choices labeled A, B, C, D.
+Extract ALL multiple-choice questions from the provided text or document. Each question should have exactly 4 answer choices labeled A, B, C, D.
 
-CRITICAL INSTRUCTION FOR PASSAGES:
-If the question is associated with a passage, text, or poem, you MUST extract that complete passage text into the "passage" field. Do NOT include the passage text inside the "stem". The "stem" should ONLY contain the actual question being asked (e.g., "Which choice best completes the text?"). If there is genuinely no passage, set it to null.
+CRITICAL INSTRUCTION FOR PASSAGES (ESPECIALLY SAT ENGLISH):
+If a question is associated with any text, paragraph, poem, or notes (even if it's just a single paragraph), you MUST extract that complete text into the "passage" field. Do NOT include it inside the "stem". The "stem" should ONLY contain the single sentence asking the actual question (e.g., "Which choice best completes the text?" or "Which choice best states the main idea of the text?"). For SAT Reading and Writing, the paragraph above the question MUST always go into the "passage" field. If there is genuinely no passage at all (e.g., a pure math equation question), set "passage" to null.
+
+CRITICAL INSTRUCTION FOR MATHEMATICAL FORMULAS (LaTeX):
+If a question, passage, or option contains algebraic equations, numbers, variables, exponents, or mathematical formulas, you MUST write them in standard inline LaTeX enclosed in single dollar signs (e.g., $x^2 + 5x + 6 = 0$) or block LaTeX enclosed in double dollar signs ($$y = mx + b$$) so they render correctly in the LaTeX component.
+
+CRITICAL INSTRUCTION FOR TABLES:
+If a question contains a data grid or table, you MUST reconstruct it as a clean Markdown table (e.g., using | Column 1 | Column 2 | and separators like |---|---|) directly inside the "passage" or "stem" field. Do not ignore tables.
+
+CRITICAL INSTRUCTION FOR GRAPHS, CHARTS, AND DIAGRAMS:
+If a question contains a graph, chart, diagram, or geometric figure, you MUST write a highly detailed textual paragraph describing all key details of the visual data (such as the axes, labels, data trends, points of intersection, coordinates, geometric parameters, or angles) and place it directly inside the "passage" or "stem" field. For example: "[Graph details: A coordinate plane showing y = f(x) intersecting the x-axis at (2,0) and y-axis at (0,4)...]". This ensures students have full visual context.
 
 Return ONLY a valid JSON object with this EXACT structure (no markdown fences, no extra text):
 {
   "questions": [
     {
-      "passage": "The COMPLETE text or passage associated with the question, if any. Do NOT put this in the stem.",
-      "stem": "The question being asked (e.g. 'Which choice completes the text...')",
+      "passage": "The COMPLETE text or passage associated with the question, if any. Do NOT put this in the stem. Include Markdown tables or visual descriptions here if applicable.",
+      "stem": "The question being asked (e.g. 'Which choice completes the text...'). Include Markdown tables or visual descriptions here if applicable.",
       "options": {
-        "A": "First option text",
-        "B": "Second option text",
-        "C": "Third option text",
-        "D": "Fourth option text"
+        "A": "First option text (use LaTeX $...$ for math if needed)",
+        "B": "Second option text (use LaTeX $...$ for math if needed)",
+        "C": "Third option text (use LaTeX $...$ for math if needed)",
+        "D": "Fourth option text (use LaTeX $...$ for math if needed)"
       }
     }
   ]
@@ -162,7 +171,7 @@ async function callGeminiGenerate(parts: Array<Record<string, unknown>>, apiKey:
 
 async function uploadFileToGemini(file: File, apiKey: string): Promise<GeminiUploadedFile> {
     const mimeType = file.type || 'application/pdf';
-    const bytes = Buffer.from(await file.arrayBuffer());
+    const bytes = new Uint8Array(await file.arrayBuffer());
 
     const startRes = await fetch(
         `${GEMINI_BASE_URL}/upload/v1beta/files?key=${encodeURIComponent(apiKey)}`,
@@ -346,10 +355,16 @@ export async function POST(req: NextRequest) {
                 const lastFailure = geminiResult.failures.at(-1);
                 console.error('[scan-pdf] Gemini error (all model attempts failed):', geminiResult.failures);
 
-                if (lastFailure && (lastFailure.status === 400 || lastFailure.status === 401 || lastFailure.status === 403)) {
+                if (lastFailure && (lastFailure.status === 401 || lastFailure.status === 403)) {
                     return NextResponse.json(
                         { error: 'Gemini API authentication failed on the server. Check server API key configuration.' },
                         { status: 401 }
+                    );
+                }
+                if (lastFailure && lastFailure.status === 400) {
+                    return NextResponse.json(
+                        { error: `Gemini API Bad Request: ${lastFailure.errorText.slice(0, 100)}` },
+                        { status: 400 }
                     );
                 }
                 if (lastFailure?.status === 429) {
@@ -389,8 +404,8 @@ export async function POST(req: NextRequest) {
             await deleteGeminiFile(fileNameToDelete, apiKey);
         }
 
-    } catch (err) {
+    } catch (err: any) {
         console.error('[scan-pdf] Unexpected error:', err);
-        return NextResponse.json({ error: 'Unexpected server error. Please try again.' }, { status: 500 });
+        return NextResponse.json({ error: err?.message || 'Unexpected server error. Please try again.' }, { status: 500 });
     }
 }

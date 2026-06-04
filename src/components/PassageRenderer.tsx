@@ -29,8 +29,7 @@ type Seg =
 /* ── OCR artifact cleanup ────────────────────────────────── */
 /**
  * Fixes common PDF-extraction / OCR spacing artifacts where a space was
- * inserted inside a word. Uses a multi-pass universal approach instead
- * of hardcoded word lists, so it catches ALL splits regardless of word.
+ * inserted inside a word.
  */
 export function cleanOCR(text: string): string {
   if (!text) return text;
@@ -45,50 +44,59 @@ export function cleanOCR(text: string): string {
   out = out.replace(/(\w)' s\b/g, "$1's");
   out = out.replace(/(\w)' t\b/g, "$1't");
 
-  // 2. Multi-pass generic single-consonant fix:
-  //    "r esearch" → "research", "b ecause" → "because"
-  //    Run up to 5 passes to handle nested splits like "r epor ted"
-  for (let i = 0; i < 5; i++) {
-    const prev = out;
-    out = out.replace(/\b([bcdfghjklmnpqrstvwxyz]) ([a-z]{2,})/g, '$1$2');
-    if (out === prev) break;
+  // 2. Fix common split words using a comprehensive list of known OCR artifacts
+  const gapFixes: Record<string, string> = {
+    "t o": "to",
+    "o f": "of",
+    "i n": "in",
+    "i s": "is",
+    "i t": "it",
+    "b e": "be",
+    "a s": "as",
+    "a t": "at",
+    "b y": "by",
+    "d o": "do",
+    "g o": "go",
+    "h e": "he",
+    "m e": "me",
+    "m y": "my",
+    "n o": "no",
+    "o n": "on",
+    "o r": "or",
+    "s o": "so",
+    "u p": "up",
+    "u s": "us",
+    "w e": "we",
+    "a n": "an",
+    "i f": "if",
+    "howe ver": "however",
+    "r esear ch": "research",
+    "ma y": "may",
+    "v ariability": "variability",
+    "f ewer": "fewer",
+    "o verall": "overall",
+    "t oward": "toward",
+    "o ther": "other",
+    "ha ve": "have",
+    "e ver": "ever",
+    "mo re": "more",
+    "be cause": "because"
+  };
+
+  // Replace common 2-letter and specific multi-letter split words
+  for (const [spaced, fixed] of Object.entries(gapFixes)) {
+    const reg = new RegExp(`\\b${spaced}\\b`, "gi");
+    out = out.replace(reg, fixed);
   }
 
-  // 3. Multi-char prefix splits: "phot ovoltaic", "astr onaut", "conser vation"
-  //    Pattern: word ending in consonant cluster + space + lowercase continuation
-  //    Only join if the left part is 2-6 chars and ends in a consonant
-  for (let i = 0; i < 3; i++) {
-    const prev = out;
-    // Short prefix (2-6 chars ending in consonant) + space + lowercase word (3+ chars)
-    out = out.replace(/\b([A-Za-z]{2,6}[bcdfghjklmnpqrstvwxyz]) ([a-z]{3,})/g, (match, prefix, suffix) => {
-      // Don't join obvious real word boundaries (common short words)
-      const skipWords = new Set(['in','on','an','at','is','it','or','as','if','of','up','by','to',
-        'no','so','do','he','we','me','be','my','us','go','am','oh','ok','and','the','for','but',
-        'not','you','all','can','had','her','was','one','our','out','are','has','his','how','its',
-        'let','may','new','now','old','see','way','who','did','get','own','say','too','use',
-        'off','per','set','top','yet','ago','ask','big','end','far','hit','hot','low','put',
-        'ran','run','sit','six','ten','try','war','win','yes']);
-      if (skipWords.has(prefix.toLowerCase())) return match;
-      return prefix + suffix;
-    });
-    if (out === prev) break;
-  }
+  // 3. Generic split fix: a single lowercase consonant followed by a space and another lowercase word.
+  // We ONLY do this if it's not a valid single-letter word ("a" or "i").
+  out = out.replace(/\b([bcdfghjklmnpqrstvwxyz]) ([a-z]{2,})\b/gi, '$1$2');
 
-  // 4. Trailing single letter splits: "mosquit o", "nativ e"  
-  //    Pattern: 4+ letter word ending in consonant + space + single vowel
-  out = out.replace(/\b([A-Za-z]{4,}[bcdfghjklmnpqrstvwxyz]) ([aeiouy])\b/g, '$1$2');
+  // 4. Fix split suffixes: word followed by space and "tion", "ing", "ly", "ment", "ness"
+  out = out.replace(/\b([a-z]{3,}) (tion|ing|ly|ment|ness)\b/gi, '$1$2');
 
-  // 5. Capital short-prefix splits: "Br oadway" → "Broadway"
-  out = out.replace(/\b([A-Z][a-z]?) ([a-z]{3,})/g, '$1$2');
-
-  // 6. Final single-consonant pass after all the above
-  for (let i = 0; i < 3; i++) {
-    const prev = out;
-    out = out.replace(/\b([bcdfghjklmnpqrstvwxyz]) ([a-z]{2,})/g, '$1$2');
-    if (out === prev) break;
-  }
-
-  // 7. Collapse runs of 2+ spaces into one
+  // 5. Collapse runs of 2+ spaces into one
   out = out.replace(/ {2,}/g, ' ');
 
   return out;
@@ -132,8 +140,18 @@ function parseTable(body:string,fallbackTitle:string):Extract<Seg,{kind:'table'}
   const lines=body.split(/\r?\n/).map(l=>l.trim()).filter(l=>l&&!l.startsWith('__'));
   let title=fallbackTitle; const rows:string[][]=[];
   for(const l of lines){
-    if(l.includes('|'))rows.push(l.split('|').map(c=>c.trim()));
-    else if(!title)title=l;
+    if(l.includes('|')){
+      // Split on | and strip leading/trailing empty cells from outer pipes
+      const cells=l.split('|').map(c=>c.trim());
+      const cleaned=cells[0]===''&&cells[cells.length-1]===''
+        ? cells.slice(1,-1)
+        : cells;
+      // Skip markdown separator rows like |---|---|
+      const isSeparator=cleaned.every(c=>/^[-:| ]+$/.test(c));
+      if(!isSeparator) rows.push(cleaned);
+    } else if(!title && l){
+      title=l;
+    }
   }
   const [header=[],...rest]=rows;
   return {kind:'table',title,header,rows:rest};
@@ -151,7 +169,7 @@ function tbl2chart(t:Extract<Seg,{kind:'table'}>):Seg{
   }
   // numeric first col → cols are series (line chart)
   const fc=rows.map(r=>r[0]);
-  if(fc.every(c=>/^~?[\d,.]+/.test(c.replace(/[°%][a-zA-Z]*/g,'').trim()))&&cols.length>=2){
+  if(fc.every(c=>/^~?[\d,.]+/.test(c.replace(/[°%][a-zA-Z]*/g,'').trim()))&&cols.length>=1){
     return{kind:'line',title,xLabels:fc,unit,
       series:cols.map((name,i)=>({name,values:rows.map(r=>pNum(r[i+1])),color:PAL[i%PAL.length]}))};
   }
@@ -215,7 +233,19 @@ function bulletBar(title:string,lines:string[]):Seg{
 
 function parsePassage(raw:string):Seg[]{
   // Clean OCR artifacts before parsing
-  const cleaned = cleanOCR(raw);
+  let cleaned = cleanOCR(raw);
+  
+  // Auto-wrap markdown tables if not already wrapped.
+  // A markdown table starts with a | row, followed by a |---| separator row.
+  cleaned = cleaned.replace(
+    /(\n|^)([ \t]*\|[^\n]+\n[ \t]*\|[-:| ]+\|\n(?:[ \t]*\|[^\n]*\n?)*)/gm,
+    function(match, newline, table) {
+      // Don't double-wrap
+      if (match.includes('__TABLE__')) return match;
+      return `${newline}\n__TABLE__\n${table.trim()}\n__ENDTABLE__\n`;
+    }
+  );
+  
   type Blk={start:number;end:number;type:'chart'|'table';body:string};
   const blks:Blk[]=[];
   let m:RegExpExecArray|null;
@@ -253,6 +283,7 @@ function parsePassage(raw:string):Seg[]{
   if(tail)segs.push({kind:'text',content:tail,offset:off});
   return segs;
 }
+
 
 /* ── LINE CHART ─────────────────────────────────────────── */
 function LineChart({seg,uid}:{seg:Extract<Seg,{kind:'line'}>;uid:number}){
@@ -518,18 +549,15 @@ function TextBlock({
             .map(h => ({...h, start: h.start - bodyOff, end: h.end - bodyOff}));
           return (
             <div key={pi}>
-              {pi > 0 && <div className="flex items-center gap-3 mb-4 mt-1">
-                <span className="inline-flex items-center px-3 py-0.5 rounded-full bg-indigo-100 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300 text-[11px] font-bold uppercase tracking-widest shrink-0">
-                  {label}
-                </span>
-                <div className="flex-1 h-px bg-slate-200 dark:bg-slate-700" />
-              </div>}
-              {pi === 0 && <span className="inline-flex items-center px-3 py-0.5 mr-2 mb-2 rounded-full bg-indigo-100 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300 text-[11px] font-bold uppercase tracking-widest">
+              {pi > 0 && <div className="mt-8 mb-2 font-bold text-[#111827] text-[16px]">
                 {label}
-              </span>}
+              </div>}
+              {pi === 0 && <div className="mb-2 font-bold text-[#111827] text-[16px]">
+                {label}
+              </div>}
               <HighlightableText
                 text={body}
-                className="text-[16px] leading-[1.9] text-[#111827] dark:text-slate-300"
+                className="text-[16px] leading-[1.9] text-[#111827]"
                 highlights={hl}
                 onAddHighlight={h => onAddHighlight({...h, start: h.start + bodyOff, end: h.end + bodyOff})}
                 onRemoveHighlight={onRemoveHighlight}
@@ -543,11 +571,52 @@ function TextBlock({
         const hl = highlights
           .filter(h => h.start >= paraOff && h.start < paraOff + para.length)
           .map(h => ({...h, start: h.start - paraOff, end: h.end - paraOff}));
+
+        // Detect inline bullet points starting with '* '
+        const isBulletList = para.includes('* ') && para.split('* ').length > 2;
+        if (isBulletList) {
+          const parts = para.split('* ').filter(p => p.trim() !== '');
+          // The text before the first '* ' might be intro text like "While researching..."
+          const intro = para.substring(0, para.indexOf('* ')).trim();
+          const bullets = parts.slice(intro ? 1 : 0);
+          
+          return (
+            <div key={pi} className="space-y-4">
+              {intro && (
+                <HighlightableText
+                  text={intro}
+                  className="text-[16px] leading-[1.9] text-[#111827]"
+                  highlights={[]} // highlights for notes could be tricky with the offset shift, let's keep it simple for now
+                  onAddHighlight={() => {}}
+                  onRemoveHighlight={() => {}}
+                  onUpdateHighlight={() => {}}
+                  isHighlightModeActive={isHighlightModeActive}
+                />
+              )}
+              <ul className="list-disc pl-8 space-y-3 marker:text-slate-400">
+                {bullets.map((bullet, idx) => (
+                  <li key={idx} className="pl-1">
+                    <HighlightableText
+                      text={bullet.trim()}
+                      className="text-[16px] leading-[1.8] text-[#111827]"
+                      highlights={[]}
+                      onAddHighlight={() => {}}
+                      onRemoveHighlight={() => {}}
+                      onUpdateHighlight={() => {}}
+                      isHighlightModeActive={isHighlightModeActive}
+                    />
+                  </li>
+                ))}
+              </ul>
+            </div>
+          );
+        }
+
         return (
           <HighlightableText
             key={pi}
             text={para}
-            className="text-[16px] leading-[1.9] text-[#111827] dark:text-slate-300"
+            className="text-[16px] leading-[1.9] text-[#111827]"
             highlights={hl}
             onAddHighlight={h => onAddHighlight({...h, start: h.start + paraOff, end: h.end + paraOff})}
             onRemoveHighlight={onRemoveHighlight}

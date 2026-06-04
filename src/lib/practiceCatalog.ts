@@ -79,12 +79,6 @@ export const practiceCards: PracticeCard[] = combinedPracticeTests.map((test) =>
   englishButtons: [
     { key: 'english-m1', label: 'Module 1', available: true, href: `/practice/test/${test.id}?module=english-m1` },
     {
-      key: 'english-m2-easy',
-      label: 'Module 2 Easy',
-      available: true,
-      href: `/practice/test/${test.id}?module=english-m2-easy`,
-    },
-    {
       key: 'english-m2-hard',
       label: 'Module 2 Hard',
       available: true,
@@ -93,12 +87,6 @@ export const practiceCards: PracticeCard[] = combinedPracticeTests.map((test) =>
   ],
   mathButtons: [
     { key: 'math-m1', label: 'Module 1', available: true, href: `/practice/test/${test.id}?module=math-m1` },
-    {
-      key: 'math-m2-easy',
-      label: 'Module 2 Easy',
-      available: true,
-      href: `/practice/test/${test.id}?module=math-m2-easy`,
-    },
     {
       key: 'math-m2-hard',
       label: 'Module 2 Hard',

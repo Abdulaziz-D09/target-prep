@@ -985,7 +985,7 @@ function QuizView({
     return (
         <div className="h-[100dvh] flex flex-col overflow-hidden relative bg-slate-50">
             {/* Bluebook Official Header */}
-            <header className="bg-white/90 backdrop-blur-xl border-b border-slate-200/80 px-6 py-3 flex items-center justify-between z-30 shrink-0 relative shadow-[0_2px_10px_rgba(0,0,0,0.02)]">
+            <header className="bg-white/90 backdrop-blur-xl border-b border-slate-200/80 px-6 py-2.5 flex items-center justify-between z-30 shrink-0 relative shadow-[0_2px_10px_rgba(0,0,0,0.02)]">
                 {/* Left: Back */}
                 <div className="flex flex-1 items-center">
                     <button
@@ -1278,7 +1278,7 @@ function QuizView({
 
                                 {/* Header bar */}
                                 <div className="flex mb-6 mt-2 shadow-sm w-full">
-                                    <div className="bg-[#111827] text-white font-bold text-[15px] w-[50px] flex flex-shrink-0 items-center justify-center">
+                                    <div className="bg-[#111827] text-white font-bold text-[15px] w-[58px] flex flex-shrink-0 items-center justify-center">
                                         {idx + 1}
                                     </div>
                                     <button
@@ -1388,7 +1388,7 @@ function QuizView({
                                                     )}
                                                 </div>
 
-                                                <div className="flex w-[50px] flex-shrink-0 items-center justify-start">
+                                                <div className="flex w-[58px] flex-shrink-0 items-center justify-start">
                                                     {!isChecked && !isTriedWrong && isEliminationMode && (
                                                             <button
                                                                 onClick={(e) => {
@@ -1430,7 +1430,7 @@ function QuizView({
                                                 }}
                                                 disabled={isChecked}
                                                 placeholder="Enter your answer"
-                                                className="w-full rounded-2xl border border-slate-300 bg-white px-4 py-3 text-[16px] font-semibold text-slate-900 shadow-sm outline-none transition placeholder:text-slate-400 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 disabled:cursor-not-allowed disabled:bg-slate-100"
+                                                className="w-full rounded-2xl border border-slate-300 bg-white px-4 py-2.5 text-[16px] font-semibold text-slate-900 shadow-sm outline-none transition placeholder:text-slate-400 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 disabled:cursor-not-allowed disabled:bg-slate-100"
                                             />
                                             <p className="text-[13px] leading-6 text-slate-500">
                                                 Enter a decimal or fraction. Equivalent values are accepted when they match the correct answer.
@@ -1486,7 +1486,7 @@ function QuizView({
 
                                 {/* Header bar */}
                                 <div className="flex mb-6 mt-2 shadow-sm w-full">
-                                    <div className="bg-[#111827] text-white font-bold text-[15px] w-[50px] flex flex-shrink-0 items-center justify-center">
+                                    <div className="bg-[#111827] text-white font-bold text-[15px] w-[58px] flex flex-shrink-0 items-center justify-center">
                                         {idx + 1}
                                     </div>
                                     <button
@@ -1593,7 +1593,7 @@ function QuizView({
                                                     )}
                                                 </div>
 
-                                                <div className="flex w-[50px] flex-shrink-0 items-center justify-start">
+                                                <div className="flex w-[58px] flex-shrink-0 items-center justify-start">
                                                     {!isChecked && !isTriedWrong && isEliminationMode && (
                                                             <button
                                                                 onClick={(e) => {
@@ -1635,7 +1635,7 @@ function QuizView({
                                                 }}
                                                 disabled={isChecked}
                                                 placeholder="Enter your answer"
-                                                className="w-full rounded-2xl border border-slate-300 bg-white px-4 py-3 text-[16px] font-semibold text-slate-900 shadow-sm outline-none transition placeholder:text-slate-400 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 disabled:cursor-not-allowed disabled:bg-slate-100"
+                                                className="w-full rounded-2xl border border-slate-300 bg-white px-4 py-2.5 text-[16px] font-semibold text-slate-900 shadow-sm outline-none transition placeholder:text-slate-400 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 disabled:cursor-not-allowed disabled:bg-slate-100"
                                             />
                                             <p className="text-[13px] leading-6 text-slate-500">
                                                 Enter a decimal or fraction. Equivalent values are accepted when they match the correct answer.

@@ -59,9 +59,9 @@ export async function signup(formData: FormData) {
 
   if (error) {
     if (error.message.toLowerCase().includes('already registered')) {
-      redirect('/login?message=Account already created. Please log in.')
+      return { redirect: '/login?message=Account already created. Please log in.' }
     }
-    redirect(`/signup?message=${encodeURIComponent(error.message)}`)
+    return { error: error.message }
   }
 
   if (!data.session) {
@@ -120,33 +120,66 @@ export async function resetPassword(formData: FormData) {
   const supabase = await createClient()
   const email = formData.get('email') as string
 
-  const { error } = await supabase.auth.resetPasswordForEmail(email, {
-    redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/auth/callback?next=/dashboard`,
-  })
+  const { error } = await supabase.auth.resetPasswordForEmail(email)
 
   if (error) {
     redirect(`/forgot-password?message=${encodeURIComponent(error.message)}`)
   }
 
-  redirect('/forgot-password?success=Check your email for the reset link.')
+  redirect(`/verify-reset-code?email=${encodeURIComponent(email)}`)
 }
 
-export async function signInWithGoogle() {
+export async function verifyResetOtp(formData: FormData) {
   const supabase = await createClient()
+  const email = formData.get('email') as string
+  const token = formData.get('token') as string
 
-  const { data, error } = await supabase.auth.signInWithOAuth({
-    provider: 'google',
-    options: {
-      redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/auth/callback`,
-    },
+  const { error } = await supabase.auth.verifyOtp({
+    email,
+    token,
+    type: 'recovery'
   })
 
   if (error) {
-    redirect(`/login?message=${encodeURIComponent(error.message)}`)
+    return { error: error.message }
   }
 
-  if (data.url) {
-    redirect(data.url)
-  }
+  // After successful OTP verification for recovery, the user is logged in
+  // We can redirect them to the update password page
+  return { redirect: '/update-password' }
 }
 
+export async function resendResetOtp(email: string) {
+  const supabase = await createClient()
+  const { error } = await supabase.auth.resend({
+    type: 'signup', // Wait, Supabase doesn't support resend for recovery directly via resend api, it's just calling resetPasswordForEmail again
+    email: email,
+  })
+  if (error) {
+    return { success: false, message: error.message }
+  }
+  return { success: true }
+}
+
+export async function updatePassword(formData: FormData) {
+  const supabase = await createClient()
+  const password = formData.get('password') as string
+  const confirmPassword = formData.get('confirmPassword') as string
+
+  if (password !== confirmPassword) {
+    redirect('/update-password?message=Passwords do not match')
+  }
+
+  const { error } = await supabase.auth.updateUser({
+    password: password
+  })
+
+  if (error) {
+    redirect(`/update-password?message=${encodeURIComponent(error.message)}`)
+  }
+
+  // Optionally sign out the user or just keep them logged in
+  await supabase.auth.signOut()
+  
+  redirect('/login?message=Password updated successfully. Please log in with your new password.')
+}

@@ -8,6 +8,7 @@ import DesmosCalculator from '@/components/DesmosCalculator';
 import 'katex/dist/katex.min.css';
 import renderMathInElement from 'katex/contrib/auto-render';
 import { useEffect, useRef } from 'react';
+import { LatexRenderer } from '@/components/LatexRenderer';
 
 // Very basic markdown bold renderer for the rationale
 function formatRationale(text: string) {
@@ -126,26 +127,24 @@ export function ReviewModal({ isOpen, onClose, questionKey, testData, userAnswer
                         <h2 className="font-bold text-[17px] text-slate-900 mb-6">{sectionName}: Question {qNum}</h2>
                         
                         {q.passage && (
-                            <div className="text-[17px] leading-[1.8] text-black font-serif mb-8 whitespace-pre-wrap">
-                                {cleanOCR(q.passage)}
+                            <div className="prose prose-sm max-w-none text-slate-600 mb-6">
+                                <LatexRenderer text={cleanOCR(q.passage || '')} />
                             </div>
                         )}
-                        
                         {q.image && (
-                            <div className="mb-6 rounded-lg overflow-hidden border border-slate-200 p-4 bg-slate-50 flex items-center justify-center">
-                                <img src={q.image} alt="Question figure" className="max-w-full max-h-[300px] object-contain mix-blend-multiply" />
+                            <div className="mb-4 rounded-xl overflow-hidden border border-slate-200 bg-slate-50 flex items-center justify-center">
+                                <img src={q.image} alt="Question figure" className="max-w-full max-h-[200px] object-contain p-2" />
                             </div>
                         )}
-
-                        <div className="text-[17px] text-slate-900 leading-relaxed font-serif font-bold mb-6">
-                            {cleanOCR(q.question)}
-                        </div>
+                        <h4 className="text-[15px] font-medium text-slate-900 mb-4">
+                            <LatexRenderer text={cleanOCR(q.question || '')} />
+                        </h4>
 
                         <div className="space-y-3">
                             {q.options.map((opt, i) => (
                                 <div key={i} className="flex text-[16px]">
                                     <span className="font-bold mr-3 text-black">{answerLetter(i)}.</span>
-                                    <span className="text-black">{cleanOCR(opt)}</span>
+                                    <span className="text-black"><LatexRenderer text={cleanOCR(opt)} /></span>
                                 </div>
                             ))}
                         </div>

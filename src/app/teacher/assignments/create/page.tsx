@@ -239,7 +239,14 @@ export default function CreateAssignmentPage() {
         e.preventDefault();
         setIsDragging(false);
         const file = e.dataTransfer.files?.[0];
-        if (file?.type === 'application/pdf') setUploadedFile(file);
+        if (file?.type === 'application/pdf') {
+            if (file.size > 4 * 1024 * 1024) {
+                setScanError(`File "${file.name}" is too large. Maximum allowed size is 4MB.`);
+                return;
+            }
+            setUploadedFile(file);
+            setScanError('');
+        }
     };
 
     const toggleClassroom = (id: string) => {
@@ -340,7 +347,13 @@ export default function CreateAssignmentPage() {
                                             className="hidden"
                                             onChange={(e) => {
                                                 const f = e.target.files?.[0];
-                                                if (f) { setUploadedFile(f); setScanError(''); }
+                                                if (f) {
+                                                    if (f.size > 4 * 1024 * 1024) {
+                                                        setScanError(`File "${f.name}" is too large. Maximum allowed size is 4MB.`);
+                                                    } else {
+                                                        setUploadedFile(f); setScanError('');
+                                                    }
+                                                }
                                             }}
                                         />
                                         {uploadedFile ? (
@@ -363,7 +376,7 @@ export default function CreateAssignmentPage() {
                                                     <Upload className="h-7 w-7 site-text-muted" />
                                                 </div>
                                                 <p className="font-bold site-text-strong text-[15px]">Drop your PDF here</p>
-                                                <p className="text-[13px] site-text-muted mt-1">or click to browse</p>
+                                                <p className="text-[13px] site-text-muted mt-1">or click to browse (Max 4MB)</p>
                                             </>
                                         )}
                                     </div>

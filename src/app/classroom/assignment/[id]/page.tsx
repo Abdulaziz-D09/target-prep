@@ -356,7 +356,7 @@ export default function ClassroomAssignmentDetailPage() {
         <div className="h-[100dvh] flex flex-col bg-slate-50 font-[system-ui,-apple-system,BlinkMacSystemFont,'Segoe_UI',Roboto,sans-serif] overflow-hidden fixed inset-0 z-50">
 
             {/* ── Header — matches practice test exactly ── */}
-            <header className="bg-white/90 backdrop-blur-xl border-b border-slate-200/80 px-6 py-3 flex items-center justify-between z-30 shrink-0 relative shadow-[0_2px_10px_rgba(0,0,0,0.02)]">
+            <header className="bg-white/90 backdrop-blur-xl border-b border-slate-200/80 px-6 py-2.5 flex items-center justify-between z-30 shrink-0 relative shadow-[0_2px_10px_rgba(0,0,0,0.02)]">
                 {/* Left: section label + directions */}
                 <div className="flex-1">
                     <div className="flex flex-col ml-4">
@@ -526,26 +526,26 @@ export default function ClassroomAssignmentDetailPage() {
                 >
                     <div className="w-full max-w-[800px] flex flex-col">
                         {/* Header: Connected Question Number & Mark for Review & ABC */}
-                        <div className="flex mb-6 mt-4 shadow-sm w-full">
+                        <div className="flex items-center mb-6 mt-4 w-full  bg-white border border-[#E5E7EB] rounded-[12px] shadow-sm h-[44px]">
                             {/* Number */}
-                            <div className="bg-[#111827] text-white font-bold text-[15px] w-[50px] flex flex-shrink-0 items-center justify-center">
+                            <div className="bg-[#111827] text-white font-bold text-[15px] w-[58px] h-[44px] flex flex-shrink-0 items-center justify-center rounded-l-[11px]">
                                 {currentIdx + 1}
                             </div>
 
                             {/* Mark for Review (Middle) */}
                             <button
                                 onClick={() => setFlaggedQuestions(s => ({ ...s, [currentIdx]: !s[currentIdx] }))}
-                                className="flex flex-1 items-center gap-2 px-4 py-2.5 bg-white border-b border-[#E5E7EB] group/mfr text-[#4B5563] text-[15px] transition-colors justify-start"
+                                className="flex flex-1 items-center gap-2 px-4 h-full text-[#4B5563] text-[15px] transition-colors justify-start bg-transparent group/mfr hover:bg-slate-50"
                             >
-                                <Bookmark className={`w-[14px] h-[14px] transition-colors ${flaggedQuestions[currentIdx] ? 'fill-slate-600 text-slate-600' : 'text-slate-400 group-hover/mfr:text-slate-600'}`} />
+                                <Bookmark className={`w-[16px] h-[16px] transition-colors ${flaggedQuestions[currentIdx] ? 'fill-slate-600 text-slate-600' : 'text-slate-400 group-hover/mfr:text-slate-600'}`} />
                                 <span className={flaggedQuestions[currentIdx] ? 'font-bold' : 'font-medium group-hover/mfr:font-bold'}>Mark for Review</span>
                             </button>
 
                             {/* ABC Elimination (Right) */}
-                            <div className="bg-[#F3F4F6] flex items-center pr-2">
+                            <div className="w-[58px] h-[44px] flex flex-shrink-0 items-center justify-center border-l border-[#E5E7EB] rounded-r-[11px] bg-transparent">
                                 <button
                                     onClick={() => setIsEliminationMode(!isEliminationMode)}
-                                    className={`flex items-center justify-center px-3 py-1 ml-2 font-bold text-[14px] transition-colors rounded ${isEliminationMode ? 'bg-[#111827] text-white' : 'bg-transparent text-slate-700 hover:bg-slate-200'}`}
+                                    className={`flex items-center justify-center w-full h-full font-bold text-[14px] transition-colors rounded-r-[11px] ${isEliminationMode ? 'bg-[#111827] text-white' : 'text-slate-700 hover:bg-slate-50'}`}
                                 >
                                     <span className="line-through decoration-[#ef4444] decoration-[2px]">ABC</span>
                                 </button>
@@ -583,7 +583,7 @@ export default function ClassroomAssignmentDetailPage() {
                                                 }
                                             }}
                                             htmlFor={`opt-${letter}`}
-                                            className={`relative flex-1 p-3 px-4 border min-h-[58px] rounded-[10px] flex items-center cursor-pointer transition-all duration-200 overflow-hidden ${isSelected ? 'border-indigo-600 shadow-[inset_0_0_0_1px_#4f46e5,0_2px_8px_rgba(79,70,229,0.15)] bg-indigo-50/30' : 'border-slate-300 hover:border-slate-400 bg-white hover:bg-slate-50 hover:shadow-sm'} ${overrideBox}`}
+                                            className={`relative flex-1 border min-h-[44px] rounded-[12px] flex items-stretch cursor-pointer transition-all duration-200 overflow-hidden ${isSelected ? 'border-indigo-600 shadow-[inset_0_0_0_1px_#4f46e5,0_2px_8px_rgba(79,70,229,0.15)] bg-indigo-50/30' : 'border-[#E5E7EB] hover:border-slate-400 bg-white hover:bg-slate-50 shadow-sm'} ${overrideBox}`}
                                         >
                                             <input
                                                 type="radio"
@@ -596,13 +596,17 @@ export default function ClassroomAssignmentDetailPage() {
                                                 }}
                                             />
 
-                                            <div className={`w-[28px] h-[28px] rounded-full border-[1.5px] flex-shrink-0 flex items-center justify-center font-bold text-[13px] mr-4 transition-colors ${isSelected ? 'border-indigo-600 text-white bg-indigo-600 shadow-sm' : 'border-slate-400 text-slate-700'}`}>
+                                            {/* Letter Box (Flush to edges) */}
+                                            <div className={`w-[50px] flex-shrink-0 flex items-center justify-center font-bold text-[15px] border-r transition-colors ${isSelected ? 'border-indigo-600 text-white border-indigo-600' : 'bg-[#F9FAFB] text-[#4B5563] border-[#E5E7EB] group-hover:bg-[#F3F4F6]'}`}>
                                                 {letter}
                                             </div>
 
-                                            <span className={`text-[17px] font-sans flex-1 ${isEliminated ? 'text-slate-400' : 'text-[#111827]'}`}>
-                                                {optText}
-                                            </span>
+                                            {/* Answer Text */}
+                                            <div className="flex-1 p-4 flex items-center">
+                                                <span className={`text-[17px] font-sans ${isEliminated ? 'text-slate-400' : 'text-[#111827]'}`}>
+                                                    {optText}
+                                                </span>
+                                            </div>
 
                                             {isEliminated && (
                                                 <div className="absolute top-1/2 left-0 w-full h-[1.5px] bg-slate-500 pointer-events-none -translate-y-[50%]"></div>

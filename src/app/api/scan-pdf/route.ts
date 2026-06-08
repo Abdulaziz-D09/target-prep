@@ -6,8 +6,13 @@ const SYSTEM_PROMPT = `You are an expert at extracting multiple-choice questions
 
 Extract ALL multiple-choice questions from the provided text or document. Each question should have exactly 4 answer choices labeled A, B, C, D.
 
-CRITICAL INSTRUCTION FOR PASSAGES (ESPECIALLY SAT ENGLISH):
-If a question is associated with any text, paragraph, poem, or notes (even if it's just a single paragraph), you MUST extract that complete text into the "passage" field. Do NOT include it inside the "stem". The "stem" should ONLY contain the single sentence asking the actual question (e.g., "Which choice best completes the text?" or "Which choice best states the main idea of the text?"). For SAT Reading and Writing, the paragraph above the question MUST always go into the "passage" field. If there is genuinely no passage at all (e.g., a pure math equation question), set "passage" to null.
+MOST CRITICAL INSTRUCTION — PASSAGE vs STEM SEPARATION:
+There are exactly TWO distinct pieces of content per question:
+  1. "passage": The reading material — any text, paragraph, poem, excerpt, or notes that the student READS. This goes in the "passage" field.
+  2. "stem": The actual question being asked — a single sentence like "Which choice best completes the text?", "What is the main purpose of the passage?", or a math problem. This goes in the "stem" field.
+
+THE STEM FIELD MUST NEVER CONTAIN THE READING TEXT OR PASSAGE. The stem must be ONLY the question prompt sentence itself — typically 1-2 sentences. If the reading material (passage) accidentally ends up in the stem field, that is WRONG.
+THE PASSAGE FIELD MUST NEVER CONTAIN THE QUESTION PROMPT. If there is genuinely no reading passage (e.g., a pure math equation question with no text to read), set "passage" to null.
 
 CRITICAL INSTRUCTION FOR MATHEMATICAL FORMULAS (LaTeX):
 If a question, passage, or option contains algebraic equations, numbers, variables, exponents, or mathematical formulas, you MUST write them in standard inline LaTeX enclosed in single dollar signs (e.g., $x^2 + 5x + 6 = 0$) or block LaTeX enclosed in double dollar signs ($$y = mx + b$$) so they render correctly in the LaTeX component.
@@ -22,8 +27,8 @@ Return ONLY a valid JSON object with this EXACT structure (no markdown fences, n
 {
   "questions": [
     {
-      "passage": "The COMPLETE text or passage associated with the question, if any. Do NOT put this in the stem. Include Markdown tables or visual descriptions here if applicable.",
-      "stem": "The question being asked (e.g. 'Which choice completes the text...'). Include Markdown tables or visual descriptions here if applicable.",
+      "passage": "The COMPLETE reading text/passage the student reads. Must NEVER include the question prompt. Set to null if there is no reading passage (e.g., pure math).",
+      "stem": "ONLY the question being asked — one or two sentences max. Example: 'Which choice best completes the text?' or 'What is the value of x?'. MUST NOT contain reading material.",
       "options": {
         "A": "First option text (use LaTeX $...$ for math if needed)",
         "B": "Second option text (use LaTeX $...$ for math if needed)",
@@ -40,6 +45,7 @@ Rules:
 3. Skip questions that do not have exactly 4 labeled options
 4. Do NOT include the correct answer — the teacher will mark answers manually
 5. Output raw JSON only — no surrounding commentary or code blocks
+6. DOUBLE-CHECK before outputting: confirm that the "stem" field contains ONLY the question sentence, and "passage" contains ONLY the reading text.
 `;
 
 // ─── Gemini config ────────────────────────────────────────────────────────────
@@ -102,8 +108,21 @@ function parseQuestionsFromModelText(rawText: string): ParsedQuestion[] {
         }
     };
 
+    const cleanExtracted = (questions: ParsedQuestion[]) => {
+        return questions.map(q => {
+            if (q.passage && q.stem) {
+                const pClean = q.passage.trim().replace(/\s+/g, ' ');
+                const sClean = q.stem.trim().replace(/\s+/g, ' ');
+                if (pClean === sClean || sClean.includes(pClean)) {
+                    return { ...q, passage: null };
+                }
+            }
+            return q;
+        });
+    };
+
     const direct = tryParse(rawText);
-    if (direct) return direct;
+    if (direct) return cleanExtracted(direct);
 
     const match = rawText.match(/\{[\s\S]*\}/);
     if (!match) {
@@ -114,7 +133,7 @@ function parseQuestionsFromModelText(rawText: string): ParsedQuestion[] {
     if (extracted === null) {
         throw new Error('Unexpected Gemini response format.');
     }
-    return extracted;
+    return cleanExtracted(extracted);
 }
 
 async function callGeminiGenerate(parts: Array<Record<string, unknown>>, apiKey: string): Promise<{

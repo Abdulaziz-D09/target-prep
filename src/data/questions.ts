@@ -184,7 +184,7 @@ const pt1_englishModule1: Question[] = [
         "answer": 1,
         "difficulty": "Medium",
         "id": "pt1-m1-q10",
-        "passage": "Millions of Metric Tons of\nCopper Mined in 1995 and\n2020\n\nCountry 1995 2020\nIndonesia 0.44 0.51\nMexico 0.33 0.73\nPeru 0.38 2.15\nUnited States 1.85 1.20\n\nWhile doing research for a paper about metal exports, a student finds a table indicating how\nmuch copper was mined in each of four countries in 1995 and 2020. The student notes that\nin 1995, Mexico mined"
+        "passage": "__TABLE__\nMillions of Metric Tons of Copper Mined in 1995 and 2020\n\nCountry | 1995 | 2020\n--- | --- | ---\nIndonesia | 0.44 | 0.51\nMexico | 0.33 | 0.73\nPeru | 0.38 | 2.15\nUnited States | 1.85 | 1.20\n__ENDTABLE__\n\nWhile doing research for a paper about metal exports, a student finds a table indicating how much copper was mined in each of four countries in 1995 and 2020. The student notes that in 1995, Mexico mined"
     },
     {
         "num": 11,
@@ -274,7 +274,7 @@ const pt1_englishModule1: Question[] = [
         "answer": 2,
         "difficulty": "Medium",
         "id": "pt1-m1-q16",
-        "passage": "Many works of the Greek mathematician Euclid (3rd century BCE) are his Elements, a\n\ntreatise of mathematical knowledge, is an extant work: it can still be read."
+        "passage": "Many works of the Greek mathematician Euclid (3rd century BCE) are _______, but his Elements, a comprehensive treatise of mathematical knowledge, is an extant work: it can still be read."
     },
     {
         "num": 17,
@@ -289,7 +289,7 @@ const pt1_englishModule1: Question[] = [
         "answer": 0,
         "difficulty": "Medium",
         "id": "pt1-m1-q17",
-        "passage": "A 2024 study cataloged all the trees in Amsterdam to evaluate the biodiversity of the city's\nurban forest. The researchers, finding that administrative unit GK13 had a 0.62 ratio of native\n\nto non-native trees, efforts to improve the biodiversity of the trees in that unit and\n\nother areas with a similarly moderate ratio."
+        "passage": "A 2024 study cataloged all the trees in Amsterdam to evaluate the biodiversity of the city's urban forest. The researchers, finding that administrative unit GK13 had a 0.62 ratio of native to non-native trees, _______ efforts to improve the biodiversity of the trees in that unit and other areas with a similarly moderate ratio."
     },
     {
         "num": 18,
@@ -304,7 +304,7 @@ const pt1_englishModule1: Question[] = [
         "answer": 0,
         "difficulty": "Medium",
         "id": "pt1-m1-q18",
-        "passage": "Growing as large as three meters in diameter, the leaves of the giant Amazonian waterlily\nfeature a complex network of radiating veins that provide structural in thickness from\n\nthe center to the edges, these veins allow the leaves to maintain their large size and\nbuoyancy with minimal material, optimizing light capture and photosynthesis."
+        "passage": "Growing as large as three meters in diameter, the leaves of the giant Amazonian waterlily feature a complex network of radiating veins that provide structural _______ in thickness from the center to the edges, these veins allow the leaves to maintain their large size and buoyancy with minimal material, optimizing light capture and photosynthesis."
     },
     {
         "num": 19,
@@ -319,7 +319,7 @@ const pt1_englishModule1: Question[] = [
         "answer": 3,
         "difficulty": "Medium",
         "id": "pt1-m1-q19",
-        "passage": "a US state when it ratified the US Constitution on December 12, 1787, was thereby\nempowered, via its representatives to the US Congress, to vote on whether to admit\nLouisiana as a state on April 30, 1812."
+        "passage": "_______ a US state when it ratified the US Constitution on December 12, 1787, was thereby empowered, via its representatives to the US Congress, to vote on whether to admit Louisiana as a state on April 30, 1812."
     },
     {
         "num": 20,
@@ -334,7 +334,7 @@ const pt1_englishModule1: Question[] = [
         "answer": 1,
         "difficulty": "Medium",
         "id": "pt1-m1-q20",
-        "passage": "Though largely eclipsed by her success as a novelist, Jessie Redmon Fauset\u2019s contributions\nas literary editor of The Crisis, a New York City-based periodical whose influence was\n\narguably at its peak during her Harlem Renaissance-era tenure, in recent scholarship\n\nthat explores Fauset\u2019s instrumental role in shaping the magazine's aesthetic and debuting\nthe work of Langston Hughes and other emerging Black writers."
+        "passage": "Though largely eclipsed by her success as a novelist, Jessie Redmon Fauset\u2019s contributions as literary editor of The Crisis, a New York City-based periodical whose influence was arguably at its peak during her Harlem Renaissance-era tenure, _______ in recent scholarship that explores Fauset\u2019s instrumental role in shaping the magazine's aesthetic and debuting the work of Langston Hughes and other emerging Black writers."
     },
     {
         "num": 21,
@@ -349,7 +349,7 @@ const pt1_englishModule1: Question[] = [
         "answer": 0,
         "difficulty": "Medium",
         "id": "pt1-m1-q21",
-        "passage": "Resins play several important roles in maintaining the health of conifers and many other\nkinds of trees.__\u2014\u2014_\u2014srresins quickly seal wounds, which helps prevent harmful insects and\nfungi from entering trees. These sticky substances also help trees retain water that is\nneeded for them to survive."
+        "passage": "Resins play several important roles in maintaining the health of conifers and many other kinds of trees. _______ resins quickly seal wounds, which helps prevent harmful insects and fungi from entering trees. These sticky substances also help trees retain water that is needed for them to survive."
     },
     {
         "num": 22,
@@ -364,7 +364,7 @@ const pt1_englishModule1: Question[] = [
         "answer": 0,
         "difficulty": "Medium",
         "id": "pt1-m1-q22",
-        "passage": "Giant dust plumes from the Sahara Desert that blow across the Atlantic Ocean can have\ncomplex and opposing effects on tropical cyclones. On one hand, the dust can enhance the\nformation of ice clouds in the cyclone\u2019s core, increasing precipitation. the dust can\nlower sea surface temperatures around the cyclone's core, weakening the storm."
+        "passage": "Giant dust plumes from the Sahara Desert that blow across the Atlantic Ocean can have complex and opposing effects on tropical cyclones. On one hand, the dust can enhance the formation of ice clouds in the cyclone\u2019s core, increasing precipitation. _______ the dust can lower sea surface temperatures around the cyclone's core, weakening the storm."
     },
     {
         "num": 23,
@@ -379,7 +379,7 @@ const pt1_englishModule1: Question[] = [
         "answer": 0,
         "difficulty": "Medium",
         "id": "pt1-m1-q23",
-        "passage": "Elvis Presley's iconic jumpsuit Red Pinwheel featured rhinestones arranged in pinwheel\npatterns. Historians note that adornments such as these added between twenty-five and\nfifty pounds to each of Elvis\u2019s stage outfits. the fabric used to make the outfits was\n\nlight and flexible, enabling freedom of motion."
+        "passage": "Elvis Presley's iconic jumpsuit Red Pinwheel featured rhinestones arranged in pinwheel patterns. Historians note that adornments such as these added between twenty-five and fifty pounds to each of Elvis\u2019s stage outfits. _______ the fabric used to make the outfits was light and flexible, enabling freedom of motion."
     },
     {
         "num": 24,
@@ -409,7 +409,7 @@ const pt1_englishModule1: Question[] = [
         "answer": 2,
         "difficulty": "Medium",
         "id": "pt1-m1-q25",
-        "passage": "Though its onboard laboratory allowed it to analyze rock samples on-site, the 2011 Mars\n\nCuriosity rover was unable to preserve samples for future analysis. when creating the\n\n2020 Mars Perseverance rover, robotics technologist Yumi lwashita and other members of\nNASA's Jet Propulsion Laboratory sought to implement a mechanism that could do exactly\nthat."
+        "passage": "Though its onboard laboratory allowed it to analyze rock samples on-site, the 2011 Mars Curiosity rover was unable to preserve samples for future analysis. _______ when creating the 2020 Mars Perseverance rover, robotics technologist Yumi Iwashita and other members of NASA's Jet Propulsion Laboratory sought to implement a mechanism that could do exactly that."
     },
     {
         "num": 26,
@@ -424,22 +424,22 @@ const pt1_englishModule1: Question[] = [
         "answer": 0,
         "difficulty": "Medium",
         "id": "pt1-m1-q26",
-        "passage": "As lestyn Barr and his team of researchers discovered when establishing the glacial timeline\nof Antarctica, the Transantarctic Mountains\u2014a 3,500-km mountain range spanning the\ncontinent\u2014are home to glaciers of at least 60 million years in age. the researchers\n\nconcluded, Antarctica had glaciers long before the formation of its continent-wide ice sheet\n34 million years ago."
+        "passage": "As Iestyn Barr and his team of researchers discovered when establishing the glacial timeline of Antarctica, the Transantarctic Mountains\u2014a 3,500-km mountain range spanning the continent\u2014are home to glaciers of at least 60 million years in age. _______ the researchers concluded, Antarctica had glaciers long before the formation of its continent-wide ice sheet 34 million years ago."
     },
     {
         "num": 27,
         "type": "Reading",
-        "question": "Which choice most effectively uses information from the given sentences to emphasize\nEdison's reliance on Hammer?",
+        "question": "Which choice most effectively uses information from the given sentences to emphasize Edison's reliance on Hammer?",
         "options": [
             "William Joseph Hammer, a laboratory assistant, worked at the Menlo Park laboratory.",
-            "William Joseph Hammer, a laboratory assistant, was known for his valuable contribution to\nthe field of technology.",
-            "Most of Thomas Edison\u2019s employees had successful careers independent of working for\nhim; for example, William Joseph Hammer, who worked at the Menlo Park laboratory, was an\naccomplished laboratory assistant.",
-            "Having received little formal education, Thomas Edison depended on specialized\nemployees, including laboratory assistant William Joseph Hammer, for many of his\ninventions."
+            "William Joseph Hammer, a laboratory assistant, was known for his valuable contribution to the field of technology.",
+            "Most of Thomas Edison\u2019s employees had successful careers independent of working for him; for example, William Joseph Hammer, who worked at the Menlo Park laboratory, was an accomplished laboratory assistant.",
+            "Having received little formal education, Thomas Edison depended on specialized employees, including laboratory assistant William Joseph Hammer, for many of his inventions."
         ],
         "answer": 3,
         "difficulty": "Medium",
         "id": "pt1-m1-q27",
-        "passage": "\u00a2 Thomas Edison is regarded as one of the most important inventors in US history.\n\ne Having received little formal schooling, Edison relied on specialist employees at his\nvarious laboratories and offices to complete the technical work for many of his\ninventions.\n\n\u00a2 William Joseph Hammer was a laboratory assistant who worked at the Menlo Park\nlaboratory.\n\n\u00a2 He is best known for curating the most comprehensive collection of historic light bulbs\nanywhere in the world.\n\n\u00a2 William Symes Andrews was an electrical engineer who worked at the Edison Electric\nLight Company.\n\n\u00a2 He is best known for establishing more than thirty power plants across New York and\nPennsylvania."
+        "passage": "While researching a topic, a student has taken the following notes:\n\n\u2022 Thomas Edison is regarded as one of the most important inventors in US history.\n\n\u2022 Having received little formal schooling, Edison relied on specialist employees at his various laboratories and offices to complete the technical work for many of his inventions.\n\n\u2022 William Joseph Hammer was a laboratory assistant who worked at the Menlo Park laboratory.\n\n\u2022 He is best known for curating the most comprehensive collection of historic light bulbs anywhere in the world.\n\n\u2022 William Symes Andrews was an electrical engineer who worked at the Edison Electric Light Company.\n\n\u2022 He is best known for establishing more than thirty power plants across New York and Pennsylvania."
     }
 ];
 
@@ -522,16 +522,17 @@ const pt1_englishModule2: Question[] = [
     {
         "num": 6,
         "type": "Reading",
-        "question": "Which choice best describes the relationship between the two texts?\nText 1\n\nSidebells wintergreen (Orthilia secunda) plants are native to Alaska, where harsh conditions\nhave historically impeded potential invasive species. As the boreal climate has warmed in\nrecent decades, however, Siberian peashrub (Caragana arborescens) plants have\nestablished themselves in Alaska. Previous research conducted in non-boreal ecosystems\nhas documented warming-induced increases in summer temperatures benefiting invasive\nspecies more than native species.\n\nText 2\n\nAt a site near Fairbanks, Alaska, Christa Mulder and Katie Spellman tracked O. secunda and\nC. arborescens, along with other native and invasive species, over several years. They\nobserved that although average summer temperatures were substantially higher in some\nyears of the study than in others, neither O. secunda nor C. arborescens showed any\nsignificant variation in summer growth patterns from year to year.",
+        "question": "Which choice best describes the relationship between the two texts?",
         "options": [
-            "Text 2 describes a methodology that helps researchers avoid a problem encountered in\nthe studies discussed in Text 1.",
-            "Text 2 explains a study that suggests an alternative explanation for the trend observed in\nthe research discussed in Text 1.",
-            "Text 2 discusses an observation that challenges the validity of the findings described in\nText 1.",
-            "Text 2 presents a finding that casts doubt on the generalizability of the research\ndiscussed in Text 1."
+            "Text 2 describes a methodology that helps researchers avoid a problem encountered in the studies discussed in Text 1.",
+            "Text 2 explains a study that suggests an alternative explanation for the trend observed in the research discussed in Text 1.",
+            "Text 2 discusses an observation that challenges the validity of the findings described in Text 1.",
+            "Text 2 presents a finding that casts doubt on the generalizability of the research discussed in Text 1."
         ],
         "answer": 3,
         "difficulty": "Hard",
-        "id": "pt1-m2-q6"
+        "id": "pt1-m2-q6",
+        "passage": "Text 1\n\nSidebells wintergreen (Orthilia secunda) plants are native to Alaska, where harsh conditions have historically impeded potential invasive species. As the boreal climate has warmed in recent decades, however, Siberian peashrub (Caragana arborescens) plants have established themselves in Alaska. Previous research conducted in non-boreal ecosystems has documented warming-induced increases in summer temperatures benefiting invasive species more than native species.\n\nText 2\n\nAt a site near Fairbanks, Alaska, Christa Mulder and Katie Spellman tracked O. secunda and C. arborescens, along with other native and invasive species, over several years. They observed that although average summer temperatures were substantially higher in some years of the study than in others, neither O. secunda nor C. arborescens showed any significant variation in summer growth patterns from year to year."
     },
     {
         "num": 7,
@@ -576,22 +577,22 @@ const pt1_englishModule2: Question[] = [
         "answer": 1,
         "difficulty": "Hard",
         "id": "pt1-m2-q9",
-        "passage": "Effect of Various Soil Treatments on Mean Pineapple Fruit Weight and Size\n\nWeight Length Diameter\n\nSoil treatment (grams) (centimeters) (centimeters)\nControl 825.9 6.14 13.63\nBiochar 915.7 6.56 13.63\nCompost 864.8 6.15 13.22\nBiochar and\n\n979.3 6.76 13.68\n\ncompost\nBiochar and NPK\n\n- 1032.1 6.78 13.96\nfertilizer\n\nWorking in Ghana, Emmanuel Hanyabui and colleagues compared the impact on pineapple\ngrowth of different combinations of soil additives, including NPK fertilizer (an inorganic\nfertilizer containing nitrogen, phosphorus, and potassium), organic compost, and biochar (a\ncarbon-rich material produced from organic waste matter). Based on data in the table,\npineapple farmers with no access to inorganic soil additives would likely increase the weight\nand size of their fruits by the greatest amount by using"
+        "passage": "__TABLE__\nEffect of Various Soil Treatments on Mean Pineapple Fruit Weight and Size\n\nSoil treatment | Weight (grams) | Length (centimeters) | Diameter (centimeters)\n--- | --- | --- | ---\nControl | 825.9 | 6.14 | 13.63\nBiochar | 915.7 | 6.56 | 13.63\nCompost | 864.8 | 6.15 | 13.22\nBiochar and compost | 979.3 | 6.76 | 13.68\nBiochar and NPK fertilizer | 1032.1 | 6.78 | 13.96\n__ENDTABLE__\n\nWorking in Ghana, Emmanuel Hanyabui and colleagues compared the impact on pineapple growth of different combinations of soil additives, including NPK fertilizer (an inorganic fertilizer containing nitrogen, phosphorus, and potassium), organic compost, and biochar (a carbon-rich material produced from organic waste matter). Based on data in the table, pineapple farmers with no access to inorganic soil additives would likely increase the weight and size of their fruits by the greatest amount by using"
     },
     {
         "num": 10,
         "type": "Reading",
-        "question": "Which choice best presents a conclusion about the habits of New Year's resolution makers\nthat is best supported by information in the text and the table?",
+        "question": "Which choice best presents a conclusion about the habits of New Year's resolution makers that is best supported by information in the text and the table?",
         "options": [
-            "The majority of US adults who make resolutions related to health and exercise also make\nresolutions in multiple additional categories.",
-            "Resolution makers between the ages of 50 and 64 are more likely to make resolutions\nrelated to personal relationships and less likely to make resolutions related to finances than\n\nresolution makers between the ages of 30 and 49 are.",
-            "Among all US adults, people become less likely to make New Year's resolutions as they\n\nage, regardless of the type of resolution.",
-            "Resolution makers between the ages of 18 and 29 are more likely to make resolutions\nabout health and exercise than resolution makers between the ages of 30 and 49 are."
+            "The majority of US adults who make resolutions related to health and exercise also make resolutions in multiple additional categories.",
+            "Resolution makers between the ages of 50 and 64 are more likely to make resolutions related to personal relationships and less likely to make resolutions related to finances than resolution makers between the ages of 30 and 49 are.",
+            "Among all US adults, people become less likely to make New Year's resolutions as they age, regardless of the type of resolution.",
+            "Resolution makers between the ages of 18 and 29 are more likely to make resolutions about health and exercise than resolution makers between the ages of 30 and 49 are."
         ],
         "answer": 1,
         "difficulty": "Hard",
         "id": "pt1-m2-q10",
-        "passage": "Percentages of New Year's Resolution Makers Who Make Certain\nKinds of Resolutions\n\nType of resolution Age 18-29 Age 30-49 Age 50-64 Age 65+\n\nHealth and exercise 79 80 79 76\nFinances 68 63 56 47\nPersonal relationships 63 53 58 52\nHobbies 65 53 51 45\n\nA Pew Research Center survey conducted in January 2024 found that three out of ten US\nadults make at least one New Year's resolution (a promise for the year ahead), while half of\nthose who make a resolution make more than one. The survey asked participants what kinds\nof resolutions they made and separated them into several categories. The table presents\npercentages of people who make particular kinds of New Year's resolutions among those\n\nwho choose to make them, indexed by age bracket."
+        "passage": "__TABLE__\nPercentages of New Year's Resolution Makers Who Make Certain Kinds of Resolutions\n\nType of resolution | Age 18-29 | Age 30-49 | Age 50-64 | Age 65+\n--- | --- | --- | --- | ---\nHealth and exercise | 79 | 80 | 79 | 76\nFinances | 68 | 63 | 56 | 47\nPersonal relationships | 63 | 53 | 58 | 52\nHobbies | 65 | 53 | 51 | 45\n__ENDTABLE__\n\nA Pew Research Center survey conducted in January 2024 found that three out of ten US adults make at least one New Year's resolution (a promise for the year ahead), while half of those who make a resolution make more than one. The survey asked participants what kinds of resolutions they made and separated them into several categories. The table presents percentages of people who make particular kinds of New Year's resolutions among those who choose to make them, indexed by age bracket."
     },
     {
         "num": 11,
@@ -641,7 +642,7 @@ const pt1_englishModule2: Question[] = [
     {
         "num": 14,
         "type": "Reading",
-        "question": "Which choice completes the text so that it conforms to the conventions of Standard English?\nIn Puerto Rico, it\u2019s not unusual for a city or town to be known by a nickname that\ncorresponds to one of its notable features, like landscape, climate, famous residents, or\nchief export. For example, the Puerto Rican municipality of Manati is well known for its\nhistory as a cultural center in the early 20th this distinction has earned it the fitting",
+        "question": "Which choice completes the text so that it conforms to the conventions of Standard English?",
         "options": [
             "century and",
             "century",
@@ -651,7 +652,7 @@ const pt1_englishModule2: Question[] = [
         "answer": 3,
         "difficulty": "Hard",
         "id": "pt1-m2-q14",
-        "passage": "nickname of \u201cthe Athens of Puerto Rico.\u201d"
+        "passage": "In Puerto Rico, it\u2019s not unusual for a city or town to be known by a nickname that corresponds to one of its notable features, like landscape, climate, famous residents, or chief export. For example, the Puerto Rican municipality of Manati is well known for its history as a cultural center in the early 20th _______ this distinction has earned it the fitting nickname of \u201cthe Athens of Puerto Rico.\u201d"
     },
     {
         "num": 15,
@@ -776,61 +777,52 @@ const pt1_englishModule2: Question[] = [
     {
         "num": 23,
         "type": "Reading",
-        "question": "Which choice most effectively uses information from the given sentences to explain the 50\nCompleters hiking challenge to a new audience?",
+        "question": "Which choice most effectively uses information from the given sentences to explain the 50 Completers hiking challenge to a new audience?",
         "options": [
-            "Hikers aiming to count themselves among the 50 Completers must reach not only West\nVirginia's Spruce Knob but also the even higher peak of Mount Elbert in Colorado.",
-            "Not until after you have reached the highest points in all fifty US states\u2014including Spruce\nKnob in West Virginia and Mount Elbert in Colorado\u2014can you include yourself among the 50\nCompleters of the Highpointers Club.",
-            "If you are looking for a new hiking challenge, consider joining the Highpointers Club, as\ndid In Suk Han, a hiker who successfully reached the highest point in every US state.",
-            "On November 15, 2013, In Suk Han finally completed the feat of reaching the highest\npoint in all fifty US states, including Spruce Knob in West Virginia and Mount Elbert in\nColorado."
+            "Hikers aiming to count themselves among the 50 Completers must reach not only West Virginia's Spruce Knob but also the even higher peak of Mount Elbert in Colorado.",
+            "Not until after you have reached the highest points in all fifty US states\u2014including Spruce Knob in West Virginia and Mount Elbert in Colorado\u2014can you include yourself among the 50 Completers of the Highpointers Club.",
+            "If you are looking for a new hiking challenge, consider joining the Highpointers Club, as did In Suk Han, a hiker who successfully reached the highest point in every US state.",
+            "On November 15, 2013, In Suk Han finally completed the feat of reaching the highest point in all fifty US states, including Spruce Knob in West Virginia and Mount Elbert in Colorado."
         ],
         "answer": 1,
         "difficulty": "Hard",
         "id": "pt1-m2-q23",
-        "passage": "\u00a2 The Highpointers Club is a hiking club.\n\n\u00a2 One of the main goals among club members is to reach the highest points in all fifty US\nstates.\n\ne Those who achieve this are called 50 Completers.\n\n\u00a2 In Suk Han became a 50 Completer on November 15, 2013.\n\n\u00a2 The highest point in West Virginia is Soruce Knob, at 4,863 ft.\ne The highest point in Colorado is Mount Elbert, at 14,440 ft."
+        "passage": "While researching a topic, a student has taken the following notes:\n\n\u2022 The Highpointers Club is a hiking club.\n\n\u2022 One of the main goals among club members is to reach the highest points in all fifty US states.\n\n\u2022 Those who achieve this are called 50 Completers.\n\n\u2022 In Suk Han became a 50 Completer on November 15, 2013.\n\n\u2022 The highest point in West Virginia is Spruce Knob, at 4,863 ft.\n\n\u2022 The highest point in Colorado is Mount Elbert, at 14,440 ft."
     },
     {
         "num": 24,
         "type": "Reading",
-        "question": "Which choice most effectively uses information from the given sentences to introduce Marie\nHall to a new audience?",
+        "question": "Which choice most effectively uses information from the given sentences to introduce Marie Hall to a new audience?",
         "options": [
             "Of the 1,000 or so violins Antonio Stradivari made, only about 500 exist today.",
             "Marie Hall was a British violinist who once owned a Stradivarius violin.",
             "The Marie Hall Stradivarius is named after Marie Hall.",
-            "Born in 1644, Antonio Stradivari was an Italian instrument maker whose violins are famous\nfor their quality."
+            "Born in 1644, Antonio Stradivari was an Italian instrument maker whose violins are famous for their quality."
         ],
         "answer": 1,
         "difficulty": "Hard",
         "id": "pt1-m2-q24",
-        "passage": "e Antonio Stradivari (1644-1737) was an Italian instrument maker.\n\ne\u00a2 He made about 1,000 violins in his lifetime.\n\ne Musicians prize his Stradivarius violins for their famed sound quality.\n\ne The Marie Hall Stradivarius is named for former owner Marie Hall, a British violinist."
+        "passage": "While researching a topic, a student has taken the following notes:\n\n\u2022 Antonio Stradivari (1644\u20131737) was an Italian instrument maker.\n\n\u2022 He made about 1,000 violins in his lifetime.\n\n\u2022 Musicians prize his Stradivarius violins for their famed sound quality.\n\n\u2022 The Marie Hall Stradivarius is named for former owner Marie Hall, a British violinist."
     },
     {
         "num": 25,
         "type": "Reading",
-        "question": "The student wants to support Browner\u2019s claim about Louis Ballard's compositions. Which\nchoice most effectively uses relevant information from the notes to accomplish this goal?\nWhile researching a topic, a student has taken the following notes:",
-        "options": [],
-        "answer": -1,
-        "difficulty": "Hard",
-        "id": "pt1-m2-q25",
-        "passage": "e Louis Ballard was a classical composer and citizen of the Quapaw Tribe.\n\n\u00a2 Ballard's composition Desert Trilogy was nominated for the Pulitzer Prize in music in"
-    },
-    {
-        "num": 1971,
-        "type": "Reading",
-        "question": "e His composition Washington Festival Suite incorporates a Pueblo log drum, a\ntraditional Native instrument.\n\ne Ethnomusicologist Tara Browner claims that Ballard\u2019s compositions rely on elements\noriginating within Native musical traditions.",
+        "question": "The student wants to support Browner\u2019s claim about Louis Ballard's compositions. Which choice most effectively uses relevant information from the notes to accomplish this goal?",
         "options": [
-            "According to Browner, composer Louis Ballard, who wrote Desert Trilogy, relies on\nelements with origins in Native musical traditions.",
-            "Browner posits that Louis Ballard's compositions rely on elements originating within\nNative musical traditions; Washington Festival Suite affirms this assertion, incorporating a\nPueblo log drum.",
-            "Classical composer Louis Ballard, who wrote Washington Festival Suite, was nominated\nfor the Pulitzer Prize in music in 1971.",
-            "Browner claims that Louis Ballard's compositions, one of which was nominated for the\nPulitzer Prize, rely on elements originating within Native musical traditions."
+            "According to Browner, composer Louis Ballard, who wrote Desert Trilogy, relies on elements with origins in Native musical traditions.",
+            "Browner posits that Louis Ballard's compositions rely on elements originating within Native musical traditions; Washington Festival Suite affirms this assertion, incorporating a Pueblo log drum.",
+            "Classical composer Louis Ballard, who wrote Washington Festival Suite, was nominated for the Pulitzer Prize in music in 1971.",
+            "Browner claims that Louis Ballard's compositions, one of which was nominated for the Pulitzer Prize, rely on elements originating within Native musical traditions."
         ],
         "answer": 1,
         "difficulty": "Hard",
-        "id": "pt1-m2-q1971"
+        "id": "pt1-m2-q25",
+        "passage": "While researching a topic, a student has taken the following notes:\n\n\u2022 Louis Ballard was a classical composer and citizen of the Quapaw Tribe.\n\n\u2022 Ballard's composition Desert Trilogy was nominated for the Pulitzer Prize in music in 1971.\n\n\u2022 His composition Washington Festival Suite incorporates a Pueblo log drum, a traditional Native instrument.\n\n\u2022 Ethnomusicologist Tara Browner claims that Ballard\u2019s compositions rely on elements originating within Native musical traditions."
     },
     {
         "num": 26,
         "type": "Reading",
-        "question": "The student wants to present the study's research methods. Which choice most effectively\nuses relevant information from the notes to accomplish this goal?",
+        "question": "The student wants to present the study's research methods. Which choice most effectively uses relevant information from the notes to accomplish this goal?",
         "options": [
             "To further analyze the origins of Earth\u2019s unique conditions, researchers focused on rocks\nfrom the Archean eon, when Earth's temperatures were extremely high.",
             "Birner\u2019s team analyzed the age and oxidation levels of rock samples collected from two\nseafloor ridges.",
@@ -1446,8 +1438,8 @@ const pt2_englishModule1: Question[] = [
         "id": "pt2-reading-m1-q3",
         "num": 3,
         "type": "Reading and Writing",
-        "passage": "The fog extended its tentacles over city and river, gradually obliterating traces of\n\nfamiliar landscapes. At five-thirty the old Panhandle bridge, supported by\nmassive sandstone pillars, stalwart, as when erected fifty years before to serve a\ngeneration now passed behind the portals of life, had become a spectral outline\nagainst the sky.",
-        "question": "As used in the text, what does the word \u201ctraces\u201d most nearly mean?\nThe following text is adapted from John Matheus\u2019s 1925 short story \u201cFog.\u201d",
+        "passage": "The following text is adapted from John Matheus\u2019s 1925 short story \u201cFog.\u201d\n\nThe fog extended its tentacles over city and river, gradually obliterating traces of familiar landscapes. At five-thirty the old Panhandle bridge, supported by massive sandstone pillars, stalwart, as when erected fifty years before to serve a generation now passed behind the portals of life, had become a spectral outline against the sky.",
+        "question": "As used in the text, what does the word \u201ctraces\u201d most nearly mean?",
         "options": [
             "Debris",
             "Copies",
@@ -1461,8 +1453,8 @@ const pt2_englishModule1: Question[] = [
         "id": "pt2-reading-m1-q4",
         "num": 4,
         "type": "Reading and Writing",
-        "passage": "onerous to comprehensively classify the microplastics in a water sample, so Ojeda-Benitez\net al. are exploring a device to help quickly and accurately identify certain characteristics.",
-        "question": "Which choice completes the text with the most logical and precise word or phrase?\nMicroplastics are a common pollutant in large masses of water like glaciers. High\nconcentrations and among particles\u2014variations in size, shape, and material\u2014make it",
+        "passage": "Microplastics are a common pollutant in large masses of water like glaciers. High concentrations and _______ among particles\u2014variations in size, shape, and material\u2014make it onerous to comprehensively classify the microplastics in a water sample, so Ojeda-Benitez et al. are exploring a device to help quickly and accurately identify certain characteristics.",
+        "question": "Which choice completes the text with the most logical and precise word or phrase?",
         "options": [
             "restraints",
             "inconsistencies",
@@ -1476,8 +1468,8 @@ const pt2_englishModule1: Question[] = [
         "id": "pt2-reading-m1-q5",
         "num": 5,
         "type": "Reading and Writing",
-        "passage": "Everything Osmond did was pose\u2014pose so subtly considered that if one were not\non the lookout one mistook it for impulse. Ralph had never met a man who lived\nso much in the land of consideration. His tastes, his studies, his\naccomplishments, his collections, were all for a purpose.",
-        "question": "As used in the text, what does the word \u201cconsideration\u201d most nearly mean?\nThe following text is adapted from Henry James's 1881 novel The Portrait of a Lady.",
+        "passage": "The following text is adapted from Henry James's 1881 novel The Portrait of a Lady.\n\nEverything Osmond did was pose\u2014pose so subtly considered that if one were not on the lookout one mistook it for impulse. Ralph had never met a man who lived so much in the land of consideration. His tastes, his studies, his accomplishments, his collections, were all for a purpose.",
+        "question": "As used in the text, what does the word \u201cconsideration\u201d most nearly mean?",
         "options": [
             "Deference",
             "Calculation",
@@ -1581,18 +1573,8 @@ const pt2_englishModule1: Question[] = [
         "id": "pt2-reading-m1-q12",
         "num": 12,
         "type": "Reading and Writing",
-        "passage": "Weight Length Diameter\n\nSoil treatment (grams) (centimeters) (centimeters)\nControl 825.9 6.14 13.63\nBiochar 915.7 6.56 13.63\nCompost 864.8 6.15 13.22\nBiochar and",
-        "question": "Which choice most effectively uses data from the table to complete the text?\nEffect of Various Soil Treatments on Mean Pineapple Fruit Weight and Size",
-        "options": [],
-        "answer": 0,
-        "difficulty": "Medium"
-    },
-    {
-        "id": "pt2-reading-m1-q13",
-        "num": 13,
-        "type": "Reading and Writing",
-        "passage": "3 6.76 13.68\n\ncompost\nBiochar and NPK\n\na 1032.1 6.78 13.96\nfertilizer\n\nWorking in Ghana, Emmanuel Hanyabui and colleagues compared the impact on pineapple\ngrowth of different combinations of soil additives, including NPK fertilizer (an inorganic\nfertilizer containing nitrogen, phosphorus, and potassium), organic compost, and biochar (a\ncarbon-rich material produced from organic waste matter). Based on data in the table,\npineapple farmers with no access to inorganic soil additives would likely increase the weight\nand size of their fruits by the greatest amount by using",
-        "question": "3 6.76 13.68\n\ncompost\nBiochar and NPK\n\na 1032.1 6.78 13.96\nfertilizer\n\nWorking in Ghana, Emmanuel Hanyabui and colleagues compared the impact on pineapple\ngrowth of different combinations of soil additives, including NPK fertilizer (an inorganic\nfertilizer containing nitrogen, phosphorus, and potassium), organic compost, and biochar (a\ncarbon-rich material produced from organic waste matter). Based on data in the table,\npineapple farmers with no access to inorganic soil additives would likely increase the weight\nand size of their fruits by the greatest amount by using",
+        "passage": "__TABLE__\nEffect of Various Soil Treatments on Mean Pineapple Fruit Weight and Size\n\nSoil treatment | Weight (grams) | Length (centimeters) | Diameter (centimeters)\n--- | --- | --- | ---\nControl | 825.9 | 6.14 | 13.63\nBiochar | 915.7 | 6.56 | 13.63\nCompost | 864.8 | 6.15 | 13.22\nBiochar and compost | 979.3 | 6.76 | 13.68\nBiochar and NPK fertilizer | 1032.1 | 6.78 | 13.96\n__ENDTABLE__\n\nWorking in Ghana, Emmanuel Hanyabui and colleagues compared the impact on pineapple growth of different combinations of soil additives, including NPK fertilizer (an inorganic fertilizer containing nitrogen, phosphorus, and potassium), organic compost, and biochar (a carbon-rich material produced from organic waste matter). Based on data in the table, pineapple farmers with no access to inorganic soil additives would likely increase the weight and size of their fruits by the greatest amount by using",
+        "question": "Which choice most effectively uses data from the table to complete the text?",
         "options": [
             "compost alone.",
             "biochar alone.",
@@ -1666,7 +1648,7 @@ const pt2_englishModule1: Question[] = [
         "id": "pt2-reading-m1-q18",
         "num": 18,
         "type": "Reading and Writing",
-        "passage": "Many works of the Greek historian Strabo (1st century BCE) are his Geographica, a\n\ndescriptive history of the ancient world, is an extant work: it can still be read.",
+        "passage": "Many works of the Greek historian Strabo (1st century BCE) are _______, but his Geographica, a descriptive history of the ancient world, is an extant work: it can still be read.",
         "question": "Which choice completes the text so that it conforms to the conventions of Standard English?",
         "options": [
             "lost. Conversely,",
@@ -1726,10 +1708,10 @@ const pt2_englishModule1: Question[] = [
         "id": "pt2-reading-m1-q22",
         "num": 22,
         "type": "Reading and Writing",
-        "passage": "",
+        "passage": "A team led by Portuguese researcher Isabel C.F.R. Ferreira found that many species of mushrooms contain chemicals called phenolic compounds, such as cinnamic acid and catechin. Ferreira detected cinnamic acid in Agaricus blazei mushrooms and catechin in Lentinus edodes mushrooms. _______ phenolic compounds have also been detected in other types of fungi.",
         "question": "Which choice completes the text with the most logical transition?",
         "options": [
-            "team led by Portuguese researcher Isabel C.F.R. Ferreira found that many species of\nmushrooms contain chemicals called phenolic compounds, such as cinnamic acid and\ncatechin. Ferreira detected cinnamic acid in Agaricus blazei mushrooms and\n\ncatechin in Lentinus edodes mushrooms.\nA. For this reason,",
+            "For this reason,",
             "However,",
             "Nevertheless,",
             "For example,"
@@ -1741,7 +1723,7 @@ const pt2_englishModule1: Question[] = [
         "id": "pt2-reading-m1-q23",
         "num": 23,
         "type": "Reading and Writing",
-        "passage": "Resins play several important roles in maintaining the health of conifers and many other\n\nkinds of trees. resins quickly seal wounds, which helps prevent harmful insects and\nfungi from entering trees. These sticky substances also help trees retain water that is\nneeded for them to survive.",
+        "passage": "Resins play several important roles in maintaining the health of conifers and many other kinds of trees. _______ resins quickly seal wounds, which helps prevent harmful insects and fungi from entering trees. These sticky substances also help trees retain water that is needed for them to survive.",
         "question": "Which choice completes the text with the most logical transition?",
         "options": [
             "Regardless,",
@@ -1786,7 +1768,7 @@ const pt2_englishModule1: Question[] = [
         "id": "pt2-reading-m1-q26",
         "num": 26,
         "type": "Reading and Writing",
-        "passage": "Ina 1948 article titled \u201cThe Language of Lines,\u201d Brazilian photographer Jos\u00e9 Yalenti argued\nthat black-and-white photography's distinctive\u2014and in his view, superior\u2014use of lines is\nwhat elevates the medium to the status of fine art.___\u2014\u2014- Yalenti insisted that conveying\nperspective through linear forms is photography's \u201cindisputable and exclusive domain,\u201d\ncreating a visual language surpassing even celebrated painters\u2019 works.",
+        "passage": "In a 1948 article titled \u201cThe Language of Lines,\u201d Brazilian photographer Jos\u00e9 Yalenti argued that black-and-white photography's distinctive\u2014and in his view, superior\u2014use of lines is what elevates the medium to the status of fine art. _______ Yalenti insisted that conveying perspective through linear forms is photography's \u201cindisputable and exclusive domain,\u201d creating a visual language surpassing even celebrated painters\u2019 works.",
         "question": "Which choice completes the text with the most logical transition?",
         "options": [
             "Indeed,",
@@ -1801,8 +1783,8 @@ const pt2_englishModule1: Question[] = [
         "id": "pt2-reading-m1-q27",
         "num": 27,
         "type": "Reading and Writing",
-        "passage": "While researching a topic, a student has taken the following notes:\n\ne\u00a2 A merchant ship is any ship hired to carry cargo or passengers.\n\u00a2 Aship\u2019s carrying capacity is also known as its deadweight tonnage (DWT).\n\nIn 2021, there were a total of 1,323 merchant ships registered in the Bahamas.\ne The combined DWT of these ships was 74.3 million tons.",
-        "question": "The student wants to emphasize the combined deadweight tonnage of the Bahamas\u2019\nmerchant ships in 2021. Which choice most effectively uses relevant information from the\nnotes to accomplish this goal?",
+        "passage": "While researching a topic, a student has taken the following notes:\n\n\u2022 A merchant ship is any ship hired to carry cargo or passengers.\n\n\u2022 A ship\u2019s carrying capacity is also known as its deadweight tonnage (DWT).\n\n\u2022 In 2021, there were a total of 1,323 merchant ships registered in the Bahamas.\n\n\u2022 The combined DWT of these ships was 74.3 million tons.",
+        "question": "The student wants to emphasize the combined deadweight tonnage of the Bahamas\u2019 merchant ships in 2021. Which choice most effectively uses relevant information from the notes to accomplish this goal?",
         "options": [
             "The carrying capacity of a merchant ship is also known as deadweight tonnage.",
             "In 2021, the Bahamas had 1,323 merchant ships hired to carry cargo or passengers.",
@@ -1864,10 +1846,10 @@ const pt2_englishModule2: Question[] = [
         "id": "pt2-reading-m2-q3",
         "num": 3,
         "type": "Reading and Writing",
-        "passage": "",
+        "passage": "Without a _______ demonstration of the logical certainty of the honeycomb conjecture, posed in the first century BCE, mathematicians\u2019 efforts until Thomas C. Hales presented the first valid proof of the conjecture in 1999.",
         "question": "Which choice completes the text with the most logical and precise word or phrase?",
         "options": [
-            "conclusive demonstration of the logical certainty of the honeycomb conjecture, posed in\nthe first century BCE, mathematicians\u2019 efforts until Thomas C. Hales presented the\nfirst valid proof of the conjecture in 1999.\n\nA. defied",
+            "defied",
             "prefigured",
             "epitomized",
             "displaced"
@@ -1939,13 +1921,13 @@ const pt2_englishModule2: Question[] = [
         "id": "pt2-reading-m2-q8",
         "num": 8,
         "type": "Reading and Writing",
-        "passage": "",
-        "question": "Which statement about the use of hydrogen in the petroleum and heating industries is most\nstrongly supported by the text?\nFrom petroleum refining to fuel for residential heating, hydrogen has many applications.\nCurrently, producing hydrogen is carbon intensive, but Alexandra M. Oliveira is one of many\nscholars investigating the feasibility of large-scale production of hydrogen through\nelectrolysis, a process that emits no carbon when renewable energy is used. Oliveira\nsuggests that although some obstacles may prevent electrolytic hydrogen from dominating\nenergy systems, there is utility in its ability to decarbonize the petroleum and heating\nindustries, where reducing carbon emissions is especially challenging.",
+        "passage": "From petroleum refining to fuel for residential heating, hydrogen has many applications. Currently, producing hydrogen is carbon intensive, but Alexandra M. Oliveira is one of many scholars investigating the feasibility of large-scale production of hydrogen through electrolysis, a process that emits no carbon when renewable energy is used. Oliveira suggests that although some obstacles may prevent electrolytic hydrogen from dominating energy systems, there is utility in its ability to decarbonize the petroleum and heating industries, where reducing carbon emissions is especially challenging.",
+        "question": "Which statement about the use of hydrogen in the petroleum and heating industries is most strongly supported by the text?",
         "options": [
-            "The adoption of electrolytic hydrogen by these industries has been impeded by concerns\nabout how carbon intensive its production is.",
-            "Development of applications for electrolytic hydrogen is less advanced in these industries\nthan it is in most other carbon-intensive industries.",
-            "At least some of electrolytic hydrogen\u2019s potential to lessen these industries\u2019 carbon\nemissions is as yet unrealized.",
-            "The fact that large-scale electrolytic hydrogen production is not yet available has limited\nthese industries\u2019 interest in pursuing hydrogen-based applications."
+            "The adoption of electrolytic hydrogen by these industries has been impeded by concerns about how carbon intensive its production is.",
+            "Development of applications for electrolytic hydrogen is less advanced in these industries than it is in most other carbon-intensive industries.",
+            "At least some of electrolytic hydrogen\u2019s potential to lessen these industries\u2019 carbon emissions is as yet unrealized.",
+            "The fact that large-scale electrolytic hydrogen production is not yet available has limited these industries\u2019 interest in pursuing hydrogen-based applications."
         ],
         "answer": 2,
         "difficulty": "Hard"
@@ -2014,13 +1996,13 @@ const pt2_englishModule2: Question[] = [
         "id": "pt2-reading-m2-q13",
         "num": 13,
         "type": "Reading and Writing",
-        "passage": "Highest Major Summits in India\n\nSummit Elevation (meters) Mountain range Prominence (meters)\n\nKangto 7,060 Assam Himalaya 2,195\nSaser Kangri Ill 7,495 Saser Karakoram 850\nLangpo 6,965 Sikkim Himalaya 560\nSri Kailash 6,932 Garhwal Himalaya 1,092\nMount Lakshmi 6,983 Rimo Karakoram 800\n\nMountain summits are often described in terms of their elevation, or height above sea level.\nBut a summit's elevation may not be as good an indication of how high the mountain appears\nto observers as is the summit\u2019s prominence, or its height above its surroundings, and these\nvalues can differ significantly. For example, the Indian mountain of",
+        "passage": "__TABLE__\nHighest Major Summits in India\n\nSummit | Elevation (meters) | Mountain range | Prominence (meters)\n--- | --- | --- | ---\nKangto | 7,060 | Assam Himalaya | 2,195\nSaser Kangri III | 7,495 | Saser Karakoram | 850\nLangpo | 6,965 | Sikkim Himalaya | 560\nSri Kailash | 6,932 | Garhwal Himalaya | 1,092\nMount Lakshmi | 6,983 | Rimo Karakoram | 800\n__ENDTABLE__\n\nMountain summits are often described in terms of their elevation, or height above sea level. But a summit's elevation may not be as good an indication of how high the mountain appears to observers as is the summit\u2019s prominence, or its height above its surroundings, and these values can differ significantly. For example, the Indian mountain of",
         "question": "Which choice most effectively uses data from the table to complete the example?",
         "options": [
-            "Saser Kangri Ill has an elevation of 7,495 meters but a considerably lower prominence of\n850 meters.",
+            "Saser Kangri III has an elevation of 7,495 meters but a considerably lower prominence of 850 meters.",
             "Kangto has a much higher prominence than does Langpo.",
-            "Kangto has a high prominence but is from a different mountain range than Mount\nLakshmi, which has a lower prominence.",
-            "Sri Kailash has an elevation of 6,932 meters and is considered the highest mountain from\nthe Garhwal Himalaya range."
+            "Kangto has a high prominence but is from a different mountain range than Mount Lakshmi, which has a lower prominence.",
+            "Sri Kailash has an elevation of 6,932 meters and is considered the highest mountain from the Garhwal Himalaya range."
         ],
         "answer": 0,
         "difficulty": "Hard"
@@ -2059,7 +2041,7 @@ const pt2_englishModule2: Question[] = [
         "id": "pt2-reading-m2-q16",
         "num": 16,
         "type": "Reading and Writing",
-        "passage": "Growing as large as three meters in diameter, the leaves of the giant Amazonian waterlily\nfeature a complex network of radiating veins that provide structural in thickness from\n\nthe center to the edges, these veins allow the leaves to maintain their large size and\nbuoyancy with minimal material, optimizing light capture and photosynthesis.",
+        "passage": "Growing as large as three meters in diameter, the leaves of the giant Amazonian waterlily feature a complex network of radiating veins that provide structural _______ in thickness from the center to the edges, these veins allow the leaves to maintain their large size and buoyancy with minimal material, optimizing light capture and photosynthesis.",
         "question": "Which choice completes the text so that it conforms to the conventions of Standard English?",
         "options": [
             "support. Decreasing",

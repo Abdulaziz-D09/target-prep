@@ -14,11 +14,13 @@ import {
     pageRevealVariants
 } from '@/components/SiteMotion';
 import Link from 'next/link';
+import { LatexRenderer } from '@/components/LatexRenderer';
+import { PassageRenderer } from '@/components/PassageRenderer';
 
 export default function TeacherMocksCreatePage() {
     const router = useRouter();
     const { createMockSession, seed } = useClassroomStore();
-    
+
     // Form state
     const [title, setTitle] = useState('');
     const [date, setDate] = useState('');
@@ -29,15 +31,19 @@ export default function TeacherMocksCreatePage() {
     const [strictMode, setStrictMode] = useState(false);
     const [host, setHost] = useState('');
     const [customTests, setCustomTests] = useState<{ file: File; id: string; name: string; questions: any[] }[]>([]);
+    
+    // Document Scanning & Parsing State
+    const [inputTab, setInputTab] = useState<'upload' | 'paste'>('upload');
+    const [pastedText, setPastedText] = useState('');
     const [isDragging, setIsDragging] = useState(false);
     const [isScanning, setIsScanning] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
     const [scanError, setScanError] = useState('');
     const [reviewingTest, setReviewingTest] = useState<{ file: File, questions: any[] } | null>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
-    
-    useEffect(() => { 
-        seed(); 
+
+    useEffect(() => {
+        seed();
         const supabase = createClient();
         supabase.auth.getUser().then(({ data }) => {
             if (data?.user) {
@@ -50,7 +56,7 @@ export default function TeacherMocksCreatePage() {
             }
         });
     }, [seed]);
-    
+
     const handleDrop = (e: React.DragEvent) => {
         e.preventDefault();
         setIsDragging(false);
@@ -60,9 +66,56 @@ export default function TeacherMocksCreatePage() {
         }
     };
 
+    const scanText = async () => {
+        if (!pastedText.trim()) {
+            setScanError('Please paste some text before scanning.');
+            return;
+        }
+
+        setIsScanning(true);
+        setScanError('');
+        try {
+            const res = await fetch('/api/scan-pdf', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ text: pastedText }),
+            });
+            const data = await res.json();
+            if (!res.ok) {
+                setScanError(data.error || 'Scan failed');
+                return;
+            }
+            if (data.questions) {
+                const qs = data.questions.map((q: any, i: number) => {
+                    const optionsArray = [
+                        q.options?.A || '',
+                        q.options?.B || '',
+                        q.options?.C || '',
+                        q.options?.D || ''
+                    ];
+                    return {
+                        id: `mock-q-${Date.now()}-${i}`,
+                        passage: q.passage || null,
+                        question: q.stem || q.question || '',
+                        options: optionsArray,
+                        answer: null
+                    };
+                });
+                setReviewingTest({ file: new File([pastedText], "Pasted Text Document", { type: "text/plain" }), questions: qs });
+                setPastedText(''); // Clear on success
+            } else {
+                setScanError('No questions found in text.');
+            }
+        } catch (err) {
+            setScanError('An error occurred during scanning. ' + String(err));
+        } finally {
+            setIsScanning(false);
+        }
+    };
+
     const scanFile = async (file: File) => {
-        if (file.size > 4 * 1024 * 1024) {
-            setScanError(`File "${file.name}" is too large. Maximum allowed size is 4MB.`);
+        if (file.size > 20 * 1024 * 1024) {
+            setScanError(`File "${file.name}" is too large. Maximum allowed size is 20MB.`);
             return;
         }
 
@@ -86,7 +139,7 @@ export default function TeacherMocksCreatePage() {
                         q.options?.D || ''
                     ];
                     return {
-                        id: `mock-q-${i}`,
+                        id: `mock-q-${Date.now()}-${i}`,
                         passage: q.passage || null,
                         question: q.stem || q.question || '',
                         options: optionsArray,
@@ -106,21 +159,22 @@ export default function TeacherMocksCreatePage() {
 
     const handleCreate = async (e: React.FormEvent) => {
         e.preventDefault();
-        
+
         if (customTests.length === 0) {
             setScanError('Please attach at least one test file before creating a session.');
             return;
         }
-        
+
         if (isScanning || isSaving) return;
         setIsSaving(true);
         setScanError('');
-        
+
         let formattedDate = date;
         if (date) {
             const d = new Date(date);
             formattedDate = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' });
         }
+
         createMockSession({
             title,
             date: formattedDate,
@@ -133,7 +187,7 @@ export default function TeacherMocksCreatePage() {
             host,
             customTests: customTests.length > 0 ? customTests.map(t => ({ id: t.id, name: t.name, questions: t.questions })) : undefined
         });
-        
+
         await new Promise(r => setTimeout(r, 400));
         router.push('/teacher/mocks');
     };
@@ -208,7 +262,7 @@ export default function TeacherMocksCreatePage() {
                                     <input type="number" value={timeLimit} onChange={e => setTimeLimit(e.target.value)} className="w-full bg-transparent border-2 border-slate-200 dark:border-slate-800 rounded-xl px-4 py-3 focus:outline-none focus:border-blue-500 font-medium transition site-text-strong" />
                                 </div>
                             </div>
-                            
+
                             <div>
                                 <label className="block text-sm font-bold site-text-strong mb-3">Mock Subject Type</label>
                                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -223,11 +277,10 @@ export default function TeacherMocksCreatePage() {
                                                 key={opt.id}
                                                 type="button"
                                                 onClick={() => setSubject(opt.id as any)}
-                                                className={`flex items-start gap-3 p-4 rounded-xl border-2 text-left transition-all cursor-pointer ${
-                                                    isSelected
+                                                className={`flex items-start gap-3 p-4 rounded-xl border-2 text-left transition-all cursor-pointer ${isSelected
                                                         ? 'border-blue-500 bg-blue-500/5 dark:bg-blue-500/10 shadow-sm'
                                                         : 'border-slate-200 dark:border-slate-800 site-subpanel hover:border-slate-300 dark:hover:border-slate-700'
-                                                }`}
+                                                    }`}
                                             >
                                                 <div className={`p-2 rounded-lg ${isSelected ? 'bg-blue-500/20 text-blue-500' : 'bg-slate-100 dark:bg-slate-800'}`}>
                                                     {opt.icon}
@@ -247,11 +300,10 @@ export default function TeacherMocksCreatePage() {
                                 <button
                                     type="button"
                                     onClick={() => setStrictMode(!strictMode)}
-                                    className={`w-full flex items-center justify-between px-4 py-3 rounded-xl border-2 transition-all ${
-                                        strictMode
+                                    className={`w-full flex items-center justify-between px-4 py-3 rounded-xl border-2 transition-all ${strictMode
                                             ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300'
                                             : 'border-slate-200 dark:border-slate-700 site-subpanel site-text hover:border-slate-300'
-                                    }`}
+                                        }`}
                                 >
                                     <div className="flex flex-col items-start text-left">
                                         <span className="font-bold text-[14px]">Require Full Screen</span>
@@ -262,49 +314,96 @@ export default function TeacherMocksCreatePage() {
                                     </div>
                                 </button>
                             </div>
-                            
+
                             <div>
-                                <label className="block text-sm font-bold site-text-strong mb-3">Attach File</label>
-                                <div
-                                    onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
-                                    onDragLeave={() => setIsDragging(false)}
-                                    onDrop={handleDrop}
-                                    onClick={() => fileInputRef.current?.click()}
-                                    className={`relative flex flex-col items-center justify-center rounded-2xl border-2 border-dashed p-12 cursor-pointer transition-all ${
-                                        isDragging
-                                            ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
-                                            : 'border-slate-300 dark:border-slate-700 hover:border-blue-400'
-                                    }`}
-                                >
-                                    <input
-                                        ref={fileInputRef}
-                                        type="file"
-                                        accept=".pdf,.txt"
-                                        className="hidden"
-                                        onChange={(e) => {
-                                            const f = e.target.files?.[0];
-                                            if (f) { scanFile(f); }
-                                        }}
-                                    />
-                                    {isScanning ? (
-                                        <>
-                                            <div className="h-14 w-14 rounded-2xl bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center mb-3">
-                                                <Loader2 className="h-7 w-7 text-blue-500 animate-spin" />
-                                            </div>
-                                            <p className="font-bold site-text-strong text-[15px]">Scanning document...</p>
-                                            <p className="text-[13px] site-text-muted mt-1">Extracting mock test questions</p>
-                                        </>
-                                    ) : (
-                                        <>
-                                            <div className="h-14 w-14 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center mb-3">
-                                                <Upload className="h-7 w-7 site-text-muted" />
-                                            </div>
-                                            <p className="font-bold site-text-strong text-[15px]">Drop your PDF or TXT files here</p>
-                                            <p className="text-[13px] site-text-muted mt-1 mb-2">Upload multiple files to randomize tests (Max 4MB per file)</p>
-                                            <p className="text-[11px] text-orange-500 font-medium">Note: The AI scanner cannot extract pictures/images from documents.</p>
-                                        </>
-                                    )}
+                                <label className="block text-sm font-bold site-text-strong mb-3">Add Questions</label>
+                                
+                                {/* Input Tabs */}
+                                <div className="flex gap-2 mb-4">
+                                    {(['upload', 'paste'] as const).map((tab) => (
+                                        <button
+                                            key={tab}
+                                            type="button"
+                                            onClick={() => { setInputTab(tab); setScanError(''); }}
+                                            className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-bold transition ${
+                                                inputTab === tab
+                                                    ? 'bg-blue-600 text-white shadow'
+                                                    : 'site-subpanel site-text hover:scale-[1.02]'
+                                            }`}
+                                        >
+                                            {tab === 'upload' ? <Upload className="h-4 w-4" /> : <FileText className="h-4 w-4" />}
+                                            {tab === 'upload' ? 'Upload PDF' : 'Paste Text'}
+                                        </button>
+                                    ))}
                                 </div>
+
+                                {/* Paste Tab Content */}
+                                {inputTab === 'paste' && (
+                                    <div className="flex flex-col gap-4">
+                                        <textarea
+                                            placeholder="Paste your questions here — e.g. from a practice test, quiz, or textbook. The AI will extract all multiple-choice questions automatically."
+                                            value={pastedText}
+                                            onChange={(e) => setPastedText(e.target.value)}
+                                            rows={8}
+                                            className="w-full px-4 py-4 rounded-2xl site-subpanel bg-transparent outline-none border-2 border-slate-200 dark:border-slate-800 focus:border-blue-500 transition text-[14px] site-text resize-none placeholder:site-text-muted leading-relaxed"
+                                        />
+                                        <button
+                                            type="button"
+                                            onClick={scanText}
+                                            disabled={isScanning || !pastedText.trim()}
+                                            className="w-full flex items-center justify-center gap-2.5 py-4 rounded-xl bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold text-[15px] shadow-sm transition hover:scale-[1.01]"
+                                        >
+                                            {isScanning ? (
+                                                <><Loader2 className="h-5 w-5 animate-spin" /> Scanning text...</>
+                                            ) : (
+                                                <><Sparkles className="h-5 w-5" /> Scan with AI</>
+                                            )}
+                                        </button>
+                                    </div>
+                                )}
+
+                                {/* Upload Tab Content */}
+                                {inputTab === 'upload' && (
+                                    <div
+                                        onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
+                                        onDragLeave={() => setIsDragging(false)}
+                                        onDrop={handleDrop}
+                                        onClick={() => fileInputRef.current?.click()}
+                                        className={`relative flex flex-col items-center justify-center rounded-2xl border-2 border-dashed p-12 cursor-pointer transition-all ${isDragging
+                                                ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
+                                                : 'border-slate-300 dark:border-slate-700 hover:border-blue-400'
+                                            }`}
+                                    >
+                                        <input
+                                            ref={fileInputRef}
+                                            type="file"
+                                            accept=".pdf,.txt"
+                                            className="hidden"
+                                            onChange={(e) => {
+                                                const f = e.target.files?.[0];
+                                                if (f) { scanFile(f); }
+                                            }}
+                                        />
+                                        {isScanning ? (
+                                            <>
+                                                <div className="h-14 w-14 rounded-2xl bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center mb-3">
+                                                    <Loader2 className="h-7 w-7 text-blue-500 animate-spin" />
+                                                </div>
+                                                <p className="font-bold site-text-strong text-[15px]">Scanning document...</p>
+                                                <p className="text-[13px] site-text-muted mt-1">Extracting mock test questions</p>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <div className="h-14 w-14 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center mb-3">
+                                                    <Upload className="h-7 w-7 site-text-muted" />
+                                                </div>
+                                                <p className="font-bold site-text-strong text-[15px]">Drop your PDF or TXT files here</p>
+                                                <p className="text-[13px] site-text-muted mt-1 mb-2">Upload multiple files to randomize tests (Max 20MB per file)</p>
+                                                <p className="text-[11px] text-orange-500 font-medium">Note: The AI scanner cannot extract pictures/images from documents.</p>
+                                            </>
+                                        )}
+                                    </div>
+                                )}
                                 {customTests.length > 0 && (
                                     <div className="mt-4 space-y-3">
                                         {customTests.map((t, idx) => (
@@ -338,7 +437,7 @@ export default function TeacherMocksCreatePage() {
                             </div>
                         </form>
                     </div>
-                    
+
                     <div className="p-6 border-t border-slate-100 dark:border-slate-800/60 bg-slate-50 dark:bg-slate-900/50 flex justify-end gap-3">
                         <Link href="/teacher/mocks" className="px-5 py-3 font-bold site-text-muted hover:site-text-strong transition">Cancel</Link>
                         <button disabled={isScanning || isSaving} form="create-mock-form" type="submit" className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-full font-bold shadow-md transition disabled:opacity-50 disabled:cursor-not-allowed">
@@ -352,11 +451,11 @@ export default function TeacherMocksCreatePage() {
             <AnimatePresence>
                 {reviewingTest && (
                     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-                        <motion.div 
+                        <motion.div
                             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
                             className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm"
                         />
-                        <motion.div 
+                        <motion.div
                             initial={{ opacity: 0, scale: 0.95, y: 10 }}
                             animate={{ opacity: 1, scale: 1, y: 0 }}
                             exit={{ opacity: 0, scale: 0.95, y: 10 }}
@@ -371,43 +470,69 @@ export default function TeacherMocksCreatePage() {
                                     <X className="w-5 h-5" />
                                 </button>
                             </div>
-                            
+
                             <div className="flex-1 overflow-y-auto p-6 space-y-6">
                                 {reviewingTest.questions.map((q, idx) => (
                                     <div key={idx} className={`p-5 rounded-xl border-2 ${q.answer === null ? 'border-red-200 bg-red-50 dark:bg-red-900/10 dark:border-red-900/30' : 'border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/30'}`}>
-                                        <div className="flex flex-col sm:flex-row gap-4 justify-between sm:items-start mb-4">
-                                            <div className="flex items-center gap-3">
-                                                <div className="h-8 w-8 rounded-lg bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold text-sm">
-                                                    {idx + 1}
-                                                </div>
-                                                <h4 className="font-bold site-text-strong text-[15px] max-w-lg line-clamp-2">{q.question}</h4>
+                                        {/* Question header: number + stem */}
+                                        <div className="flex items-start gap-3 mb-4">
+                                            <div className="h-8 w-8 flex-shrink-0 rounded-lg bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold text-sm">
+                                                {idx + 1}
                                             </div>
-                                            <div className="flex flex-wrap gap-2">
-                                                {['A', 'B', 'C', 'D'].map((letter, optIdx) => (
-                                                    <button
-                                                        key={letter}
-                                                        type="button"
-                                                        onClick={() => {
-                                                            const newQs = [...reviewingTest.questions];
-                                                            newQs[idx].answer = optIdx;
-                                                            setReviewingTest({ ...reviewingTest, questions: newQs });
-                                                        }}
-                                                        className={`w-10 h-10 rounded-xl font-bold flex items-center justify-center transition-all ${
-                                                            q.answer === optIdx
-                                                                ? 'bg-emerald-500 text-white shadow-md'
-                                                                : 'bg-white dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 site-text hover:border-emerald-500 hover:text-emerald-500'
-                                                        }`}
-                                                    >
-                                                        {letter}
-                                                    </button>
-                                                ))}
+                                            <div className="w-full">
+                                                {q.passage && (
+                                                    <div className="mb-4 bg-slate-50 dark:bg-slate-900/50 rounded-xl border border-slate-100 dark:border-slate-800/60 overflow-hidden">
+                                                        <PassageRenderer
+                                                            text={q.passage}
+                                                            highlights={[]}
+                                                            onAddHighlight={() => {}}
+                                                            onRemoveHighlight={() => {}}
+                                                            onUpdateHighlight={() => {}}
+                                                            isHighlightModeActive={false}
+                                                        />
+                                                    </div>
+                                                )}
+                                                <div className="font-semibold site-text-strong text-[15px] leading-relaxed">
+                                                    {q.question ? <LatexRenderer text={q.question} /> : '(No question text)'}
+                                                </div>
                                             </div>
                                         </div>
-                                        {q.answer === null && <p className="text-xs text-red-500 font-bold ml-11">Please select the correct answer.</p>}
+
+                                        {/* Answer choices listed vertically — click to mark correct */}
+                                        <div className="space-y-2 ml-11">
+                                            {['A', 'B', 'C', 'D'].map((letter, optIdx) => (
+                                                <button
+                                                    key={letter}
+                                                    type="button"
+                                                    onClick={() => {
+                                                        const newQs = [...reviewingTest.questions];
+                                                        newQs[idx].answer = optIdx;
+                                                        setReviewingTest({ ...reviewingTest, questions: newQs });
+                                                    }}
+                                                    className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl border-2 text-left transition-all ${
+                                                        q.answer === optIdx
+                                                            ? 'bg-emerald-50 border-emerald-500 dark:bg-emerald-900/20 dark:border-emerald-500'
+                                                            : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 hover:border-emerald-400'
+                                                    }`}
+                                                >
+                                                    <span className={`w-8 h-8 flex-shrink-0 rounded-full flex items-center justify-center font-bold text-sm transition-all ${
+                                                        q.answer === optIdx
+                                                            ? 'bg-emerald-500 text-white'
+                                                            : 'bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300'
+                                                    }`}>{letter}</span>
+                                                    <span className={`text-[14px] font-medium ${
+                                                        q.answer === optIdx ? 'text-emerald-700 dark:text-emerald-300' : 'site-text-strong'
+                                                    }`}>
+                                                        <LatexRenderer text={q.options?.[optIdx] || `Option ${letter}`} />
+                                                    </span>
+                                                </button>
+                                            ))}
+                                        </div>
+                                        {q.answer === null && <p className="text-xs text-red-500 font-bold ml-11 mt-2">Please select the correct answer.</p>}
                                     </div>
                                 ))}
                             </div>
-                            
+
                             <div className="p-6 border-t border-slate-100 dark:border-white/10 bg-slate-50 dark:bg-slate-900 flex justify-end gap-3">
                                 <button type="button" onClick={() => setReviewingTest(null)} className="px-5 py-3 font-bold site-text-muted hover:site-text-strong transition">Cancel</button>
                                 <button

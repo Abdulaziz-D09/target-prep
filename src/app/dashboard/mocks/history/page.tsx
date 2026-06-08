@@ -111,19 +111,10 @@ export default function StudentMocksHistoryPage() {
                                     
                                     <div className="flex items-center gap-6 w-full md:w-auto bg-slate-50 dark:bg-slate-800/50 p-5 rounded-2xl border border-slate-100 dark:border-slate-800">
                                         <div className="text-center">
-                                            <p className="text-[11px] uppercase tracking-widest font-bold site-text-muted mb-1">Total Score</p>
-                                            <p className="text-3xl font-black text-blue-600">{result.score}</p>
-                                        </div>
-                                        <div className="w-px h-12 bg-slate-200 dark:bg-slate-700"></div>
-                                        <div className="flex gap-4">
-                                            <div className="text-center">
-                                                <p className="text-[10px] uppercase tracking-wider font-bold site-text-muted mb-1">EBRW</p>
-                                                <p className="text-lg font-bold site-text-strong">{result.englishScore ?? '--'}</p>
-                                            </div>
-                                            <div className="text-center">
-                                                <p className="text-[10px] uppercase tracking-wider font-bold site-text-muted mb-1">Math</p>
-                                                <p className="text-lg font-bold site-text-strong">{result.mathScore ?? '--'}</p>
-                                            </div>
+                                            <p className="text-[11px] uppercase tracking-widest font-bold site-text-muted mb-1">Score</p>
+                                            <p className="text-3xl font-black text-blue-600">
+                                                {result.totalCorrect ?? 0} <span className="text-lg text-slate-400">/ {result.totalQuestions ?? 0}</span>
+                                            </p>
                                         </div>
                                         <div className="ml-2 w-10 h-10 bg-white dark:bg-slate-700 rounded-full flex items-center justify-center shadow-sm group-hover:bg-blue-600 group-hover:text-white transition-all border border-slate-200 dark:border-slate-600">
                                             <ArrowRight className="w-5 h-5" />

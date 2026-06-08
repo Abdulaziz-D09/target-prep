@@ -5,7 +5,8 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FloatingPageShapes, pageRevealVariants, itemRevealVariants, staggerContainerVariants, sectionRevealVariants } from '@/components/SiteMotion';
-import { Target, ArrowRight, PlayCircle, FileText, CheckCircle2, Sparkles, BookOpen, Calculator, Video, X, Minus, Plus, PenLine, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Target, ArrowRight, Play, FileText, CheckCircle2, Sparkles, BookOpen, Calculator, Video, X, Minus, Plus, PenLine, ChevronLeft, ChevronRight, Youtube } from 'lucide-react';
+import { allVaultVideos } from '@/data/videos';
 
 const CHAPTER_THEMES: Record<string, { gradient: string; borderColorClass: string; bgColorClass: string; glowColorClass: string; washColorClass: string; bgBadge: string; textAccent: string }> = {
   // English
@@ -107,7 +108,7 @@ const PLACEMENT_TOPICS = [
 
 export default function StudyPlanPage() {
   const router = useRouter();
-  const [activeTab, setActiveTab] = useState<'plan' | 'vault'>('plan');
+  const [activeTab, setActiveTab] = useState<'lessons' | 'vault'>('lessons');
   const [planState, setPlanState] = useState<'loading' | 'onboarding' | 'placement' | 'test' | 'active'>('loading');
   
   const englishScrollRef = useRef<HTMLDivElement>(null);
@@ -155,11 +156,7 @@ export default function StudyPlanPage() {
       }
     }
 
-    if (savedPlan) {
-      setPlanState(savedPlan as any);
-    } else {
-      setPlanState('onboarding');
-    }
+    setPlanState('active');
   }, []);
 
   const saveState = (state: string) => {
@@ -229,9 +226,9 @@ export default function StudyPlanPage() {
         <div className="flex mb-6">
           <div className="flex gap-2 p-1.5 site-subpanel rounded-[20px] shadow-sm border border-slate-200 dark:border-slate-800/60">
             <button
-              onClick={() => setActiveTab('plan')}
+              onClick={() => setActiveTab('lessons')}
               className={`px-8 py-2.5 text-sm font-bold rounded-xl transition-all ${
-                activeTab === 'plan' 
+                activeTab === 'lessons' 
                   ? 'bg-blue-600 text-white shadow-md' 
                   : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 hover:bg-slate-200/50 dark:hover:bg-slate-800/50'
               }`}
@@ -253,7 +250,7 @@ export default function StudyPlanPage() {
 
         {planState !== 'loading' && (
           <AnimatePresence mode="wait">
-            {activeTab === 'plan' ? (
+            {activeTab === 'lessons' ? (
               <motion.div
                 key="tab-plan"
                 initial={{ opacity: 0, y: 10 }}
@@ -279,44 +276,14 @@ export default function StudyPlanPage() {
                         Study Center
                       </p>
                       <h1 className="site-hero-title mt-4 text-3xl font-black tracking-[-0.05em] sm:text-[2.6rem]">
-                        Study Plan
+                        Lessons
                       </h1>
                       <p className="site-hero-body mt-3 max-w-2xl text-sm leading-6 sm:text-[15px]">
-                        Your personalized path to a higher score.
+                        Master every topic on the digital SAT.
                       </p>
                     </motion.div>
 
-                    {planState === 'active' && (
-                      <motion.div className="grid gap-3 grid-cols-3 xl:max-w-[500px] xl:justify-self-end w-full" variants={staggerContainerVariants}>
-                        <motion.div className="site-hero-stat rounded-[22px] px-4 py-4 text-center" variants={itemRevealVariants}>
-                          <p className="site-hero-kicker text-[10px] font-bold uppercase tracking-[0.22em]">Exam</p>
-                          <p className="site-hero-title mt-2 text-[15px] sm:text-base font-black tracking-[-0.03em] whitespace-nowrap">
-                            {examDate ? new Date(examDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : 'Not set'}
-                          </p>
-                        </motion.div>
-                        <motion.div className="site-hero-stat rounded-[22px] px-4 py-4 text-center" variants={itemRevealVariants}>
-                          <p className="site-hero-kicker text-[10px] font-bold uppercase tracking-[0.22em]">Target</p>
-                          <p className="site-hero-title mt-2 text-xl sm:text-2xl font-black tracking-[-0.05em] text-blue-400">{targetScore || '1500'}</p>
-                        </motion.div>
-                        <motion.div className="site-hero-stat rounded-[22px] px-4 py-4 text-center" variants={itemRevealVariants}>
-                          <p className="site-hero-kicker text-[10px] font-bold uppercase tracking-[0.22em]">Days Left</p>
-                          <p className="site-hero-title mt-2 text-xl sm:text-2xl font-black tracking-[-0.05em] text-amber-400">
-                            {examDate ? Math.max(0, Math.ceil((new Date(examDate).getTime() - new Date().getTime()) / (1000 * 3600 * 24))) : '--'}
-                          </p>
-                        </motion.div>
-                      </motion.div>
-                    )}
-                    {planState === 'active' && (
-                      <motion.div className="flex justify-end xl:justify-self-end" variants={itemRevealVariants}>
-                        <button
-                          onClick={() => { localStorage.removeItem('targetprep_plan'); setPlanState('onboarding'); }}
-                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-slate-300/40 dark:border-slate-600/40 text-[11px] font-bold site-text-muted hover:site-text-strong hover:border-slate-400/60 transition cursor-pointer"
-                        >
-                          <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" /></svg>
-                          Retake Placement
-                        </button>
-                      </motion.div>
-                    )}
+
                   </motion.div>
                 </motion.section>
 
@@ -868,14 +835,7 @@ export default function StudyPlanPage() {
                     </div>
                   </div>
                   <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-                    {[
-                      { id: 'kPxQfGU6Keg', title: 'Linear Equations — SAT Algebra', day: 'Day 1', subject: 'Math', duration: '12 min', source: 'Khan Academy', color: 'amber' },
-                      { id: 'n-os2ArEFiA', title: 'SAT Reading: Main Ideas & Details', day: 'Day 4', subject: 'English', duration: '10 min', source: 'Khan Academy', color: 'indigo' },
-                      { id: '5nC5c46TA_s', title: 'Advanced Math: Quadratics', day: 'Day 3', subject: 'Math', duration: '14 min', source: 'Khan Academy', color: 'orange' },
-                      { id: 'OmJ-4B-mS-Y', title: 'Command of Evidence — SAT Reading', day: 'Day 2', subject: 'English', duration: '9 min', source: 'Khan Academy', color: 'blue' },
-                      { id: 'rAMNe-NsQyA', title: 'Geometry & Trig — Circles & Angles', day: 'Day 5', subject: 'Math', duration: '11 min', source: 'Khan Academy', color: 'cyan' },
-                      { id: 'Z0_FNd8qgB8', title: 'Standard English Conventions', day: 'Day 6', subject: 'English', duration: '8 min', source: 'Khan Academy', color: 'rose' },
-                    ].map((v) => {
+                    {allVaultVideos.map((v) => {
                       const colorMap: Record<string, { bg: string; text: string; badge: string }> = {
                         amber: { bg: 'bg-amber-500/10', text: 'text-amber-500', badge: 'bg-amber-500/15 text-amber-600 dark:text-amber-400' },
                         indigo: { bg: 'bg-indigo-500/10', text: 'text-indigo-500', badge: 'bg-indigo-500/15 text-indigo-600 dark:text-indigo-400' },
@@ -1007,16 +967,28 @@ export default function StudyPlanPage() {
                 <h2 className="text-3xl font-black tracking-tight leading-tight">{selectedNode.title}</h2>
               </div>
               
-              <div className="space-y-3">
-                <button className="w-full flex items-center justify-center gap-2 px-4 py-4 rounded-2xl bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white font-bold hover:bg-slate-200 dark:hover:bg-slate-700 transition cursor-pointer">
-                  <PlayCircle className="w-5 h-5" /> Watch Lesson
-                </button>
-                <button className={`w-full flex items-center justify-center gap-2 px-4 py-4 rounded-2xl font-bold transition shadow-lg cursor-pointer ${
+              <div className="flex gap-4">
+                {(() => {
+                  const video = allVaultVideos.find(v => v.topic === selectedNode.title);
+                  return video ? (
+                    <a href={`https://www.youtube.com/watch?v=${video.id}`} target="_blank" rel="noopener noreferrer" className="flex-1 flex items-center justify-center gap-2 px-4 py-4 rounded-2xl bg-red-600 text-white font-bold hover:bg-red-700 hover:scale-[1.02] transition-all cursor-pointer shadow-lg shadow-red-600/20 border border-red-500/50">
+                      <Play className="w-5 h-5 fill-white text-white" />
+                      <span>Watch Lesson</span>
+                    </a>
+                  ) : (
+                    <button disabled className="flex-1 flex items-center justify-center gap-2 px-4 py-4 rounded-2xl bg-slate-100 dark:bg-slate-800 text-slate-400 font-bold transition-all cursor-not-allowed border border-slate-200 dark:border-slate-700">
+                      <Play className="w-5 h-5 fill-slate-400 text-slate-400" />
+                      <span>No Video</span>
+                    </button>
+                  );
+                })()}
+                <button className={`flex-1 flex items-center justify-center gap-2 px-4 py-4 rounded-2xl font-bold transition-all cursor-pointer ${
                   selectedNode.status === 'locked' 
-                    ? 'bg-slate-200 dark:bg-slate-800 text-slate-400 shadow-none cursor-not-allowed'
-                    : 'bg-blue-600 text-white hover:bg-blue-700 shadow-blue-500/20'
+                    ? 'bg-slate-100 dark:bg-slate-800 text-slate-400 border border-slate-200 dark:border-slate-700 cursor-not-allowed'
+                    : 'bg-[linear-gradient(135deg,#2563eb,#3b82f6)] text-white hover:scale-[1.02] shadow-lg shadow-blue-500/25 border border-blue-500/50'
                 }`}>
-                  <FileText className="w-5 h-5" /> Practice
+                  <FileText className="w-5 h-5" />
+                  <span>Practice</span>
                 </button>
               </div>
             </motion.div>

@@ -17,6 +17,8 @@ import {
 } from '@/lib/studentAssignmentProgress';
 import DesmosCalculator from '@/components/DesmosCalculator';
 import { ReferenceSheet } from '@/components/ReferenceSheet';
+import { PassageRenderer } from '@/components/PassageRenderer';
+import { LatexRenderer } from '@/components/LatexRenderer';
 
 // Seed synchronously — prevents blank page on first open
 seedOnce();
@@ -494,9 +496,14 @@ export default function ClassroomAssignmentDetailPage() {
                     <div className="overflow-y-auto p-4 lg:p-10 pr-4 lg:pr-6 flex justify-center bg-white border-r border-[#E5E7EB]" style={{ width: `${leftPanelWidth}%` }}>
                         <div className="w-full max-w-[800px] relative mt-2">
                             {currentQuestion?.passage ? (
-                                <p className="text-[17px] leading-[1.85] text-[#111827] font-normal tracking-[-0.01em] select-text">
-                                    {currentQuestion.passage}
-                                </p>
+                                <PassageRenderer
+                                    text={currentQuestion.passage}
+                                    highlights={[]}
+                                    onAddHighlight={() => {}}
+                                    onRemoveHighlight={() => {}}
+                                    onUpdateHighlight={() => {}}
+                                    isHighlightModeActive={false}
+                                />
                             ) : (
                                 <div className="text-[17px] text-[#6B7280] leading-[1.8] font-serif italic text-center mt-20">
                                     No passage for this question.
@@ -554,7 +561,9 @@ export default function ClassroomAssignmentDetailPage() {
 
                         {/* Question Content */}
                         <div className="text-[18px] text-[#111827] mb-6 leading-relaxed">
-                            <p className="font-bluebook break-words whitespace-pre-wrap [text-wrap:pretty]">{currentQuestion?.stem}</p>
+                            <div className="font-bluebook break-words whitespace-pre-wrap [text-wrap:pretty]">
+                                {currentQuestion?.stem ? <LatexRenderer text={currentQuestion.stem} /> : null}
+                            </div>
                         </div>
 
                         {/* Answer Options */}
@@ -604,7 +613,7 @@ export default function ClassroomAssignmentDetailPage() {
                                             {/* Answer Text */}
                                             <div className="flex-1 p-4 flex items-center">
                                                 <span className={`text-[17px] font-sans ${isEliminated ? 'text-slate-400' : 'text-[#111827]'}`}>
-                                                    {optText}
+                                                    <LatexRenderer text={optText} />
                                                 </span>
                                             </div>
 

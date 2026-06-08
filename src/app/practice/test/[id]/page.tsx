@@ -1,13 +1,14 @@
 'use client';
-import { useEffect, useState, use, useMemo } from 'react';
+import { useEffect, useState, use, useMemo, useRef } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { X, Clock, ArrowLeft, ArrowRight, Check, CheckCircle, Coffee, Trophy, Flag, BookOpen, ChevronDown, ChevronUp, Highlighter, Maximize2, MoreHorizontal, ArrowLeftCircle, Bookmark, LayoutGrid, FileText, Calculator, Home, BarChart3 } from 'lucide-react';
+import { X, Clock, ArrowLeft, ArrowRight, Check, CheckCircle, Coffee, Trophy, Flag, BookOpen, ChevronDown, ChevronUp, Highlighter, Maximize2, MoreHorizontal, ArrowLeftCircle, Bookmark, LayoutGrid, FileText, Calculator, Home, BarChart3, LogOut, AlertCircle } from 'lucide-react';
 import { useTestStore, Highlight } from '@/store/testStore';
+import { useClassroomStore } from '@/store/classroomStore';
 import { resolvePracticeTest } from '@/lib/practiceCatalog';
 import { HighlightableText } from '@/components/HighlightableText';
 import DesmosCalculator from '@/components/DesmosCalculator';
 import { ReferenceSheet } from '@/components/ReferenceSheet';
-import { cleanOCR } from '@/components/PassageRenderer';
+import { cleanOCR, PassageRenderer } from '@/components/PassageRenderer';
 import Link from 'next/link';
 import { AnimatePresence, motion } from 'framer-motion';
 
@@ -35,7 +36,47 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
     const moduleKey = searchParams.get('module');
     const resumeRequested = searchParams.get('resume') === '1';
     const isFullTest = !moduleKey;
-    const test = resolvePracticeTest(testId, moduleKey);
+    const mockId = searchParams.get('mockId');
+    const mockSessions = useClassroomStore(state => state.mockSessions);
+    const mockSession = mockSessions.find(s => s.id === mockId);
+    const isStrictMode = !!mockSession?.strictMode;
+    
+    let test = resolvePracticeTest(testId, moduleKey);
+
+    if (!test && mockId) {
+        const session = mockSessions.find(s => s.id === mockId);
+        if (session && session.customTests) {
+            const customTest = session.customTests.find(t => t.id === id);
+            if (customTest) {
+                test = {
+                    id: customTest.id as any,
+                    title: customTest.name,
+                    sections: [
+                        {
+                            name: 'Full Test',
+                            modules: [
+                                {
+                                    timeMinutes: session.timeLimitMinutes || 120,
+                                    questions: customTest.questions.map((q, idx) => ({
+                                        id: q.id,
+                                        question: q.question || q.text || q.stem || '',
+                                        passage: q.passage || undefined,
+                                        image: q.image || undefined,
+                                        options: q.options,
+                                        answer: q.answer,
+                                        explanation: q.explanation || 'No explanation provided.',
+                                        difficulty: 'Medium',
+                                        skill: 'Custom',
+                                        domain: 'Custom'
+                                    }))
+                                }
+                            ]
+                        }
+                    ]
+                } as any;
+            }
+        }
+    }
 
     const {
         currentSectionIndex, currentModuleIndex, currentQuestionIndex,
@@ -74,6 +115,9 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
     const [calcMode, setCalcMode] = useState<'graphing' | 'scientific'>('graphing');
     const [hasInitialized, setHasInitialized] = useState(false);
     const [isExitModalOpen, setIsExitModalOpen] = useState(false);
+    const [fsWarningCountdown, setFsWarningCountdown] = useState<number | null>(null);
+    const [isKickedOut, setIsKickedOut] = useState(false);
+    const fsCountdownRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
     const clearActiveSession = () => {
         if (typeof window === 'undefined') return;
@@ -158,33 +202,124 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
         };
     }, [isDragging]);
 
+    // ─── Strict Mode Fullscreen Enforcement ──────────────────────────────────────
+    useEffect(() => {
+        if (!isStrictMode || !isTestActive) return;
+
+        // Enter fullscreen on mount
+        if (!document.fullscreenElement) {
+            document.documentElement.requestFullscreen().catch(() => {});
+        }
+
+        let lostComplianceAt: number | null = null;
+
+        const checkCompliance = () => {
+            const isCompliant = !!document.fullscreenElement && !document.hidden && document.hasFocus();
+
+            if (!isCompliant) {
+                // Out of compliance
+                if (!fsCountdownRef.current) {
+                    lostComplianceAt = Date.now();
+                    setFsWarningCountdown(5);
+                    fsCountdownRef.current = setInterval(() => {
+                        if (!lostComplianceAt) return;
+                        const elapsed = Math.floor((Date.now() - lostComplianceAt) / 1000);
+                        const remaining = 5 - elapsed;
+
+                        if (remaining <= 0) {
+                            clearInterval(fsCountdownRef.current!);
+                            fsCountdownRef.current = null;
+                            setFsWarningCountdown(null);
+                            setIsKickedOut(true);
+                            finishTest(true);
+                        } else {
+                            setFsWarningCountdown(remaining);
+                        }
+                    }, 500); // Check every 500ms so it updates snappily even if throttled
+                }
+            } else {
+                // Returned to compliance
+                // First check if they were out of compliance for more than 5 seconds while backgrounded
+                if (lostComplianceAt && (Date.now() - lostComplianceAt) >= 5000) {
+                    if (fsCountdownRef.current) clearInterval(fsCountdownRef.current);
+                    fsCountdownRef.current = null;
+                    setFsWarningCountdown(null);
+                    setIsKickedOut(true);
+                    finishTest(true);
+                    return;
+                }
+
+                // If they made it back in time, cancel the warning
+                if (fsCountdownRef.current) {
+                    clearInterval(fsCountdownRef.current);
+                    fsCountdownRef.current = null;
+                }
+                setFsWarningCountdown(null);
+                lostComplianceAt = null;
+            }
+        };
+
+        document.addEventListener('fullscreenchange', checkCompliance);
+        document.addEventListener('visibilitychange', checkCompliance);
+        window.addEventListener('blur', checkCompliance);
+        window.addEventListener('focus', checkCompliance);
+        
+        // Initial check just in case
+        checkCompliance();
+
+        return () => {
+            document.removeEventListener('fullscreenchange', checkCompliance);
+            document.removeEventListener('visibilitychange', checkCompliance);
+            window.removeEventListener('blur', checkCompliance);
+            window.removeEventListener('focus', checkCompliance);
+            if (fsCountdownRef.current) clearInterval(fsCountdownRef.current);
+        };
+    }, [isStrictMode, isTestActive, endTest]);
+
+    const students = useClassroomStore(state => state.students);
+    const studentIdStr = searchParams.get('studentId');
+    // Use a ref to skip the very first render (students not yet loaded)
+    const kickCheckMountedRef = useRef(false);
+    
+    useEffect(() => {
+        if (!mockId || !studentIdStr || isKickedOut) return;
+        // Skip kick check on first mount — store is still hydrating
+        if (!kickCheckMountedRef.current) {
+            kickCheckMountedRef.current = true;
+            return;
+        }
+        const student = students.find(s => s.id === studentIdStr);
+        if (!student || student.mockSessionId !== mockId) {
+            clearActiveSession();
+            setIsKickedOut(true);
+        }
+    }, [students, mockId, studentIdStr, isKickedOut]);
+
     useEffect(() => {
         if (!test || hasInitialized) return;
 
-        if (resumeRequested) {
-            const saved = readActiveSession();
-            if (saved && saved.testId === testId && (saved.moduleKey ?? null) === (moduleKey ?? null)) {
-                const section = test.sections[saved.currentSectionIndex] ?? test.sections[0];
-                const module = section?.modules[saved.currentModuleIndex] ?? section?.modules[0];
-                const maxQuestionIndex = Math.max((module?.questions.length ?? 1) - 1, 0);
+        const saved = readActiveSession();
+        if (saved && saved.testId === testId && (saved.moduleKey ?? null) === (moduleKey ?? null)) {
+            const section = test.sections[saved.currentSectionIndex] ?? test.sections[0];
+            const module = section?.modules[saved.currentModuleIndex] ?? section?.modules[0];
+            const maxQuestionIndex = Math.max((module?.questions.length ?? 1) - 1, 0);
 
-                useTestStore.setState({
-                    currentTestId: testId,
-                    currentSectionIndex: Math.max(0, Math.min(saved.currentSectionIndex, test.sections.length - 1)),
-                    currentModuleIndex: Math.max(0, Math.min(saved.currentModuleIndex, (section?.modules.length ?? 1) - 1)),
-                    currentQuestionIndex: Math.max(0, Math.min(saved.currentQuestionIndex, maxQuestionIndex)),
-                    userAnswers: saved.userAnswers,
-                    flaggedQuestions: saved.flaggedQuestions,
-                    eliminatedAnswers: saved.eliminatedAnswers,
-                    highlights: saved.highlights,
-                    timeRemaining: saved.timeRemaining > 0 ? saved.timeRemaining : (module?.timeMinutes ?? 1) * 60,
-                    isIntroScreen: false,
-                    isTestActive: true,
-                    showResults: false,
-                });
-                setHasInitialized(true);
-                return;
-            }
+            useTestStore.setState({
+                currentTestId: testId,
+                currentSectionIndex: Math.max(0, Math.min(saved.currentSectionIndex, test.sections.length - 1)),
+                currentModuleIndex: Math.max(0, Math.min(saved.currentModuleIndex, (section?.modules.length ?? 1) - 1)),
+                currentQuestionIndex: Math.max(0, Math.min(saved.currentQuestionIndex, maxQuestionIndex)),
+                userAnswers: saved.userAnswers,
+                flaggedQuestions: saved.flaggedQuestions,
+                eliminatedAnswers: saved.eliminatedAnswers,
+                highlights: saved.highlights,
+                timeRemaining: saved.timeRemaining > 0 ? saved.timeRemaining : (module?.timeMinutes ?? 1) * 60,
+                isIntroScreen: false,
+                isTestActive: true,
+                showResults: false,
+            });
+            setHasInitialized(true);
+            return;
         }
 
         useTestStore.setState({
@@ -297,7 +432,7 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
                 setBreakTimeRemaining(600);
                 setTransitionState('break');
             } else {
-                finishTest();
+                finishTest(false);
             }
             return;
         }
@@ -325,7 +460,7 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
         }
     };
 
-    const finishTest = () => {
+    const finishTest = (kickedOut: boolean = false) => {
         let englishCorrect = 0, mathCorrect = 0, englishTotal = 0, mathTotal = 0;
         test.sections.forEach((sec, sIdx) => {
             sec.modules.forEach((mod, mIdx) => {
@@ -349,6 +484,26 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
         const engScore = Math.round(engRaw / 10) * 10;
         const mthScore = Math.round(mthRaw / 10) * 10;
         const totalScore = engScore + mthScore;
+
+        const mockId = searchParams.get('mockId');
+        const studentId = searchParams.get('studentId');
+
+        if (mockId && studentId) {
+            import('@/store/classroomStore').then(({ useClassroomStore }) => {
+                useClassroomStore.getState().submitMockResult({
+                    mockId,
+                    studentId,
+                    assignedTestId: String(test.id),
+                    score: totalScore,
+                    englishScore: engScore,
+                    mathScore: mthScore,
+                    totalCorrect: englishCorrect + mathCorrect,
+                    totalQuestions: englishTotal + mathTotal,
+                    answers: userAnswers,
+                    kickedOut,
+                });
+            });
+        }
 
         endTest({
             testId: test.id,
@@ -490,17 +645,23 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
                     <div className="w-20 h-20 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-8">
                         <CheckCircle className="w-10 h-10 text-emerald-600" />
                     </div>
-                    <h2 className="text-3xl font-bold text-slate-900 mb-4 tracking-tight">Your Practice Test Is Complete</h2>
-                    <p className="text-slate-500 mb-4 leading-relaxed text-[16px]">Congratulations! You have finished all sections of this practice test. Your answers have been saved.</p>
-                    <p className="text-slate-500 mb-10 leading-relaxed text-[16px]">To view your estimated score, score breakdown, and detailed answer explanations, head to your <strong className="text-slate-700">Progress</strong> page.</p>
+                    <h2 className="text-3xl font-bold text-slate-900 mb-4 tracking-tight">Your {searchParams.get('mockId') ? 'Mock' : 'Practice'} Test Is Complete</h2>
+                    <p className="text-slate-500 mb-4 leading-relaxed text-[16px]">Congratulations! You have finished all sections of this {searchParams.get('mockId') ? 'mock' : 'practice'} test. Your answers have been saved.</p>
+                    <p className="text-slate-500 mb-10 leading-relaxed text-[16px]">
+                        {searchParams.get('mockId') ? (
+                            <>To view your score and rank, head to your <strong className="text-slate-700">Mock History</strong> page.</>
+                        ) : (
+                            <>To view your estimated score, score breakdown, and detailed answer explanations, head to your <strong className="text-slate-700">Progress</strong> page.</>
+                        )}
+                    </p>
 
                     <div className="space-y-3">
                         <div className="grid grid-cols-2 gap-3">
                             <button onClick={() => { router.push('/dashboard'); setTimeout(() => resetTest(), 500); }} className="bg-white border-2 border-slate-200 text-slate-700 py-3.5 rounded-xl font-bold hover:bg-slate-50 hover:border-slate-300 transition-all flex items-center justify-center gap-2">
                                 <Home className="w-4 h-4" /> Home
                             </button>
-                            <button onClick={() => { router.push('/progress'); setTimeout(() => resetTest(), 500); }} className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white py-3.5 rounded-xl font-bold transition-all shadow-md shadow-blue-500/20 flex items-center justify-center gap-2">
-                                <BarChart3 className="w-4 h-4" /> Progress
+                            <button onClick={() => { router.push(searchParams.get('mockId') ? '/dashboard/mocks?tab=completed' : '/progress'); setTimeout(() => resetTest(), 500); }} className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white py-3.5 rounded-xl font-bold transition-all shadow-md shadow-blue-500/20 flex items-center justify-center gap-2">
+                                <BarChart3 className="w-4 h-4" /> {searchParams.get('mockId') ? 'Mock History' : 'Progress'}
                             </button>
                         </div>
                     </div>
@@ -513,14 +674,18 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
         return (
             <div className="flex items-center justify-center bg-white p-8 fade-in fixed inset-0 z-50">
                 <div className="max-w-3xl w-full">
-                    <h1 className="text-[2.15rem] font-bold text-slate-900 mb-8 pb-4 border-b border-slate-200">Target Prep Full-length Practice Test</h1>
+                    <h1 className="text-[2.15rem] font-bold text-slate-900 mb-8 pb-4 border-b border-slate-200">
+                        {mockId ? 'Target Prep Mock Exam' : 'Target Prep Full-length Practice Test'}
+                    </h1>
 
                     <div className="space-y-8 mb-12">
                         <div className="flex gap-4">
                             <Clock className="w-8 h-8 text-blue-600 flex-shrink-0 mt-1" />
                             <div>
                                 <h3 className="font-bold text-xl text-slate-900 mb-1">Timing</h3>
-                                <p className="text-slate-600 leading-relaxed text-[17px]">Practice tests are timed, but you can exit at any time and your answers and remaining time will be saved.</p>
+                                <p className="text-slate-600 leading-relaxed text-[17px]">
+                                    {mockId ? 'Mock exams are strictly timed. Make sure you complete the sections before the time runs out.' : 'Practice tests are timed, but you can exit at any time and your answers and remaining time will be saved.'}
+                                </p>
                             </div>
                         </div>
 
@@ -528,7 +693,9 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
                             <Trophy className="w-8 h-8 text-blue-600 flex-shrink-0 mt-1" />
                             <div>
                                 <h3 className="font-bold text-xl text-slate-900 mb-1">Scores</h3>
-                                <p className="text-slate-600 leading-relaxed text-[17px]">When you finish the practice test, you will be taken to the results page to see your estimated score.</p>
+                                <p className="text-slate-600 leading-relaxed text-[17px]">
+                                    {mockId ? 'When you finish the mock exam, your score will be sent to your instructor.' : 'When you finish the practice test, you will be taken to the results page to see your estimated score.'}
+                                </p>
                             </div>
                         </div>
 
@@ -536,7 +703,9 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
                             <BookOpen className="w-8 h-8 text-blue-600 flex-shrink-0 mt-1" />
                             <div>
                                 <h3 className="font-bold text-xl text-slate-900 mb-1">No Device Lock</h3>
-                                <p className="text-slate-600 leading-relaxed text-[17px]">We don&apos;t lock your device during practice. On test day, you&apos;ll be blocked from using other programs or apps.</p>
+                                <p className="text-slate-600 leading-relaxed text-[17px]">
+                                    {mockId ? 'During the mock exam, do not leave the browser or open other applications. Stay focused on the test.' : 'We don\'t lock your device during practice. On test day, you\'ll be blocked from using other programs or apps.'}
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -751,6 +920,48 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
         <div
             className="h-[100dvh] flex flex-col bg-slate-50 font-[system-ui,-apple-system,BlinkMacSystemFont,'Segoe_UI',Roboto,sans-serif] overflow-hidden"
         >
+            {/* Strict Mode Fullscreen Warning */}
+            {fsWarningCountdown !== null && !isKickedOut && (
+                <div className="fixed inset-0 z-[100] flex items-center justify-center bg-red-900/90 backdrop-blur-md">
+                    <div className="bg-white rounded-3xl p-10 max-w-lg w-full text-center shadow-2xl">
+                        <AlertCircle className="w-20 h-20 text-red-500 mx-auto mb-6" />
+                        <h2 className="text-3xl font-black text-slate-900 mb-4">Return to Fullscreen</h2>
+                        <p className="text-lg text-slate-600 mb-8 font-medium">
+                            This exam is in strict mode. You must remain in fullscreen at all times.
+                            If you do not return to fullscreen, your exam will be automatically submitted in:
+                        </p>
+                        <div className="text-6xl font-black text-red-600 mb-8 font-mono">
+                            {fsWarningCountdown}
+                        </div>
+                        <button
+                            onClick={() => document.documentElement.requestFullscreen().catch(() => {})}
+                            className="bg-red-600 hover:bg-red-700 text-white font-bold text-lg px-8 py-4 rounded-full w-full transition-colors"
+                        >
+                            Click Here to Return to Fullscreen
+                        </button>
+                    </div>
+                </div>
+            )}
+
+            {/* Kicked Out Overlay */}
+            {isKickedOut && (
+                <div className="fixed inset-0 z-[110] flex items-center justify-center bg-red-900/95 backdrop-blur-md">
+                    <div className="bg-white rounded-3xl p-10 max-w-lg w-full text-center shadow-2xl">
+                        <LogOut className="w-20 h-20 text-red-500 mx-auto mb-6" />
+                        <h2 className="text-3xl font-black text-slate-900 mb-4">You Have Been Removed</h2>
+                        <p className="text-lg text-slate-600 mb-8 font-medium">
+                            The instructor has removed you from this mock session. You are no longer permitted to continue this exam.
+                        </p>
+                        <button
+                            onClick={() => router.push('/dashboard/mocks')}
+                            className="bg-slate-900 hover:bg-black text-white font-bold text-lg px-8 py-4 rounded-full w-full transition-colors"
+                        >
+                            Return to Dashboard
+                        </button>
+                    </div>
+                </div>
+            )}
+
             {/* Bluebook Official Header */}
             <header className="bg-white/90 backdrop-blur-xl border-b border-slate-200/80 px-6 py-2.5 flex items-center justify-between z-30 shrink-0 relative shadow-[0_2px_10px_rgba(0,0,0,0.02)]">
                 {/* Left: Directions Dropdown */}
@@ -826,71 +1037,18 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
                             <span className="font-bold text-[12px] leading-none">Highlight</span>
                         </button>
                     )}
-                    <button
-                        onClick={toggleFullscreen}
-                        className="flex flex-col items-center justify-center gap-1.5 w-[80px] h-[64px] rounded-lg hover:bg-black/5 text-slate-700 transition-colors"
-                    >
-                        <Maximize2 className="w-[24px] h-[24px]" />
-                        <span className="font-bold text-[12px] leading-none">Fullscreen</span>
-                    </button>
-                    <button
-                        onClick={() => setIsExitModalOpen(true)}
-                        className="flex flex-col items-center justify-center gap-1.5 w-[80px] h-[64px] rounded-lg hover:bg-black/5 text-slate-700 transition-colors"
-                    >
-                        <div className="flex items-center justify-center w-6 h-6 bg-slate-800 rounded text-white">
-                            <X className="w-3.5 h-3.5" />
-                        </div>
-                        <span className="font-bold text-[12px] leading-none">Save & Exit</span>
-                    </button>
+                    {!isStrictMode && (
+                        <button
+                            onClick={toggleFullscreen}
+                            className="flex flex-col items-center justify-center gap-1.5 w-[80px] h-[64px] rounded-lg hover:bg-black/5 text-slate-700 transition-colors"
+                        >
+                            <Maximize2 className="w-[24px] h-[24px]" />
+                            <span className="font-bold text-[12px] leading-none">Fullscreen</span>
+                        </button>
+                    )}
                 </div>
             </header>
 
-            {/* Custom Exit Modal */}
-            <AnimatePresence>
-                {isExitModalOpen && (
-                    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-                        <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                            className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm"
-                            onClick={() => setIsExitModalOpen(false)}
-                        />
-                        <motion.div
-                            initial={{ opacity: 0, scale: 0.95, y: 10 }}
-                            animate={{ opacity: 1, scale: 1, y: 0 }}
-                            exit={{ opacity: 0, scale: 0.95, y: 10 }}
-                            className="relative w-full max-w-[420px] overflow-hidden rounded-[24px] bg-white shadow-[0_24px_50px_rgba(0,0,0,0.2)] p-7"
-                        >
-                            <h2 className="text-2xl font-black tracking-tight text-slate-800 mb-2">Save & Exit?</h2>
-                            <p className="text-[14px] text-slate-500 mb-8 leading-6">
-                                Your progress is automatically saved to your device. You can resume this session later from the dashboard.
-                            </p>
-                            <div className="flex items-center gap-3 justify-end">
-                                <button
-                                    onClick={() => setIsExitModalOpen(false)}
-                                    className="px-5 py-2.5 rounded-full text-sm font-bold text-slate-600 hover:bg-slate-100 transition"
-                                >
-                                    Continue Testing
-                                </button>
-                                <button
-                                    onClick={() => {
-                                        setIsExitModalOpen(false);
-                                        if (isFullTest) {
-                                            persistActiveSession();
-                                        }
-                                        resetTest();
-                                        router.push('/practice');
-                                    }}
-                                    className="px-6 py-2.5 rounded-full text-sm font-bold bg-[#111827] text-white hover:bg-slate-800 shadow-md transition"
-                                >
-                                    Save & Exit
-                                </button>
-                            </div>
-                        </motion.div>
-                    </div>
-                )}
-            </AnimatePresence>
 
             {/* Split Pane Content Area */}
             <main className="flex-1 flex overflow-hidden bg-white pb-[70px]">
@@ -920,11 +1078,23 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
                                 <DesmosCalculator mode={calcMode} isDragging={isDragging} />
                             </div>
                         ) : (
-                            <div className="overflow-y-auto p-4 lg:p-10 pr-4 lg:pr-6 flex justify-center bg-white" style={{ width: `${leftPanelWidth}%` }}>
-                                <div className="w-full max-w-[800px] relative mt-2">
-                                    {currentQuestion?.passage ? (
-                                        <HighlightableText
-                                            text={currentQuestion.passage}
+                            <div className="overflow-y-auto bg-white" style={{ width: `${leftPanelWidth}%` }}>
+                                <div className="p-4 lg:p-10 pr-4 lg:pr-8 max-w-[800px] w-full mx-auto">
+                                    {(() => {
+                                        if (!currentQuestion?.passage) return false;
+                                        const cleanP = cleanOCR(currentQuestion.passage);
+                                        const cleanQ = cleanOCR(currentQuestion.question || '');
+                                        // If passage is identical to question, or heavily overlaps, don't show it twice.
+                                        const isDuplicate = cleanP === cleanQ || 
+                                                            (cleanP.length > 20 && cleanQ.includes(cleanP)) || 
+                                                            (cleanQ.length > 20 && cleanP.includes(cleanQ));
+                                        
+                                        if (isDuplicate) return false;
+                                        
+                                        return true;
+                                    })() ? (
+                                        <PassageRenderer
+                                            text={currentQuestion.passage!}
                                             highlights={highlights[questionKey] || []}
                                             onAddHighlight={(h) => addHighlight(questionKey, { ...h, id: Math.random().toString(36).substring(2, 11) })}
                                             onRemoveHighlight={(id) => removeHighlight(questionKey, id)}
@@ -932,8 +1102,11 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
                                             isHighlightModeActive={isHighlightActive}
                                         />
                                     ) : (
-                                        <div className="text-[17px] text-[#6B7280] leading-[1.8] font-serif italic text-center mt-20">
-                                            No passage for this question.
+                                        <div className="flex flex-col items-center justify-center h-full min-h-[200px] text-center pt-16">
+                                            <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center mb-3">
+                                                <BookOpen className="w-5 h-5 text-slate-400" />
+                                            </div>
+                                            <p className="text-[15px] text-slate-400 font-medium">No passage for this question.</p>
                                         </div>
                                     )}
                                 </div>
@@ -959,9 +1132,9 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
                             <div className="w-full max-w-[800px] flex flex-col">
 
                                 {/* Header: Connected Question Number & Mark for Review & ABC */}
-                                <div className="flex items-center mb-6 mt-4 w-full  bg-white border border-[#E5E7EB] rounded-[12px] shadow-sm h-[44px]">
+                                <div className="flex items-center mb-6 mt-4 w-full bg-white border border-[#E5E7EB] rounded-[12px] shadow-sm h-[54px]">
                                     {/* Number */}
-                                    <div className="bg-[#111827] text-white font-bold text-[15px] w-[58px] h-[44px] flex flex-shrink-0 items-center justify-center rounded-l-[11px]">
+                                    <div className="bg-[#111827] text-white font-bold text-[16px] w-[64px] h-[54px] flex flex-shrink-0 items-center justify-center rounded-l-[11px]">
                                         {currentQuestionIndex + 1}
                                     </div>
 
@@ -975,7 +1148,7 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
                                     </button>
 
                                     {/* ABC Elimination (Right) */}
-                                    <div className="w-[58px] h-[44px] flex flex-shrink-0 items-center justify-center border-l border-[#E5E7EB] rounded-r-[11px] bg-transparent">
+                                    <div className="w-[64px] h-[54px] flex flex-shrink-0 items-center justify-center border-l border-[#E5E7EB] rounded-r-[11px] bg-transparent">
                                         <button
                                             onClick={() => setIsEliminationMode(!isEliminationMode)}
                                             className={`flex items-center justify-center w-full h-full font-bold text-[14px] transition-colors rounded-r-[11px] ${isEliminationMode ? 'bg-[#111827] text-white' : 'text-slate-700 hover:bg-slate-50'}`}
@@ -998,7 +1171,13 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
                                 )}
                                 <div className="text-[18px] text-[#111827] mb-6 leading-relaxed">
                                     <HighlightableText
-                                        text={cleanOCR(currentQuestion?.question || '')}
+                                        text={cleanOCR(
+                                            // For math, use passage as question if question is empty
+                                            currentSection?.name === 'Math'
+                                                ? (currentQuestion?.question || currentQuestion?.passage || '')
+                                                // For reading/writing: use ONLY the stem/question, never the passage
+                                                : (currentQuestion?.question || '')
+                                        ).replace(/^\s*\d+[\.\)]\s*/, '')}
                                         highlights={highlights[`q-${questionKey}`] || []}
                                         onAddHighlight={(h) => addHighlight(`q-${questionKey}`, { ...h, id: Math.random().toString(36).substring(2, 11) })}
                                         onRemoveHighlight={(id) => removeHighlight(`q-${questionKey}`, id)}
@@ -1025,7 +1204,7 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
                                                         }
                                                     }}
                                                     htmlFor={`opt-${i}`}
-                                                    className={`relative flex-1 border min-h-[44px] rounded-[12px] flex items-stretch cursor-pointer transition-all duration-200 overflow-hidden ${isSelected ? 'border-indigo-600 shadow-[inset_0_0_0_1px_#4f46e5,0_2px_8px_rgba(79,70,229,0.15)] bg-indigo-50/30' : 'border-[#E5E7EB] hover:border-slate-400 bg-white hover:bg-slate-50 shadow-sm'}`}
+                                                    className={`relative w-full border h-auto min-h-[64px] rounded-[12px] flex items-stretch cursor-pointer transition-all duration-200 overflow-hidden ${isSelected ? 'border-[#111827] shadow-[inset_0_0_0_1px_#111827] z-10' : 'border-[#E5E7EB] hover:border-slate-400 shadow-sm'}`}
                                                 >
                                                     <input
                                                         type="radio"
@@ -1038,15 +1217,17 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
                                                         }}
                                                     />
 
-                                                    {/* Letter Box (Flush to edges) */}
-                                                    <div className={`w-[50px] flex-shrink-0 flex items-center justify-center font-bold text-[15px] border-r transition-colors ${isSelected ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-[#F9FAFB] text-[#4B5563] border-[#E5E7EB] group-hover:bg-[#F3F4F6]'}`}>
-                                                        {letter}
+                                                    {/* Letter Box (Circular) */}
+                                                    <div className="w-[60px] flex-shrink-0 flex items-center justify-center bg-transparent">
+                                                        <div className={`w-[34px] h-[34px] rounded-full flex items-center justify-center font-bold text-[15px] border-[1.5px] transition-all ${isSelected ? 'border-[#111827] bg-[#111827] text-white shadow-md' : 'border-[#D1D5DB] text-[#4B5563] bg-white group-hover:border-[#9CA3AF] group-hover:text-[#111827]'}`}>
+                                                            {letter}
+                                                        </div>
                                                     </div>
 
                                                     {/* Answer Text */}
-                                                    <div className="flex-1 p-4 flex items-center">
+                                                    <div className="flex-1 p-4 flex items-center bg-transparent">
                                                         <span className={`text-[17px] font-sans ${isEliminated ? 'text-slate-400' : 'text-[#111827]'}`}>
-                                                            {cleanOCR(opt || '')}
+                                                            {cleanOCR(opt || '').replace(/^\s*[A-D][\.\)]\s*/, '')}
                                                         </span>
                                                     </div>
 

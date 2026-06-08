@@ -29,7 +29,7 @@ type Seg =
 /* ── OCR artifact cleanup ────────────────────────────────── */
 /**
  * Fixes common PDF-extraction / OCR spacing artifacts where a space was
- * inserted inside a word.
+ * inserted inside a word. Also normalises bullet-point markers.
  */
 export function cleanOCR(text: string): string {
   if (!text) return text;
@@ -39,6 +39,14 @@ export function cleanOCR(text: string): string {
     .replace(/ﬁ/g, 'fi').replace(/ﬀ/g, 'ff').replace(/ﬃ/g, 'ffi')
     .replace(/ﬄ/g, 'ffl').replace(/ﬂ/g, 'fl').replace(/ﬅ/g, 'st')
     .replace(/\xa0/g, ' ');
+
+  // 0b. Bullet/list markers that commonly appear as OCR artifacts
+  // Replace ¢ (cent sign used as bullet) at start of line with •
+  out = out.replace(/(^|\n)¢\s*/g, '$1• ');
+  // Replace standalone 'e ' at start of line (OCR artifact for bullet) with •
+  out = out.replace(/(^|\n)e\s+(?=[A-Z])/g, '$1• ');
+  // Normalise existing bullet-like patterns
+  out = out.replace(/(^|\n)[*•·]\s*/g, '$1• ');
 
   // 1. Fix possessives: "word' s" → "word's"
   out = out.replace(/(\w)' s\b/g, "$1's");
@@ -506,6 +514,27 @@ function PremiumTable({seg}:{seg:Extract<Seg,{kind:'table'}>}){
   );
 }
 
+/* ── Render text with SAT-style answer blanks ────────────── */
+/**
+ * Splits text on _____ (5+ underscores) and renders the blank as a
+ * styled underline span that matches the real SAT Bluebook interface.
+ */
+function renderWithBlanks(text: string): React.ReactNode {
+  const parts = text.split(/(_{5,})/g);
+  return parts.map((part, i) => {
+    if (/^_{5,}$/.test(part)) {
+      return (
+        <span
+          key={i}
+          className="inline-block border-b-2 border-slate-800 min-w-[80px] mx-1 align-bottom"
+          aria-label="blank"
+        />
+      );
+    }
+    return <span key={i}>{part}</span>;
+  });
+}
+
 /* ── Paragraph-aware text block ─────────────────────────── */
 /** Renders a text segment split on paragraph breaks (\n\n or \n), giving
  *  "Text 1" / "Text 2" introductions a styled pill label + divider. */
@@ -549,10 +578,10 @@ function TextBlock({
             .map(h => ({...h, start: h.start - bodyOff, end: h.end - bodyOff}));
           return (
             <div key={pi}>
-              {pi > 0 && <div className="mt-8 mb-2 font-bold text-[#111827] text-[16px]">
+              {pi > 0 && <div className="mt-8 mb-3 font-bold text-[#111827] text-[15px] uppercase tracking-wide border-t border-slate-200 pt-4">
                 {label}
               </div>}
-              {pi === 0 && <div className="mb-2 font-bold text-[#111827] text-[16px]">
+              {pi === 0 && <div className="mb-3 font-bold text-[#111827] text-[15px] uppercase tracking-wide">
                 {label}
               </div>}
               <HighlightableText
@@ -572,43 +601,63 @@ function TextBlock({
           .filter(h => h.start >= paraOff && h.start < paraOff + para.length)
           .map(h => ({...h, start: h.start - paraOff, end: h.end - paraOff}));
 
-        // Detect inline bullet points starting with '* '
-        const isBulletList = para.includes('* ') && para.split('* ').length > 2;
+        // Detect bullet lists starting with '• ' (after cleanOCR normalization)
+        const isBulletList = para.startsWith('• ') || para.includes('\n• ');
         if (isBulletList) {
-          const parts = para.split('* ').filter(p => p.trim() !== '');
-          // The text before the first '* ' might be intro text like "While researching..."
-          const intro = para.substring(0, para.indexOf('* ')).trim();
-          const bullets = parts.slice(intro ? 1 : 0);
-          
+          const lines = para.split('\n').filter(Boolean);
+          // Find any intro text before the first bullet
+          const firstBulletIdx = lines.findIndex(l => l.startsWith('• '));
+          const introLines = firstBulletIdx > 0 ? lines.slice(0, firstBulletIdx) : [];
+          const bulletLines = lines.slice(firstBulletIdx);
           return (
-            <div key={pi} className="space-y-4">
-              {intro && (
-                <HighlightableText
-                  text={intro}
-                  className="text-[16px] leading-[1.9] text-[#111827]"
-                  highlights={[]} // highlights for notes could be tricky with the offset shift, let's keep it simple for now
-                  onAddHighlight={() => {}}
-                  onRemoveHighlight={() => {}}
-                  onUpdateHighlight={() => {}}
-                  isHighlightModeActive={isHighlightModeActive}
-                />
-              )}
-              <ul className="list-disc pl-8 space-y-3 marker:text-slate-400">
-                {bullets.map((bullet, idx) => (
-                  <li key={idx} className="pl-1">
-                    <HighlightableText
-                      text={bullet.trim()}
-                      className="text-[16px] leading-[1.8] text-[#111827]"
-                      highlights={[]}
-                      onAddHighlight={() => {}}
-                      onRemoveHighlight={() => {}}
-                      onUpdateHighlight={() => {}}
-                      isHighlightModeActive={isHighlightModeActive}
-                    />
+            <div key={pi} className="space-y-3">
+              {introLines.map((line, li) => (
+                <p key={li} className="text-[16px] leading-[1.9] text-[#111827]">{line}</p>
+              ))}
+              <ul className="space-y-2 pl-1">
+                {bulletLines.map((bullet, idx) => (
+                  <li key={idx} className="flex items-start gap-3">
+                    <span className="text-slate-400 mt-[3px] flex-shrink-0">•</span>
+                    <span className="text-[16px] leading-[1.8] text-[#111827]">
+                      {renderWithBlanks(bullet.replace(/^•\s*/, '').trim())}
+                    </span>
                   </li>
                 ))}
               </ul>
             </div>
+          );
+        }
+
+        // Legacy: detect inline bullet points starting with '* '
+        const isStarList = para.includes('* ') && para.split('* ').length > 2;
+        if (isStarList) {
+          const parts = para.split('* ').filter(p => p.trim() !== '');
+          const intro = para.substring(0, para.indexOf('* ')).trim();
+          const bullets = parts.slice(intro ? 1 : 0);
+          return (
+            <div key={pi} className="space-y-3">
+              {intro && <p className="text-[16px] leading-[1.9] text-[#111827]">{intro}</p>}
+              <ul className="space-y-2 pl-1">
+                {bullets.map((bullet, idx) => (
+                  <li key={idx} className="flex items-start gap-3">
+                    <span className="text-slate-400 mt-[3px] flex-shrink-0">•</span>
+                    <span className="text-[16px] leading-[1.8] text-[#111827]">
+                      {renderWithBlanks(bullet.trim())}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          );
+        }
+
+        // Check if this paragraph contains a blank (5+ underscores)
+        const hasBlanks = /_{5,}/.test(para);
+        if (hasBlanks) {
+          return (
+            <p key={pi} className="text-[16px] leading-[1.9] text-[#111827]">
+              {renderWithBlanks(para)}
+            </p>
           );
         }
 

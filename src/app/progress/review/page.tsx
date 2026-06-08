@@ -261,37 +261,39 @@ export default function ReviewPage() {
 
               {/* Total Score */}
               <div className="flex flex-col items-center justify-center bg-gradient-to-br from-blue-600 to-indigo-600 rounded-[24px] px-8 py-6 text-white shadow-xl shadow-blue-500/20 min-w-[160px]">
-                <p className="text-[11px] font-black uppercase tracking-[0.2em] text-blue-200">Total Score</p>
-                <p className="text-6xl font-black tracking-tighter mt-1 leading-none">{test.totalScore}</p>
+                <p className="text-[11px] font-black uppercase tracking-[0.2em] text-blue-200">{mockIdParam ? 'Score' : 'Total Score'}</p>
+                <p className="text-6xl font-black tracking-tighter mt-1 leading-none">{mockIdParam ? test.totalCorrect : test.totalScore}</p>
                 <p className="text-[11px] text-blue-200 mt-2">
-                  out of { (session?.subject === 'English' || session?.subject === 'Math') ? 800 : 1600 }
+                  out of {mockIdParam ? test.totalQuestions : ((session?.subject === 'English' || session?.subject === 'Math') ? 800 : 1600)}
                 </p>
               </div>
             </div>
 
             {/* Section Score Arcs */}
-            <div className={`grid ${(!session || session.subject === 'Full') ? 'grid-cols-2' : 'grid-cols-1 max-w-sm mx-auto'} gap-4 mt-8`}>
-              {(!session || session.subject === 'Full' || session.subject === 'English') && (
-                <div className="site-subpanel rounded-[20px] p-5 flex flex-col items-center text-center border border-blue-500/15">
-                  <div className="flex items-center gap-2 mb-3">
-                    <BookOpen className="w-4 h-4 text-blue-500" />
-                    <span className="text-[12px] font-black uppercase tracking-widest text-blue-600 dark:text-blue-400">Reading & Writing</span>
+            {!mockIdParam && (
+              <div className={`grid ${(!session || session.subject === 'Full') ? 'grid-cols-2' : 'grid-cols-1 max-w-sm mx-auto'} gap-4 mt-8`}>
+                {(!session || session.subject === 'Full' || session.subject === 'English') && (
+                  <div className="site-subpanel rounded-[20px] p-5 flex flex-col items-center text-center border border-blue-500/15">
+                    <div className="flex items-center gap-2 mb-3">
+                      <BookOpen className="w-4 h-4 text-blue-500" />
+                      <span className="text-[12px] font-black uppercase tracking-widest text-blue-600 dark:text-blue-400">Reading & Writing</span>
+                    </div>
+                    <ScoreArc score={test.englishScore} color={scoreColor(test.englishScore)} />
+                    <p className="text-[11px] site-text-muted mt-2">out of 800</p>
                   </div>
-                  <ScoreArc score={test.englishScore} color={scoreColor(test.englishScore)} />
-                  <p className="text-[11px] site-text-muted mt-2">out of 800</p>
-                </div>
-              )}
-              {(!session || session.subject === 'Full' || session.subject === 'Math') && (
-                <div className="site-subpanel rounded-[20px] p-5 flex flex-col items-center text-center border border-indigo-500/15">
-                  <div className="flex items-center gap-2 mb-3">
-                    <Calculator className="w-4 h-4 text-indigo-500" />
-                    <span className="text-[12px] font-black uppercase tracking-widest text-indigo-600 dark:text-indigo-400">Math</span>
+                )}
+                {(!session || session.subject === 'Full' || session.subject === 'Math') && (
+                  <div className="site-subpanel rounded-[20px] p-5 flex flex-col items-center text-center border border-indigo-500/15">
+                    <div className="flex items-center gap-2 mb-3">
+                      <Calculator className="w-4 h-4 text-indigo-500" />
+                      <span className="text-[12px] font-black uppercase tracking-widest text-indigo-600 dark:text-indigo-400">Math</span>
+                    </div>
+                    <ScoreArc score={test.mathScore} color={scoreColor(test.mathScore)} />
+                    <p className="text-[11px] site-text-muted mt-2">out of 800</p>
                   </div>
-                  <ScoreArc score={test.mathScore} color={scoreColor(test.mathScore)} />
-                  <p className="text-[11px] site-text-muted mt-2">out of 800</p>
-                </div>
-              )}
-            </div>
+                )}
+              </div>
+            )}
           </div>
         </div>
 

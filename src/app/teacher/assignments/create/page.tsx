@@ -9,6 +9,8 @@ import {
 import Link from 'next/link';
 import { FloatingPageShapes, itemRevealVariants, pageRevealVariants } from '@/components/SiteMotion';
 import { useClassroomStore, seedOnce } from '@/store/classroomStore';
+import { LatexRenderer } from '@/components/LatexRenderer';
+import { PassageRenderer } from '@/components/PassageRenderer';
 
 // Seed before render so classrooms show immediately in the classroom picker
 seedOnce();
@@ -94,8 +96,10 @@ function OptionCard({ letter, text, selected, onSelect }: {
             }`}>
                 {letter}
             </span>
-            <span className={`text-[15px] leading-snug ${selected ? 'font-semibold text-indigo-700 dark:text-indigo-300' : 'site-text'}`}>
-                {text}
+            <span className={`text-[15px] font-medium leading-relaxed ${
+                selected ? 'text-indigo-800 dark:text-indigo-200 font-bold' : 'site-text-strong'
+            }`}>
+                <LatexRenderer text={text} />
             </span>
         </button>
     );
@@ -436,15 +440,20 @@ export default function CreateAssignmentPage() {
                                 {/* Question stem */}
                                 <div className="px-6 py-6 border-b border-slate-100 dark:border-slate-800">
                                     {currentQ.passage && (
-                                        <div className="mb-4 p-4 bg-slate-50 dark:bg-slate-900/50 rounded-xl border border-slate-100 dark:border-slate-800/60">
-                                            <p className="text-[14px] leading-[1.65] site-text-muted font-bluebook whitespace-pre-wrap">
-                                                {currentQ.passage}
-                                            </p>
+                                        <div className="mb-4 bg-slate-50 dark:bg-slate-900/50 rounded-xl border border-slate-100 dark:border-slate-800/60 overflow-hidden">
+                                            <PassageRenderer
+                                                text={currentQ.passage}
+                                                highlights={[]}
+                                                onAddHighlight={() => {}}
+                                                onRemoveHighlight={() => {}}
+                                                onUpdateHighlight={() => {}}
+                                                isHighlightModeActive={false}
+                                            />
                                         </div>
                                     )}
-                                    <p className="text-[17px] leading-[1.7] site-text-strong font-[450] font-bluebook">
-                                        {currentQ.stem}
-                                    </p>
+                                    <div className="text-[17px] leading-[1.7] site-text-strong font-[450] font-bluebook">
+                                        <LatexRenderer text={currentQ.stem} />
+                                    </div>
                                 </div>
 
                                 {/* Options */}
@@ -553,7 +562,9 @@ export default function CreateAssignmentPage() {
                                                         <span className="text-[13px] font-bold site-text-muted">{idx + 1}</span>
                                                     </td>
                                                     <td className="px-5 py-3.5">
-                                                        <p className="text-[13px] site-text leading-snug line-clamp-2">{q.stem}</p>
+                                                        <div className="text-[13px] site-text leading-snug line-clamp-2">
+                                                            <LatexRenderer text={q.stem} />
+                                                        </div>
                                                     </td>
                                                     <td className="px-5 py-3.5 text-center">
                                                         <select

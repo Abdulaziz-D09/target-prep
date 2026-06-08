@@ -64,6 +64,10 @@ export type MockSession = {
   host?: string;
   customTests?: { id: string; name: string; questions: any[] }[];
   subject?: 'Full' | 'English' | 'Math';
+  distributionMode?: 'random' | 'manual';
+  studentAssignments?: Record<string, string>;
+  joinLocked?: boolean;
+  joinDeadline?: string;
 };
 
 export type MockResult = {
@@ -79,6 +83,7 @@ export type MockResult = {
   mathScore?: number;
   timeSpent?: number; // in seconds
   answers?: Record<string, number>;
+  kickedOut?: boolean;
 };
 
 export type StudentProgress = {
@@ -182,9 +187,13 @@ type Actions = {
   leaveClassroom: (id: string) => void;
   
   createMockSession: (data: Omit<MockSession, 'id' | 'joinCode' | 'createdAt' | 'status'>) => MockSession;
+  updateMockSession: (id: string, updates: Partial<MockSession>) => void;
   updateMockSessionStatus: (id: string, status: MockSession['status']) => void;
   deleteMockSession: (id: string) => void;
-  joinMock: (code: string, studentInfo: { name: string; school: string; grade: string }) => { success: boolean; error?: string; session?: MockSession; student?: Student; assignedTestId?: string };
+  assignTestToStudent: (mockId: string, studentId: string, testId: string) => void;
+  removeStudent: (studentId: string) => void;
+  registerForMock: (mockId: string, studentInfo: { name: string; school: string; grade: string }) => { success: boolean; error?: string; session?: MockSession; student?: Student };
+  joinMock: (code: string, studentId: string) => { success: boolean; error?: string; session?: MockSession; assignedTestId?: string };
   submitMockResult: (result: Omit<MockResult, 'id' | 'completedAt'>) => void;
   deleteMockResult: (id: string) => void;
 };
@@ -298,22 +307,33 @@ export const useClassroomStore = create<State & Actions>()(
         set((state) => ({ mockSessions: [...state.mockSessions, newSession] }));
         return newSession;
       },
+      updateMockSession: (id, updates) => set((state) => ({
+        mockSessions: state.mockSessions.map((s) => 
+          s.id === id ? { ...s, ...updates } : s
+        )
+      })),
       updateMockSessionStatus: (id, status) => set((state) => ({
         mockSessions: state.mockSessions.map(s => s.id === id ? { ...s, status } : s)
       })),
-      joinMock: (code, studentInfo) => {
+      assignTestToStudent: (mockId, studentId, testId) => set((state) => ({
+        mockSessions: state.mockSessions.map(s => {
+            if (s.id === mockId) {
+                const assignments = s.studentAssignments || {};
+                return { ...s, studentAssignments: { ...assignments, [studentId]: testId } };
+            }
+            return s;
+        })
+      })),
+      removeStudent: (studentId) => set((state) => ({
+          students: state.students.filter(s => s.id !== studentId)
+      })),
+      registerForMock: (mockId, studentInfo) => {
         let result: any = { success: false };
         set((state) => {
-            const session = state.mockSessions.find(s => s.joinCode === code);
-            if (!session) { result = { success: false, error: 'Invalid join code' }; return state; }
-            if (session.status !== 'active') { result = { success: false, error: 'Session is not active' }; return state; }
-            
-            let assignedTestId = '1';
-            if (session.customTests && session.customTests.length > 0) {
-                assignedTestId = session.customTests[Math.floor(Math.random() * session.customTests.length)].id;
-            } else if (session.attachedTestIds && session.attachedTestIds.length > 0) {
-                assignedTestId = session.attachedTestIds[Math.floor(Math.random() * session.attachedTestIds.length)];
-            }
+            const session = state.mockSessions.find(s => s.id === mockId);
+            if (!session) { result = { success: false, error: 'Session not found' }; return state; }
+            if (session.status === 'completed') { result = { success: false, error: 'Session has already ended' }; return state; }
+            if (session.joinLocked) { result = { success: false, error: 'Registration for this session is locked by the instructor.' }; return state; }
             
             let student = state.students.find(s => s.name === studentInfo.name && s.school === studentInfo.school);
             if (!student) {
@@ -327,15 +347,47 @@ export const useClassroomStore = create<State & Actions>()(
                     avatar: 'blue',
                     mockSessionId: session.id
                 };
-                result = { success: true, session, student, assignedTestId };
+                result = { success: true, session, student };
                 return { students: [...state.students, student] };
             }
-            
             const updatedStudents = state.students.map(s => 
                 s.id === student.id ? { ...s, mockSessionId: session.id } : s
             );
-            result = { success: true, session, student: { ...student, mockSessionId: session.id }, assignedTestId };
+            const returnedStudent = { ...student, mockSessionId: session.id };
+            result = { success: true, session, student: returnedStudent };
+
             return { students: updatedStudents };
+        });
+        return result;
+      },
+      joinMock: (code, studentId) => {
+        let result: any = { success: false };
+        set((state) => {
+            const session = state.mockSessions.find(s => s.joinCode === code);
+            if (!session) { result = { success: false, error: 'Invalid join code' }; return state; }
+            if (session.status !== 'active') { result = { success: false, error: 'Session is not active yet. Please wait for the teacher to start it.' }; return state; }
+            if (session.joinLocked) { result = { success: false, error: 'Joining for this session has been locked by the teacher.' }; return state; }
+            if (session.joinDeadline && new Date() > new Date(session.joinDeadline)) { result = { success: false, error: 'The joining deadline for this session has passed.' }; return state; }
+            
+            const student = state.students.find(s => s.id === studentId);
+            if (!student || student.mockSessionId !== session.id) {
+                result = { success: false, error: 'Not registered for this session' }; 
+                return state; 
+            }
+
+            result = { success: true, session };
+
+            if (session.studentAssignments && session.studentAssignments[student.id]) {
+                result.assignedTestId = session.studentAssignments[student.id];
+            } else if (session.customTests && session.customTests.length > 0) {
+                result.assignedTestId = session.customTests[Math.floor(Math.random() * session.customTests.length)].id;
+            } else if (session.attachedTestIds && session.attachedTestIds.length > 0) {
+                result.assignedTestId = session.attachedTestIds[Math.floor(Math.random() * session.attachedTestIds.length)];
+            } else {
+                result.assignedTestId = '1';
+            }
+
+            return state;
         });
         return result;
       },

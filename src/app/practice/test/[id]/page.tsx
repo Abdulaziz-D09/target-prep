@@ -21,7 +21,7 @@ type ActiveTestSession = {
     currentSectionIndex: number;
     currentModuleIndex: number;
     currentQuestionIndex: number;
-    userAnswers: Record<string, number>;
+    userAnswers: Record<string, number | string>;
     flaggedQuestions: Record<string, boolean>;
     eliminatedAnswers: Record<string, number[]>;
     highlights: Record<string, Highlight[]>;

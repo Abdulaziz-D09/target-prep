@@ -386,7 +386,7 @@ export default function ReviewPage() {
                           const key = `${sIdx}-${mIdx}-${qIdx}`;
                           const answered = test.answers[key];
                           const isCorrect = answered === q.answer;
-                          const label = answered !== undefined ? String.fromCharCode(65 + answered) : '–';
+                          const label = typeof answered === 'number' ? String.fromCharCode(65 + answered) : (answered !== undefined ? String(answered) : '–');
 
                           return (
                             <button

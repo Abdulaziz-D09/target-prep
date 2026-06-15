@@ -31,7 +31,7 @@ export interface ReviewModalProps {
     onClose: () => void;
     questionKey: string;
     testData: PracticeTest;
-    userAnswers: Record<string, number>;
+    userAnswers: Record<string, number | string>;
     onNavigate: (newKey: string) => void;
     allKeys: string[];
     testDate?: string;
@@ -156,11 +156,11 @@ export function ReviewModal({ isOpen, onClose, questionKey, testData, userAnswer
                         
                         {isOmitted ? (
                             <div className="bg-red-600 text-white px-5 py-3 rounded-lg font-medium text-[15px] mb-8">
-                                You omitted this question. The correct answer is {answerLetter(q.answer)}.
+                                You omitted this question. The correct answer is {typeof q.answer === 'number' ? answerLetter(q.answer) : q.answer}.
                             </div>
                         ) : (
                             <div className={`text-white px-5 py-3 rounded-lg font-medium text-[15px] mb-8 ${isCorrect ? 'bg-emerald-700' : 'bg-red-600'}`}>
-                                You selected answer {answerLetter(userAnswer)}. The correct answer is {answerLetter(q.answer)}.
+                                You selected answer {typeof userAnswer === 'number' ? answerLetter(userAnswer) : userAnswer}. The correct answer is {typeof q.answer === 'number' ? answerLetter(q.answer) : q.answer}.
                             </div>
                         )}
 

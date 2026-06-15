@@ -839,6 +839,7 @@ function QuizView({
     const [isDesmosOpen, setIsDesmosOpen] = useState(false);
     const [isReferenceOpen, setIsReferenceOpen] = useState(false);
     const [calcMode, setCalcMode] = useState<'graphing' | 'scientific'>('graphing');
+    const [expandedImage, setExpandedImage] = useState<string | null>(null);
 
     useEffect(() => {
         if (isPaused) return;
@@ -1009,7 +1010,29 @@ function QuizView({
     const canCheck = isNumericQuestion(q) ? !!cleanNumericInput(currentNumericResponse) && !isChecked : sel !== null && !isChecked;
 
     return (
-        <div className="absolute inset-0 flex flex-col overflow-hidden bg-slate-50">
+        <>
+            {/* Modal for expanded image */}
+            {expandedImage && (
+                <div 
+                    className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 sm:p-8 cursor-pointer"
+                    onClick={() => setExpandedImage(null)}
+                >
+                    <div className="relative max-w-5xl w-full max-h-full flex items-center justify-center cursor-default" onClick={e => e.stopPropagation()}>
+                        <button 
+                            onClick={() => setExpandedImage(null)}
+                            className="absolute -top-12 right-0 md:-right-12 md:top-0 w-10 h-10 bg-white rounded-full flex items-center justify-center text-slate-800 hover:bg-slate-200 transition-colors z-[100] shadow-lg border border-slate-200"
+                        >
+                            <X className="w-6 h-6" />
+                        </button>
+                        <img 
+                            src={expandedImage} 
+                            alt="Expanded question figure" 
+                            className="max-w-full max-h-[85vh] object-contain bg-white rounded-xl shadow-2xl p-4"
+                        />
+                    </div>
+                </div>
+            )}
+            <div className="absolute inset-0 flex flex-col overflow-hidden bg-slate-50">
             {/* Bluebook Official Header */}
             <header className="bg-white/90 backdrop-blur-xl border-b border-slate-200/80 px-6 py-2.5 flex items-center justify-between z-30 shrink-0 relative shadow-[0_2px_10px_rgba(0,0,0,0.02)]">
                 {/* Left: Back */}
@@ -1330,11 +1353,10 @@ function QuizView({
                                     </div>
                                 </div>
 
-                                {/* Math image (diagram/graph) if present */}
                                 {q.image && (
                                     <div className="mb-5 rounded-xl overflow-hidden border border-slate-100 flex justify-center bg-slate-50 p-4" style={{ animation: 'qb-slideUp 0.2s ease both' }}>
                                         {/* eslint-disable-next-line @next/next/no-img-element */}
-                                        <img src={q.image} alt="Question image" className="max-w-full h-auto max-h-[200px] object-contain rounded-lg shadow-sm cursor-pointer hover:opacity-90 transition-opacity" onClick={() => setExpandedImage?.(q.image)} />
+                                        <img src={q.image} alt="Question image" className="max-w-full h-auto max-h-[200px] object-contain rounded-lg shadow-sm cursor-pointer hover:opacity-90 transition-opacity" onClick={() => setExpandedImage(q.image || null)} />
                                     </div>
                                 )}
 
@@ -1498,7 +1520,7 @@ function QuizView({
                                 ) : showImageOnLeft && q.image ? (
                                     <div className="rounded-[20px] border border-slate-100 bg-white p-4 shadow-[0_8px_25px_rgba(15,23,42,0.04)]" style={{ animation: 'qb-slideUp 0.4s ease both' }}>
                                         {/* eslint-disable-next-line @next/next/no-img-element */}
-                                        <img src={q.image} alt="Question image" className="max-w-full h-auto w-full max-h-[200px] rounded-lg object-contain cursor-pointer hover:opacity-90 transition-opacity" onClick={() => setExpandedImage?.(q.image)} />
+                                        <img src={q.image} alt="Question image" className="max-w-full h-auto w-full max-h-[200px] rounded-lg object-contain cursor-pointer hover:opacity-90 transition-opacity" onClick={() => setExpandedImage(q.image || null)} />
                                     </div>
                                 ) : (
                                     <div className="mt-8 rounded-[20px] border border-dashed border-slate-200 bg-slate-50/70 px-6 py-16 text-center text-[17px] italic text-slate-400">
@@ -1552,7 +1574,7 @@ function QuizView({
                                 {q.image && !showImageOnLeft && (
                                     <div className="mb-5 rounded-xl overflow-hidden border border-slate-100 flex justify-center bg-slate-50 p-4" style={{ animation: 'qb-slideUp 0.2s ease both' }}>
                                         {/* eslint-disable-next-line @next/next/no-img-element */}
-                                        <img src={q.image} alt="Question image" className="max-w-full h-auto max-h-[200px] object-contain rounded-lg shadow-sm cursor-pointer hover:opacity-90 transition-opacity" onClick={() => setExpandedImage?.(q.image)} />
+                                        <img src={q.image} alt="Question image" className="max-w-full h-auto max-h-[200px] object-contain rounded-lg shadow-sm cursor-pointer hover:opacity-90 transition-opacity" onClick={() => setExpandedImage(q.image || null)} />
                                     </div>
                                 )}
 
@@ -1744,6 +1766,7 @@ function QuizView({
 
             <ReferenceSheet isOpen={isReferenceOpen} onClose={() => setIsReferenceOpen(false)} />
         </div>
+        </>
     );
 }
 

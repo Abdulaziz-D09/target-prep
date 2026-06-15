@@ -84,7 +84,7 @@ export type MockResult = {
   englishScore?: number;
   mathScore?: number;
   timeSpent?: number; // in seconds
-  answers?: Record<string, number>;
+  answers?: Record<string, number | string>;
   kickedOut?: boolean;
 };
 

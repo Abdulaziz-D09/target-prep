@@ -1,6 +1,6 @@
 'use client';
 import { motion, useReducedMotion } from 'framer-motion';
-import { BookOpen, Target, ChevronDown, CheckCircle, Activity, Sparkles } from 'lucide-react';
+import { BookOpen, Target, ChevronDown, CheckCircle, Activity, Sparkles, BarChart2, Users, Clock } from 'lucide-react';
 import { CustomSelect } from '@/components/CustomSelect';
 import {
     FloatingPageShapes,

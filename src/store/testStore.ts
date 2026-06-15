@@ -1,5 +1,6 @@
 'use client';
 import { create } from 'zustand';
+import { createClient } from '@/lib/supabase/client';
 
 interface TestState {
     // Test progress
@@ -59,6 +60,7 @@ interface TestActions {
     goToModule: (sectionIndex: number, moduleIndex: number) => void;
     endTest: (results: CompletedTest) => void;
     resetTest: () => void;
+    syncWithSupabase: () => Promise<void>;
 }
 
 type TestStore = TestState & TestActions;
@@ -194,7 +196,7 @@ export const useTestStore = create<TestStore>((set, get) => ({
         currentSectionIndex: sectionIndex, currentModuleIndex: moduleIndex, currentQuestionIndex: 0,
     }),
 
-    endTest: (results) => {
+    endTest: async (results) => {
         const s = get();
         const updated = [...s.completedTests, results];
         const newState = {
@@ -207,6 +209,28 @@ export const useTestStore = create<TestStore>((set, get) => ({
         };
         set(newState);
         saveProgress(newState);
+
+        try {
+            const supabase = createClient();
+            const { data: { session } } = await supabase.auth.getSession();
+            if (session?.user) {
+                await supabase.from('completed_tests').insert({
+                    user_id: session.user.id,
+                    test_id: results.testId,
+                    test_title: results.testTitle,
+                    date: results.date,
+                    english_score: results.englishScore,
+                    math_score: results.mathScore,
+                    total_score: results.totalScore,
+                    total_correct: results.totalCorrect,
+                    total_questions: results.totalQuestions,
+                    answers: results.answers,
+                    eliminated: results.eliminated,
+                });
+            }
+        } catch (err) {
+            console.warn('Failed to save completed test to Supabase:', err);
+        }
     },
 
     resetTest: () => set({
@@ -214,4 +238,59 @@ export const useTestStore = create<TestStore>((set, get) => ({
         currentQuestionIndex: 0, userAnswers: {}, flaggedQuestions: {}, eliminatedAnswers: {},
         highlights: {}, timeRemaining: 0, isIntroScreen: false, isTestActive: false, showResults: false,
     }),
+
+    syncWithSupabase: async () => {
+        try {
+            const supabase = createClient();
+            const { data: { session } } = await supabase.auth.getSession();
+            if (!session?.user) return;
+
+            const { data, error } = await supabase
+                .from('completed_tests')
+                .select('*')
+                .eq('user_id', session.user.id)
+                .order('date', { ascending: true });
+
+            if (error) throw error;
+
+            if (data && data.length > 0) {
+                const mapped = data.map((t: any) => ({
+                    testId: t.test_id,
+                    testTitle: t.test_title,
+                    date: t.date,
+                    englishScore: t.english_score,
+                    mathScore: t.math_score,
+                    totalScore: t.total_score,
+                    totalCorrect: t.total_correct,
+                    totalQuestions: t.total_questions,
+                    answers: t.answers || {},
+                    eliminated: t.eliminated || {},
+                }));
+
+                const currentLocal = get().completedTests;
+                const merged = [...currentLocal];
+                mapped.forEach((dbTest) => {
+                    const exists = merged.some(localTest => 
+                        localTest.testId === dbTest.testId && 
+                        new Date(localTest.date).getTime() === new Date(dbTest.date).getTime()
+                    );
+                    if (!exists) {
+                        merged.push(dbTest);
+                    }
+                });
+
+                merged.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+
+                const newState = {
+                    completedTests: merged,
+                    streak: get().streak,
+                    totalQuestionsAnswered: get().totalQuestionsAnswered,
+                };
+                set(newState);
+                saveProgress(newState);
+            }
+        } catch (err) {
+            console.warn('Failed to sync completed tests with Supabase:', err);
+        }
+    },
 }));

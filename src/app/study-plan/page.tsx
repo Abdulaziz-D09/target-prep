@@ -8,7 +8,7 @@ import { FloatingPageShapes, pageRevealVariants, itemRevealVariants, staggerCont
 import { Target, ArrowRight, Play, FileText, CheckCircle2, Sparkles, BookOpen, Calculator, Video, X, Minus, Plus, PenLine, ChevronLeft, ChevronRight, Youtube } from 'lucide-react';
 import { allVaultVideos } from '@/data/videos';
 
-const CHAPTER_THEMES: Record<string, { gradient: string; borderColorClass: string; bgColorClass: string; glowColorClass: string; washColorClass: string; bgBadge: string; textAccent: string }> = {
+const CHAPTER_THEMES: Record<string, { gradient: string; borderColorClass: string; bgColorClass: string; glowColorClass: string; washColorClass: string; bgBadge: string; textAccent: string; cardBg: string }> = {
   // English
   'Craft and Structure': {
     gradient: 'from-blue-600 to-cyan-500',
@@ -17,7 +17,8 @@ const CHAPTER_THEMES: Record<string, { gradient: string; borderColorClass: strin
     glowColorClass: 'shadow-[0_0_15px_rgba(37,99,235,0.2)] dark:shadow-[0_0_15px_rgba(96,165,250,0.2)]',
     washColorClass: 'from-blue-600/10 dark:from-blue-400/20',
     bgBadge: 'bg-blue-600/10 text-blue-700 dark:text-blue-400 border border-blue-600/20 dark:border-blue-400/20',
-    textAccent: 'text-blue-700 dark:text-blue-400'
+    textAccent: 'text-blue-700 dark:text-blue-400',
+    cardBg: 'bg-gradient-to-br from-blue-50/50 to-cyan-50/30 dark:from-blue-950/15 dark:to-cyan-950/5 border-blue-100 dark:border-blue-900/30'
   },
   'Expression of Ideas': {
     gradient: 'from-indigo-600 to-purple-500',
@@ -26,7 +27,8 @@ const CHAPTER_THEMES: Record<string, { gradient: string; borderColorClass: strin
     glowColorClass: 'shadow-[0_0_15px_rgba(79,70,229,0.2)] dark:shadow-[0_0_15px_rgba(129,140,248,0.2)]',
     washColorClass: 'from-indigo-600/10 dark:from-indigo-400/20',
     bgBadge: 'bg-indigo-600/10 text-indigo-700 dark:text-indigo-400 border border-indigo-600/20 dark:border-indigo-400/20',
-    textAccent: 'text-indigo-700 dark:text-indigo-400'
+    textAccent: 'text-indigo-700 dark:text-indigo-400',
+    cardBg: 'bg-gradient-to-br from-indigo-50/50 to-purple-50/30 dark:from-indigo-950/15 dark:to-purple-950/5 border-indigo-100 dark:border-indigo-900/30'
   },
   'Information and Ideas': {
     gradient: 'from-fuchsia-600 to-rose-500',
@@ -35,7 +37,8 @@ const CHAPTER_THEMES: Record<string, { gradient: string; borderColorClass: strin
     glowColorClass: 'shadow-[0_0_15px_rgba(217,70,239,0.2)] dark:shadow-[0_0_15px_rgba(232,121,249,0.2)]',
     washColorClass: 'from-fuchsia-600/10 dark:from-fuchsia-400/20',
     bgBadge: 'bg-fuchsia-600/10 text-fuchsia-700 dark:text-fuchsia-400 border border-fuchsia-600/20 dark:border-fuchsia-400/20',
-    textAccent: 'text-fuchsia-700 dark:text-fuchsia-400'
+    textAccent: 'text-fuchsia-700 dark:text-fuchsia-400',
+    cardBg: 'bg-gradient-to-br from-fuchsia-50/50 to-rose-50/30 dark:from-fuchsia-950/15 dark:to-rose-950/5 border-fuchsia-100 dark:border-fuchsia-900/30'
   },
   'Standard English Conventions': {
     gradient: 'from-rose-600 to-pink-500',
@@ -44,7 +47,8 @@ const CHAPTER_THEMES: Record<string, { gradient: string; borderColorClass: strin
     glowColorClass: 'shadow-[0_0_15px_rgba(244,63,94,0.2)] dark:shadow-[0_0_15px_rgba(251,113,133,0.2)]',
     washColorClass: 'from-rose-600/10 dark:from-rose-400/20',
     bgBadge: 'bg-rose-600/10 text-rose-700 dark:text-rose-400 border border-rose-600/20 dark:border-rose-400/20',
-    textAccent: 'text-rose-700 dark:text-rose-400'
+    textAccent: 'text-rose-700 dark:text-rose-400',
+    cardBg: 'bg-gradient-to-br from-rose-50/50 to-pink-50/30 dark:from-rose-950/15 dark:to-pink-950/5 border-rose-100 dark:border-rose-900/30'
   },
   // Math
   'Algebra': {
@@ -54,7 +58,8 @@ const CHAPTER_THEMES: Record<string, { gradient: string; borderColorClass: strin
     glowColorClass: 'shadow-[0_0_15px_rgba(217,119,6,0.2)] dark:shadow-[0_0_15px_rgba(251,191,36,0.2)]',
     washColorClass: 'from-amber-600/10 dark:from-amber-400/20',
     bgBadge: 'bg-amber-600/10 text-amber-700 dark:text-amber-400 border border-amber-600/20 dark:border-amber-400/20',
-    textAccent: 'text-amber-700 dark:text-amber-400'
+    textAccent: 'text-amber-700 dark:text-amber-400',
+    cardBg: 'bg-gradient-to-br from-amber-50/50 to-orange-50/30 dark:from-amber-950/15 dark:to-orange-950/5 border-amber-100 dark:border-amber-900/30'
   },
   'Advanced Math': {
     gradient: 'from-orange-600 to-red-500',
@@ -63,7 +68,8 @@ const CHAPTER_THEMES: Record<string, { gradient: string; borderColorClass: strin
     glowColorClass: 'shadow-[0_0_15px_rgba(234,88,12,0.2)] dark:shadow-[0_0_15px_rgba(251,146,60,0.2)]',
     washColorClass: 'from-orange-600/10 dark:from-orange-400/20',
     bgBadge: 'bg-orange-600/10 text-orange-700 dark:text-orange-400 border border-orange-600/20 dark:border-orange-400/20',
-    textAccent: 'text-orange-700 dark:text-orange-400'
+    textAccent: 'text-orange-700 dark:text-orange-400',
+    cardBg: 'bg-gradient-to-br from-orange-50/50 to-red-50/30 dark:from-orange-950/15 dark:to-red-950/5 border-orange-100 dark:border-orange-900/30'
   },
   'Problem-Solving and Data Analysis': {
     gradient: 'from-emerald-600 to-teal-500',
@@ -72,7 +78,8 @@ const CHAPTER_THEMES: Record<string, { gradient: string; borderColorClass: strin
     glowColorClass: 'shadow-[0_0_15px_rgba(5,150,105,0.2)] dark:shadow-[0_0_15px_rgba(52,211,153,0.2)]',
     washColorClass: 'from-emerald-600/10 dark:from-emerald-400/20',
     bgBadge: 'bg-emerald-600/10 text-emerald-700 dark:text-emerald-400 border border-emerald-600/20 dark:border-emerald-400/20',
-    textAccent: 'text-emerald-700 dark:text-emerald-400'
+    textAccent: 'text-emerald-700 dark:text-emerald-400',
+    cardBg: 'bg-gradient-to-br from-emerald-50/50 to-teal-50/30 dark:from-emerald-950/15 dark:to-teal-950/5 border-emerald-100 dark:border-emerald-900/30'
   },
   'Geometry and Trigonometry': {
     gradient: 'from-cyan-600 to-blue-500',
@@ -81,7 +88,8 @@ const CHAPTER_THEMES: Record<string, { gradient: string; borderColorClass: strin
     glowColorClass: 'shadow-[0_0_15px_rgba(6,182,212,0.2)] dark:shadow-[0_0_15px_rgba(34,211,238,0.2)]',
     washColorClass: 'from-cyan-600/10 dark:from-cyan-400/20',
     bgBadge: 'bg-cyan-600/10 text-cyan-700 dark:text-cyan-400 border border-cyan-600/20 dark:border-cyan-400/20',
-    textAccent: 'text-cyan-700 dark:text-cyan-400'
+    textAccent: 'text-cyan-700 dark:text-cyan-400',
+    cardBg: 'bg-gradient-to-br from-cyan-50/50 to-blue-50/30 dark:from-cyan-950/15 dark:to-blue-950/5 border-cyan-100 dark:border-cyan-900/30'
   }
 };
 
@@ -133,6 +141,8 @@ export default function StudyPlanPage() {
   // Node Modal
   const [selectedNode, setSelectedNode] = useState<any>(null);
   const [masteredTopics, setMasteredTopics] = useState<string[]>([]);
+  const [showMathCheatSheet, setShowMathCheatSheet] = useState(false);
+  const [showEnglishCheatSheet, setShowEnglishCheatSheet] = useState(false);
 
   // Score Calculator State (Module Based)
   const [readingMod1, setReadingMod1] = useState(14);
@@ -442,25 +452,18 @@ export default function StudyPlanPage() {
                                 <div className="flex items-center gap-4 relative z-10">
                                   {chapter.topics.map((topic, j) => {
                                     const isMastered = masteredTopics.includes(topic.name);
+                                    const hoverBorderColor = theme.borderColorClass.split(' ')[0] || 'border-blue-500';
                                     return (
                                       <div key={topic.name} className="flex items-center flex-shrink-0">
                                         <div 
                                           onClick={() => setSelectedNode({ ...topic, title: topic.name, type: 'Topic Practice', chapter: chapter.chapter, duration: '15 mins', status: 'active', mastered: isMastered })}
-                                          className={`relative flex items-center justify-center p-4 rounded-[20px] border transition-all cursor-pointer min-w-[150px] max-w-[200px] ${
-                                            isMastered 
-                                              ? 'bg-emerald-500 dark:bg-emerald-950/30 border-emerald-600 dark:border-emerald-600/60 text-white dark:text-emerald-400 shadow-lg' 
-                                              : 'site-panel site-text hover:border-blue-500/40'
-                                          }`}
+                                          className={`relative flex items-center justify-center p-4 rounded-[20px] border transition-all cursor-pointer min-w-[150px] max-w-[200px] hover:scale-[1.03] hover:shadow-lg hover:${hoverBorderColor} ${theme.cardBg}`}
                                         >
                                           <div className="flex flex-col items-center text-center gap-2">
-                                            {isMastered ? (
-                                              <CheckCircle2 className="w-5 h-5 text-emerald-400" />
-                                            ) : (
-                                              <div className="w-5 h-5 rounded-full border border-slate-400/40 flex items-center justify-center text-[10px] font-bold site-text-muted">
-                                                {j + 1}
-                                              </div>
-                                            )}
-                                            <span className="font-semibold text-[12px] leading-snug max-w-[130px] line-clamp-2 site-text">
+                                            <div className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-black ${theme.bgBadge}`}>
+                                              {j + 1}
+                                            </div>
+                                            <span className="font-bold text-[12px] leading-snug max-w-[130px] line-clamp-2 site-text-strong">
                                               {topic.name}
                                             </span>
                                           </div>
@@ -469,8 +472,8 @@ export default function StudyPlanPage() {
                                         {/* Connector line inside chapter */}
                                         {j < chapter.topics.length - 1 && (
                                           <div className="flex items-center gap-1 flex-shrink-0 px-1">
-                                            <div className={`h-[2px] w-6 rounded-full ${masteredTopics.includes(chapter.topics[j+1].name) && isMastered ? 'bg-emerald-500' : 'bg-slate-300/30 dark:bg-slate-700'}`} />
-                                            <ArrowRight className={`w-4 h-4 flex-shrink-0 ${masteredTopics.includes(chapter.topics[j+1].name) && isMastered ? 'text-emerald-500' : 'site-text-faint'}`} />
+                                            <div className="h-[2px] w-6 rounded-full bg-slate-300/40 dark:bg-slate-700/60" />
+                                            <ArrowRight className={`w-4 h-4 flex-shrink-0 ${theme.textAccent} opacity-60`} />
                                           </div>
                                         )}
                                       </div>
@@ -557,25 +560,18 @@ export default function StudyPlanPage() {
                                 <div className="flex items-center gap-4 relative z-10">
                                   {chapter.topics.map((topic, j) => {
                                     const isMastered = masteredTopics.includes(topic.name);
+                                    const hoverBorderColor = theme.borderColorClass.split(' ')[0] || 'border-amber-500';
                                     return (
                                       <div key={topic.name} className="flex items-center flex-shrink-0">
                                         <div 
                                           onClick={() => setSelectedNode({ ...topic, title: topic.name, type: 'Topic Practice', chapter: chapter.chapter, duration: '15 mins', status: 'active', mastered: isMastered })}
-                                          className={`relative flex items-center justify-center p-4 rounded-[20px] border transition-all cursor-pointer min-w-[150px] max-w-[200px] ${
-                                            isMastered 
-                                              ? 'bg-emerald-500 dark:bg-emerald-950/30 border-emerald-600 dark:border-emerald-600/60 text-white dark:text-emerald-400 shadow-lg' 
-                                              : 'site-panel site-text hover:border-amber-500/40'
-                                          }`}
+                                          className={`relative flex items-center justify-center p-4 rounded-[20px] border transition-all cursor-pointer min-w-[150px] max-w-[200px] hover:scale-[1.03] hover:shadow-lg hover:${hoverBorderColor} ${theme.cardBg}`}
                                         >
                                           <div className="flex flex-col items-center text-center gap-2">
-                                            {isMastered ? (
-                                              <CheckCircle2 className="w-5 h-5 text-emerald-400" />
-                                            ) : (
-                                              <div className="w-5 h-5 rounded-full border border-slate-400/40 flex items-center justify-center text-[10px] font-bold site-text-muted">
-                                                {j + 1}
-                                              </div>
-                                            )}
-                                            <span className="font-semibold text-[12px] leading-snug max-w-[130px] line-clamp-2 site-text">
+                                            <div className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-black ${theme.bgBadge}`}>
+                                              {j + 1}
+                                            </div>
+                                            <span className="font-bold text-[12px] leading-snug max-w-[130px] line-clamp-2 site-text-strong">
                                               {topic.name}
                                             </span>
                                           </div>
@@ -584,8 +580,8 @@ export default function StudyPlanPage() {
                                         {/* Connector line inside chapter */}
                                         {j < chapter.topics.length - 1 && (
                                           <div className="flex items-center gap-1 flex-shrink-0 px-1">
-                                            <div className={`h-[2px] w-6 rounded-full ${masteredTopics.includes(chapter.topics[j+1].name) && isMastered ? 'bg-emerald-500' : 'bg-slate-300/30 dark:bg-slate-700'}`} />
-                                            <ArrowRight className={`w-4 h-4 flex-shrink-0 ${masteredTopics.includes(chapter.topics[j+1].name) && isMastered ? 'text-emerald-500' : 'site-text-faint'}`} />
+                                            <div className="h-[2px] w-6 rounded-full bg-slate-300/40 dark:bg-slate-700/60" />
+                                            <ArrowRight className={`w-4 h-4 flex-shrink-0 ${theme.textAccent} opacity-60`} />
                                           </div>
                                         )}
                                       </div>
@@ -645,6 +641,46 @@ export default function StudyPlanPage() {
                     </motion.div>
                   </motion.div>
                 </motion.section>
+
+                {/* Vault Section: Cheat Sheets */}
+                <section className="site-panel rounded-[24px] p-6 sm:p-8">
+                  <div className="flex items-center gap-3 mb-2">
+                    <h2 className="text-2xl font-black">Cheat Sheets</h2>
+                  </div>
+                  <p className="site-text-muted mb-8 font-medium">Quick reference guides to boost your score.</p>
+                  
+                  <div className="grid sm:grid-cols-2 gap-6">
+                    <button 
+                      onClick={() => setShowMathCheatSheet(true)}
+                      className="group relative flex items-center justify-between p-6 rounded-[20px] bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-950/20 dark:to-orange-950/10 border border-amber-200/50 dark:border-amber-800/30 hover:shadow-lg hover:shadow-amber-500/10 transition-all cursor-pointer text-left overflow-hidden"
+                    >
+                      <div className="absolute right-0 top-0 w-32 h-32 bg-amber-500/10 rounded-full blur-3xl -mr-10 -mt-10 pointer-events-none" />
+                      <div>
+                        <span className="inline-flex mb-3 items-center justify-center w-10 h-10 rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400">
+                          <Calculator className="w-5 h-5" />
+                        </span>
+                        <h3 className="text-xl font-black site-text-strong tracking-tight">Math Formulas</h3>
+                        <p className="text-sm site-text-muted font-medium mt-1">Core SAT equations & rules</p>
+                      </div>
+                      <ArrowRight className="w-5 h-5 text-amber-500 transform group-hover:translate-x-1 transition" />
+                    </button>
+
+                    <button 
+                      onClick={() => setShowEnglishCheatSheet(true)}
+                      className="group relative flex items-center justify-between p-6 rounded-[20px] bg-gradient-to-br from-indigo-50 to-blue-50 dark:from-indigo-950/20 dark:to-blue-950/10 border border-indigo-200/50 dark:border-indigo-800/30 hover:shadow-lg hover:shadow-indigo-500/10 transition-all cursor-pointer text-left overflow-hidden"
+                    >
+                      <div className="absolute right-0 top-0 w-32 h-32 bg-indigo-500/10 rounded-full blur-3xl -mr-10 -mt-10 pointer-events-none" />
+                      <div>
+                        <span className="inline-flex mb-3 items-center justify-center w-10 h-10 rounded-xl bg-indigo-500/10 text-indigo-600 dark:text-indigo-400">
+                          <BookOpen className="w-5 h-5" />
+                        </span>
+                        <h3 className="text-xl font-black site-text-strong tracking-tight">English Strategies</h3>
+                        <p className="text-sm site-text-muted font-medium mt-1">Reading & Writing cheat codes</p>
+                      </div>
+                      <ArrowRight className="w-5 h-5 text-indigo-500 transform group-hover:translate-x-1 transition" />
+                    </button>
+                  </div>
+                </section>
 
                 {/* Vault Section: Score Calculator (Redesigned) */}
                 <section className="site-panel rounded-[24px] p-6 sm:p-8">
@@ -835,7 +871,7 @@ export default function StudyPlanPage() {
                     </div>
                   </div>
                   <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-                    {allVaultVideos.map((v) => {
+                    {allVaultVideos.map((v, idx) => {
                       const colorMap: Record<string, { bg: string; text: string; badge: string }> = {
                         amber: { bg: 'bg-amber-500/10', text: 'text-amber-500', badge: 'bg-amber-500/15 text-amber-600 dark:text-amber-400' },
                         indigo: { bg: 'bg-indigo-500/10', text: 'text-indigo-500', badge: 'bg-indigo-500/15 text-indigo-600 dark:text-indigo-400' },
@@ -847,7 +883,7 @@ export default function StudyPlanPage() {
                       const c = colorMap[v.color];
                       return (
                         <a
-                          key={v.id}
+                          key={`${v.id}-${idx}`}
                           href={`https://www.youtube.com/watch?v=${v.id}`}
                           target="_blank"
                           rel="noopener noreferrer"
@@ -905,10 +941,10 @@ export default function StudyPlanPage() {
                   </div>
                   <div className="grid gap-4 sm:grid-cols-2">
                     {[
-                      { num: 1, title: 'Digital SAT Practice Test 1', questions: 98, time: '134 min', href: 'https://satsuite.collegeboard.org/media/pdf/digital-sat-practice-test-1.pdf', new: false },
-                      { num: 2, title: 'Digital SAT Practice Test 2', questions: 98, time: '134 min', href: 'https://satsuite.collegeboard.org/media/pdf/digital-sat-practice-test-2.pdf', new: false },
-                      { num: 3, title: 'Digital SAT Practice Test 3', questions: 98, time: '134 min', href: 'https://satsuite.collegeboard.org/media/pdf/digital-sat-practice-test-3.pdf', new: false },
-                      { num: 4, title: 'Digital SAT Practice Test 4', questions: 98, time: '134 min', href: 'https://satsuite.collegeboard.org/media/pdf/digital-sat-practice-test-4.pdf', new: true },
+                      { num: 1, title: 'Digital SAT Practice Test 1', questions: 98, time: '134 min', href: 'https://satsuite.collegeboard.org/digital/digital-practice-preparation/practice-tests/linear', new: false },
+                      { num: 2, title: 'Digital SAT Practice Test 2', questions: 98, time: '134 min', href: 'https://satsuite.collegeboard.org/digital/digital-practice-preparation/practice-tests/linear', new: false },
+                      { num: 3, title: 'Digital SAT Practice Test 3', questions: 98, time: '134 min', href: 'https://satsuite.collegeboard.org/digital/digital-practice-preparation/practice-tests/linear', new: false },
+                      { num: 4, title: 'Digital SAT Practice Test 4', questions: 98, time: '134 min', href: 'https://satsuite.collegeboard.org/digital/digital-practice-preparation/practice-tests/linear', new: true },
                     ].map((test) => (
                       <a
                         key={test.num}
@@ -973,23 +1009,181 @@ export default function StudyPlanPage() {
                   return video ? (
                     <a href={`https://www.youtube.com/watch?v=${video.id}`} target="_blank" rel="noopener noreferrer" className="flex-1 flex items-center justify-center gap-2 px-4 py-4 rounded-2xl bg-red-600 text-white font-bold hover:bg-red-700 hover:scale-[1.02] transition-all cursor-pointer shadow-lg shadow-red-600/20 border border-red-500/50">
                       <Play className="w-5 h-5 fill-white text-white" />
-                      <span>Watch Lesson</span>
+                      <span className="text-center leading-tight">Watch Lesson</span>
                     </a>
                   ) : (
                     <button disabled className="flex-1 flex items-center justify-center gap-2 px-4 py-4 rounded-2xl bg-slate-100 dark:bg-slate-800 text-slate-400 font-bold transition-all cursor-not-allowed border border-slate-200 dark:border-slate-700">
                       <Play className="w-5 h-5 fill-slate-400 text-slate-400" />
-                      <span>No Video</span>
+                      <span className="text-center leading-tight">No Video</span>
                     </button>
                   );
                 })()}
-                <button className={`flex-1 flex items-center justify-center gap-2 px-4 py-4 rounded-2xl font-bold transition-all cursor-pointer ${
-                  selectedNode.status === 'locked' 
-                    ? 'bg-slate-100 dark:bg-slate-800 text-slate-400 border border-slate-200 dark:border-slate-700 cursor-not-allowed'
-                    : 'bg-[linear-gradient(135deg,#2563eb,#3b82f6)] text-white hover:scale-[1.02] shadow-lg shadow-blue-500/25 border border-blue-500/50'
-                }`}>
-                  <FileText className="w-5 h-5" />
-                  <span>Practice</span>
-                </button>
+                {selectedNode.status === 'locked' ? (
+                  <button disabled className="flex-1 flex items-center justify-center gap-2 px-4 py-4 rounded-2xl font-bold transition-all bg-slate-100 dark:bg-slate-800 text-slate-400 border border-slate-200 dark:border-slate-700 cursor-not-allowed">
+                    <FileText className="w-5 h-5" />
+                    <span>Practice</span>
+                  </button>
+                ) : (
+                  <Link 
+                    href={`/practice/topic/${encodeURIComponent(selectedNode.title.toLowerCase().replace(/[^a-z0-9]+/g, '-'))}?title=${encodeURIComponent(selectedNode.title)}`}
+                    className="flex-1 flex items-center justify-center gap-2 px-4 py-4 rounded-2xl font-bold transition-all cursor-pointer bg-[linear-gradient(135deg,#2563eb,#3b82f6)] text-white hover:scale-[1.02] shadow-lg shadow-blue-500/25 border border-blue-500/50"
+                  >
+                    <FileText className="w-5 h-5" />
+                    <span>Practice</span>
+                  </Link>
+                )}
+              </div>
+            </motion.div>
+          </div>
+        )}
+
+        {showMathCheatSheet && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/60 dark:bg-slate-900/80 backdrop-blur-sm" onClick={() => setShowMathCheatSheet(false)}>
+            <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} onClick={e => e.stopPropagation()} className="site-panel w-full max-w-5xl h-[90vh] rounded-[32px] overflow-hidden flex flex-col shadow-2xl relative">
+              <div className="flex items-center justify-between p-6 border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50">
+                <h3 className="text-xl font-black site-text-strong flex items-center gap-2">
+                  <Calculator className="w-5 h-5 text-amber-500" /> Math Cheat Sheet
+                </h3>
+                <button onClick={() => setShowMathCheatSheet(false)} className="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 transition site-text-muted cursor-pointer"><X className="w-5 h-5" /></button>
+              </div>
+              <div className="flex-1 w-full bg-slate-100 dark:bg-slate-900">
+                <iframe src="/math-cheatsheet.pdf" className="w-full h-full border-none" title="Math Cheat Sheet" />
+              </div>
+            </motion.div>
+          </div>
+        )}
+
+        {showEnglishCheatSheet && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/60 dark:bg-slate-900/80 backdrop-blur-sm overflow-y-auto py-10" onClick={() => setShowEnglishCheatSheet(false)}>
+            <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} onClick={e => e.stopPropagation()} className="site-panel w-full max-w-5xl rounded-[32px] overflow-hidden flex flex-col shadow-2xl relative my-auto">
+              <div className="flex items-center justify-between p-6 border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50">
+                <h3 className="text-xl font-black site-text-strong flex items-center gap-2"><BookOpen className="w-5 h-5 text-indigo-500" /> English Cheat Sheet</h3>
+                <button onClick={() => setShowEnglishCheatSheet(false)} className="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 transition site-text-muted cursor-pointer"><X className="w-5 h-5" /></button>
+              </div>
+              <div className="p-8 max-h-[75vh] overflow-y-auto custom-scrollbar">
+                <div className="grid md:grid-cols-2 gap-12">
+                  {/* READING */}
+                  <div className="space-y-8">
+                    <div className="border-b-4 border-rose-500 pb-2 mb-6">
+                      <h4 className="text-2xl font-black text-rose-600 tracking-tight uppercase">Reading</h4>
+                    </div>
+                    
+                    <div>
+                      <h5 className="text-[13px] font-bold text-rose-500 uppercase tracking-widest mb-3">General Strategies</h5>
+                      <ol className="list-decimal list-outside ml-4 space-y-2 text-[15px] site-text-strong font-medium">
+                        <li>Identify key details in question.</li>
+                        <li>Read the title.</li>
+                        <li>Read a sentence above and below given line numbers.</li>
+                        <li>Pick the literal and obvious answer.</li>
+                      </ol>
+                    </div>
+
+                    <div>
+                      <h5 className="text-[13px] font-bold text-rose-500 uppercase tracking-widest mb-3">Summary Questions</h5>
+                      <ol className="list-decimal list-outside ml-4 space-y-2 text-[15px] site-text-strong font-medium">
+                        <li>Do them last.</li>
+                        <li>Reread hotspots: Title, Intro/Concluding Paragraphs, Thesis (last sentence of 1st paragraph), Topic Sentences.</li>
+                        <li>Review other questions in the passage for clues.</li>
+                      </ol>
+                    </div>
+
+                    <div>
+                      <h5 className="text-[13px] font-bold text-rose-500 uppercase tracking-widest mb-3">Vocabulary</h5>
+                      <ol className="list-decimal list-outside ml-4 space-y-2 text-[15px] site-text-strong font-medium">
+                        <li>Forget what you think the word means.</li>
+                        <li>Ignore the answer choices.</li>
+                        <li>Make up your own definition for the word in context.</li>
+                        <li>Read a sentence above and below the line.</li>
+                        <li>Plug in the answer choices.</li>
+                      </ol>
+                    </div>
+
+                    <div>
+                      <h5 className="text-[13px] font-bold text-rose-500 uppercase tracking-widest mb-3">Evidence-Based Questions</h5>
+                      <ol className="list-decimal list-outside ml-4 space-y-2 text-[15px] site-text-strong font-medium">
+                        <li>Choose the line number that matches key details in previous question.</li>
+                        <li>Choose answer in previous question that matches line number.</li>
+                      </ol>
+                    </div>
+
+                    <div>
+                      <h5 className="text-[13px] font-bold text-rose-500 uppercase tracking-widest mb-3">Data Questions</h5>
+                      <ol className="list-decimal list-outside ml-4 space-y-2 text-[15px] site-text-strong font-medium">
+                        <li>Look at the key spots: Title, Columns/Rows, X and Y Axes, Legend/Key, Source.</li>
+                        <li>No assumptions: the answer is in the data.</li>
+                      </ol>
+                    </div>
+                    
+                    <div>
+                      <h5 className="text-[13px] font-bold text-rose-500 uppercase tracking-widest mb-3">Passage Questions</h5>
+                      <ol className="list-decimal list-outside ml-4 space-y-2 text-[15px] site-text-strong font-medium">
+                        <li>Do 1 passage at a time.</li>
+                        <li>Make a quick mental summary of each passage.</li>
+                        <li>Usually, the authors disagree.</li>
+                      </ol>
+                    </div>
+                  </div>
+
+                  {/* WRITING */}
+                  <div className="space-y-8">
+                    <div className="border-b-4 border-emerald-500 pb-2 mb-6">
+                      <h4 className="text-2xl font-black text-emerald-600 tracking-tight uppercase">Writing</h4>
+                    </div>
+
+                    <div>
+                      <h5 className="text-[13px] font-bold text-emerald-500 uppercase tracking-widest mb-3">Grammar Questions</h5>
+                      <ol className="list-decimal list-outside ml-4 space-y-2 text-[15px] site-text-strong font-medium">
+                        <li>Choose the shortest answer.<br/><span className="text-slate-500 text-xs font-normal mt-1 block leading-relaxed">Deleting is always the shortest. Shortest in words, not letters. Includes punctuation.</span></li>
+                        <li>Look at how the answers are different.</li>
+                        <li>Similar answers are probably wrong.</li>
+                        <li>Keep related words together.</li>
+                        <li>Keep the same style as the rest of the sentence or paragraph: Tense, Tone, Number.</li>
+                        <li>Identify the main noun and main verb in the sentence.</li>
+                        <li>Choose the most boring answer.</li>
+                      </ol>
+                    </div>
+
+                    <div>
+                      <h5 className="text-[13px] font-bold text-emerald-500 uppercase tracking-widest mb-3">Transitions</h5>
+                      <ol className="list-decimal list-outside ml-4 space-y-2 text-[15px] site-text-strong font-medium">
+                        <li>Read the sentence before and after the sentence, and pick the one that best matches the relationship.</li>
+                        <li>Transitions are options: delete if given the option.</li>
+                        <li>Transitions cannot combine sentences with a comma; therefore, they usually come after a semicolon or period.</li>
+                      </ol>
+                    </div>
+
+                    <div>
+                      <h5 className="text-[13px] font-bold text-emerald-500 uppercase tracking-widest mb-3">Best Combines Underlined Sentences</h5>
+                      <ol className="list-decimal list-outside ml-4 space-y-2 text-[15px] site-text-strong font-medium">
+                        <li>Shortest answer.</li>
+                        <li>Least repetitive.</li>
+                        <li>Keeps the same structure.</li>
+                        <li>Doesn't change the meaning.</li>
+                      </ol>
+                    </div>
+
+                    <div>
+                      <h5 className="text-[13px] font-bold text-emerald-500 uppercase tracking-widest mb-3">Moving/Adding/Deleting Sentences</h5>
+                      <ol className="list-decimal list-outside ml-4 space-y-2 text-[15px] site-text-strong font-medium">
+                        <li>Read in the right place (this sentence, following sentence, Sentence 5).</li>
+                        <li>Read the sentences before and after.</li>
+                        <li>Do not worry about length.</li>
+                        <li>The answer is almost never "undermines."</li>
+                        <li>If one part of the answer is wrong, the whole answer is wrong.</li>
+                      </ol>
+                    </div>
+
+                    <div>
+                      <h5 className="text-[13px] font-bold text-emerald-500 uppercase tracking-widest mb-3">Replacing Sentences</h5>
+                      <ol className="list-decimal list-outside ml-4 space-y-2 text-[15px] site-text-strong font-medium">
+                        <li>Match the key details in the sentence.</li>
+                        <li>Read in the right place.</li>
+                        <li>Match the sentence before and after.</li>
+                        <li>Most specific answer is usually correct.</li>
+                      </ol>
+                    </div>
+                  </div>
+                </div>
               </div>
             </motion.div>
           </div>

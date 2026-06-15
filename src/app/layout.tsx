@@ -3,6 +3,7 @@ import "./globals.css";
 import SidebarWrapper from "@/components/SidebarWrapper";
 import SiteAtmosphereWrapper from "@/components/SiteAtmosphereWrapper";
 import RouteTransition from "@/components/RouteTransition";
+import SupabaseSyncProvider from "@/components/SupabaseSyncProvider";
 
 export const metadata: Metadata = {
   title: "Target Prep - SAT Preparation",
@@ -36,6 +37,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body className="flex h-screen overflow-hidden bg-[var(--site-shell-bg)] transition-colors duration-300">
         <SiteAtmosphereWrapper />
+        <SupabaseSyncProvider />
         <SidebarWrapper />
         <main className="relative flex-1 overflow-y-auto">
           <RouteTransition>{children}</RouteTransition>

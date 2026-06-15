@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
-    ArrowLeft, Copy, Users, ClipboardList, CheckCircle2, Clock, GraduationCap, ChevronDown, ChevronUp, ChevronRight, X
+    ArrowLeft, Copy, Users, ClipboardList, CheckCircle2, Clock, GraduationCap, ChevronDown, ChevronUp, ChevronRight, X, Trash2
 } from 'lucide-react';
 import {
     FloatingPageShapes,
@@ -65,8 +65,10 @@ export default function ClassDetailPage() {
     const [expandedAssignmentId, setExpandedAssignmentId] = useState<string | null>(null);
     const [copiedCode, setCopiedCode] = useState(false);
     const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
+    const [confirmRemoveStudentId, setConfirmRemoveStudentId] = useState<string | null>(null);
+    const [confirmDeleteAssignmentId, setConfirmDeleteAssignmentId] = useState<string | null>(null);
 
-    const { classrooms, students, assignments, progress } = useClassroomStore();
+    const { classrooms, students, assignments, progress, removeStudent, deleteAssignment } = useClassroomStore();
 
     const cls = classrooms.find((c) => c.id === params.id);
 
@@ -267,7 +269,14 @@ export default function ClassDetailPage() {
                                                                 : <span className="text-[14px] site-text-muted">–</span>}
                                                         </td>
                                                         <td className="pr-8 py-5 text-right">
-                                                            <div className="flex justify-end">
+                                                            <div className="flex justify-end gap-2">
+                                                                <button
+                                                                    onClick={(e) => { e.stopPropagation(); setConfirmRemoveStudentId(student.id); }}
+                                                                    className="h-9 w-9 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all hover:bg-rose-100 dark:hover:bg-rose-900/40 text-rose-500"
+                                                                    title="Remove Student"
+                                                                >
+                                                                    <Trash2 className="h-4 w-4" />
+                                                                </button>
                                                                 <div className="h-9 w-9 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all -translate-x-2 group-hover:translate-x-0">
                                                                     <ChevronRight className="h-5 w-5 site-text-strong" />
                                                                 </div>
@@ -346,11 +355,18 @@ export default function ClassDetailPage() {
                                                                 <span className="text-[14px] font-bold site-text-strong">{completed}</span>
                                                                 <span className="text-[13px] site-text-muted">/{total}</span>
                                                             </td>
-                                                            <td className="px-6 py-4 text-center relative pr-10">
+                                                            <td className="px-6 py-4 text-center relative pr-16">
                                                                 {avgScore !== null
                                                                     ? <span className={`text-[14px] font-black ${scoreColor(avgScore)}`}>{avgScore}%</span>
                                                                     : <span className="text-[13px] site-text-muted">–</span>}
-                                                                <div className="absolute right-4 top-1/2 -translate-y-1/2 opacity-40 group-hover:opacity-100 transition-opacity">
+                                                                <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-2 opacity-40 group-hover:opacity-100 transition-opacity">
+                                                                    <button
+                                                                        onClick={(e) => { e.stopPropagation(); setConfirmDeleteAssignmentId(asgn.id); }}
+                                                                        className="h-7 w-7 rounded-full flex items-center justify-center hover:bg-rose-100 dark:hover:bg-rose-900/40 text-rose-500 transition-colors"
+                                                                        title="Delete Assignment"
+                                                                    >
+                                                                        <Trash2 className="h-3.5 w-3.5" />
+                                                                    </button>
                                                                     {isExpanded ? <ChevronUp className="h-4 w-4 site-text-strong" /> : <ChevronDown className="h-4 w-4 site-text-strong" />}
                                                                 </div>
                                                             </td>
@@ -546,6 +562,58 @@ export default function ClassDetailPage() {
                                 </div>
                             </div>
 
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
+
+            {/* Confirm Remove Student Modal */}
+            <AnimatePresence>
+                {confirmRemoveStudentId && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm" onClick={() => setConfirmRemoveStudentId(null)}>
+                        <motion.div 
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0, scale: 0.95 }}
+                            className="bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-slate-100 dark:border-slate-800 p-6 max-w-sm w-full" 
+                            onClick={e => e.stopPropagation()}
+                        >
+                            <h3 className="font-bold text-lg site-text-strong mb-2">Remove Student</h3>
+                            <p className="site-text-muted mb-6 text-sm">Are you sure you want to remove this student from the class? This cannot be undone.</p>
+                            <div className="flex justify-end gap-3">
+                                <button onClick={() => setConfirmRemoveStudentId(null)} className="px-5 py-2.5 text-sm font-bold site-text-muted hover:site-text-strong transition">
+                                    Cancel
+                                </button>
+                                <button onClick={() => { removeStudent(confirmRemoveStudentId); setConfirmRemoveStudentId(null); }} className="px-5 py-2.5 text-sm font-bold text-white bg-rose-600 hover:bg-rose-700 rounded-full transition shadow-sm">
+                                    Remove
+                                </button>
+                            </div>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
+
+            {/* Confirm Delete Assignment Modal */}
+            <AnimatePresence>
+                {confirmDeleteAssignmentId && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm" onClick={() => setConfirmDeleteAssignmentId(null)}>
+                        <motion.div 
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0, scale: 0.95 }}
+                            className="bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-slate-100 dark:border-slate-800 p-6 max-w-sm w-full" 
+                            onClick={e => e.stopPropagation()}
+                        >
+                            <h3 className="font-bold text-lg site-text-strong mb-2">Delete Assignment</h3>
+                            <p className="site-text-muted mb-6 text-sm">Are you sure you want to delete this assignment? This cannot be undone.</p>
+                            <div className="flex justify-end gap-3">
+                                <button onClick={() => setConfirmDeleteAssignmentId(null)} className="px-5 py-2.5 text-sm font-bold site-text-muted hover:site-text-strong transition">
+                                    Cancel
+                                </button>
+                                <button onClick={() => { deleteAssignment(confirmDeleteAssignmentId); setConfirmDeleteAssignmentId(null); }} className="px-5 py-2.5 text-sm font-bold text-white bg-rose-600 hover:bg-rose-700 rounded-full transition shadow-sm">
+                                    Delete
+                                </button>
+                            </div>
                         </motion.div>
                     </div>
                 )}

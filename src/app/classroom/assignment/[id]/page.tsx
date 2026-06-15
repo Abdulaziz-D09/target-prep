@@ -10,6 +10,7 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 
 import { useClassroomStore, seedOnce } from '@/store/classroomStore';
+import { createClient } from '@/lib/supabase/client';
 import {
     readStudentAssignmentProgress,
     StudentAssignmentOption,
@@ -29,8 +30,18 @@ export default function ClassroomAssignmentDetailPage() {
     const { id } = useParams<{ id: string }>();
     const router = useRouter();
 
-    const { assignments, seed } = useClassroomStore();
+    const { assignments, students, submitAssignmentProgress, seed } = useClassroomStore();
     useEffect(() => { seed(); }, [seed]);
+
+    const [userId, setUserId] = useState<string | null>(null);
+    useEffect(() => {
+        const supabase = createClient();
+        supabase.auth.getUser().then(({ data }) => {
+            if (data?.user) {
+                setUserId(data.user.id);
+            }
+        });
+    }, []);
 
     const assignment = assignments.find((item) => item.id === id);
     const subject = assignment?.subject ?? 'English';
@@ -114,7 +125,26 @@ export default function ClassroomAssignmentDetailPage() {
             hasStarted: mode !== 'intro',
             updatedAt: new Date().toISOString(),
         });
-    }, [assignment, hasHydrated, totalQuestions, answers, currentIdx, mode, timeRemaining]);
+
+        // Trigger store & Supabase progress sync
+        const currentStudent = students.find(s => 
+            s.user_id === userId && 
+            assignment.classroomIds.includes(s.classroomId)
+        );
+        const resolvedStudentId = currentStudent?.id || 'guest-student';
+        const answeredCount = Object.keys(answers).length;
+        const correctCount = assignment.questions.filter((q, idx) => answers[String(idx)] === q.answer).length;
+        const isCompleted = mode === 'complete' || mode === 'review';
+
+        submitAssignmentProgress(
+            resolvedStudentId,
+            assignment.id,
+            answeredCount,
+            correctCount,
+            assignment.questions.length,
+            isCompleted
+        );
+    }, [assignment, hasHydrated, totalQuestions, answers, currentIdx, mode, timeRemaining, userId, students, submitAssignmentProgress]);
 
     // ── Drag divider ─────────────────────────────────────────────────────────
 
@@ -528,10 +558,10 @@ export default function ClassroomAssignmentDetailPage() {
                 )}
 {/* ── Right pane: question + answers ── */}
                 <div
-                    className={`overflow-y-auto p-4 lg:p-10 pl-4 lg:pl-8 flex justify-center bg-white ${!isDragging && isMath ? 'transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]' : ''}`}
+                    className={`overflow-y-auto p-4 lg:p-10 pl-4 lg:pl-8 bg-white ${!isDragging && isMath ? 'transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]' : ''}`}
                     style={{ width: (isMath && !isDesmosOpen) ? '100%' : `${100 - leftPanelWidth}%` }}
                 >
-                    <div className="w-full max-w-[800px] flex flex-col">
+                    <div className="w-full max-w-[800px] mx-auto flex flex-col">
                         {/* Header: Connected Question Number & Mark for Review & ABC */}
                         <div className="flex items-center mb-6 mt-4 w-full  bg-white border border-[#E5E7EB] rounded-[12px] shadow-sm h-[44px]">
                             {/* Number */}
@@ -647,6 +677,9 @@ export default function ClassroomAssignmentDetailPage() {
                                     </div>
                                 );
                             })}
+                            
+                            {/* Spacer to prevent Option D from touching footer due to flex overflow bugs */}
+                            <div className="h-24 shrink-0 w-full"></div>
                         </div>
                     </div>
                 </div>
@@ -727,7 +760,7 @@ export default function ClassroomAssignmentDetailPage() {
 
             
             {/* Premium Bottom Navigation Bar */}
-            <footer className="bg-white/80 backdrop-blur-lg border-t border-slate-200/80 px-8 h-[76px] flex items-center justify-between shrink-0 absolute bottom-0 left-0 right-0 z-40 shadow-[0_-2px_15px_rgba(0,0,0,0.03)]">
+            <footer className="bg-white/80 backdrop-blur-lg border-t border-slate-200/80 px-8 h-[76px] flex items-center justify-between shrink-0 z-40 shadow-[0_-2px_15px_rgba(0,0,0,0.03)]">
                 <div className="w-48"></div>
 
                 <div className="absolute left-1/2 -translate-x-1/2">

@@ -18,7 +18,6 @@ const studentNavItems: NavItem[] = [
     { href: '/dashboard', label: 'Home', icon: Home },
     { href: '/study-plan', label: 'Study Vault', icon: Map },
     { href: '/practice', label: 'Practice Tests', icon: FileText },
-    { href: '#', label: 'SAT Go!', icon: Rocket, badge: 'Soon' },
     { href: '/question-bank', label: 'Question Bank', icon: LayoutGrid },
     { href: '/classroom', label: 'Classroom', icon: GraduationCap },
     { href: '/progress', label: 'Progress', icon: BarChart2 },

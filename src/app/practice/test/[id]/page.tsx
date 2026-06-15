@@ -9,6 +9,7 @@ import { HighlightableText } from '@/components/HighlightableText';
 import DesmosCalculator from '@/components/DesmosCalculator';
 import { ReferenceSheet } from '@/components/ReferenceSheet';
 import { cleanOCR, PassageRenderer } from '@/components/PassageRenderer';
+import { MathText } from '@/components/MathText';
 import Link from 'next/link';
 import { AnimatePresence, motion } from 'framer-motion';
 
@@ -79,7 +80,7 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
     }
 
     const {
-        currentSectionIndex, currentModuleIndex, currentQuestionIndex,
+        currentTestId, currentSectionIndex, currentModuleIndex, currentQuestionIndex,
         userAnswers, flaggedQuestions, eliminatedAnswers, highlights, timeRemaining, showResults, isTestActive, isIntroScreen,
         startTest, beginTimer, selectAnswer, toggleFlag, toggleElimination,
         addHighlight, removeHighlight, updateHighlight,
@@ -117,7 +118,9 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
     const [isExitModalOpen, setIsExitModalOpen] = useState(false);
     const [fsWarningCountdown, setFsWarningCountdown] = useState<number | null>(null);
     const [isKickedOut, setIsKickedOut] = useState(false);
+    const [isExiting, setIsExiting] = useState(false);
     const fsCountdownRef = useRef<ReturnType<typeof setInterval> | null>(null);
+    const [expandedImage, setExpandedImage] = useState<string | null>(null);
 
     const clearActiveSession = () => {
         if (typeof window === 'undefined') return;
@@ -340,11 +343,11 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
     }, [test, hasInitialized, resumeRequested, testId, moduleKey, isFullTest]);
 
     useEffect(() => {
-        if (test && !isTestActive && !showResults && !isIntroScreen && transitionState === 'none') {
+        if (currentTestId === testId && test && !isTestActive && !showResults && !isIntroScreen && transitionState === 'none') {
             beginTimer();
             setTimeRemaining(test.sections[0].modules[0].timeMinutes * 60);
         }
-    }, [test, isTestActive, isIntroScreen, showResults, transitionState, beginTimer, setTimeRemaining]);
+    }, [currentTestId, testId, test, isTestActive, isIntroScreen, showResults, transitionState, beginTimer, setTimeRemaining]);
 
     useEffect(() => {
         if (transitionState !== 'none' || showResults || !test) return;
@@ -377,7 +380,7 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
     }, [transitionState]);
 
     useEffect(() => {
-        if (!hasInitialized || !isFullTest) return;
+        if (!hasInitialized || !isFullTest || currentTestId !== testId) return;
 
         if (showResults) {
             clearActiveSession();
@@ -399,6 +402,7 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
         transitionState,
         showCheckWork,
         testId,
+        currentTestId,
         moduleKey,
         currentSectionIndex,
         currentModuleIndex,
@@ -409,6 +413,17 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
         highlights,
         timeRemaining,
     ]);
+
+    if (isExiting) {
+        return (
+            <div className="h-full flex items-center justify-center bg-slate-50 fixed inset-0 z-[9999]">
+                <div className="flex flex-col items-center gap-4">
+                    <div className="w-10 h-10 rounded-full border-[3px] border-slate-200 border-t-blue-600 animate-spin"></div>
+                    <p className="text-slate-500 font-medium animate-pulse">Loading...</p>
+                </div>
+            </div>
+        );
+    }
 
     if (!test) return <div className="p-8 text-slate-800">Test not found</div>;
 
@@ -538,10 +553,31 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
         if (isReviewing || isExternalReview) {
             return (
                 <div className="h-full flex flex-col bg-[#fafafa]">
+                    {/* Modal for expanded image */}
+                    {expandedImage && (
+                        <div 
+                            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 sm:p-8 cursor-pointer"
+                            onClick={() => setExpandedImage(null)}
+                        >
+                            <div className="relative max-w-5xl w-full max-h-full flex items-center justify-center cursor-default" onClick={e => e.stopPropagation()}>
+                                <button 
+                                    onClick={() => setExpandedImage(null)}
+                                    className="absolute -top-12 right-0 md:-right-12 md:top-0 w-10 h-10 bg-white rounded-full flex items-center justify-center text-slate-800 hover:bg-slate-200 transition-colors z-[100] shadow-lg border border-slate-200"
+                                >
+                                    <X className="w-6 h-6" />
+                                </button>
+                                <img 
+                                    src={expandedImage} 
+                                    alt="Expanded question figure" 
+                                    className="max-w-full max-h-[85vh] object-contain bg-white rounded-xl shadow-2xl p-4"
+                                />
+                            </div>
+                        </div>
+                    )}
                     <header className="bg-white border-b border-black/5 px-6 sm:px-10 py-4 flex items-center justify-between shadow-sm sticky top-0 z-20">
                         <div className="flex items-center gap-4">
                             <button onClick={() => {
-                                if (isExternalReview) router.push('/progress');
+                                if (isExternalReview) { setIsExiting(true); router.push('/progress'); }
                                 else setIsReviewing(false);
                             }} className="text-slate-500 hover:text-slate-900 flex items-center gap-2 font-medium bg-slate-50 px-3 py-1.5 rounded-md transition-colors">
                                 <ArrowLeft className="w-4 h-4" /> Back
@@ -585,8 +621,13 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
                                                             </div>
                                                         )}
                                                         {q.image && (
-                                                            <div className="mb-4 rounded-xl overflow-hidden border border-slate-200 bg-slate-50 flex items-center justify-center">
-                                                                <img src={q.image} alt="Question figure" className="max-w-full max-h-[280px] object-contain p-2" />
+                                                            <div className="mb-6 border border-slate-200 rounded-xl overflow-hidden bg-slate-50 flex items-center justify-center p-4">
+                                                                <img 
+                                                                    src={q.image} 
+                                                                    alt="Question figure" 
+                                                                    className="max-w-full max-h-[250px] object-contain cursor-pointer hover:opacity-90 transition-opacity" 
+                                                                    onClick={() => setExpandedImage(q.image)}
+                                                                />
                                                             </div>
                                                         )}
                                                         <h4 className="text-lg font-medium text-slate-900 mb-6">{cleanOCR(q.question || '')}</h4>
@@ -657,10 +698,10 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
 
                     <div className="space-y-3">
                         <div className="grid grid-cols-2 gap-3">
-                            <button onClick={() => { router.push('/dashboard'); setTimeout(() => resetTest(), 500); }} className="bg-white border-2 border-slate-200 text-slate-700 py-3.5 rounded-xl font-bold hover:bg-slate-50 hover:border-slate-300 transition-all flex items-center justify-center gap-2">
+                            <button onClick={() => { setIsExiting(true); router.push('/dashboard'); setTimeout(() => resetTest(), 500); }} className="bg-white border-2 border-slate-200 text-slate-700 py-3.5 rounded-xl font-bold hover:bg-slate-50 hover:border-slate-300 transition-all flex items-center justify-center gap-2">
                                 <Home className="w-4 h-4" /> Home
                             </button>
-                            <button onClick={() => { router.push(searchParams.get('mockId') ? '/dashboard/mocks?tab=completed' : '/progress'); setTimeout(() => resetTest(), 500); }} className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white py-3.5 rounded-xl font-bold transition-all shadow-md shadow-blue-500/20 flex items-center justify-center gap-2">
+                            <button onClick={() => { setIsExiting(true); router.push(searchParams.get('mockId') ? '/dashboard/mocks?tab=completed' : '/progress'); setTimeout(() => resetTest(), 500); }} className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white py-3.5 rounded-xl font-bold transition-all shadow-md shadow-blue-500/20 flex items-center justify-center gap-2">
                                 <BarChart3 className="w-4 h-4" /> {searchParams.get('mockId') ? 'Mock History' : 'Progress'}
                             </button>
                         </div>
@@ -917,9 +958,30 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
     const currentEliminations = eliminatedAnswers[questionKey] || [];
 
     return (
-        <div
-            className="h-[100dvh] flex flex-col bg-slate-50 font-[system-ui,-apple-system,BlinkMacSystemFont,'Segoe_UI',Roboto,sans-serif] overflow-hidden"
-        >
+        <>
+            {/* Modal for expanded image */}
+            {expandedImage && (
+                <div 
+                    className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 sm:p-8 cursor-pointer"
+                    onClick={() => setExpandedImage(null)}
+                >
+                    <div className="relative max-w-5xl w-full max-h-full flex items-center justify-center cursor-default" onClick={e => e.stopPropagation()}>
+                        <button 
+                            onClick={() => setExpandedImage(null)}
+                            className="absolute -top-12 right-0 md:-right-12 md:top-0 w-10 h-10 bg-white rounded-full flex items-center justify-center text-slate-800 hover:bg-slate-200 transition-colors z-[100] shadow-lg border border-slate-200"
+                        >
+                            <X className="w-6 h-6" />
+                        </button>
+                        <img 
+                            src={expandedImage} 
+                            alt="Expanded question figure" 
+                            className="max-w-full max-h-[85vh] object-contain bg-white rounded-xl shadow-2xl p-4"
+                        />
+                    </div>
+                </div>
+            )}
+            
+            <div className="absolute inset-0 z-50 bg-[#F3F4F6] font-sans overflow-hidden flex flex-col">
             {/* Strict Mode Fullscreen Warning */}
             {fsWarningCountdown !== null && !isKickedOut && (
                 <div className="fixed inset-0 z-[100] flex items-center justify-center bg-red-900/90 backdrop-blur-md">
@@ -1046,12 +1108,73 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
                             <span className="font-bold text-[12px] leading-none">Fullscreen</span>
                         </button>
                     )}
+                    <button
+                        onClick={() => { setIsExitModalOpen(true); setIsReferenceOpen(false); }}
+                        className="flex flex-col items-center justify-center gap-1.5 w-[80px] h-[64px] rounded-lg hover:bg-black/5 text-slate-700 transition-colors"
+                    >
+                        <div className="flex items-center justify-center w-6 h-6 bg-slate-800 rounded text-white">
+                            <X className="w-3.5 h-3.5" />
+                        </div>
+                        <span className="font-bold text-[12px] leading-none">Save & Exit</span>
+                    </button>
                 </div>
             </header>
 
+            {/* Custom Exit Modal */}
+            <AnimatePresence>
+                {isExitModalOpen && (
+                    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm"
+                            onClick={() => setIsExitModalOpen(false)}
+                        />
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.95, y: 10 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.95, y: 10 }}
+                            className="relative w-full max-w-[420px] overflow-hidden rounded-[24px] bg-white shadow-[0_24px_50px_rgba(0,0,0,0.2)] p-7"
+                        >
+                            <h2 className="text-2xl font-black tracking-tight text-slate-800 mb-2">Save & Exit?</h2>
+                            <p className="text-[14px] text-slate-500 mb-8 leading-6">
+                                Your progress is automatically saved to your device. You can resume this session later from the dashboard.
+                            </p>
+                            <div className="flex items-center gap-3 justify-end">
+                                <button
+                                    onClick={() => setIsExitModalOpen(false)}
+                                    className="px-5 py-2.5 rounded-full text-sm font-bold text-slate-600 hover:bg-slate-100 transition"
+                                >
+                                    Continue Testing
+                                </button>
+                                <button
+                                    onClick={() => {
+                                        setIsExitModalOpen(false);
+                                        if (isFullTest) {
+                                            persistActiveSession();
+                                        }
+                                        setIsExiting(true);
+                                        setTimeout(() => resetTest(), 500);
+                                        if (mockId) {
+                                            router.push('/dashboard/mocks');
+                                        } else {
+                                            router.push('/practice');
+                                        }
+                                    }}
+                                    className="px-6 py-2.5 rounded-full text-sm font-bold bg-[#111827] text-white hover:bg-slate-800 shadow-md transition"
+                                >
+                                    Save & Exit
+                                </button>
+                            </div>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
+
 
             {/* Split Pane Content Area */}
-            <main className="flex-1 flex overflow-hidden bg-white pb-[70px]">
+            <main className="flex-1 flex overflow-hidden bg-white">
                 {!showCheckWork ? (
                     <div className="w-full bg-white flex overflow-hidden relative">
 
@@ -1128,8 +1251,8 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
                         )}
 
                         {/* Right Pane (Question Area) */}
-                        <div className={`overflow-y-auto p-4 lg:p-10 pl-4 lg:pl-8 flex justify-center bg-white ${!isDragging && currentSection?.name === 'Math' ? 'transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]' : ''}`} style={{ width: (currentSection?.name === 'Math' && !isDesmosOpen) ? '100%' : `${100 - leftPanelWidth}%` }}>
-                            <div className="w-full max-w-[800px] flex flex-col">
+                        <div className={`overflow-y-auto p-4 lg:p-10 pl-4 lg:pl-8 bg-white ${!isDragging && currentSection?.name === 'Math' ? 'transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]' : ''}`} style={{ width: (currentSection?.name === 'Math' && !isDesmosOpen) ? '100%' : `${100 - leftPanelWidth}%` }}>
+                            <div className="w-full max-w-[800px] mx-auto flex flex-col pb-10">
 
                                 {/* Header: Connected Question Number & Mark for Review & ABC */}
                                 <div className="flex items-center mb-6 mt-4 w-full bg-white border border-[#E5E7EB] rounded-[12px] shadow-sm h-[54px]">
@@ -1161,33 +1284,51 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
                                 {/* Question Content */}
                                 {/* Math question image/graph */}
                                 {currentQuestion?.image && (
-                                    <div className="mb-5 rounded-xl overflow-hidden border border-slate-200 bg-slate-50 flex items-center justify-center">
+                                    <div className="mb-5 flex items-center justify-center">
                                         <img
                                             src={currentQuestion.image}
                                             alt="Question figure"
-                                            className="max-w-full max-h-[320px] object-contain p-2"
+                                            className="max-w-full max-h-[200px] object-contain cursor-pointer hover:opacity-90 transition-opacity"
+                                            onClick={() => setExpandedImage(currentQuestion.image)}
                                         />
                                     </div>
                                 )}
                                 <div className="text-[18px] text-[#111827] mb-6 leading-relaxed">
-                                    <HighlightableText
-                                        text={cleanOCR(
-                                            // For math, use passage as question if question is empty
-                                            currentSection?.name === 'Math'
-                                                ? (currentQuestion?.question || currentQuestion?.passage || '')
-                                                // For reading/writing: use ONLY the stem/question, never the passage
-                                                : (currentQuestion?.question || '')
-                                        ).replace(/^\s*\d+[\.\)]\s*/, '')}
-                                        highlights={highlights[`q-${questionKey}`] || []}
-                                        onAddHighlight={(h) => addHighlight(`q-${questionKey}`, { ...h, id: Math.random().toString(36).substring(2, 11) })}
-                                        onRemoveHighlight={(id) => removeHighlight(`q-${questionKey}`, id)}
-                                        onUpdateHighlight={(id, updates) => updateHighlight(`q-${questionKey}`, id, updates)}
-                                        isHighlightModeActive={isHighlightActive}
-                                    />
+                                    {currentSection?.name === 'Math' ? (
+                                        <MathText
+                                            text={cleanOCR(
+                                                currentQuestion?.question || currentQuestion?.passage || ''
+                                            ).replace(/^\s*\d+[\.\)]\s*/, '')}
+                                            style={{ fontSize: 18, lineHeight: 1.7, display: 'block' }}
+                                        />
+                                    ) : (
+                                        <HighlightableText
+                                            text={cleanOCR(currentQuestion?.question || '').replace(/^\s*\d+[\.\)]\s*/, '')}
+                                            highlights={highlights[`q-${questionKey}`] || []}
+                                            onAddHighlight={(h) => addHighlight(`q-${questionKey}`, { ...h, id: Math.random().toString(36).substring(2, 11) })}
+                                            onRemoveHighlight={(id) => removeHighlight(`q-${questionKey}`, id)}
+                                            onUpdateHighlight={(id, updates) => updateHighlight(`q-${questionKey}`, id, updates)}
+                                            isHighlightModeActive={isHighlightActive}
+                                        />
+                                    )}
                                 </div>
 
-                                {/* Answer Options */}
+                                {/* Answer Options or SPR Input */}
                                 <div className="space-y-4 w-full relative pl-[2px] pt-[2px]">
+                                    {currentQuestion?.type === 'Math (SPR)' || (currentQuestion?.options && currentQuestion.options.length === 0) ? (
+                                        <div className="flex flex-col gap-2">
+                                            <input
+                                                type="text"
+                                                id="spr-answer-input"
+                                                value={typeof userAnswers[questionKey] === 'string' ? userAnswers[questionKey] as string : typeof userAnswers[questionKey] === 'number' ? String(userAnswers[questionKey]) : ''}
+                                                onChange={(e) => selectAnswer(questionKey, e.target.value)}
+                                                className="w-[200px] h-[52px] border-2 border-[#D1D5DB] rounded-[8px] px-4 text-[18px] font-mono font-bold text-[#111827] focus:outline-none focus:border-[#111827] transition-colors bg-white"
+                                                autoComplete="off"
+                                                spellCheck={false}
+                                            />
+
+                                        </div>
+                                    ) : null}
                                     {currentQuestion?.options.map((opt, i) => {
                                         const isSelected = userAnswers[questionKey] === i;
                                         const isEliminated = currentEliminations.includes(i);
@@ -1227,7 +1368,11 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
                                                     {/* Answer Text */}
                                                     <div className="flex-1 p-4 flex items-center bg-transparent">
                                                         <span className={`text-[17px] font-sans ${isEliminated ? 'text-slate-400' : 'text-[#111827]'}`}>
-                                                            {cleanOCR(opt || '').replace(/^\s*[A-D][\.\)]\s*/, '')}
+                                                            {currentSection?.name === 'Math' ? (
+                                                                <MathText text={cleanOCR(opt || '').replace(/^\s*[A-D][\.\)]\s*/, '')} />
+                                                            ) : (
+                                                                cleanOCR(opt || '').replace(/^\s*[A-D][\.\)]\s*/, '')
+                                                            )}
                                                         </span>
                                                     </div>
 
@@ -1264,6 +1409,9 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
                                         );
                                     })}
                                 </div>
+                                
+                                {/* Spacer to prevent Option D from touching footer due to flex overflow bugs */}
+                                <div className="h-24 shrink-0 w-full"></div>
                             </div>
                         </div>
                     </div>
@@ -1298,7 +1446,7 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
                                         const isAnswered = userAnswers[key] !== undefined;
                                         const isFlagged = flaggedQuestions[key];
 
-                                        let boxClass = 'cursor-pointer font-bold text-[15px] flex items-center justify-center relative transition-all w-10 h-10 ';
+                                        let boxClass = 'cursor-pointer font-bold text-[15px] flex items-center justify-center relative transition-all w-10 h-10 rounded-md ';
 
                                         if (isAnswered) {
                                             boxClass += 'bg-[#111827] text-white hover:bg-[#374151]';
@@ -1332,7 +1480,7 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
             </main>
 
             {/* Premium Bottom Navigation Bar */}
-            <footer className="bg-white/80 backdrop-blur-lg border-t border-slate-200/80 px-8 h-[76px] flex items-center justify-between shrink-0 absolute bottom-0 left-0 right-0 z-40 shadow-[0_-2px_15px_rgba(0,0,0,0.03)]">
+            <footer className="bg-white/80 backdrop-blur-lg border-t border-slate-200/80 px-8 h-[76px] flex items-center justify-between shrink-0 z-40 shadow-[0_-2px_15px_rgba(0,0,0,0.03)]">
                 <div className="w-48"></div>
 
                 {!showCheckWork && (
@@ -1411,7 +1559,7 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
                                     const isFlagged = flaggedQuestions[key];
                                     const isActive = idx === currentQuestionIndex;
 
-                                    let boxClass = 'border-2 cursor-pointer font-bold text-[14px] w-12 h-12 flex items-center justify-center relative transition-all ';
+                                    let boxClass = 'border-2 cursor-pointer font-bold text-[14px] w-12 h-12 flex items-center justify-center relative transition-all rounded-md ';
 
                                     if (isActive && isAnswered) {
                                         boxClass += 'border-[#2563EB] bg-[#111827] text-white shadow-[inset_0_0_0_2px_#2563EB]';
@@ -1450,6 +1598,6 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
             <ReferenceSheet isOpen={isReferenceOpen} onClose={() => setIsReferenceOpen(false)} />
         </div>
     );
+        </>
+    );
 }
-
-// Ensure the modal replaces the final return block properly

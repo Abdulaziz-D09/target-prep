@@ -88,81 +88,109 @@ export function HighlightableText({
         setSelectionRange(null);
     };
 
-    // Render text with highlights
-    const renderContent = () => {
-        if (!highlights || highlights.length === 0) return <LatexRenderer text={text} />;
+    // We force a full remount of the content whenever highlights change,
+    // so we can safely mutate the DOM to add highlight spans without fighting React's reconciliation.
+    const contentKey = React.useMemo(() => {
+        return highlights.map(h => `${h.id}-${h.color}-${h.isUnderline ? 'u' : 'n'}`).join('|') + text.length;
+    }, [highlights, text]);
 
-        // Sort highlights by start offset
-        const sorted = [...highlights].sort((a, b) => a.start - b.start);
+    useEffect(() => {
+        if (!containerRef.current || !highlights || highlights.length === 0) return;
 
-        const nodes: React.ReactNode[] = [];
-        let currentIndex = 0;
-
-        sorted.forEach((h) => {
-            // Add unhighlighted text before this highlight
-            if (h.start > currentIndex) {
-                nodes.push(<LatexRenderer key={`text-${currentIndex}`} text={text.substring(currentIndex, h.start)} className="inline" />);
+        const walker = document.createTreeWalker(containerRef.current, NodeFilter.SHOW_TEXT);
+        const textNodes: { node: Text, start: number, end: number }[] = [];
+        let offset = 0;
+        let n: Node | null;
+        
+        while ((n = walker.nextNode())) {
+            const len = n.textContent?.length || 0;
+            if (len > 0) {
+                textNodes.push({ node: n as Text, start: offset, end: offset + len });
+                offset += len;
             }
-
-            // Draw highlight
-            if (h.start < text.length && h.end > currentIndex) {
-                const highlightText = text.substring(Math.max(currentIndex, h.start), Math.min(text.length, h.end));
-                const highlightClass = h.isUnderline ? 'highlight-underline' : `highlight-${h.color}`;
-
-                nodes.push(
-                    <span
-                        key={`hl-${h.id}`}
-                        className={`relative group cursor-pointer ${highlightClass}`}
-                        onClick={() => h.note ? setActiveNoteHighlightId(h.id) : null}
-                    >
-                        <LatexRenderer text={highlightText} className="inline" />
-
-                        {/* Note Indicator Indicator */}
-                        {h.note && (
-                            <span className="absolute -top-3 -right-2 bg-blue-500 text-white w-4 h-4 rounded-full flex items-center justify-center text-[10px] shadow-sm">
-                                !
-                            </span>
-                        )}
-
-                        {/* Hover Tools */}
-                        {!activeNoteHighlightId && (
-                            <div className="absolute bottom-full left-1/2 -translate-x-1/2 pb-1 hidden group-hover:flex z-50">
-                                <div className="flex items-center gap-1 bg-[#111827] text-white p-1 rounded-md shadow-lg whitespace-nowrap">
-                                    <button
-                                        onClick={(e) => { e.stopPropagation(); setActiveNoteHighlightId(h.id); setNoteText(h.note || ''); }}
-                                        className="p-1.5 hover:bg-slate-700 rounded transition-colors text-xs flex items-center gap-1"
-                                    >
-                                        <MessageSquarePlus className="w-3 h-3" /> Note
-                                    </button>
-                                    <div className="w-px h-4 bg-slate-600 mx-1"></div>
-                                    <button
-                                        onClick={(e) => { e.stopPropagation(); onRemoveHighlight(h.id); }}
-                                        className="p-1.5 hover:bg-red-500 hover:text-white rounded transition-colors text-xs flex items-center gap-1 text-red-400"
-                                    >
-                                        <Trash2 className="w-3 h-3" /> Remove
-                                    </button>
-                                </div>
-                            </div>
-                        )}
-                    </span>
-                );
-                currentIndex = h.end;
-            }
-        });
-
-        // Add remaining text
-        if (currentIndex < text.length) {
-            nodes.push(<LatexRenderer key={`text-${currentIndex}`} text={text.substring(currentIndex)} className="inline" />);
         }
 
-        return nodes;
-    };
+        const sortedHighlights = [...highlights].sort((a, b) => b.start - a.start);
+
+        sortedHighlights.forEach(h => {
+            const overlaps = textNodes.filter(tn => tn.end > h.start && tn.start < h.end);
+            
+            // Process overlaps in reverse so we don't invalidate offsets of earlier nodes in the same text node
+            overlaps.reverse().forEach(tn => {
+                const relStart = Math.max(0, h.start - tn.start);
+                const relEnd = Math.min(tn.node.length, h.end - tn.start);
+                
+                if (relStart >= relEnd) return;
+
+                try {
+                    const range = document.createRange();
+                    range.setStart(tn.node, relStart);
+                    range.setEnd(tn.node, relEnd);
+
+                    const span = document.createElement('span');
+                    span.className = `relative group cursor-pointer ${h.isUnderline ? 'highlight-underline' : `highlight-${h.color}`}`;
+                    
+                    if (h.note) {
+                        const noteInd = document.createElement('span');
+                        noteInd.className = "absolute -top-3 -right-2 bg-blue-500 text-white w-4 h-4 rounded-full flex items-center justify-center text-[10px] shadow-sm";
+                        noteInd.textContent = "!";
+                        span.appendChild(noteInd);
+                        
+                        span.onclick = (e) => {
+                            e.stopPropagation();
+                            setActiveNoteHighlightId(h.id);
+                        };
+                    } else {
+                        // Hover Tools
+                        const hoverDiv = document.createElement('div');
+                        hoverDiv.className = "absolute bottom-full left-1/2 -translate-x-1/2 pb-1 hidden group-hover:flex z-50";
+                        
+                        const innerDiv = document.createElement('div');
+                        innerDiv.className = "flex items-center gap-1 bg-[#111827] text-white p-1 rounded-md shadow-lg whitespace-nowrap";
+                        
+                        const noteBtn = document.createElement('button');
+                        noteBtn.className = "p-1.5 hover:bg-slate-700 rounded transition-colors text-xs flex items-center gap-1";
+                        noteBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square-plus"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><line x1="9" x2="15" y1="10" y2="10"/><line x1="12" x2="12" y1="7" y2="13"/></svg> Note`;
+                        noteBtn.onclick = (e) => {
+                            e.stopPropagation();
+                            setActiveNoteHighlightId(h.id);
+                            setNoteText(h.note || '');
+                        };
+
+                        const divider = document.createElement('div');
+                        divider.className = "w-px h-4 bg-slate-600 mx-1";
+
+                        const removeBtn = document.createElement('button');
+                        removeBtn.className = "p-1.5 hover:bg-red-500 hover:text-white rounded transition-colors text-xs flex items-center gap-1 text-red-400";
+                        removeBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash-2"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg> Remove`;
+                        removeBtn.onclick = (e) => {
+                            e.stopPropagation();
+                            onRemoveHighlight(h.id);
+                        };
+
+                        innerDiv.appendChild(noteBtn);
+                        innerDiv.appendChild(divider);
+                        innerDiv.appendChild(removeBtn);
+                        hoverDiv.appendChild(innerDiv);
+                        span.appendChild(hoverDiv);
+                    }
+
+                    range.surroundContents(span);
+                } catch (e) {
+                    console.warn("Could not apply highlight to range", e);
+                }
+            });
+        });
+
+    }, [contentKey, highlights]);
 
     return (
         <div className={`relative break-words whitespace-pre-wrap font-sans text-base leading-relaxed text-[#374151] [text-wrap:pretty] ${className ?? ''}`}>
             {/* The Text Container */}
             <div ref={containerRef} className={`${isHighlightModeActive ? 'selection:bg-slate-200 selection:text-black cursor-text' : ''}`}>
-                {renderContent()}
+                <div key={contentKey}>
+                    <LatexRenderer text={text} />
+                </div>
             </div>
 
             {/* Selection Popover */}

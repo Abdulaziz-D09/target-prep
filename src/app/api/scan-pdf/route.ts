@@ -23,6 +23,12 @@ If a question contains a data grid or table, you MUST reconstruct it as a clean 
 CRITICAL INSTRUCTION FOR GRAPHS, CHARTS, AND DIAGRAMS:
 If a question contains a graph, chart, diagram, or geometric figure, you MUST write a highly detailed textual paragraph describing all key details of the visual data (such as the axes, labels, data trends, points of intersection, coordinates, geometric parameters, or angles) and place it directly inside the "passage" or "stem" field. For example: "[Graph details: A coordinate plane showing y = f(x) intersecting the x-axis at (2,0) and y-axis at (0,4)...]". This ensures students have full visual context.
 
+CRITICAL INSTRUCTION FOR MESSY AND OCR TEXT:
+If the source text is messy due to copy-pasting from a PDF (e.g. erratic gaps between words, broken sentences, missing question numbers, unaligned columns, or merged options), YOU MUST CLEAN IT UP. 
+- Reconstruct fragmented words and sentences into proper English/Math formatting.
+- Automatically infer missing question numbers if they are omitted.
+- Fix broken spacing so it is readable and perfectly formatted.
+
 Return ONLY a valid JSON object with this EXACT structure (no markdown fences, no extra text):
 {
   "questions": [

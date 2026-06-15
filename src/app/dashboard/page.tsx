@@ -153,10 +153,19 @@ function getCountdown(targetMs: number): Countdown {
   };
 }
 
+const SCORE_RELEASE_DATES = [
+  { name: 'June SAT', date: 'June 22, 2026', target: '2026-06-22T16:30:00+05:00', testTarget: '2026-06-06T08:00:00' },
+  { name: 'August SAT', date: 'September 5, 2026', target: '2026-09-05T16:30:00+05:00', testTarget: '2026-08-22T08:00:00' },
+  { name: 'October SAT', date: 'October 17, 2026', target: '2026-10-17T16:30:00+05:00', testTarget: '2026-10-03T08:00:00' },
+  { name: 'November SAT', date: 'November 20, 2026', target: '2026-11-20T16:30:00+05:00', testTarget: '2026-11-07T08:00:00' },
+  { name: 'December SAT', date: 'December 19, 2026', target: '2026-12-19T16:30:00+05:00', testTarget: '2026-12-05T08:00:00' },
+];
+
 export default function HomePage() {
   const shouldReduceMotion = useReducedMotion();
   const [todayLabel, setTodayLabel] = useState('');
   const [countdown, setCountdown] = useState<Countdown>(EMPTY_COUNTDOWN);
+  const [scoreCountdown, setScoreCountdown] = useState<Countdown>(EMPTY_COUNTDOWN);
   const [stats, setStats] = useState({
     streak: 0,
     avgScore: 0,
@@ -168,6 +177,23 @@ export default function HomePage() {
 
   const nextTest = useMemo(() => {
     return satDates.find((date) => new Date(date.target).getTime() > PAGE_LOAD_TIME) ?? satDates[satDates.length - 1];
+  }, []);
+
+  const nextScoreRelease = useMemo(() => {
+    // Find a test that has happened but whose scores are not yet released
+    const pendingRelease = SCORE_RELEASE_DATES.find(d => new Date(d.testTarget).getTime() <= PAGE_LOAD_TIME && new Date(d.target).getTime() > PAGE_LOAD_TIME);
+    
+    if (pendingRelease) {
+      return { ...pendingRelease, status: 'counting_down' as const };
+    }
+    
+    // If no such test exists, find the next upcoming test
+    const nextTestToHappen = SCORE_RELEASE_DATES.find(d => new Date(d.testTarget).getTime() > PAGE_LOAD_TIME);
+    if (nextTestToHappen) {
+      return { ...nextTestToHappen, status: 'waiting_for_test' as const };
+    }
+    
+    return { ...SCORE_RELEASE_DATES[SCORE_RELEASE_DATES.length - 1], status: 'waiting_for_test' as const };
   }, []);
 
   const upcomingDates = useMemo(
@@ -186,22 +212,10 @@ export default function HomePage() {
         }).format(new Date())
       );
 
-      const planRaw = localStorage.getItem('targetprep_plan');
-      setHasPlan(!!planRaw);
-
-      // Compute today's study plan focus day
-      if (planRaw) {
-        try {
-          const plan = JSON.parse(planRaw);
-          const startDate = plan.startDate ? new Date(plan.startDate) : new Date();
-          const msPerDay = 1000 * 60 * 60 * 24;
-          const daysSinceStart = Math.floor((Date.now() - startDate.getTime()) / msPerDay);
-          const dayIndex = daysSinceStart % STUDY_PLAN_DAYS.length;
-          setTodayPlanDay(STUDY_PLAN_DAYS[dayIndex]);
-        } catch {
-          setTodayPlanDay(STUDY_PLAN_DAYS[0]);
-        }
-      }
+      // Always show a random study plan focus day
+      setHasPlan(true);
+      const randomIndex = Math.floor(Math.random() * STUDY_PLAN_DAYS.length);
+      setTodayPlanDay(STUDY_PLAN_DAYS[randomIndex]);
 
       try {
         const raw = localStorage.getItem('targetprep_progress');
@@ -254,6 +268,15 @@ export default function HomePage() {
     return () => clearInterval(interval);
   }, [nextTest]);
 
+  useEffect(() => {
+    const targetMs = new Date(nextScoreRelease.target).getTime();
+    const update = () => setScoreCountdown(getCountdown(targetMs));
+
+    update();
+    const interval = setInterval(update, 1000);
+    return () => clearInterval(interval);
+  }, [nextScoreRelease]);
+
   // Mock predicted score
   const predictedScoreRange = stats.avgScore > 0 ? `${Math.max(400, stats.avgScore - 30)}–${Math.min(1600, stats.avgScore + 30)}` : '--';
   const mathRange = stats.avgScore > 0 ? `${Math.round(((stats.avgScore / 2) - 10) / 10) * 10}–${Math.round(((stats.avgScore / 2) + 20) / 10) * 10}` : '';
@@ -275,9 +298,9 @@ export default function HomePage() {
       accent: 'from-amber-400 via-orange-500 to-red-500',
     },
     {
-      title: 'Progress',
-      body: 'Track scores, streaks, and how your practice is compounding over time.',
-      href: '/progress',
+      title: 'Performance History',
+      body: 'Track your mock scores, question bank accuracy, and specific choices.',
+      href: '/dashboard/history',
       icon: TrendingUp,
       accent: 'from-emerald-400 via-emerald-500 to-teal-600',
     },
@@ -354,14 +377,14 @@ export default function HomePage() {
                 </div>
                 
                 {/* Score Predictor */}
-                <motion.div className="site-hero-stat mt-4 rounded-[26px] p-6 border-2 border-blue-500/20 bg-blue-50/50 dark:bg-blue-950/20" variants={itemRevealVariants}>
+                <motion.div className="site-hero-stat mt-4 rounded-[24px] p-5 border-2 border-blue-500/20 bg-blue-50/50 dark:bg-blue-950/20" variants={itemRevealVariants}>
                   <div className="flex items-center gap-2">
                     <p className="site-hero-kicker text-[11px] font-bold uppercase tracking-[0.22em] text-blue-600 dark:text-blue-400">Score Predictor</p>
                     <Sparkles className="h-3.5 w-3.5 text-blue-500" />
                   </div>
                   {stats.completed > 0 ? (
-                    <div className="mt-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                      <p className="text-5xl font-black tracking-[-0.04em] text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-400">
+                    <div className="mt-3 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                      <p className="text-3xl font-black tracking-[-0.04em] text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-400">
                         {predictedScoreRange}
                       </p>
                       <div className="flex items-center gap-6">
@@ -377,13 +400,57 @@ export default function HomePage() {
                       </div>
                     </div>
                   ) : (
-                    <div className="mt-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                      <p className="text-5xl font-black tracking-[-0.04em] text-slate-300 dark:text-slate-700">
+                    <div className="mt-3 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                      <p className="text-3xl font-black tracking-[-0.04em] text-slate-300 dark:text-slate-700">
                         --
                       </p>
                       <p className="text-sm font-medium site-text-muted">Complete a practice test to unlock your prediction.</p>
                     </div>
                   )}
+                </motion.div>
+
+                {/* Score Release Dates */}
+                <motion.div
+                  className="site-panel flex flex-col rounded-[28px] p-5 mt-4"
+                  variants={itemRevealVariants}
+                >
+                  <div className="flex items-start justify-between gap-4">
+                    <div>
+                      <p className="site-hero-kicker text-[11px] font-bold uppercase tracking-[0.24em]">Score release dates</p>
+                      <h2 className="site-hero-title mt-2 text-2xl font-black tracking-[-0.03em]">{nextScoreRelease.name}</h2>
+                      <p className="site-hero-body mt-2 text-sm leading-6">
+                        {nextScoreRelease.date}
+                      </p>
+                    </div>
+                    <div className="site-chip rounded-2xl p-3">
+                      <Clock3 className="h-5 w-5 site-text-strong" />
+                    </div>
+                  </div>
+
+                  <div className="mt-auto pt-4">
+                    {nextScoreRelease.status === 'counting_down' ? (
+                      <div className="grid grid-cols-4 gap-3">
+                        {[
+                          { label: 'Days', value: scoreCountdown.days },
+                          { label: 'Hours', value: scoreCountdown.hours },
+                          { label: 'Minutes', value: scoreCountdown.minutes },
+                          { label: 'Seconds', value: scoreCountdown.seconds },
+                        ].map((item) => (
+                          <div key={item.label} className="site-subpanel rounded-[16px] px-2 py-3 text-center flex flex-col items-center justify-center">
+                            <p className="site-hero-title text-2xl font-black tracking-[-0.05em] text-amber-500 dark:text-amber-400 drop-shadow-sm">{item.value.toString().padStart(2, '0')}</p>
+                            <p className="site-hero-kicker mt-1 text-[9px] font-bold uppercase tracking-[0.22em] text-amber-600/70 dark:text-amber-400/70">
+                              {item.label}
+                            </p>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="site-subpanel rounded-[22px] px-6 py-8 text-center flex flex-col items-center justify-center min-h-[110px]">
+                        <p className="text-sm font-semibold text-amber-600/80 dark:text-amber-500/80 uppercase tracking-[0.15em] mb-2">Pending</p>
+                        <p className="text-[17px] font-bold text-slate-700 dark:text-slate-300">Test has not occurred yet</p>
+                      </div>
+                    )}
+                  </div>
                 </motion.div>
               </motion.div>
             </motion.div>
@@ -426,7 +493,7 @@ export default function HomePage() {
                       { label: 'Minutes', value: countdown.minutes },
                       { label: 'Seconds', value: countdown.seconds },
                     ].map((item) => (
-                      <div key={item.label} className="site-subpanel rounded-[22px] px-3 py-4 text-center">
+                      <div key={item.label} className="site-subpanel rounded-[22px] px-3 py-3 text-center flex flex-col items-center justify-center aspect-square">
                         <p className="site-hero-title text-3xl font-black tracking-[-0.05em] text-amber-500 dark:text-amber-400 drop-shadow-sm">{item.value.toString().padStart(2, '0')}</p>
                         <p className="site-hero-kicker mt-2 text-[10px] font-bold uppercase tracking-[0.22em] text-amber-600/70 dark:text-amber-400/70">
                           {item.label}
@@ -522,7 +589,7 @@ export default function HomePage() {
 
               {/* Big Countdown Restored - REMOVED FROM HERE, MOVED ABOVE */}
 
-              <motion.div className="grid gap-4 sm:grid-cols-2" variants={staggerContainerVariants}>
+              <motion.div className="grid gap-4 sm:grid-cols-2 items-start" variants={staggerContainerVariants}>
                 <motion.div className="site-panel rounded-[28px] p-6" variants={itemRevealVariants}>
                   <div className="flex items-center gap-3">
                     <div className="rounded-2xl bg-emerald-100 p-3 text-emerald-700">

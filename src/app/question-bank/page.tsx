@@ -145,42 +145,74 @@ function detectSkill(q: RawBankQuestion): { domain: string; skill: string } {
 
 
 
+// ── Quality filters ────────────────────────────────────────────────────────
+function isGarbled(text: string): boolean {
+    const t = (text || '').toLowerCase();
+    return t.includes('choice a is incorrect') ||
+        t.includes('is incorrect.') ||
+        t.includes('choice b is incorrect') ||
+        t.length < 5;
+}
+
+function isValidMathQuestion(q: RawBankQuestion): boolean {
+    if (!q.question || isGarbled(q.question)) return false;
+    const isNumeric = q.answerType === 'numeric' ||
+        (q.answerText && !q.options) ||
+        (Array.isArray(q.acceptableAnswers) && q.acceptableAnswers.length > 0);
+    if (isNumeric) return true; // SPR questions don't need options
+    // MC must have 4 clean options
+    if (!Array.isArray(q.options) || q.options.length < 4) return false;
+    if (q.options.some(o => isGarbled(o))) return false;
+    return true;
+}
+
+function isValidEnglishQuestion(q: RawBankQuestion): boolean {
+    if (!q.question || isGarbled(q.question)) return false;
+    if (!q.passage || q.passage.trim().length < 20) return false;
+    if (!Array.isArray(q.options) || q.options.length < 2) return false;
+    return true;
+}
+
 // Build question list
-const allEnglishQuestions: Question[] = (ebrwData as RawBankQuestion[]).map((q) => {
-    const { domain, skill } = detectSkill(q);
-    return {
+const allEnglishQuestions: Question[] = (ebrwData as RawBankQuestion[])
+    .filter(isValidEnglishQuestion)
+    .map((q) => {
+        const { domain, skill } = detectSkill(q);
+        return {
+            id: q.id,
+            type: q.type || 'Reading',
+            passage: q.passage || '',
+            question: q.question || '',
+            options: Array.isArray(q.options) ? q.options : [],
+            answer: typeof q.answer === 'number' ? q.answer : 0,
+            answerType: 'multiple_choice',
+            explanation: q.explanation || '',
+            difficulty: q.difficulty || 'Medium',
+            domain,
+            skill,
+            image: q.image,
+        };
+    });
+
+const allMathQuestions: Question[] = (mathData as RawBankQuestion[])
+    .filter(isValidMathQuestion)
+    .map((q) => ({
         id: q.id,
-        type: q.type || 'Reading',
+        type: q.type || 'Math',
         passage: q.passage || '',
         question: q.question || '',
         options: Array.isArray(q.options) ? q.options : [],
-        answer: typeof q.answer === 'number' ? q.answer : 0,
-        answerType: 'multiple_choice',
+        answer: typeof q.answer === 'number' ? q.answer : undefined,
+        answerType: q.answerType || (typeof q.answer === 'number' ? 'multiple_choice' : 'numeric'),
+        answerText: q.answerText,
+        acceptableAnswers: Array.isArray(q.acceptableAnswers) ? q.acceptableAnswers : undefined,
         explanation: q.explanation || '',
         difficulty: q.difficulty || 'Medium',
-        domain,
-        skill,
+        domain: q.domain || 'Math',
+        skill: q.skill || 'Math',
         image: q.image,
-    };
-});
-
-const allMathQuestions: Question[] = (mathData as RawBankQuestion[]).map((q) => ({
-    id: q.id,
-    type: q.type || 'Math',
-    passage: q.passage || '',
-    question: q.question || '',
-    options: Array.isArray(q.options) ? q.options : [],
-    answer: typeof q.answer === 'number' ? q.answer : undefined,
-    answerType: q.answerType || (typeof q.answer === 'number' ? 'multiple_choice' : 'numeric'),
-    answerText: q.answerText,
-    acceptableAnswers: Array.isArray(q.acceptableAnswers) ? q.acceptableAnswers : undefined,
-    explanation: q.explanation || '',
-    difficulty: q.difficulty || 'Medium',
-    domain: q.domain || 'Math',
-    skill: q.skill || 'Math',
-    image: q.image,
-    imageLayout: q.imageLayout,
-}));
+        imageLayout: q.imageLayout,
+    }));
 
 const allQuestionBankQuestions = [...allEnglishQuestions, ...allMathQuestions];
 
@@ -588,16 +620,10 @@ function BrowseView({ onStartQuiz, reviewedIds, qbStats }: { onStartQuiz: (qs: Q
 
                     <div className="ml-auto flex items-center gap-2">
                         <button 
-                            onClick={() => {
-                                const allQs = filter([...allEnglishQuestions, ...allMathQuestions]);
-                                if (allQs.length > 0) {
-                                    const randomQ = allQs[Math.floor(Math.random() * allQs.length)];
-                                    onStartQuiz([randomQ], "Random Question");
-                                }
-                            }} 
-                            className={`flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-bold transition site-button-secondary`}
+                            onClick={() => setShuffled(!shuffled)} 
+                            className={`flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-bold transition ${shuffled ? 'border-emerald-500 bg-emerald-500 text-white shadow-[0_0_15px_rgba(16,185,129,0.35)]' : 'site-button-secondary'}`}
                         >
-                            <Shuffle className="h-4 w-4" /> Random Question
+                            <Shuffle className="h-4 w-4" /> Randomize Questions
                         </button>
                     </div>
                 </motion.div>
@@ -861,7 +887,7 @@ function QuizView({
     const wrongAttemptsForCurrent = incorrectAttempts[idx] || [];
     const currentNumericResponse = numericResponses[idx] || '';
     const showImageOnLeft = !q?.passage && !!q?.image && !isMathQuestion;
-    const showQuestionCard = true;
+    const showQuestionCard = !!(q.question && q.question.trim().length > 0);
 
     useEffect(() => {
         if (!isMathQuestion) {
@@ -983,7 +1009,7 @@ function QuizView({
     const canCheck = isNumericQuestion(q) ? !!cleanNumericInput(currentNumericResponse) && !isChecked : sel !== null && !isChecked;
 
     return (
-        <div className="h-[100dvh] flex flex-col overflow-hidden relative bg-slate-50">
+        <div className="absolute inset-0 flex flex-col overflow-hidden bg-slate-50">
             {/* Bluebook Official Header */}
             <header className="bg-white/90 backdrop-blur-xl border-b border-slate-200/80 px-6 py-2.5 flex items-center justify-between z-30 shrink-0 relative shadow-[0_2px_10px_rgba(0,0,0,0.02)]">
                 {/* Left: Back */}
@@ -1027,7 +1053,7 @@ function QuizView({
 
                 {/* Right Controls */}
                 <div className="flex items-center justify-end flex-1 gap-2">
-                    {isMathQuestion ? (
+                    {isMathQuestion && (
                         <>
                             <button
                                 onClick={() => setIsDesmosOpen(!isDesmosOpen)}
@@ -1044,15 +1070,14 @@ function QuizView({
                                 <span className="font-bold text-[12px] leading-none text-slate-500">Reference</span>
                             </button>
                         </>
-                    ) : (
-                        <button
-                            onClick={() => setIsHighlightActive(!isHighlightActive)}
-                            className={`flex flex-col items-center justify-center gap-1.5 w-[80px] h-[64px] rounded-lg transition-colors border border-transparent ${isHighlightActive ? 'bg-slate-200 text-slate-900 shadow-inner' : 'hover:bg-black/5 text-slate-700'}`}
-                        >
-                            <Highlighter className="w-[24px] h-[24px]" />
-                            <span className="font-bold text-[12px] leading-none">Highlight</span>
-                        </button>
                     )}
+                    <button
+                        onClick={() => setIsHighlightActive(!isHighlightActive)}
+                        className={`flex flex-col items-center justify-center gap-1.5 w-[80px] h-[64px] rounded-lg transition-colors border border-transparent ${isHighlightActive ? 'bg-slate-200 text-slate-900 shadow-inner' : 'hover:bg-black/5 text-slate-700'}`}
+                    >
+                        <Highlighter className="w-[24px] h-[24px]" />
+                        <span className="font-bold text-[12px] leading-none">Highlight</span>
+                    </button>
                     <button
                         onClick={() => {
                             if (!document.fullscreenElement) {
@@ -1271,28 +1296,33 @@ function QuizView({
                         {/* Math Question + Answers (centered, moves right when Desmos opens) */}
                         <div
                             ref={rightPanelRef}
-                            className={`overflow-y-auto bg-white pb-28 flex justify-center ${!isDragging ? 'transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]' : ''}`}
+                            className={`overflow-y-auto bg-white flex justify-center ${!isDragging ? 'transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]' : ''}`}
                             style={{ width: isDesmosOpen ? `${100 - leftPanelWidth}%` : '100%' }}
                         >
-                            <div className="p-6 lg:p-10 w-full max-w-[800px]">
+                            <div className="p-6 lg:p-10 w-full max-w-[800px] pb-10">
 
-                                {/* Header bar */}
-                                <div className="flex mb-6 mt-2 shadow-sm w-full">
-                                    <div className="bg-[#111827] text-white font-bold text-[15px] w-[58px] flex flex-shrink-0 items-center justify-center">
+                                {/* Header: Connected Question Number & Mark for Review & ABC */}
+                                <div className="flex items-center mb-6 mt-4 w-full bg-white border border-[#E5E7EB] rounded-[12px] shadow-sm h-[54px]">
+                                    {/* Number */}
+                                    <div className="bg-[#111827] text-white font-bold text-[16px] w-[64px] h-[54px] flex flex-shrink-0 items-center justify-center rounded-l-[11px]">
                                         {idx + 1}
                                     </div>
+
+                                    {/* Mark for Review (Middle) */}
                                     <button
                                         onClick={() => handleToggleReview(idx)}
-                                        className="flex flex-1 items-center gap-2 px-4 py-2.5 bg-white border-b border-[#E5E7EB] text-[#4B5563] text-[14px] justify-start transition-colors group/mfr hover:bg-slate-50"
+                                        className="flex flex-1 items-center gap-2 px-4 h-full text-[#4B5563] text-[15px] transition-colors justify-start bg-transparent group/mfr hover:bg-slate-50"
                                     >
-                                        <Bookmark className={`w-[14px] h-[14px] transition-colors ${flaggedQuestions[idx] ? 'fill-slate-600 text-slate-600' : 'text-slate-400 group-hover/mfr:text-slate-600'}`} />
+                                        <Bookmark className={`w-[16px] h-[16px] transition-colors ${flaggedQuestions[idx] ? 'fill-slate-600 text-slate-600' : 'text-slate-400 group-hover/mfr:text-slate-600'}`} />
                                         <span className={flaggedQuestions[idx] ? 'font-bold' : 'font-medium group-hover/mfr:font-bold'}>Mark for Review</span>
                                     </button>
-                                    <div className="bg-[#F3F4F6] flex items-center pr-2">
+
+                                    {/* ABC Elimination (Right) */}
+                                    <div className="w-[64px] h-[54px] flex flex-shrink-0 items-center justify-center border-l border-[#E5E7EB] rounded-r-[11px] bg-transparent">
                                         {isMultipleChoiceQuestion(q) && (
                                         <button
                                             onClick={() => setIsEliminationMode(!isEliminationMode)}
-                                            className={`flex items-center justify-center px-3 py-1 ml-2 font-bold text-[14px] transition-colors rounded ${isEliminationMode ? 'bg-[#111827] text-white' : 'bg-transparent text-slate-700 hover:bg-slate-200'}`}
+                                            className={`flex items-center justify-center w-full h-full font-bold text-[14px] transition-colors rounded-r-[11px] ${isEliminationMode ? 'bg-[#111827] text-white' : 'text-slate-700 hover:bg-slate-50'}`}
                                         >
                                             <span className="line-through decoration-[#ef4444] decoration-[2px]">ABC</span>
                                         </button>
@@ -1304,7 +1334,7 @@ function QuizView({
                                 {q.image && (
                                     <div className="mb-5 rounded-xl overflow-hidden border border-slate-100 flex justify-center bg-slate-50 p-4" style={{ animation: 'qb-slideUp 0.2s ease both' }}>
                                         {/* eslint-disable-next-line @next/next/no-img-element */}
-                                        <img src={q.image} alt="Question image" className="max-w-full h-auto max-h-[400px] object-contain rounded-lg shadow-sm" />
+                                        <img src={q.image} alt="Question image" className="max-w-full h-auto max-h-[200px] object-contain rounded-lg shadow-sm cursor-pointer hover:opacity-90 transition-opacity" onClick={() => setExpandedImage?.(q.image)} />
                                     </div>
                                 )}
 
@@ -1336,8 +1366,9 @@ function QuizView({
                                         const isCorrectSelection = isChecked && i === q.answer;
                                         const optionText = cleanOptionText(opt);
 
-                                        let boxClass = `relative flex-1 rounded-[10px] border px-[14px] py-[11px] min-h-[50px] flex items-center transition-all duration-200 overflow-hidden ${(isChecked || isTriedWrong) ? 'cursor-default pointer-events-none' : 'cursor-pointer'} select-text`;
-                                        let circleClass = 'mr-3.5 flex h-[26px] w-[26px] flex-shrink-0 items-center justify-center rounded-full border-[1.5px] text-[12px] font-bold transition-colors';
+                                        let boxClass = `relative w-full border h-auto min-h-[64px] rounded-[12px] flex items-stretch transition-all duration-200 overflow-hidden ${(isChecked || isTriedWrong) ? 'cursor-default pointer-events-none' : 'cursor-pointer'} select-text group`;
+                                        let circleWrapperClass = 'w-[60px] flex-shrink-0 flex items-center justify-center bg-transparent';
+                                        let circleClass = 'w-[34px] h-[34px] rounded-full flex items-center justify-center font-bold text-[15px] border-[1.5px] transition-all';
                                         const textTone = isEliminated ? 'text-slate-400' : 'text-[#111827]';
 
                                         if (isCorrectSelection) {
@@ -1347,11 +1378,11 @@ function QuizView({
                                             boxClass += ' border-red-500 bg-red-50/60 shadow-[inset_0_0_0_1px_#ef4444]';
                                             circleClass += ' border-red-500 bg-red-500 text-white';
                                         } else if (isSelected) {
-                                            boxClass += ' border-indigo-600 bg-indigo-50/30 shadow-[inset_0_0_0_1px_#4f46e5,0_2px_8px_rgba(79,70,229,0.15)]';
-                                            circleClass += ' border-indigo-600 bg-indigo-600 text-white shadow-sm';
+                                            boxClass += ' border-[#111827] bg-white shadow-[inset_0_0_0_1px_#111827] z-10';
+                                            circleClass += ' border-[#111827] bg-[#111827] text-white shadow-md';
                                         } else {
-                                            boxClass += ' border-slate-300 bg-white hover:border-slate-400 hover:bg-slate-50 hover:shadow-sm';
-                                            circleClass += ' border-slate-400 text-slate-700';
+                                            boxClass += ' border-[#E5E7EB] bg-white hover:border-slate-400 shadow-sm';
+                                            circleClass += ' border-[#D1D5DB] text-[#4B5563] bg-white group-hover:border-[#9CA3AF] group-hover:text-[#111827]';
                                         }
 
                                         return (
@@ -1371,11 +1402,13 @@ function QuizView({
                                                     }}
                                                     className={boxClass}
                                                 >
-                                                    <div className={circleClass}>{letter}</div>
-                                                    <div className={`relative z-10 flex-1 ${textTone}`}>
+                                                    <div className={circleWrapperClass}>
+                                                        <div className={circleClass}>{letter}</div>
+                                                    </div>
+                                                    <div className={`relative z-10 flex-1 ${textTone} p-4 flex items-center bg-transparent`}>
                                                         <HighlightableText
                                                             text={optionText || `Option ${letter}`}
-                                                            className="text-[15px] leading-6 text-inherit"
+                                                            className="text-[17px] leading-[1.7] text-inherit"
                                                             highlights={highlights[`opt-${idx}-${i}`] || []}
                                                             onAddHighlight={(h) => setHighlights(p => ({ ...p, [`opt-${idx}-${i}`]: [...(p[`opt-${idx}-${i}`] || []), { ...h, id: Math.random().toString(36).substr(2, 9) }] }))}
                                                             onRemoveHighlight={(id) => setHighlights(p => ({ ...p, [`opt-${idx}-${i}`]: (p[`opt-${idx}-${i}`] || []).filter(x => x.id !== id) }))}
@@ -1388,7 +1421,7 @@ function QuizView({
                                                     )}
                                                 </div>
 
-                                                <div className="flex w-[58px] flex-shrink-0 items-center justify-start">
+                                                <div className="flex w-[50px] flex-shrink-0 items-center justify-start">
                                                     {!isChecked && !isTriedWrong && isEliminationMode && (
                                                             <button
                                                                 onClick={(e) => {
@@ -1438,6 +1471,9 @@ function QuizView({
                                         </div>
                                     </div>
                                 )}
+                                
+                                {/* Spacer to prevent Option D from touching footer due to flex overflow bugs */}
+                                <div className="h-24 shrink-0 w-full"></div>
                             </div>
                         </div>
                     </div>
@@ -1446,7 +1482,7 @@ function QuizView({
                     <>
                         {/* Left Panel — Passage */}
                         <div className="overflow-y-auto bg-white" style={{ width: `${leftPanelWidth}%` }}>
-                            <div className="p-8 pb-24 max-w-[800px] mx-auto">
+                            <div className="p-8 max-w-[800px] mx-auto">
                                 {q.passage ? (
                                     <div className="rounded-[20px] border border-slate-100 bg-white px-6 py-7 shadow-[0_8px_25px_rgba(15,23,42,0.04)]" style={{ animation: 'qb-slideUp 0.4s ease both' }}>
                                         <PassageRenderer
@@ -1462,7 +1498,7 @@ function QuizView({
                                 ) : showImageOnLeft && q.image ? (
                                     <div className="rounded-[20px] border border-slate-100 bg-white p-4 shadow-[0_8px_25px_rgba(15,23,42,0.04)]" style={{ animation: 'qb-slideUp 0.4s ease both' }}>
                                         {/* eslint-disable-next-line @next/next/no-img-element */}
-                                        <img src={q.image} alt="Question image" className="max-w-full h-auto w-full rounded-lg object-contain" />
+                                        <img src={q.image} alt="Question image" className="max-w-full h-auto w-full max-h-[200px] rounded-lg object-contain cursor-pointer hover:opacity-90 transition-opacity" onClick={() => setExpandedImage?.(q.image)} />
                                     </div>
                                 ) : (
                                     <div className="mt-8 rounded-[20px] border border-dashed border-slate-200 bg-slate-50/70 px-6 py-16 text-center text-[17px] italic text-slate-400">
@@ -1481,26 +1517,31 @@ function QuizView({
                         </div>
 
                         {/* Right Panel — Question + Answers */}
-                        <div ref={rightPanelRef} className="overflow-y-auto bg-white pb-28" style={{ width: `${100 - leftPanelWidth}%` }}>
-                            <div className="p-6 lg:p-10 max-w-[800px] mx-auto">
+                        <div ref={rightPanelRef} className="overflow-y-auto bg-white" style={{ width: `${100 - leftPanelWidth}%` }}>
+                            <div className="p-6 lg:p-10 max-w-[800px] mx-auto pb-10">
 
-                                {/* Header bar */}
-                                <div className="flex mb-6 mt-2 shadow-sm w-full">
-                                    <div className="bg-[#111827] text-white font-bold text-[15px] w-[58px] flex flex-shrink-0 items-center justify-center">
+                                {/* Header: Connected Question Number & Mark for Review & ABC */}
+                                <div className="flex items-center mb-6 mt-4 w-full bg-white border border-[#E5E7EB] rounded-[12px] shadow-sm h-[54px]">
+                                    {/* Number */}
+                                    <div className="bg-[#111827] text-white font-bold text-[16px] w-[64px] h-[54px] flex flex-shrink-0 items-center justify-center rounded-l-[11px]">
                                         {idx + 1}
                                     </div>
+
+                                    {/* Mark for Review (Middle) */}
                                     <button
                                         onClick={() => handleToggleReview(idx)}
-                                        className="flex flex-1 items-center gap-2 px-4 py-2.5 bg-white border-b border-[#E5E7EB] text-[#4B5563] text-[14px] justify-start transition-colors group/mfr hover:bg-slate-50"
+                                        className="flex flex-1 items-center gap-2 px-4 h-full text-[#4B5563] text-[15px] transition-colors justify-start bg-transparent group/mfr hover:bg-slate-50"
                                     >
-                                        <Bookmark className={`w-[14px] h-[14px] transition-colors ${flaggedQuestions[idx] ? 'fill-slate-600 text-slate-600' : 'text-slate-400 group-hover/mfr:text-slate-600'}`} />
+                                        <Bookmark className={`w-[16px] h-[16px] transition-colors ${flaggedQuestions[idx] ? 'fill-slate-600 text-slate-600' : 'text-slate-400 group-hover/mfr:text-slate-600'}`} />
                                         <span className={flaggedQuestions[idx] ? 'font-bold' : 'font-medium group-hover/mfr:font-bold'}>Mark for Review</span>
                                     </button>
-                                    <div className="bg-[#F3F4F6] flex items-center pr-2">
+
+                                    {/* ABC Elimination (Right) */}
+                                    <div className="w-[64px] h-[54px] flex flex-shrink-0 items-center justify-center border-l border-[#E5E7EB] rounded-r-[11px] bg-transparent">
                                         {isMultipleChoiceQuestion(q) && (
                                         <button
                                             onClick={() => setIsEliminationMode(!isEliminationMode)}
-                                            className={`flex items-center justify-center px-3 py-1 ml-2 font-bold text-[14px] transition-colors rounded ${isEliminationMode ? 'bg-[#111827] text-white' : 'bg-transparent text-slate-700 hover:bg-slate-200'}`}
+                                            className={`flex items-center justify-center w-full h-full font-bold text-[14px] transition-colors rounded-r-[11px] ${isEliminationMode ? 'bg-[#111827] text-white' : 'text-slate-700 hover:bg-slate-50'}`}
                                         >
                                             <span className="line-through decoration-[#ef4444] decoration-[2px]">ABC</span>
                                         </button>
@@ -1511,7 +1552,7 @@ function QuizView({
                                 {q.image && !showImageOnLeft && (
                                     <div className="mb-5 rounded-xl overflow-hidden border border-slate-100 flex justify-center bg-slate-50 p-4" style={{ animation: 'qb-slideUp 0.2s ease both' }}>
                                         {/* eslint-disable-next-line @next/next/no-img-element */}
-                                        <img src={q.image} alt="Question image" className="max-w-full h-auto max-h-[400px] object-contain rounded-lg shadow-sm" />
+                                        <img src={q.image} alt="Question image" className="max-w-full h-auto max-h-[200px] object-contain rounded-lg shadow-sm cursor-pointer hover:opacity-90 transition-opacity" onClick={() => setExpandedImage?.(q.image)} />
                                     </div>
                                 )}
 
@@ -1541,8 +1582,9 @@ function QuizView({
                                         const isCorrectSelection = isChecked && i === q.answer;
                                         const optionText = cleanOptionText(opt);
 
-                                        let boxClass = `relative flex-1 rounded-[10px] border px-[14px] py-[11px] min-h-[50px] flex items-center transition-all duration-200 overflow-hidden ${(isChecked || isTriedWrong) ? 'cursor-default pointer-events-none' : 'cursor-pointer'} select-text`;
-                                        let circleClass = 'mr-3.5 flex h-[26px] w-[26px] flex-shrink-0 items-center justify-center rounded-full border-[1.5px] text-[12px] font-bold transition-colors';
+                                        let boxClass = `relative w-full border h-auto min-h-[64px] rounded-[12px] flex items-stretch transition-all duration-200 overflow-hidden ${(isChecked || isTriedWrong) ? 'cursor-default pointer-events-none' : 'cursor-pointer'} select-text group`;
+                                        let circleWrapperClass = 'w-[60px] flex-shrink-0 flex items-center justify-center bg-transparent';
+                                        let circleClass = 'w-[34px] h-[34px] rounded-full flex items-center justify-center font-bold text-[15px] border-[1.5px] transition-all';
                                         const textTone = isEliminated ? 'text-slate-400' : 'text-[#111827]';
 
                                         if (isCorrectSelection) {
@@ -1552,11 +1594,11 @@ function QuizView({
                                             boxClass += ' border-red-500 bg-red-50/60 shadow-[inset_0_0_0_1px_#ef4444]';
                                             circleClass += ' border-red-500 bg-red-500 text-white';
                                         } else if (isSelected) {
-                                            boxClass += ' border-indigo-600 bg-indigo-50/30 shadow-[inset_0_0_0_1px_#4f46e5,0_2px_8px_rgba(79,70,229,0.15)]';
-                                            circleClass += ' border-indigo-600 bg-indigo-600 text-white shadow-sm';
+                                            boxClass += ' border-[#111827] bg-white shadow-[inset_0_0_0_1px_#111827] z-10';
+                                            circleClass += ' border-[#111827] bg-[#111827] text-white shadow-md';
                                         } else {
-                                            boxClass += ' border-slate-300 bg-white hover:border-slate-400 hover:bg-slate-50 hover:shadow-sm';
-                                            circleClass += ' border-slate-400 text-slate-700';
+                                            boxClass += ' border-[#E5E7EB] bg-white hover:border-slate-400 shadow-sm';
+                                            circleClass += ' border-[#D1D5DB] text-[#4B5563] bg-white group-hover:border-[#9CA3AF] group-hover:text-[#111827]';
                                         }
 
                                         return (
@@ -1576,8 +1618,10 @@ function QuizView({
                                                     }}
                                                     className={boxClass}
                                                 >
-                                                    <div className={circleClass}>{letter}</div>
-                                                            <div className={`relative z-10 flex-1 ${textTone}`}>
+                                                    <div className={circleWrapperClass}>
+                                                        <div className={circleClass}>{letter}</div>
+                                                    </div>
+                                                    <div className={`relative z-10 flex-1 ${textTone} p-4 flex items-center bg-transparent`}>
                                                         <HighlightableText
                                                             text={optionText || `Option ${letter}`}
                                                             className="text-[17px] leading-[1.7] text-inherit"
@@ -1593,7 +1637,7 @@ function QuizView({
                                                     )}
                                                 </div>
 
-                                                <div className="flex w-[58px] flex-shrink-0 items-center justify-start">
+                                                <div className="flex w-[50px] flex-shrink-0 items-center justify-start">
                                                     {!isChecked && !isTriedWrong && isEliminationMode && (
                                                             <button
                                                                 onClick={(e) => {
@@ -1643,6 +1687,9 @@ function QuizView({
                                         </div>
                                     </div>
                                 )}
+                                
+                                {/* Spacer to prevent Option D from touching footer due to flex overflow bugs */}
+                                <div className="h-24 shrink-0 w-full"></div>
                             </div>
                         </div>
                     </>

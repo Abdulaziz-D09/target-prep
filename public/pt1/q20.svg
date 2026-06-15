@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 200" width="400" height="200">
+  <defs>
+    <style>
+      .line { stroke: black; stroke-width: 2.5; fill: none; stroke-linejoin: round; }
+      .text { font-family: serif; font-size: 16px; font-style: italic; }
+      .num { font-family: serif; font-size: 20px; }
+      .note { font-family: serif; font-size: 14px; }
+      .rect { stroke: black; stroke-width: 1.5; fill: none; }
+    </style>
+  </defs>
+
+  <polygon class="line" points="50,150 250,150 250,40" />
+  <rect class="rect" x="235" y="135" width="15" height="15" />
+  
+  <text class="text" x="35" y="155">S</text>
+  <text class="text" x="255" y="155">R</text>
+  <text class="text" x="255" y="35">Q</text>
+  
+  <text class="num" x="140" y="170">37</text>
+  <text class="note" x="70" y="190">Note: Figure not drawn to scale</text>
+</svg>

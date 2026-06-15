@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 250" width="500" height="250">
+  <defs>
+    <style>
+      .line { stroke: black; stroke-width: 2; fill: none; stroke-linejoin: round; }
+      .text { font-family: serif; font-size: 18px; font-style: italic; }
+      .note { font-family: serif; font-size: 14px; }
+    </style>
+  </defs>
+
+  <!-- Triangle ABC -->
+  <polygon class="line" points="80,120 120,60 160,120" />
+  <text class="text" x="65" y="125">A</text>
+  <text class="text" x="115" y="50">B</text>
+  <text class="text" x="165" y="125">C</text>
+
+  <!-- Triangle A'B'C' -->
+  <polygon class="line" points="220,120 300,20 380,120" />
+  <text class="text" x="200" y="125">A'</text>
+  <text class="text" x="295" y="10">B'</text>
+  <text class="text" x="385" y="125">C'</text>
+  
+  <text class="note" x="120" y="160">Note: Figures not drawn to scale.</text>
+</svg>

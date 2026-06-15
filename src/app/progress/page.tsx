@@ -11,6 +11,7 @@ import {
     sectionRevealVariants,
     staggerContainerVariants,
 } from '@/components/SiteMotion';
+import { ProgressChart } from '@/components/ProgressChart';
 
 function readLegacyHistoryFromStorage(): CompletedTest[] {
     if (typeof window === 'undefined') return [];
@@ -153,46 +154,49 @@ export default function ProgressPage() {
                     </motion.section>
                 ) : (
                     <>
-                        <motion.section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 mb-7" variants={staggerContainerVariants}>
-                            <motion.article className="site-panel rounded-[28px] p-5" variants={itemRevealVariants}>
-                                <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.2em] site-text-muted">
+                        <motion.section className="grid gap-4 grid-cols-2 lg:grid-cols-4 mb-7" variants={staggerContainerVariants}>
+                            <motion.article className="site-panel rounded-[28px] p-5 flex flex-col justify-between aspect-[4/3] sm:aspect-auto sm:min-h-[140px]" variants={itemRevealVariants}>
+                                <div className="flex items-center gap-2 text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.2em] site-text-muted">
                                     <BookOpen className="h-4 w-4" />
                                     Reading Avg
                                 </div>
-                                <p className="site-text-strong mt-3 text-4xl font-black tracking-[-0.05em]">{stats.readingAvg}</p>
+                                <p className="site-text-strong mt-3 text-3xl sm:text-4xl font-black tracking-[-0.05em]">{stats.readingAvg}</p>
                             </motion.article>
 
-                            <motion.article className="site-panel rounded-[28px] p-5" variants={itemRevealVariants}>
-                                <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.2em] site-text-muted">
+                            <motion.article className="site-panel rounded-[28px] p-5 flex flex-col justify-between aspect-[4/3] sm:aspect-auto sm:min-h-[140px]" variants={itemRevealVariants}>
+                                <div className="flex items-center gap-2 text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.2em] site-text-muted">
                                     <Calculator className="h-4 w-4" />
                                     Math Avg
                                 </div>
-                                <p className="site-text-strong mt-3 text-4xl font-black tracking-[-0.05em]">{stats.mathAvg}</p>
+                                <p className="site-text-strong mt-3 text-3xl sm:text-4xl font-black tracking-[-0.05em]">{stats.mathAvg}</p>
                             </motion.article>
 
-                            <motion.article className="site-panel rounded-[28px] p-5" variants={itemRevealVariants}>
-                                <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.2em] site-text-muted">
+                            <motion.article className="site-panel rounded-[28px] p-5 flex flex-col justify-between aspect-[4/3] sm:aspect-auto sm:min-h-[140px]" variants={itemRevealVariants}>
+                                <div className="flex items-center gap-2 text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.2em] site-text-muted">
                                     <Trophy className="h-4 w-4" />
                                     Score Spread
                                 </div>
-                                <p className="site-text-strong mt-3 text-4xl font-black tracking-[-0.05em]">{Math.max(stats.highest - stats.avg, 0)}</p>
-                                <p className="site-text-muted mt-1 text-sm">Difference between highest and average</p>
+                                <div>
+                                    <p className="site-text-strong mt-3 text-3xl sm:text-4xl font-black tracking-[-0.05em]">{Math.max(stats.highest - stats.avg, 0)}</p>
+                                    <p className="site-text-muted mt-1 text-[11px] leading-tight">Difference between highest and average</p>
+                                </div>
+                            </motion.article>
+
+                            <motion.article className="site-panel rounded-[28px] p-5 flex flex-col justify-between aspect-[4/3] sm:aspect-auto sm:min-h-[140px] border border-blue-500/20 bg-blue-50/50 dark:bg-blue-950/20" variants={itemRevealVariants}>
+                                <div className="flex items-center gap-2 text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.2em] text-blue-600 dark:text-blue-400">
+                                    <Sparkles className="h-4 w-4" />
+                                    Predictor
+                                </div>
+                                <div>
+                                    <p className="site-hero-title mt-2 text-2xl sm:text-3xl font-black tracking-[-0.04em] text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-400">
+                                        {Math.max(400, stats.avg - 30)}–{Math.min(1600, stats.avg + 30)}
+                                    </p>
+                                    <p className="site-hero-body mt-1 text-[10px] font-medium leading-tight">M: {Math.round((stats.avg / 2) - 10)}–{Math.round((stats.avg / 2) + 20)}<br/>E: {Math.round((stats.avg / 2) - 20)}–{Math.round((stats.avg / 2) + 10)}</p>
+                                </div>
                             </motion.article>
                         </motion.section>
 
-                        {/* Score Predictor */}
-                        <motion.div className="site-hero-stat rounded-[26px] p-5 mb-7 border border-blue-500/20 bg-blue-50/50 dark:bg-blue-950/20" variants={itemRevealVariants}>
-                            <div className="flex items-center gap-2">
-                                <p className="site-hero-kicker text-[11px] font-bold uppercase tracking-[0.22em] text-blue-600 dark:text-blue-400">Score Predictor</p>
-                                <Sparkles className="h-3.5 w-3.5 text-blue-500" />
-                            </div>
-                            <div className="mt-3 flex flex-wrap items-baseline gap-x-4 gap-y-2">
-                                <p className="site-hero-title text-3xl font-black tracking-[-0.04em] text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-400">
-                                    {Math.max(400, stats.avg - 30)}–{Math.min(1600, stats.avg + 30)}
-                                </p>
-                                <p className="site-hero-body text-sm font-medium">Math: {Math.round((stats.avg / 2) - 10)}–{Math.round((stats.avg / 2) + 20)} &middot; English: {Math.round((stats.avg / 2) - 20)}–{Math.round((stats.avg / 2) + 10)}</p>
-                            </div>
-                        </motion.div>
+                        <ProgressChart history={history} />
 
                         <motion.section variants={sectionRevealVariants}>
                             <h3 className="site-text-strong font-black text-2xl tracking-[-0.03em] mb-4 flex items-center gap-2">

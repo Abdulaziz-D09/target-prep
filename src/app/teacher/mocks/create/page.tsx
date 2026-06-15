@@ -31,6 +31,7 @@ export default function TeacherMocksCreatePage() {
     const [strictMode, setStrictMode] = useState(false);
     const [host, setHost] = useState('');
     const [customTests, setCustomTests] = useState<{ file: File; id: string; name: string; questions: any[] }[]>([]);
+    const [distributionMode, setDistributionMode] = useState<'random' | 'manual'>('random');
     
     // Document Scanning & Parsing State
     const [inputTab, setInputTab] = useState<'upload' | 'paste'>('upload');
@@ -185,7 +186,8 @@ export default function TeacherMocksCreatePage() {
             subject,
             strictMode,
             host,
-            customTests: customTests.length > 0 ? customTests.map(t => ({ id: t.id, name: t.name, questions: t.questions })) : undefined
+            customTests: customTests.length > 0 ? customTests.map(t => ({ id: t.id, name: t.name, questions: t.questions })) : undefined,
+            distributionMode: customTests.length > 1 ? distributionMode : 'random'
         });
 
         await new Promise(r => setTimeout(r, 400));
@@ -431,6 +433,47 @@ export default function TeacherMocksCreatePage() {
                                         ))}
                                     </div>
                                 )}
+
+                                {customTests.length > 1 && (
+                                    <div className="mt-6 p-5 rounded-2xl border-2 border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/30">
+                                        <label className="block text-sm font-bold site-text-strong mb-3">Test Distribution Mode</label>
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                            <button
+                                                type="button"
+                                                onClick={() => setDistributionMode('random')}
+                                                className={`flex items-start gap-3 p-4 rounded-xl border-2 text-left transition-all cursor-pointer ${distributionMode === 'random'
+                                                        ? 'border-blue-500 bg-blue-500/5 dark:bg-blue-500/10 shadow-sm'
+                                                        : 'border-slate-200 dark:border-slate-800 site-subpanel hover:border-slate-300'
+                                                    }`}
+                                            >
+                                                <div className={`p-2 rounded-lg ${distributionMode === 'random' ? 'bg-blue-500/20 text-blue-500' : 'bg-slate-100 dark:bg-slate-800'}`}>
+                                                    <Sparkles className="w-5 h-5" />
+                                                </div>
+                                                <div>
+                                                    <p className={`font-bold text-[14px] ${distributionMode === 'random' ? 'text-blue-600 dark:text-blue-400' : 'site-text-strong'}`}>Randomize</p>
+                                                    <p className="text-[11px] site-text-muted mt-0.5 leading-relaxed">Students get a random test when joining.</p>
+                                                </div>
+                                            </button>
+                                            <button
+                                                type="button"
+                                                onClick={() => setDistributionMode('manual')}
+                                                className={`flex items-start gap-3 p-4 rounded-xl border-2 text-left transition-all cursor-pointer ${distributionMode === 'manual'
+                                                        ? 'border-blue-500 bg-blue-500/5 dark:bg-blue-500/10 shadow-sm'
+                                                        : 'border-slate-200 dark:border-slate-800 site-subpanel hover:border-slate-300'
+                                                    }`}
+                                            >
+                                                <div className={`p-2 rounded-lg ${distributionMode === 'manual' ? 'bg-blue-500/20 text-blue-500' : 'bg-slate-100 dark:bg-slate-800'}`}>
+                                                    <CheckCircle className="w-5 h-5" />
+                                                </div>
+                                                <div>
+                                                    <p className={`font-bold text-[14px] ${distributionMode === 'manual' ? 'text-blue-600 dark:text-blue-400' : 'site-text-strong'}`}>Manual Assignment</p>
+                                                    <p className="text-[11px] site-text-muted mt-0.5 leading-relaxed">Choose which student gets which test.</p>
+                                                </div>
+                                            </button>
+                                        </div>
+                                    </div>
+                                )}
+
                                 {scanError && (
                                     <p className="text-red-500 text-sm mt-2 font-bold">{scanError}</p>
                                 )}

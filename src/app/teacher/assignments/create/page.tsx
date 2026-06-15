@@ -10,6 +10,7 @@ import Link from 'next/link';
 import { FloatingPageShapes, itemRevealVariants, pageRevealVariants } from '@/components/SiteMotion';
 import { useClassroomStore, seedOnce } from '@/store/classroomStore';
 import { LatexRenderer } from '@/components/LatexRenderer';
+import { CustomSelect } from '@/components/CustomSelect';
 import { PassageRenderer } from '@/components/PassageRenderer';
 
 // Seed before render so classrooms show immediately in the classroom picker
@@ -316,8 +317,18 @@ export default function CreateAssignmentPage() {
                                                     : 'site-subpanel site-text hover:scale-[1.02]'
                                             }`}
                                         >
-                                            {tab === 'paste' ? <FileText className="h-4 w-4" /> : <Upload className="h-4 w-4" />}
-                                            {tab === 'paste' ? 'Paste Text' : 'Upload PDF'}
+                                            {tab === 'paste' ? (
+                                                <>
+                                                    <FileText className="h-4 w-4" />
+                                                    Paste Text
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <Upload className="h-4 w-4" />
+                                                    Upload PDF
+                                                    <span className={`ml-1 text-[9px] font-black uppercase tracking-wider px-1.5 py-0.5 rounded ${inputTab === tab ? 'bg-white/20 text-white' : 'bg-emerald-100 text-emerald-600 dark:bg-emerald-900/40 dark:text-emerald-400'}`}>Recommended</span>
+                                                </>
+                                            )}
                                         </button>
                                     ))}
                                 </div>
@@ -567,23 +578,24 @@ export default function CreateAssignmentPage() {
                                                         </div>
                                                     </td>
                                                     <td className="px-5 py-3.5 text-center">
-                                                        <select
+                                                        <CustomSelect
                                                             value={q.answer ?? ''}
-                                                            onChange={(e) => {
-                                                                const val = e.target.value as Option;
+                                                            onChange={(val) => {
+                                                                const value = val as Option;
                                                                 setQuestions((prev) =>
-                                                                    prev.map((item, i) => i === idx ? { ...item, answer: val } : item)
+                                                                    prev.map((item, i) => i === idx ? { ...item, answer: value } : item)
                                                                 );
                                                             }}
-                                                            className={`px-3 py-1.5 rounded-full text-sm font-black border-2 outline-none cursor-pointer transition-all ${
+                                                            options={[
+                                                                { value: '', label: '–' },
+                                                                ...OPTION_LABELS.map(l => ({ value: l, label: l }))
+                                                            ]}
+                                                            buttonClassName={`px-3 py-1.5 flex items-center justify-between gap-1 rounded-full text-sm font-black border-2 outline-none cursor-pointer transition-all ${
                                                                 q.answer
                                                                     ? 'bg-indigo-50 dark:bg-indigo-900/20 border-indigo-400 dark:border-indigo-600 text-indigo-700 dark:text-indigo-300'
                                                                     : 'site-subpanel border-slate-200 dark:border-slate-700 site-text-muted'
                                                             }`}
-                                                        >
-                                                            <option value="">–</option>
-                                                            {OPTION_LABELS.map((l) => <option key={l} value={l}>{l}</option>)}
-                                                        </select>
+                                                        />
                                                     </td>
                                                 </tr>
                                             ))}

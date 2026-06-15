@@ -2,6 +2,7 @@
 import { useParams, useRouter } from 'next/navigation';
 import { useClassroomStore } from '@/store/classroomStore';
 import { ArrowLeft, Users, FileText, CheckCircle, Clock, Settings, X } from 'lucide-react';
+import { CustomSelect } from '@/components/CustomSelect';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import { practiceCards as practiceCatalog } from '@/lib/practiceCatalog';
@@ -120,7 +121,7 @@ export default function TeacherMockDetailPage() {
                                 <tr className="bg-slate-50 dark:bg-slate-800/50 border-b border-slate-200 dark:border-slate-800/50">
                                     <th className="px-6 py-4 text-[13px] font-bold site-text-muted uppercase tracking-widest">Student</th>
                                     <th className="px-6 py-4 text-[13px] font-bold site-text-muted uppercase tracking-widest">School & Grade</th>
-                                    {session.status === 'upcoming' && availableTests.length > 0 && (
+                                    {session.status === 'upcoming' && availableTests.length > 1 && session.distributionMode === 'manual' && (
                                         <th className="px-6 py-4 text-[13px] font-bold site-text-muted uppercase tracking-widest">Assign Test</th>
                                     )}
                                     <th className="px-6 py-4 text-[13px] font-bold site-text-muted uppercase tracking-widest text-right">Status</th>
@@ -130,7 +131,7 @@ export default function TeacherMockDetailPage() {
                             <tbody className="divide-y divide-slate-100 dark:divide-slate-800/40">
                                 {activeStudentsList.length === 0 ? (
                                     <tr>
-                                        <td colSpan={session.status === 'upcoming' && availableTests.length > 0 ? 5 : 4} className="px-6 py-12 text-center site-text-muted">
+                                        <td colSpan={session.status === 'upcoming' && availableTests.length > 1 && session.distributionMode === 'manual' ? 5 : 4} className="px-6 py-12 text-center site-text-muted">
                                             {session.status === 'upcoming' ? 'No students have joined the lobby yet.' : 'No students are currently taking this mock exam.'}
                                         </td>
                                     </tr>
@@ -143,18 +144,15 @@ export default function TeacherMockDetailPage() {
                                         <td className="px-6 py-4 text-[14px] site-text-muted">
                                             {student.school || '--'} • {student.gradeLevel || '--'}
                                         </td>
-                                        {session.status === 'upcoming' && availableTests.length > 0 && (
+                                        {session.status === 'upcoming' && availableTests.length > 1 && session.distributionMode === 'manual' && (
                                             <td className="px-6 py-4">
-                                                <select
+                                                <CustomSelect
                                                     value={session.studentAssignments?.[student.id] || ''}
-                                                    onChange={(e) => assignTestToStudent(session.id, student.id, e.target.value)}
-                                                    className="bg-slate-100 dark:bg-slate-800 rounded-lg px-3 py-1.5 text-sm font-bold text-slate-700 dark:text-slate-300 border-2 border-slate-200 dark:border-slate-700 focus:outline-none focus:border-blue-500 w-full max-w-[200px]"
-                                                >
-                                                    <option value="">Randomize</option>
-                                                    {availableTests.map(t => (
-                                                        <option key={t.id} value={t.id}>{t.name}</option>
-                                                    ))}
-                                                </select>
+                                                    onChange={(val) => assignTestToStudent(session.id, student.id, val)}
+                                                    placeholder="Select Test..."
+                                                    options={availableTests.map(t => ({ value: String(t.id), label: t.name }))}
+                                                    buttonClassName="w-full max-w-[200px] flex items-center justify-between gap-2 bg-slate-100 dark:bg-slate-800 rounded-lg px-3 py-1.5 text-sm font-bold text-slate-700 dark:text-slate-300 border-2 border-slate-200 dark:border-slate-700 focus:outline-none focus:border-blue-500"
+                                                />
                                             </td>
                                         )}
                                         <td className="px-6 py-4 text-right">

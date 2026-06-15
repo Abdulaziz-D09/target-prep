@@ -49,7 +49,7 @@ const pt1_englishModule1: Question[] = [
         "answer": 3,
         "difficulty": "Medium",
         "id": "pt1-m1-q1",
-        "passage": "A study by Augusta D. Gaspar and Joana Carneiro Pinto found that a bank's corporate social\nresponsibility (CSR) efforts, including environmental and social campaigns, improve its\ncorporate image. When CSR was mentioned in bank marketing strategies, favorability scores\nassigned by study participants tended to the scores assigned by participants when\nCSR wasn't mentioned."
+        "passage": "A study by Augusta D. Gaspar and Joana Carneiro Pinto found that a bank's corporate social\nresponsibility (CSR) efforts, including environmental and social campaigns, improve its\ncorporate image. When CSR was mentioned in bank marketing strategies, favorability scores\nassigned by study participants tended to ______ the scores assigned by participants when\nCSR wasn't mentioned."
     },
     {
         "num": 2,
@@ -64,7 +64,7 @@ const pt1_englishModule1: Question[] = [
         "answer": 3,
         "difficulty": "Medium",
         "id": "pt1-m1-q2",
-        "passage": "Researchers have long debated the origins of silver used in European coins from the 600s\nthrough the early 800s CE. Geochemical analysis by Kershaw et al. of 49 coins dating to\n660-820 CE provides concrete evidence that reconciles two competing theories: early coins\nwere made from Byzantine silver, and later coins used Frankish silver, findings that provide\n\nfirm details in a previously area of study."
+        "passage": "Researchers have long debated the origins of silver used in European coins from the 600s\nthrough the early 800s CE. Geochemical analysis by Kershaw et al. of 49 coins dating to\n660-820 CE provides concrete evidence that reconciles two competing theories: early coins\nwere made from Byzantine silver, and later coins used Frankish silver, findings that provide\n\nfirm details in a previously ______ area of study."
     },
     {
         "num": 3,
@@ -94,7 +94,7 @@ const pt1_englishModule1: Question[] = [
         "answer": 1,
         "difficulty": "Medium",
         "id": "pt1-m1-q4",
-        "passage": "Science fiction has long served as a real-world technological advancements. Indeed,\nfrom Jules Verne's 1865 novel From the Earth to the Moon inspiring developments in\naerospace engineering to the television show Star Trek sparking the design of the ancestor\nof today's smartphones, these narratives have spurred many actual innovations."
+        "passage": "Science fiction has long served as a ______ of real-world technological advancements. Indeed,\nfrom Jules Verne's 1865 novel From the Earth to the Moon inspiring developments in\naerospace engineering to the television show Star Trek sparking the design of the ancestor\nof today's smartphones, these narratives have spurred many actual innovations."
     },
     {
         "num": 5,
@@ -109,7 +109,7 @@ const pt1_englishModule1: Question[] = [
         "answer": 0,
         "difficulty": "Medium",
         "id": "pt1-m1-q5",
-        "passage": "Any effort to raise the toll that drivers must pay to use the Lewis and Clark Bridge, which\nspans the Ohio River to connect Indiana and Kentucky, should explain why a higher toll is\nnecessary; no amount of justification, however, is likely to persuade some drivers who\nbelieve the current toll is"
+        "passage": "Any effort to raise the toll that drivers must pay to use the Lewis and Clark Bridge, which\nspans the Ohio River to connect Indiana and Kentucky, should explain why a higher toll is\nnecessary; no amount of justification, however, is likely to persuade some drivers who\nbelieve the current toll is ______."
     },
     {
         "num": 6,
@@ -139,7 +139,7 @@ const pt1_englishModule1: Question[] = [
         "answer": 3,
         "difficulty": "Medium",
         "id": "pt1-m1-q7",
-        "passage": "Postcranial skeletal pneumaticity (PSP) refers to the presence of extensions of an animal's\nlungs and air sacs inside its bones. These extensions are known as pneumatic diverticula.\nfossilize, so paleontologists have relied on studies of living bird species to document these\nqualities, augmenting their findings from fossil analysis to glean additional insights into the\nrespiratory systems of extinct genera such as Tyrannosaurus, Euhelopus, and other\nCretaceous theropods and sauropods that may have also exhibited PSP."
+        "passage": "Postcranial skeletal pneumaticity (PSP) refers to the presence of extensions of an animal's\nlungs and air sacs inside its bones. These extensions are known as pneumatic diverticula.\nPneumatic diverticula rarely fossilize, so paleontologists have relied on studies of living bird species to document these\nqualities, augmenting their findings from fossil analysis to glean additional insights into the\nrespiratory systems of extinct genera such as Tyrannosaurus, Euhelopus, and other\nCretaceous theropods and sauropods that may have also exhibited PSP."
     },
     {
         "num": 8,
@@ -154,7 +154,7 @@ const pt1_englishModule1: Question[] = [
         "answer": 1,
         "difficulty": "Medium",
         "id": "pt1-m1-q8",
-        "passage": "Adult glass eels can be found off the coast of Maine, but the eels begin their lives in the\nSargasso Sea, a biodiverse area in the North Atlantic Ocean where they are born and later\nreturn to breed. Though biologists believe they have identified the general area in the\nSargasso Sea that is crucial to the endangered eels\u2019 survival, little is yet known about how\nthe animals spawn there. Scientists believe that solving the mystery will lead to better\nconservation of glass eels and their habitat, helping_in turn to sustain several other species\n\nthat rely on them as a food source."
+        "passage": "Adult glass eels can be found off the coast of Maine, but the eels begin their lives in the\nSargasso Sea, a biodiverse area in the North Atlantic Ocean where they are born and later\nreturn to breed. Though biologists believe they have identified the general area in the\nSargasso Sea that is crucial to the endangered eels\u2019 survival, little is yet known about how\nthe animals spawn there. Scientists believe that solving the mystery will lead to better\nconservation of glass eels and their habitat, helping, in turn, to sustain several other species\n\nthat rely on them as a food source."
     },
     {
         "num": 9,
@@ -244,7 +244,7 @@ const pt1_englishModule1: Question[] = [
         "answer": 0,
         "difficulty": "Medium",
         "id": "pt1-m1-q14",
-        "passage": "Antonia Olivia Dolan and colleagues had musicians and nonmusicians with clinically average\nhearing listen to recordings of nature sounds and music in popular genres like acoustic folk\nand funk and adjust the volume to optimize their listening enjoyment. The researchers found\nthat for a given recording that a musician and nonmusician identified as their favorite among\nthose included in the study, optimal volume tended to be higher for the musician than for the\nnonmusician. Thus, if a musician and nonmusician both identified Jose Gonzalez's\n\u201cHeartbeats\u201d as their favorite recording and the musician preferred to listen to it at a volume\nof 82.2 decibels, the nonmusician would be expected to"
+        "passage": "Antonia Olivia Dolan and colleagues had musicians and nonmusicians with clinically average\nhearing listen to recordings of nature sounds and music in popular genres like acoustic folk\nand funk and adjust the volume to optimize their listening enjoyment. The researchers found\nthat for a given recording that a musician and nonmusician identified as their favorite among\nthose included in the study, optimal volume tended to be higher for the musician than for the\nnonmusician. Thus, if a musician and nonmusician both identified Jose Gonzalez's\n\u201cHeartbeats\u201d as their favorite recording and the musician preferred to listen to it at a volume\nof 82.2 decibels, the nonmusician would be expected to ______."
     },
     {
         "num": 15,
@@ -259,7 +259,7 @@ const pt1_englishModule1: Question[] = [
         "answer": 3,
         "difficulty": "Medium",
         "id": "pt1-m1-q15",
-        "passage": "Outi Tervo and team studied the effect of human-caused noise on narwhals (Vonodon\nmonoceros), arctic marine mammals that are sensitive to acoustic changes in their\nenvironment. Hypothesizing that elevated sound levels affect foraging among narwhals,\nTervo's team compared narwhal diving behaviors in natural sound conditions with those\nbehaviors in two human-caused sound exposure conditions\u2014ship sounds and ship sounds\ncoupled with sonic pulses. Both exposure conditions resulted in significant decreases in the\nnumber and target depth of deep dives (associated with foraging) relative to natural\nconditions. However, differences between diving behaviors in the two exposure types were\nnegligible, a finding that could be attributed to the fact that"
+        "passage": "Outi Tervo and team studied the effect of human-caused noise on narwhals (Vonodon\nmonoceros), arctic marine mammals that are sensitive to acoustic changes in their\nenvironment. Hypothesizing that elevated sound levels affect foraging among narwhals,\nTervo's team compared narwhal diving behaviors in natural sound conditions with those\nbehaviors in two human-caused sound exposure conditions\u2014ship sounds and ship sounds\ncoupled with sonic pulses. Both exposure conditions resulted in significant decreases in the\nnumber and target depth of deep dives (associated with foraging) relative to natural\nconditions. However, differences between diving behaviors in the two exposure types were\nnegligible, a finding that could be attributed to the fact that ______."
     },
     {
         "num": 16,
@@ -394,7 +394,7 @@ const pt1_englishModule1: Question[] = [
         "answer": 3,
         "difficulty": "Medium",
         "id": "pt1-m1-q24",
-        "passage": "In a 1998 study by Smith et al., the researchers used microhistological fecal analysis to\ndetermine the ratio of three plant subtypes (graminoids, forbs, and browse) within the diets\nof North American ungulates. The researchers did not perform this analysis on all such\nungulates, they focused exclusively on pronghorns and wild horses in New Mexico."
+        "passage": "In a 1998 study by Smith et al., the researchers used microhistological fecal analysis to\ndetermine the ratio of three plant subtypes (graminoids, forbs, and browse) within the diets\nof North American ungulates. The researchers did not perform this analysis on all such\nungulates, ______ they focused exclusively on pronghorns and wild horses in New Mexico."
     },
     {
         "num": 25,
@@ -457,7 +457,7 @@ const pt1_englishModule2: Question[] = [
         "answer": 1,
         "difficulty": "Hard",
         "id": "pt1-m2-q1",
-        "passage": "Louisa May Alcott contributed A Modern Mephistopheles to the No Name Series, a collection\nof novels published anonymously between 1876 and 1887. The series challenged readers to\nguess authors\u2019 identities, reflecting the era\u2019s fascination for literary mystery. This\n\napproach to publishing allowed Alcott to experiment beyond her established style."
+        "passage": "Louisa May Alcott contributed A Modern Mephistopheles to the No Name Series, a collection\nof novels published anonymously between 1876 and 1887. The series challenged readers to\nguess authors\u2019 identities, reflecting the era\u2019s fascination for literary mystery. This ______ approach to publishing allowed Alcott to experiment beyond her established style."
     },
     {
         "num": 2,
@@ -472,7 +472,7 @@ const pt1_englishModule2: Question[] = [
         "answer": 0,
         "difficulty": "Hard",
         "id": "pt1-m2-q2",
-        "passage": "Though copies of The Adventures of Indiana Jones in Wenceslas Square in Prague on\nJanuary 16, 7989\u2014an underground computer game that was created anonymously in 1989\nas an act of political protest against the authoritarian regime of what was then\nCzechoslovakia\u2014were originally distributed , the game is now readily available online\n\nfor anyone to play."
+        "passage": "Though copies of The Adventures of Indiana Jones in Wenceslas Square in Prague on\nJanuary 16, 1989\u2014an underground computer game that was created anonymously in 1989\nas an act of political protest against the authoritarian regime of what was then\nCzechoslovakia\u2014were originally distributed ______, the game is now readily available online for anyone to play."
     },
     {
         "num": 3,
@@ -487,7 +487,7 @@ const pt1_englishModule2: Question[] = [
         "answer": 0,
         "difficulty": "Hard",
         "id": "pt1-m2-q3",
-        "passage": "In their study of caterpillars in fragmented forests (formerly contiguous forests that have\nbeen broken into isolated patches by roads or other interruptions), Riley M. Anderson et al.\n\nstress that although fragmentation inevitably alterations to local ecological\n\nprocesses, the changes will likely have a greater impact on Nola triquetrana, a specialist\nfeeding on a limited number of plant species, than on a species like Himella intractata that\nfeeds on several."
+        "passage": "In their study of caterpillars in fragmented forests (formerly contiguous forests that have\nbeen broken into isolated patches by roads or other interruptions), Riley M. Anderson et al.\n\nstress that although fragmentation inevitably ______ alterations to local ecological\n\nprocesses, the changes will likely have a greater impact on Nola triquetrana, a specialist\nfeeding on a limited number of plant species, than on a species like Himella intractata that\nfeeds on several."
     },
     {
         "num": 4,
@@ -502,7 +502,7 @@ const pt1_englishModule2: Question[] = [
         "answer": 0,
         "difficulty": "Hard",
         "id": "pt1-m2-q4",
-        "passage": "Yuen Yuen Ang et al. argue that merely tallying the number of patents filed per year\n\nthe degree of innovation occurring: truly novel patents\u2014those, like a 2011 patent for an\nautomated navigation system for planes, that combine previously unaffiliated technological\ndomains\u2014are vastly outnumbered by nonnovel patents (e.g., a 2008 patent for a method of\nmaking soup)."
+        "passage": "Yuen Yuen Ang et al. argue that merely tallying the number of patents filed per year ______ the degree of innovation occurring: truly novel patents\u2014those, like a 2011 patent for an\nautomated navigation system for planes, that combine previously unaffiliated technological\ndomains\u2014are vastly outnumbered by nonnovel patents (e.g., a 2008 patent for a method of\nmaking soup)."
     },
     {
         "num": 5,
@@ -622,7 +622,7 @@ const pt1_englishModule2: Question[] = [
         "answer": 0,
         "difficulty": "Hard",
         "id": "pt1-m2-q12",
-        "passage": "Duckweed is a small freshwater plant that is often exposed to zinc pollution. Sofia Vamos\nand colleagues collected samples of four duckweed ecotypes (genetically and\ngeographically distinct populations within a species), along with water from each ecotype\u2019s\nhabitat. Hypothesizing that each ecotype is adapted to its local conditions in ways that\nbolster its growth and resistance to pollutants, the researchers grew each ecotype in all four\nwater samples and with three levels of zinc (none, low, high). (The researchers did not\nreplicate local differences in light or temperature.) They found that the ecotypes grew\nequally well in all four water samples and that adding zinc consistently enhanced growth,\nregardless of concentration, suggesting that"
+        "passage": "Duckweed is a small freshwater plant that is often exposed to zinc pollution. Sofia Vamos\nand colleagues collected samples of four duckweed ecotypes (genetically and\ngeographically distinct populations within a species), along with water from each ecotype\u2019s\nhabitat. Hypothesizing that each ecotype is adapted to its local conditions in ways that\nbolster its growth and resistance to pollutants, the researchers grew each ecotype in all four\nwater samples and with three levels of zinc (none, low, high). (The researchers did not\nreplicate local differences in light or temperature.) They found that the ecotypes grew\nequally well in all four water samples and that adding zinc consistently enhanced growth,\nregardless of concentration, suggesting that ______."
     },
     {
         "num": 13,
@@ -637,7 +637,7 @@ const pt1_englishModule2: Question[] = [
         "answer": 1,
         "difficulty": "Hard",
         "id": "pt1-m2-q13",
-        "passage": "As juveniles, all white-necked jacobin hummingbirds display vibrantly blue head plumage;\nwhen they enter adulthood, males retain these blue feathers and most females molt to a\ndrab green hue. However, 28% of adult female jacobins remain identical in coloration to\njuveniles and adult males. Based on field observations in Panama, a team of researchers\nreports that while adult males show a clear preference in mate selection for adult females\nwith drab green feathers, they also engage in more antagonistic behavior toward those adult\nfemales than toward blue-feathered adult females when competing for resources. Therefore,\nthe team hypothesizes that"
+        "passage": "As juveniles, all white-necked jacobin hummingbirds display vibrantly blue head plumage;\nwhen they enter adulthood, males retain these blue feathers and most females molt to a\ndrab green hue. However, 28% of adult female jacobins remain identical in coloration to\njuveniles and adult males. Based on field observations in Panama, a team of researchers\nreports that while adult males show a clear preference in mate selection for adult females\nwith drab green feathers, they also engage in more antagonistic behavior toward those adult\nfemales than toward blue-feathered adult females when competing for resources. Therefore,\nthe team hypothesizes that ______."
     },
     {
         "num": 14,
@@ -667,7 +667,7 @@ const pt1_englishModule2: Question[] = [
         "answer": 3,
         "difficulty": "Hard",
         "id": "pt1-m2-q15",
-        "passage": "Working on an unimaginably small scale of billionths of a meter, nanoengineers have found\n\nways to leverage palladium to facilitate energy generation in fuel cells."
+        "passage": "Working on an unimaginably small scale of billionths of a meter, nanoengineers have found ways to leverage ______ to facilitate energy generation in fuel cells."
     },
     {
         "num": 16,
@@ -682,7 +682,7 @@ const pt1_englishModule2: Question[] = [
         "answer": 1,
         "difficulty": "Hard",
         "id": "pt1-m2-q16",
-        "passage": "Bertie Marshall, a key figure in the history of steel band music in Trinidad and Tobago, made\nseveral innovations to the steel wheels so the instrument could be easily transported\n\nduring Carnival, a cover to protect the pans from the sun, and amplification so the sound of\nthe pans could be better heard over large crowds and other instrumentation."
+        "passage": "Bertie Marshall, a key figure in the history of steel band music in Trinidad and Tobago, made\nseveral innovations to the steel ______ so the instrument could be easily transported during Carnival, a cover to protect the pans from the sun, and amplification so the sound of\nthe pans could be better heard over large crowds and other instrumentation."
     },
     {
         "num": 17,
@@ -697,7 +697,7 @@ const pt1_englishModule2: Question[] = [
         "answer": 3,
         "difficulty": "Hard",
         "id": "pt1-m2-q17",
-        "passage": "In a chemical equation, the value known as molar mass is useful for converting between the\nmass of the reactants and the mass of the product. The liquid have molar masses of\n\n186.06 and 78.12 g/mol, respectively."
+        "passage": "In a chemical equation, the value known as molar mass is useful for converting between the\nmass of the reactants and the mass of the product. The liquid ______ have molar masses of 186.06 and 78.12 g/mol, respectively."
     },
     {
         "num": 18,
@@ -712,7 +712,7 @@ const pt1_englishModule2: Question[] = [
         "answer": 3,
         "difficulty": "Hard",
         "id": "pt1-m2-q18",
-        "passage": "The statement \u201call tarantulas are venomous\" is scientific because it could be proved false by\na single observation to the contrary, according to Karl Popper. Popper's theory that\n\nscientific hypotheses must be refutable, termed the criterion of falsifiability, rejects the\nconfirmationist position that uses verifiability as the standard for scientific hypotheses."
+        "passage": "The statement \u201call tarantulas are venomous\" is scientific because it could be proved false by\na single observation to the contrary, according to Karl Popper. Popper's theory ______ that scientific hypotheses must be refutable, termed the criterion of falsifiability, rejects the\nconfirmationist position that uses verifiability as the standard for scientific hypotheses."
     },
     {
         "num": 19,
@@ -727,7 +727,7 @@ const pt1_englishModule2: Question[] = [
         "answer": 3,
         "difficulty": "Hard",
         "id": "pt1-m2-q19",
-        "passage": "Geologist and scholar John Bostock joined with 55 other prominent British writers in 1837 to\npetition the US Congress for greater copyright protections. This cadre of renowned\n\nthat American publishers\u2019 appropriation of their work caused, in the words of the petition,\n\u201cdeep and extensive injuries...on their reputation and property,\u201d helped sow the seeds for the\nInternational Copyright Act of 1891."
+        "passage": "Geologist and scholar John Bostock joined with 55 other prominent British writers in 1837 to\npetition the US Congress for greater copyright protections. This cadre of renowned ______ that American publishers\u2019 appropriation of their work caused, in the words of the petition,\n\u201cdeep and extensive injuries...on their reputation and property,\u201d helped sow the seeds for the\nInternational Copyright Act of 1891."
     },
     {
         "num": 20,
@@ -742,7 +742,7 @@ const pt1_englishModule2: Question[] = [
         "answer": 0,
         "difficulty": "Hard",
         "id": "pt1-m2-q20",
-        "passage": "In 2003, some 393 years after Galileo Galilei and Simon Marius independently discovered\nJupiter's four largest moons (lo, Europa, Ganymede, and Callisto), scientists discovered the\n\nmoon Helike in orbit around Jupiter. researchers have discovered eighty moons\n\norbiting Jupiter."
+        "passage": "In 2003, some 393 years after Galileo Galilei and Simon Marius independently discovered\nJupiter's four largest moons (lo, Europa, Ganymede, and Callisto), scientists discovered the moon Helike in orbit around Jupiter. ______ researchers have discovered eighty moons\n\norbiting Jupiter."
     },
     {
         "num": 21,
@@ -757,7 +757,7 @@ const pt1_englishModule2: Question[] = [
         "answer": 2,
         "difficulty": "Hard",
         "id": "pt1-m2-q21",
-        "passage": "The Hornbostel-Sachs system classifies musical instruments by how they produce sound.\nFor example, an instrument that is popular in Norway called the hardingfele produces sound\nprimarily through the vibration of its strings. under the Hornbostel-Sachs system, the\nhardingfele is a chordophone."
+        "passage": "The Hornbostel-Sachs system classifies musical instruments by how they produce sound.\nFor example, an instrument that is popular in Norway called the hardingfele produces sound\nprimarily through the vibration of its strings. ______ under the Hornbostel-Sachs system, the hardingfele is a chordophone."
     },
     {
         "num": 22,
@@ -772,7 +772,7 @@ const pt1_englishModule2: Question[] = [
         "answer": 0,
         "difficulty": "Hard",
         "id": "pt1-m2-q22",
-        "passage": "Brain imaging research led by neuroscientist Dwaynica Greaves found that actors showed\nsuppressed responses in the left anterior prefrontal cortex (the portion of the brain\nassociated with self-awareness) when their names were called during performances;\n\nthe actors\u2019 responses were normal in nonacting contexts. These findings suggest that when\nembodying characters, performers may temporarily set aside their personal identities."
+        "passage": "Brain imaging research led by neuroscientist Dwaynica Greaves found that actors showed\nsuppressed responses in the left anterior prefrontal cortex (the portion of the brain\nassociated with self-awareness) when their names were called during performances; ______ the actors’ responses were normal in nonacting contexts. These findings suggest that when embodying characters, performers may temporarily set aside their personal identities."
     },
     {
         "num": 23,
@@ -833,6 +833,21 @@ const pt1_englishModule2: Question[] = [
         "difficulty": "Hard",
         "id": "pt1-m2-q26",
         "passage": "While researching a topic, a student has taken the following notes:\n\ne Suzanne K. Birner led a study analyzing rocks on the seafloor to better understand the\nhistory of Earth's mantle.\n\ne Rock samples were collected from two seafloor ridges.\n\ne The researchers determined the samples\u2019 period of formation (the Archean eon) and\noxidation level (extremely low).\n\ne\u00a2 High temperatures in the Archean likely caused the rocks\u2019 low oxidation.\n\ne Birner\u2019s team suggests the oxidation of Earth's mantle has remained stable over time,\ncontrary to previous theories.\n\ne The findings help explain the unique conditions that allowed life to develop on Earth."
+    },
+    {
+        "num": 27,
+        "type": "Reading",
+        "question": "The student wants to place the 1821 Declaration of Independence in the context of Valle’s changing political beliefs. Which choice most effectively uses relevant information from the notes to accomplish this goal?",
+        "options": [
+            "A change in Valle’s political beliefs that occurred when the Spanish king repealed the 1812 constitution led to Valle writing Central America’s Declaration of Independence.",
+            "Long an opponent of Central American independence, Valle changed his mind after an 1820 revolt and wrote the 1821 declaration.",
+            "The writing of Central America’s Declaration of Independence may not have happened were it not for Colonel Riego's 1820 revolt.",
+            "Colonel Riego’s revolt was the inspiration that Valle, a long-standing opponent of Central American independence, needed to change his political beliefs."
+        ],
+        "answer": 1,
+        "difficulty": "Hard",
+        "id": "pt1-m2-q27",
+        "passage": "While researching a topic, a student has taken the following notes:\n\n\u2022 Leaders of the Province of Guatemala proclaimed independence for Central America from the Spanish Empire on September 15, 1821.\n\n\u2022 The accompanying Declaration of Independence was written by Honduran scholar and politician José Cecilio del Valle.\n\n\u2022 The 1812 Spanish Constitution had provided some degree of independence for Central America, but it was repealed by the Spanish king in 1814.\n\n\u2022 Valle, a loyal advisor to the Spanish Empire's administrators in Central America, had long opposed independence.\n\n\u2022 He changed his mind after Colonel Rafael del Riego’s 1820 revolt, which demanded the return of rights lost in 1814."
     }
 ];
 
@@ -841,7 +856,7 @@ const pt1_mathModule1: Question[] = [
         "id": "pt1-math-m1-q1",
         "num": 1,
         "type": "Math",
-        "question": "If $9x+4=67$ what is the value of $90x+40?$",
+        "question": "If 9x + 4 = 67, what is the value of 90x + 40?",
         "options": [
             "7",
             "70",
@@ -855,7 +870,8 @@ const pt1_mathModule1: Question[] = [
         "id": "pt1-math-m1-q2",
         "num": 2,
         "type": "Math",
-        "question": "$x^{\\circ}$ P 72\u00b0 r Note: Figure not drawn to scale. In the figure, line p is parallel to line r, and line t intersects both lines. What is the value of x?",
+        "image": "/math-bank/pt1-math-m1-q2.png",
+        "question": "Note: Figure not drawn to scale. In the figure, line p is parallel to line r, and line t intersects both lines. What is the value of x?",
         "options": [
             "36",
             "72",
@@ -878,7 +894,7 @@ const pt1_mathModule1: Question[] = [
         "id": "pt1-math-m1-q4",
         "num": 4,
         "type": "Math (SPR)",
-        "question": "The equation $58=2x+2y$ gives the perimeter of a rectangular garden that has length x, in feet, and width y, in feet. The width of the garden is 14 feet. What is the length, in feet, of the garden?",
+        "question": "The equation 58=2x+2y gives the perimeter of a rectangular garden that has length x, in feet, and width y, in feet. The width of the garden is 14 feet. What is the length, in feet, of the garden?",
         "options": [],
         "answer": "15",
         "difficulty": "Medium"
@@ -887,12 +903,12 @@ const pt1_mathModule1: Question[] = [
         "id": "pt1-math-m1-q5",
         "num": 5,
         "type": "Math",
-        "question": "The relationship between the variables and y is defined by an exponential equation. When $x=0$, the value of y is 40, and for every increase in the value of x by 1, the corresponding value of y increases by 50% of its previous value. Which equation represents this relationship?",
+        "question": "The relationship between the variables x and y is defined by an exponential equation. When x = 0, the value of y is 40, and for every increase in the value of x by 1, the corresponding value of y increases by 50% of its previous value. Which equation represents this relationship?",
         "options": [
-            "$y=40(1.50)^{x}$",
-            "$y=40(1.05)^{x}$",
-            "$y=50(1.40)^{x}$",
-            "$y=50(1.04)^{x}$"
+            "y = 40(1.50)ˣ",
+            "y = 40(1.05)ˣ",
+            "y = 50(1.40)ˣ",
+            "y = 50(1.04)ˣ"
         ],
         "answer": 0,
         "difficulty": "Medium"
@@ -901,7 +917,7 @@ const pt1_mathModule1: Question[] = [
         "id": "pt1-math-m1-q6",
         "num": 6,
         "type": "Math (SPR)",
-        "question": "The function f is defined by $f(x)=\\frac{1}{8x}$. What is the value of $f(x)$ when $x=9$?",
+        "question": "The function f is defined by f(x) = 1 / (8x). What is the value of f(x) when x = 9?",
         "options": [],
         "answer": "0138",
         "difficulty": "Medium"
@@ -910,12 +926,12 @@ const pt1_mathModule1: Question[] = [
         "id": "pt1-math-m1-q7",
         "num": 7,
         "type": "Math",
-        "question": "The function f is defined by $f(x)=3x-\\frac{1}{4}$. What is the y-intercept of the graph of $y=f(x)$ in the xy-plane?",
+        "question": "The function f is defined by f(x) = 3x − 1/4. What is the y-intercept of the graph of y = f(x) in the xy-plane?",
         "options": [
-            "$(0,-\\frac{1}{4})$",
-            "$(0,-3)$",
-            "(0,3)",
-            "(0,4)"
+            "(0, −1/4)",
+            "(0, −3)",
+            "(0, 3)",
+            "(0, 4)"
         ],
         "answer": 0,
         "difficulty": "Medium"
@@ -924,7 +940,7 @@ const pt1_mathModule1: Question[] = [
         "id": "pt1-math-m1-q8",
         "num": 8,
         "type": "Math (SPR)",
-        "question": "$x+6y=28$\n\n\n$6y=14$\n\n\nThe solution to the given system of equations is $(x,y)$. What is the value of x?",
+        "question": "x + 6y = 28\n6y = 14\n\nThe solution to the given system of equations is (x, y). What is the value of x?",
         "options": [],
         "answer": "14",
         "difficulty": "Medium"
@@ -961,7 +977,8 @@ const pt1_mathModule1: Question[] = [
         "id": "pt1-math-m1-q11",
         "num": 11,
         "type": "Math",
-        "question": "y -8- 6- 4- 2- -6 9 6. -4- 6 8- The complete graph of $y=f(x)$ is shown. For how many values of does $f(x)=0?$",
+        "image": "/math-bank/pt1-math-m1-q11.png",
+        "question": "The complete graph of y=f(x) is shown. For how many values of x does f(x)=0?",
         "options": [
             "One",
             "Two",
@@ -975,12 +992,12 @@ const pt1_mathModule1: Question[] = [
         "id": "pt1-math-m1-q12",
         "num": 12,
         "type": "Math",
-        "question": "$b^{2}+4c=7d$ The given equation relates the real numbers $b_{\\prime}$, $c_{\\prime}$ and d, where $d>\\frac{4}{7}c$. Which equation correctly expresses b in terms of c and d?",
+        "question": "b² + 4c = 7d. The given equation relates the real numbers b, c, and d, where d > 4c/7. Which equation correctly expresses b in terms of c and d?",
         "options": [
-            "$b=\\frac{7d+4c}{2}$",
-            "$b=\\frac{7d-4c}{2}$",
-            "$b=\\pm\\sqrt{7d+4c}$",
-            "$b=\\pm\\sqrt{7d-4c}$"
+            "b = (7d + 4c) / 2",
+            "b = (7d − 4c) / 2",
+            "b = ±√(7d + 4c)",
+            "b = ±√(7d − 4c)"
         ],
         "answer": 3,
         "difficulty": "Medium"
@@ -989,7 +1006,7 @@ const pt1_mathModule1: Question[] = [
         "id": "pt1-math-m1-q13",
         "num": 13,
         "type": "Math",
-        "question": "$x^{2}-\\frac{81}{16}=0$ How many distinct real solutions does the given equation have?",
+        "question": "x² − 81/16 = 0. How many distinct real solutions does the given equation have?",
         "options": [
             "Zero",
             "Exactly one",
@@ -1003,7 +1020,8 @@ const pt1_mathModule1: Question[] = [
         "id": "pt1-math-m1-q14",
         "num": 14,
         "type": "Math",
-        "question": "B $B^{\\prime}$ A C $A^{\\prime}$ $C^{\\prime}$ Note: Figures not drawn to scale. Triangles ABC and $A^{\\prime}B^{\\prime}C^{\\prime}$ are shown. Triangle ABC is dilated by a scale factor of 6 to form triangle $A^{\\prime}B^{\\prime}C^{\\prime}$. If the length of $\\overline{AB}$ is 18, what is the length of $\\overline{A^{\\prime}B^{\\prime}}?$",
+        "image": "/math-bank/pt1-math-m1-q14.png",
+        "question": "Triangles ABC and A'B'C' are shown. Triangle ABC is dilated by a scale factor of 6 to form triangle A'B'C'. If the length of side AB is 18, what is the length of side A'B'?",
         "options": [
             "3",
             "6",
@@ -1017,7 +1035,7 @@ const pt1_mathModule1: Question[] = [
         "id": "pt1-math-m1-q15",
         "num": 15,
         "type": "Math (SPR)",
-        "question": "What is the radius of the circle in the xy-plane defined by $(x+3)^{2}+(y+9)^{2}=361$?",
+        "question": "What is the radius of the circle in the xy-plane defined by (x + 3)² + (y + 9)² = 361?",
         "options": [],
         "answer": "19",
         "difficulty": "Medium"
@@ -1026,12 +1044,12 @@ const pt1_mathModule1: Question[] = [
         "id": "pt1-math-m1-q16",
         "num": 16,
         "type": "Math",
-        "question": "In the xy-plane, which of the following does NOT contain any points that are part of the solution set to $5x-7y>35!$",
+        "question": "In the xy-plane, which of the following does NOT contain any points that are part of the solution set to 5x − 7y > 35?",
         "options": [
             "The x-axis",
-            "The region where $x>0$ and $y>0$",
-            "The region where $x<0$ and $y<0$",
-            "The region where $x<0$ and $y>0$"
+            "The region where x>0 and y>0",
+            "The region where x<0 and y<0",
+            "The region where x<0 and y>0"
         ],
         "answer": 3,
         "difficulty": "Medium"
@@ -1040,7 +1058,8 @@ const pt1_mathModule1: Question[] = [
         "id": "pt1-math-m1-q17",
         "num": 17,
         "type": "Math",
-        "question": "The table shows the distribution of people in a certain city by age group.\n\n* Less than 18 years old: 26%\n\n\n* 18-40 years old: 21%\n\n\n* 41-65 years old: 29%\n\n\n* Greater than 65 years old: 24%\n\n\n\nIf a person in this city is selected at random, which of the following is closest to the probability of selecting a person who is greater than 65 years old, given that the person is at least 18 years old?",
+        "image": "/math-bank/pt1-math-m1-q17.png",
+        "question": "The table shows the distribution of people in a certain city by age group. If a person in this city is selected at random, which of the following is closest to the probability of selecting a person who is greater than 65 years old, given that the person is at least 18 years old?",
         "options": [
             "0.24",
             "0.32",
@@ -1054,12 +1073,12 @@ const pt1_mathModule1: Question[] = [
         "id": "pt1-math-m1-q18",
         "num": 18,
         "type": "Math",
-        "question": "Line h is defined by $\\frac{1}{2}x+\\frac{1}{9}y-54=0.$ Line j is perpendicular to line h in the xy-plane. What is the slope of line j?",
+        "question": "Line h is defined by (1/2)x + (1/9)y − 54 = 0. Line j is perpendicular to line h in the xy-plane. What is the slope of line j?",
         "options": [
-            "$-\\frac{9}{2}$",
-            "$-\\frac{2}{9}$",
-            "$\\frac{9}{2}$",
-            "$\\frac{2}{9}$"
+            "−9/2",
+            "−2/9",
+            "9/2",
+            "2/9"
         ],
         "answer": 3,
         "difficulty": "Medium"
@@ -1068,7 +1087,7 @@ const pt1_mathModule1: Question[] = [
         "id": "pt1-math-m1-q19",
         "num": 19,
         "type": "Math",
-        "question": "a, 26, 29, b, 31, 47, \u0441 For the given data set, the data values are listed in ascending order, where a, b, and c are constants. For this data set, the mean is 36, the median is 29, and the range is 72. What is the value of c?",
+        "question": "Data set: a, 26, 29, b, 31, 47, c. The data values are listed in ascending order, where a, b, and c are constants. For this data set, the mean is 36, the median is 29, and the range is 72. What is the value of c?",
         "options": [
             "54",
             "72",
@@ -1082,9 +1101,15 @@ const pt1_mathModule1: Question[] = [
         "id": "pt1-math-m1-q20",
         "num": 20,
         "type": "Math (SPR)",
-        "question": "S 37 Note: Figurehot2drawn202caleF e R In triangle QRS shown, $QR<RS$.[cite: $\\frac{37}{\\cos~Q}$[cite: $\\frac{37}{\\sin~Q}$[cite: $\\overline{QS}$[cite: $a $y=\"9(\\frac{a}{7})^{x+c}-b$[cite:\" 21.",
-        "options": [],
-        "answer": "1",
+        "image": "/math-bank/pt1-math-m1-q20.png",
+        "question": "Note: Figure not drawn to scale. In right triangle QRS shown, QR < RS and RS = 37. Which expression represents the length of QS?",
+        "options": [
+            "37 sin(Q)",
+            "37 / sin(Q)",
+            "37 cos(Q)",
+            "37 / cos(Q)"
+        ],
+        "answer": 1,
         "difficulty": "Medium"
     },
     {
@@ -1105,12 +1130,12 @@ const pt1_mathModule1: Question[] = [
         "id": "pt1-math-m1-q22",
         "num": 22,
         "type": "Math",
-        "question": "(Repeated number in text) $x^{2}-2x=28$ What is one of the solutions to the given equation?",
+        "question": "x² − 2x = 28. What is one of the solutions to the given equation?",
         "options": [
-            "$\\sqrt{28}$",
-            "$1+\\sqrt{29}$",
+            "√28",
+            "1 + √29",
             "29",
-            "$28+\\sqrt{2}$"
+            "28 + √2"
         ],
         "answer": 1,
         "difficulty": "Medium"
@@ -1124,10 +1149,10 @@ const pt1_mathModule2: Question[] = [
         "type": "Math",
         "question": "Zuri has a goal to run at least 16 miles per week while training for a race. This week, she has run 4 miles. If x represents the additional number of miles Zuri needs to run this week to meet her goal, which inequality represents this situation?",
         "options": [
-            "$4-x\\le16$",
-            "$4+x\\le16$",
-            "$4-x\\ge16$",
-            "$4+x\\ge16$"
+            "4 − x ≤ 16",
+            "4 + x ≤ 16",
+            "4 − x ≥ 16",
+            "4 + x ≥ 16"
         ],
         "answer": 3,
         "difficulty": "Hard"
@@ -1136,12 +1161,13 @@ const pt1_mathModule2: Question[] = [
         "id": "pt1-math-m2-q2",
         "num": 2,
         "type": "Math",
-        "question": "r S k $w^{\\circ}$ $x^{\\circ}$ $y^{\\circ}$ $z^{\\circ}$ Note: Figure not drawn to scale. In the figure shown, line k intersects lines r and s. If $w=147,$ which additional piece of information is sufficient to prove that lines r and s are parallel?",
+        "image": "/math-bank/pt1-math-m2-q2.png",
+        "question": "Note: Figure not drawn to scale. In the figure shown, line k intersects lines r and s. If w = 147, which additional piece of information is sufficient to prove that lines r and s are parallel?",
         "options": [
-            "$x=33$",
-            "$y=147$",
-            "$w+y=180$",
-            "$y+z=180$"
+            "x = 33",
+            "y = 147",
+            "w + y = 180",
+            "y + z = 180"
         ],
         "answer": 1,
         "difficulty": "Hard"
@@ -1150,12 +1176,13 @@ const pt1_mathModule2: Question[] = [
         "id": "pt1-math-m2-q3",
         "num": 3,
         "type": "Math",
-        "question": "* Number of food tickets: 10 | Total amount paid: $44.00\n\n\n* Number of food tickets: 15 | Total amount paid: $51.50\n\n\n* Number of food tickets: 25 | Total amount paid: $66.50\n\n\n\nAt a fundraiser, a family pays a fixed entrance fee. They then purchase food tickets, which each have the same cost. The table shows the relationship between the number of food tickets, that are purchased and the total amount paid $y_{1}$ in dollars, for both the entrance fee and the food tickets. Which equation represents the relationship between and y?",
+        "image": "/math-bank/pt1-math-m2-q3.png",
+        "question": "At a fundraiser, a family pays a fixed entrance fee. They then purchase food tickets, which each have the same cost. The table shows the relationship between the number of food tickets, x, that are purchased and the total amount paid y, in dollars, for both the entrance fee and the food tickets. Which equation represents the relationship between x and y?",
         "options": [
-            "$y=\\frac{3}{2}x+29$",
-            "$y=\\frac{3}{2}x-56$",
-            "$y=\\frac{2}{3}x+\\frac{112}{3}$",
-            "$y=\\frac{2}{3}x+\\frac{58}{3}$"
+            "y = (3/2)x + 29",
+            "y = (3/2)x − 56",
+            "y = (2/3)x + 112/3",
+            "y = (2/3)x + 58/3"
         ],
         "answer": 0,
         "difficulty": "Hard"
@@ -1164,7 +1191,8 @@ const pt1_mathModule2: Question[] = [
         "id": "pt1-math-m2-q4",
         "num": 4,
         "type": "Math",
-        "question": "A group of 10 gardeners recorded data on the germination rates of their tomato crop for one growing season. The scatterplot shows the relationship between the number of tomato seeds planted, $x_{1}$ and the number of tomato seeds that germinated, y, for each of the gardeners. A line of best fit is also shown. 500 400 300 200 100 X 100 200 300 400 500 Which of the following is the best interpretation of the slope of the line of best fit in this context?",
+        "image": "/math-bank/pt1-math-m2-q4.png",
+        "question": "A group of 10 gardeners recorded data on the germination rates of their tomato crop for one growing season. The scatterplot shows the relationship between the number of tomato seeds planted, x, and the number of tomato seeds that germinated, y, for each of the gardeners. A line of best fit is also shown. Which of the following is the best interpretation of the slope of the line of best fit in this context?",
         "options": [
             "The number of tomato seeds planted is predicted to increase by 60 seeds every 100 days.",
             "The number of tomato seeds planted is predicted to increase by 300 seeds every 100 days.",
@@ -1178,7 +1206,7 @@ const pt1_mathModule2: Question[] = [
         "id": "pt1-math-m2-q5",
         "num": 5,
         "type": "Math (SPR)",
-        "question": "The graph of $2x+y=11$ in the xy-plane is a line. What is the slope of the line?",
+        "question": "The graph of 2x+y=11 in the xy-plane is a line. What is the slope of the line?",
         "options": [],
         "answer": "-2",
         "difficulty": "Hard"
@@ -1187,7 +1215,7 @@ const pt1_mathModule2: Question[] = [
         "id": "pt1-math-m2-q6",
         "num": 6,
         "type": "Math",
-        "question": "$f(x)=2x+3$\n\n\n$g(x)=7x-2$\n\n\n$h(x)=5x+6$\n\n\nThe functions f, g, and h are defined as shown. If $f(x)\\cdot g(x)-h(x)=ax^{2}+bx+c_{r}$ where a, b, and c are constants, what is the value of b?",
+        "question": "f(x) = 2x + 3\ng(x) = 7x − 2\nh(x) = 5x + 6\n\nThe functions f, g, and h are defined as shown. If f(x) · g(x) − h(x) = ax² + bx + c, where a, b, and c are constants, what is the value of b?",
         "options": [
             "-5",
             "12",
@@ -1201,12 +1229,12 @@ const pt1_mathModule2: Question[] = [
         "id": "pt1-math-m2-q7",
         "num": 7,
         "type": "Math",
-        "question": "The function f is defined by $f(x)=\\frac{x+11}{5}$, and $f(a)=-18$ where a is a constant. What is the value of a?",
+        "question": "The function f is defined by f(x) = (x + 11) / 5, and f(a) = −18, where a is a constant. What is the value of a?",
         "options": [
-            "-101",
-            "-79",
-            "$-\\frac{79}{5}$",
-            "$-\\frac{7}{5}$"
+            "−101",
+            "−79",
+            "−79/5",
+            "−7/5"
         ],
         "answer": 0,
         "difficulty": "Hard"
@@ -1215,7 +1243,8 @@ const pt1_mathModule2: Question[] = [
         "id": "pt1-math-m2-q8",
         "num": 8,
         "type": "Math",
-        "question": "The table shows values of x and their corresponding values of y for three points on line j in the xy-plane.\n\n* X: 0, y: -10\n\n\n* X: -4, y: 1\n\n\n* X: 2, y: 2\n\n\n\nLine k also lies in the xy-plane and is defined by the equation $y=4x.$ At what point $(x,y)$ do lines j and k intersect?",
+        "image": "/math-bank/pt1-math-m2-q8.png",
+        "question": "The table shows values of x and their corresponding values of y for three points on line j in the xy-plane. Line k also lies in the xy-plane and is defined by the equation y=4x. At what point (x,y) do lines j and k intersect?",
         "options": [
             "(5,20)",
             "(5, -44)",
@@ -1229,7 +1258,7 @@ const pt1_mathModule2: Question[] = [
         "id": "pt1-math-m2-q9",
         "num": 9,
         "type": "Math (SPR)",
-        "question": "$h(t)=-16t^{2}+b$ The function h estimates an object's height, in feet, above the ground t seconds after the object is dropped, where b is a constant. The function estimates that the object is 19.36 feet above the ground when it is dropped at $t=0$ How many seconds after being dropped does the function estimate the object will hit the ground?",
+        "question": "h(t) = −16t² + b. The function h estimates an object's height, in feet, above the ground t seconds after the object is dropped, where b is a constant. The function estimates that the object is 19.36 feet above the ground when it is dropped at t = 0. How many seconds after being dropped does the function estimate the object will hit the ground?",
         "options": [],
         "answer": "1.1",
         "difficulty": "Hard"
@@ -1238,7 +1267,7 @@ const pt1_mathModule2: Question[] = [
         "id": "pt1-math-m2-q10",
         "num": 10,
         "type": "Math",
-        "question": "$|4x-3|=-9$ How many solutions does the given equation have?",
+        "question": "|4x − 3| = −9. How many solutions does the given equation have?",
         "options": [
             "Zero",
             "One",
@@ -1252,7 +1281,7 @@ const pt1_mathModule2: Question[] = [
         "id": "pt1-math-m2-q11",
         "num": 11,
         "type": "Math",
-        "question": "The function h is defined by $h(x)=a^{x}+b$, where a and b are positive constants. The graph of $y=h(x)$ in the xy-plane passes through the points (0, 10) and (2, 13). What is the value of ab?",
+        "question": "The function h is defined by h(x) = aˣ + b, where a and b are positive constants. The graph of y = h(x) in the xy-plane passes through the points (0, 10) and (2, 13). What is the value of ab?",
         "options": [
             "13",
             "18",
@@ -1266,7 +1295,7 @@ const pt1_mathModule2: Question[] = [
         "id": "pt1-math-m2-q12",
         "num": 12,
         "type": "Math (SPR)",
-        "question": "A circle has center P, and points A and B lie on the circle. The measure of arc AB is 45\u00b0 and the length of arc AB is $4\\pi$ units. What is the length, in units, of the radius of the circle?",
+        "question": "A circle has center P, and points A and B lie on the circle. The measure of arc AB is 45° and the length of arc AB is 4π units. What is the length, in units, of the radius of the circle?",
         "options": [],
         "answer": "16",
         "difficulty": "Hard"
@@ -1275,7 +1304,7 @@ const pt1_mathModule2: Question[] = [
         "id": "pt1-math-m2-q13",
         "num": 13,
         "type": "Math",
-        "question": "The function f is defined by $f(x)=56(0.19)^{x}.$ For any positive integer $n_{1}$ the value of $f(n)$ is $p\\%$ less than the value of $f(n-1)$ What is the value of p?",
+        "question": "The function f is defined by f(x) = 56(0.19)ˣ. For any positive integer n, the value of f(n) is p% less than the value of f(n − 1). What is the value of p?",
         "options": [
             "19",
             "44",
@@ -1289,7 +1318,7 @@ const pt1_mathModule2: Question[] = [
         "id": "pt1-math-m2-q14",
         "num": 14,
         "type": "Math",
-        "question": "$x^{2}+(\\sqrt{k-3})x+42=0$ In the given equation, k is a constant. The equation has exactly one real solution. What is the value of k?",
+        "question": "x² + √(k − 3) · x + 42 = 0. In the given equation, k is a constant. The equation has exactly one real solution. What is the value of k?",
         "options": [
             "171",
             "168",
@@ -1303,12 +1332,12 @@ const pt1_mathModule2: Question[] = [
         "id": "pt1-math-m2-q15",
         "num": 15,
         "type": "Math",
-        "question": "$x^{2}+y^{2}=36$\n\n\n$y=mx+\\frac{b}{4}$\n\n\nIn the given system of equations, m and b are negative constants. In the xy-plane, the graphs of the equations in the given system intersect at the point $(-5,y)$, where $y<0.$ Which expression represents the value of b?",
+        "question": "x² + y² = 36\ny = mx + b/4\n\nIn the given system of equations, m and b are negative constants. In the xy-plane, the graphs of the equations in the given system intersect at the point (−5, y), where y < 0. Which expression represents the value of b?",
         "options": [
-            "$-\\frac{5m}{4}+\\frac{\\sqrt{11}}{4}$",
-            "$\\frac{5m}{4}-\\frac{\\sqrt{11}}{4}$",
-            "$-20m+4\\sqrt{11}$",
-            "$20m-4\\sqrt{11}$"
+            "−5m/4 + √11/4",
+            "5m/4 − √11/4",
+            "−20m + 4√11",
+            "20m − 4√11"
         ],
         "answer": 3,
         "difficulty": "Hard"
@@ -1331,7 +1360,9 @@ const pt1_mathModule2: Question[] = [
         "id": "pt1-math-m2-q17",
         "num": 17,
         "type": "Math",
-        "question": "For data set A, the table summarizes the distribution of the number of pieces of mail received by a business each day during a period of 11 days.\n\n* Pieces of mail: 0 | Days: 2\n\n\n* Pieces of mail: 3 | Days: 2\n\n\n* Pieces of mail: 4 | Days: 2\n\n\n* Pieces of mail: 5 | Days: 2\n\n\n* Pieces of mail: 6 | Days: 1\n\n\n* Pieces of mail: 7 | Days: 1\n\n\n* Pieces of mail: 13 | Days: 1\n\n\n\nThe data value 13 is removed from data set A to create data set B, which consists of the remaining 10 data values. Which statement best compares the median of data set A and the median of data set B?",
+        "image": "/math-bank/pt1-math-m2-q17.png",
+        "passage": "For data set A, the table summarizes the distribution of the number of pieces of mail received by a business each day during a period of 11 days.",
+        "question": "The data value 13 is removed from data set A to create data set B, which consists of the remaining 10 data values. Which statement best compares the median of data set A and the median of data set B?",
         "options": [
             "The median of data set B is less than the median of data set A.",
             "The median of data set B is greater than the median of data set A.",
@@ -1345,12 +1376,12 @@ const pt1_mathModule2: Question[] = [
         "id": "pt1-math-m2-q18",
         "num": 18,
         "type": "Math",
-        "question": "$\\frac{x}{5}+\\frac{y}{9}=\\frac{47}{45}$ An engineer connects resistors in series, where the resistors in the series have a total resistance of $\\frac{47}{45}$ ohms. In this series, there are resistors of type A, which each have a resistance of a ohms, and y resistors of type B, which each have a resistance of b ohms. The given equation represents this situation. According to this equation, what is the positive difference between the value of a and the value of b?",
+        "question": "x/5 + y/9 = 47/45. An engineer connects resistors in series, where the resistors in the series have a total resistance of 47/45 ohms. In this series, there are resistors of type A, which each have a resistance of a ohms, and y resistors of type B, which each have a resistance of b ohms. The given equation represents this situation. According to this equation, what is the positive difference between the value of a and the value of b?",
         "options": [
             "47",
             "4",
-            "$\\frac{47}{45}$",
-            "$\\frac{4}{45}$"
+            "47/45",
+            "4/45"
         ],
         "answer": 3,
         "difficulty": "Hard"
@@ -1359,7 +1390,7 @@ const pt1_mathModule2: Question[] = [
         "id": "pt1-math-m2-q19",
         "num": 19,
         "type": "Math (SPR)",
-        "question": "$9x^{2}+8=nx$ In the given equation, n is a constant. The equation has exactly one solution. What is the value of $\\frac{n^{2}}{8}$",
+        "question": "9x² + 8 = nx. In the given equation, n is a constant. The equation has exactly one solution. What is the value of n²/8?",
         "options": [],
         "answer": "36",
         "difficulty": "Hard"
@@ -1368,7 +1399,8 @@ const pt1_mathModule2: Question[] = [
         "id": "pt1-math-m2-q20",
         "num": 20,
         "type": "Math",
-        "question": "The table gives the areas and perimeters of two similar rectangles, where n is a constant.\n\n* Rectangle A | Area: 630 square inches | Perimeter: 210 inches\n\n\n* Rectangle B | Area: 2,520 square inches | Perimeter: n inches\n\n\n\nWhat is the value of n?",
+        "passage": "__TABLE__\nRectangle | Area | Perimeter\n--- | --- | ---\nA | 630 square inches | 210 inches\nB | 2,520 square inches | n inches\n__ENDTABLE__",
+        "question": "The table gives the areas and perimeters of two similar rectangles, where n is a constant. What is the value of n?",
         "options": [
             "2,100",
             "1,680",
@@ -1391,12 +1423,12 @@ const pt1_mathModule2: Question[] = [
         "id": "pt1-math-m2-q22",
         "num": 22,
         "type": "Math",
-        "question": "Which expression is a factor of $y^{2}(x-3)-25(x-3)^{3}?$",
+        "question": "Which expression is a factor of y²(x − 3) − 25(x − 3)³?",
         "options": [
-            "$y(x-3)$",
-            "$(x-5)(x-3)$",
-            "$y+x-3$",
-            "$y+5x-15$"
+            "y(x-3)",
+            "(x-5)(x-3)",
+            "y+x-3",
+            "y+5x-15"
         ],
         "answer": 3,
         "difficulty": "Hard"
@@ -1408,7 +1440,7 @@ const pt2_englishModule1: Question[] = [
         "id": "pt2-reading-m1-q1",
         "num": 1,
         "type": "Reading and Writing",
-        "passage": "Scientists have used machine learning tools to study elephant sounds, uncovering a\n\nsophisticated communication system. The tools unique patterns in the rumbling\n\nsounds elephants make. The scientists claim that these patterns are specific calls the\nelephants use for individuals, similar to names.",
+        "passage": "Scientists have used machine learning tools to study elephant sounds, uncovering a\n\nsophisticated communication system. The tools ______ unique patterns in the rumbling sounds elephants make. The scientists claim that these patterns are specific calls the\nelephants use for individuals, similar to names.",
         "question": "Which choice completes the text with the most logical and precise word or phrase?",
         "options": [
             "created",
@@ -1483,7 +1515,7 @@ const pt2_englishModule1: Question[] = [
         "id": "pt2-reading-m1-q6",
         "num": 6,
         "type": "Reading and Writing",
-        "passage": "Adult glass eels can be found off the coast of Maine, but the eels begin their lives in the\nSargasso Sea, a biodiverse area in the North Atlantic Ocean where they are born and later\nreturn to breed. Though biologists believe they have identified the general area in the\nSargasso Sea that is crucial to the endangered eels\u2019 survival, little is yet known about how\nthe animals spawn there. Scientists believe that solving the mystery will lead to better\nconservation of glass eels and their habitat, helping_in turn to sustain several other species\n\nthat rely on them as a food source.",
+        "passage": "Adult glass eels can be found off the coast of Maine, but the eels begin their lives in the\nSargasso Sea, a biodiverse area in the North Atlantic Ocean where they are born and later\nreturn to breed. Though biologists believe they have identified the general area in the\nSargasso Sea that is crucial to the endangered eels\u2019 survival, little is yet known about how\nthe animals spawn there. Scientists believe that solving the mystery will lead to better\nconservation of glass eels and their habitat, helping, in turn, to sustain several other species\n\nthat rely on them as a food source.",
         "question": "Which choice best describes the function of the underlined portion in the text as a whole?",
         "options": [
             "It presents a finding from a study that identifies the circumstances required to ensure the\nsurvival of glass eels.",
@@ -1588,7 +1620,7 @@ const pt2_englishModule1: Question[] = [
         "id": "pt2-reading-m1-q14",
         "num": 14,
         "type": "Reading and Writing",
-        "passage": "Neuroscientist Artin Arshamian and his team sought to determine what affects a person's\nperception of an odor as pleasant: is it culture, personal taste, or aspects of human\nanatomy? The team assessed odor preferences in ten groups of people with different modes\nof living (urban, agricultural, and hunter-gatherer) including urban dwellers from a large city\nin Thailand and the Seri people from a small community in Mexico. The team observed that\nacross cultures, people generally rated odors about the same: vanillin, which smells like\nvanilla, was typically rated more pleasant than galbazine, which smells like peanuts. The\nteam therefore concluded that",
+        "passage": "Neuroscientist Artin Arshamian and his team sought to determine what affects a person's\nperception of an odor as pleasant: is it culture, personal taste, or aspects of human\nanatomy? The team assessed odor preferences in ten groups of people with different modes\nof living (urban, agricultural, and hunter-gatherer) including urban dwellers from a large city\nin Thailand and the Seri people from a small community in Mexico. The team observed that\nacross cultures, people generally rated odors about the same: vanillin, which smells like\nvanilla, was typically rated more pleasant than galbazine, which smells like peanuts. The team therefore concluded that ______.",
         "question": "Which choice most logically completes the text?",
         "options": [
             "culture likely plays more of a role in a person's perception of how pleasant an odor is than\ndoes human anatomy.",
@@ -1603,7 +1635,7 @@ const pt2_englishModule1: Question[] = [
         "id": "pt2-reading-m1-q15",
         "num": 15,
         "type": "Reading and Writing",
-        "passage": "Outi Tervo and team studied the effect of human-caused noise on narwhals (Vonodon\nmonoceros), arctic marine mammals that are sensitive to acoustic changes in their\nenvironment. Hypothesizing that elevated sound levels affect foraging among narwhals,\nTervo's team compared narwhal diving behaviors in natural sound conditions with those\nbehaviors in two human-caused sound exposure conditions\u2014ship sounds and ship sounds\ncoupled with sonic pulses. Both exposure conditions resulted in significant decreases in the\nnumber and target depth of deep dives (associated with foraging) relative to natural\nconditions. However, differences between diving behaviors in the two exposure types were\nnegligible, a finding that could be attributed to the fact that",
+        "passage": "Outi Tervo and team studied the effect of human-caused noise on narwhals (Vonodon\nmonoceros), arctic marine mammals that are sensitive to acoustic changes in their\nenvironment. Hypothesizing that elevated sound levels affect foraging among narwhals,\nTervo's team compared narwhal diving behaviors in natural sound conditions with those\nbehaviors in two human-caused sound exposure conditions\u2014ship sounds and ship sounds\ncoupled with sonic pulses. Both exposure conditions resulted in significant decreases in the\nnumber and target depth of deep dives (associated with foraging) relative to natural\nconditions. However, differences between diving behaviors in the two exposure types were\nnegligible, a finding that could be attributed to the fact that ______.",
         "question": "Which choice most logically completes the text?",
         "options": [
             "sonic pulses can be heard at significantly greater ocean depths than ship sounds can.",
@@ -1618,7 +1650,7 @@ const pt2_englishModule1: Question[] = [
         "id": "pt2-reading-m1-q16",
         "num": 16,
         "type": "Reading and Writing",
-        "passage": "Jesse Trevifio's 1976 painting Mis Hermanos was featured in the Smithsonian\u2018s 2013\nexhibition Our America: The Latino Presence in American Art. The piece chosen for\n\nthe exhibition by curator E. Carmen Ramos.",
+        "passage": "Jesse Trevifio's 1976 painting Mis Hermanos was featured in the Smithsonian\u2018s 2013\nexhibition Our America: The Latino Presence in American Art. The piece ______ for the exhibition by curator E. Carmen Ramos.",
         "question": "Which choice completes the text so that it conforms to the conventions of Standard English?",
         "options": [
             "is",
@@ -1633,7 +1665,7 @@ const pt2_englishModule1: Question[] = [
         "id": "pt2-reading-m1-q17",
         "num": 17,
         "type": "Reading and Writing",
-        "passage": "Mia Heavener's 2019 novel Under Nushagak Bluff, which takes place in a mid-twentieth-\ncentury rural Alaskan fishing the story of three Yup\u2019ik women who grapple with the\nrise of commercial fisheries and other changes affecting their community.",
+        "passage": "Mia Heavener's 2019 novel Under Nushagak Bluff, which takes place in a mid-twentieth-\ncentury rural Alaskan fishing ______ the story of three Yup\u2019ik women who grapple with the\nrise of commercial fisheries and other changes affecting their community.",
         "question": "Which choice completes the text so that it conforms to the conventions of Standard English?",
         "options": [
             "village: tells",
@@ -1663,7 +1695,7 @@ const pt2_englishModule1: Question[] = [
         "id": "pt2-reading-m1-q19",
         "num": 19,
         "type": "Reading and Writing",
-        "passage": "Enacted in 1944, Iceland\u2019s 4,089-word constitution, in contrast to Spain's, which was\nenacted in 1978 and contains a far greater number (17,608) of words, as the 2nd\n\nshortest in the world. Such data are studied by constitutional scholars like George Tsebelis,\nwho can use them to draw broader conclusions.",
+        "passage": "Enacted in 1944, Iceland\u2019s 4,089-word constitution, in contrast to Spain's, which was\nenacted in 1978 and contains a far greater number (17,608) of words, ______ as the 2nd shortest in the world. Such data are studied by constitutional scholars like George Tsebelis,\nwho can use them to draw broader conclusions.",
         "question": "Which choice completes the text so that it conforms to the conventions of Standard English?",
         "options": [
             "have ranked",
@@ -1678,7 +1710,7 @@ const pt2_englishModule1: Question[] = [
         "id": "pt2-reading-m1-q20",
         "num": 20,
         "type": "Reading and Writing",
-        "passage": "Working on an unimaginably small scale of billionths of a meter, nanoengineers have found\n\nways to leverage cerium oxide to improve treatments for certain conditions related to\n\noxidative stress.",
+        "passage": "Working on an unimaginably small scale of billionths of a meter, nanoengineers have found ways to leverage ______ to improve treatments for certain conditions related to\n\noxidative stress.",
         "question": "Which choice completes the text so that it conforms to the conventions of Standard English?",
         "options": [
             "nanoparticles\u2019 properties\u2019",
@@ -1693,7 +1725,7 @@ const pt2_englishModule1: Question[] = [
         "id": "pt2-reading-m1-q21",
         "num": 21,
         "type": "Reading and Writing",
-        "passage": "Recordings of electrical activity in the brain, increased activity in brain areas\n\nassociated with suppressing motor functions.",
+        "passage": "Recordings of electrical activity in the brain ______ increased activity in brain areas associated with suppressing motor functions.",
         "question": "Which choice completes the text so that it conforms to the conventions of Standard English?",
         "options": [
             "electrograms show that while responding to hypothetical match scenarios, the most\nhighly skilled soccer players have",
@@ -1738,7 +1770,7 @@ const pt2_englishModule1: Question[] = [
         "id": "pt2-reading-m1-q24",
         "num": 24,
         "type": "Reading and Writing",
-        "passage": "While some researchers have identified the planet Kepler-296e as potentially habitable, it\u2019s\nunlikely that humanity will be able to take advantage of its favorable conditions anytime soon\n\u2014it's 737 light years away. humanity must first focus on making planets within our\nsolar system more habitable.",
+        "passage": "While some researchers have identified the planet Kepler-296e as potentially habitable, it\u2019s\nunlikely that humanity will be able to take advantage of its favorable conditions anytime soon\n\u2014it's 737 light years away. ______ humanity must first focus on making planets within our solar system more habitable.",
         "question": "Which choice completes the text with the most logical transition?",
         "options": [
             "Likewise,",
@@ -1753,7 +1785,7 @@ const pt2_englishModule1: Question[] = [
         "id": "pt2-reading-m1-q25",
         "num": 25,
         "type": "Reading and Writing",
-        "passage": "The Tres Zapotes archaeological site is located in our home state of Veracruz, Mexico.\nan 8.5-ton stone statue of a human head was left behind by the ancient Olmec\ncivilization. In the nearby state of Tabasco was another stone statue that weighs 19.8 tons.",
+        "passage": "The Tres Zapotes archaeological site is located in our home state of Veracruz, Mexico. ______ an 8.5-ton stone statue of a human head was left behind by the ancient Olmec\ncivilization. In the nearby state of Tabasco was another stone statue that weighs 19.8 tons.",
         "question": "Which choice completes the text with the most logical transition?",
         "options": [
             "In other words,",
@@ -1816,7 +1848,7 @@ const pt2_englishModule2: Question[] = [
         "id": "pt2-reading-m2-q1",
         "num": 1,
         "type": "Reading and Writing",
-        "passage": "Though copies of The Adventures of Indiana Jones in Wenceslas Square in Prague on\nJanuary 16, 1989\u2014an underground computer game that was created anonymously in 1989\nas an act of political protest against the authoritarian regime of what was then\nCzechoslovakia\u2014were originally distributed , the game is now readily available online\nfor anyone to play.",
+        "passage": "Though copies of The Adventures of Indiana Jones in Wenceslas Square in Prague on\nJanuary 16, 1989\u2014an underground computer game that was created anonymously in 1989\nas an act of political protest against the authoritarian regime of what was then\nCzechoslovakia\u2014were originally distributed ______, the game is now readily available online for anyone to play.",
         "question": "Which choice completes the text with the most logical and precise word or phrase?",
         "options": [
             "succinctly",
@@ -1831,7 +1863,7 @@ const pt2_englishModule2: Question[] = [
         "id": "pt2-reading-m2-q2",
         "num": 2,
         "type": "Reading and Writing",
-        "passage": "If some specific predictions in Alvin Toffler\u2019s 1970 book Future Shock seem ludicrous now\u2014\npeople do not wear paper clothing while living in underwater cities\u2014Toffler's fundamental\nclaim that rapid technological and social change will leave people feeling disoriented and\natomized seems, in our age of disequilibrium and fragmentation, remarkably",
+        "passage": "If some specific predictions in Alvin Toffler\u2019s 1970 book Future Shock seem ludicrous now\u2014\npeople do not wear paper clothing while living in underwater cities\u2014Toffler's fundamental\nclaim that rapid technological and social change will leave people feeling disoriented and\natomized seems, in our age of disequilibrium and fragmentation, remarkably ______.",
         "question": "Which choice completes the text with the most logical and precise word or phrase?",
         "options": [
             "prescient",
@@ -2011,7 +2043,7 @@ const pt2_englishModule2: Question[] = [
         "id": "pt2-reading-m2-q14",
         "num": 14,
         "type": "Reading and Writing",
-        "passage": "Whereas Joan Lockard's 1984 study of captive gorillas reported more right-handedness\nthan left-handedness, Jane Goodall's 1963 study of wild chimpanzees did not. According to\na meta-analysis of studies of nonhuman primates, captive populations are more likely to be\ndescribed as right-handed than wild populations are. Statistical analysis indicates a\nhandedness study would need a minimum of 176 individuals to show a representative result;\nhowever, the study by Lockard included a total population of 8, and the study by Goodall\nincluded a total population of 8. This suggests that",
+        "passage": "Whereas Joan Lockard's 1984 study of captive gorillas reported more right-handedness\nthan left-handedness, Jane Goodall's 1963 study of wild chimpanzees did not. According to\na meta-analysis of studies of nonhuman primates, captive populations are more likely to be\ndescribed as right-handed than wild populations are. Statistical analysis indicates a\nhandedness study would need a minimum of 176 individuals to show a representative result;\nhowever, the study by Lockard included a total population of 8, and the study by Goodall included a total population of 8. This suggests that ______.",
         "question": "Which choice most logically completes the text?",
         "options": [
             "neither the study by Lockard nor the study by Goodall provides sufficient evidence to\nmake a meaningful comparison about handedness in primates.",
@@ -2026,7 +2058,7 @@ const pt2_englishModule2: Question[] = [
         "id": "pt2-reading-m2-q15",
         "num": 15,
         "type": "Reading and Writing",
-        "passage": "Interested in how the color of dogs\u2019 irises affects human responses to dogs, Akitsugu Konno\net al. showed images of 12 dogs\u2019 faces to human participants and asked them to rate the\ndogs\u2019 kindness and trustworthiness as well as the likelihood that they would interact with or\nkeep the dogs. The researchers had previously adjusted the images so that each dog was\npresented in two versions, one with light irises and one with dark irises. They distributed the\nimages such that no participant saw both the light and dark versions of the same dog. Konno\net al. found that participants responded more positively to the latter. The study\u2019s design\nallowed the researchers to exclude the possibility that the results",
+        "passage": "Interested in how the color of dogs\u2019 irises affects human responses to dogs, Akitsugu Konno\net al. showed images of 12 dogs\u2019 faces to human participants and asked them to rate the\ndogs\u2019 kindness and trustworthiness as well as the likelihood that they would interact with or\nkeep the dogs. The researchers had previously adjusted the images so that each dog was\npresented in two versions, one with light irises and one with dark irises. They distributed the\nimages such that no participant saw both the light and dark versions of the same dog. Konno\net al. found that participants responded more positively to the latter. The study\u2019s design\nallowed the researchers to exclude the possibility that the results ______.",
         "question": "Which choice most logically completes the text?",
         "options": [
             "may have been different if participants had been able to see the dogs\u2019 irises in person\ninstead of only seeing images that included the dogs' irises.",
@@ -2056,7 +2088,7 @@ const pt2_englishModule2: Question[] = [
         "id": "pt2-reading-m2-q17",
         "num": 17,
         "type": "Reading and Writing",
-        "passage": "Charles Dickens's classic 1850 novel about a young man named David Copperfield has a title\nthat is instantly recognizable to many readers: David Copperfield. Dickens's novel originally\nhad a different while writing and editing, Dickens had planned to call the novel Mag\u2019s\nDiversions.",
+        "passage": "Charles Dickens's classic 1850 novel about a young man named David Copperfield has a title\nthat is instantly recognizable to many readers: David Copperfield. Dickens's novel originally had a different ______; while writing and editing, Dickens had planned to call the novel Mag\u2019s\nDiversions.",
         "question": "Which choice completes the text so that it conforms to the conventions of Standard English?",
         "options": [
             "title, though;",
@@ -2071,7 +2103,7 @@ const pt2_englishModule2: Question[] = [
         "id": "pt2-reading-m2-q18",
         "num": 18,
         "type": "Reading and Writing",
-        "passage": "On Guard is a 1997 photograph by Iranian artist Shirin Neshat. Like many of Neshat's photos,\nthe work features a pair of hands. Clasping a microphone, one hand covered in\nPersian script, the hands imply an out-of-frame figure on the edge of speaking.",
+        "passage": "On Guard is a 1997 photograph by Iranian artist Shirin Neshat. Like many of Neshat's photos,\nthe work features a pair of hands. Clasping a microphone, one hand ______ and the other covered in Persian script, the hands imply an out-of-frame figure on the edge of speaking.",
         "question": "Which choice completes the text so that it conforms to the conventions of Standard English?",
         "options": [
             "is bare and the other is",
@@ -2086,7 +2118,7 @@ const pt2_englishModule2: Question[] = [
         "id": "pt2-reading-m2-q19",
         "num": 19,
         "type": "Reading and Writing",
-        "passage": "The exoplanet Pi Mensae d was discovered using an indirect approach to planetary\ndetection, the radial velocity method. Compared to that of the direct imaging method,\nthe effect these exoplanets have on nearby stars.",
+        "passage": "The exoplanet Pi Mensae d was discovered using an indirect approach to planetary\ndetection, the radial velocity method. Compared to that of the direct imaging method, ______ is detected by the effect these exoplanets have on nearby stars.",
         "question": "Which choice completes the text so that it conforms to the conventions of Standard English?",
         "options": [
             "the detection of distant exoplanets, too dim to be observed in the radial velocity method's\nvast zone of discovery, is based on",
@@ -2101,7 +2133,7 @@ const pt2_englishModule2: Question[] = [
         "id": "pt2-reading-m2-q20",
         "num": 20,
         "type": "Reading and Writing",
-        "passage": "In the eastern Chinese city of Suzhou, known as a hub for silk manufacturing, a unique\n\ntradition of embroidery back over two thousand years\u2014one that includes iconic\n\ndouble-sided stitching with different images on each side\u2014remains popular with modern\naudiences, preserving the city\u2019s cultural heritage.",
+        "passage": "In the eastern Chinese city of Suzhou, known as a hub for silk manufacturing, a unique tradition of embroidery ______ back over two thousand years—one that includes iconic\n\ndouble-sided stitching with different images on each side\u2014remains popular with modern\naudiences, preserving the city\u2019s cultural heritage.",
         "question": "Which choice completes the text so that it conforms to the conventions of Standard English?",
         "options": [
             "dates",
@@ -2116,7 +2148,7 @@ const pt2_englishModule2: Question[] = [
         "id": "pt2-reading-m2-q21",
         "num": 21,
         "type": "Reading and Writing",
-        "passage": "Giant dust plumes from the Sahara Desert that blow across the Atlantic Ocean can have\ncomplex and opposing effects on tropical cyclones. On one hand, the dust can enhance the\nformation of ice clouds in the cyclone\u2019s core, increasing precipitation. the dust can\nlower sea surface temperatures around the cyclone's core, weakening the storm.",
+        "passage": "Giant dust plumes from the Sahara Desert that blow across the Atlantic Ocean can have\ncomplex and opposing effects on tropical cyclones. On one hand, the dust can ______ enhance the formation of ice clouds in the cyclone\u2019s core, increasing precipitation. the dust can\nlower sea surface temperatures around the cyclone's core, weakening the storm.",
         "question": "Which choice completes the text with the most logical transition?",
         "options": [
             "In other words,",
@@ -2131,7 +2163,7 @@ const pt2_englishModule2: Question[] = [
         "id": "pt2-reading-m2-q22",
         "num": 22,
         "type": "Reading and Writing",
-        "passage": "moon Pasiphae in orbit around Jupiter. researchers have discovered eighty moons\n\norbiting Jupiter.",
+        "passage": "moon Pasiphae in orbit around Jupiter. ______ researchers have discovered eighty moons orbiting Jupiter.",
         "question": "Which choice completes the text with the most logical transition?\nIn 1908, some 298 years after Galileo Galilei and Simon Marius independently discovered\nJupiter's four largest moons (lo, Europa, Ganymede, and Callisto), scientists discovered the",
         "options": [
             "To date,",
@@ -2146,7 +2178,7 @@ const pt2_englishModule2: Question[] = [
         "id": "pt2-reading-m2-q23",
         "num": 23,
         "type": "Reading and Writing",
-        "passage": "When ordering the branches of the Colville River system, cartographers tend to begin with\n\nthe riverway\u2019s lowest point, the Colville River. hydrologists begin at the top of the\n\nriver system, with the Siksikpuk River and other tributaries fed by the riverway\u2019s source,\nAlaska\u2019s De Long Mountains.",
+        "passage": "When ordering the branches of the Colville River system, cartographers tend to begin with the riverway’s lowest point, the Colville River. ______ hydrologists begin at the top of the\n\nriver system, with the Siksikpuk River and other tributaries fed by the riverway\u2019s source,\nAlaska\u2019s De Long Mountains.",
         "question": "Which choice completes the text with the most logical transition?",
         "options": [
             "In a similar way,",
@@ -2161,7 +2193,7 @@ const pt2_englishModule2: Question[] = [
         "id": "pt2-reading-m2-q24",
         "num": 24,
         "type": "Reading and Writing",
-        "passage": "The Sultanate of Brunei, a Malay sea power based on the northern coast of Borneo that\nreached its height around 1600 CE, is considered a thalassocracy\u2014a geopolitical entity\nwhose hegemony resulted from control of the sea rather than of land. Historians classify\nthalassocracies as distinct from tellurocracies, or land-based powers. the Ottoman\nEmpire (1300s-\u20141900s CE) is known for both land and sea supremacy.",
+        "passage": "The Sultanate of Brunei, a Malay sea power based on the northern coast of Borneo that\nreached its height around 1600 CE, is considered a thalassocracy\u2014a geopolitical entity\nwhose hegemony resulted from control of the sea rather than of land. Historians classify\nthalassocracies as distinct from tellurocracies, or land-based powers. the Ottoman Empire (1300s—1900s CE) is known for both land and sea supremacy. ______",
         "question": "Which choice completes the text with the most logical transition?",
         "options": [
             "For example, tellurocracies have long overpowered their rivals:",
@@ -2264,12 +2296,12 @@ const pt2_mathModule1: Question[] = [
         "id": "pt2-math-m1-q6",
         "num": 6,
         "type": "Math",
-        "question": "Note: Figure not drawn to scale.\n\nIn the figure shown, lines @ and k are parallel and line \u00a2 intersects both lines. If 2 > 116,\nwhich of the following must be true?",
+        "question": "In the figure shown, lines $p$ and $k$ are parallel and line $\\ell$ intersects both lines. If $z > 116$, which of the following must be true?",
         "options": [
-            "y < 64",
-            "y > 64",
-            "x+y< 180",
-            "z+y> 180"
+            "$y < 64$",
+            "$y > 64$",
+            "$x+y < 180$",
+            "$z+y > 180$"
         ],
         "answer": 0,
         "difficulty": "Medium"
@@ -2315,7 +2347,7 @@ const pt2_mathModule1: Question[] = [
         "id": "pt2-math-m1-q10",
         "num": 10,
         "type": "Math",
-        "question": "A LI C\n10 cm\n\nNote: Figure not drawn to scale.\n\nThe area of triangle ABC is 150 square centimeters. What is the height h, in centimeters, of\nthis triangle?",
+        "question": "In triangle $ABC$, the base $AC = 10$ cm. The area of triangle $ABC$ is 150 square centimeters. What is the height $h$, in centimeters, of this triangle?",
         "options": [
             "10",
             "15",
@@ -2503,12 +2535,12 @@ const pt2_mathModule2: Question[] = [
         "id": "pt2-math-m2-q7",
         "num": 7,
         "type": "Math",
-        "question": "s 23\nNote: Figure not drawn to scale.\nIn triangle QRS shown, QR < RS. Which expression represents the length of QS?",
+        "question": "In right triangle $QRS$ shown, $QR < RS$ and $RS = 23$. Which expression represents the length of $\\overline{QS}$?",
         "options": [
-            "23 cosQ",
-            "23 sinQ",
-            ">\n\n23",
-            "sin Q"
+            "$23\\cos Q$",
+            "$23\\sin Q$",
+            "$\\dfrac{23}{\\cos Q}$",
+            "$\\dfrac{23}{\\sin Q}$"
         ],
         "answer": 3,
         "difficulty": "Hard"

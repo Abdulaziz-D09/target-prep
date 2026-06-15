@@ -521,22 +521,22 @@ Answer: A
 Which choice most effectively uses information from the given sentences to emphasize
 Edison's reliance on Hammer?
 
-¢ Thomas Edison is regarded as one of the most important inventors in US history.
+- Thomas Edison is regarded as one of the most important inventors in US history.
 
-e Having received little formal schooling, Edison relied on specialist employees at his
+- Having received little formal schooling, Edison relied on specialist employees at his
 various laboratories and offices to complete the technical work for many of his
 inventions.
 
-¢ William Joseph Hammer was a laboratory assistant who worked at the Menlo Park
+- William Joseph Hammer was a laboratory assistant who worked at the Menlo Park
 laboratory.
 
-¢ He is best known for curating the most comprehensive collection of historic light bulbs
+- He is best known for curating the most comprehensive collection of historic light bulbs
 anywhere in the world.
 
-¢ William Symes Andrews was an electrical engineer who worked at the Edison Electric
+- William Symes Andrews was an electrical engineer who worked at the Edison Electric
 Light Company.
 
-¢ He is best known for establishing more than thirty power plants across New York and
+- He is best known for establishing more than thirty power plants across New York and
 Pennsylvania.
 
 A. William Joseph Hammer, a laboratory assistant, worked at the Menlo Park laboratory.
@@ -1060,17 +1060,17 @@ Answer: A
 Which choice most effectively uses information from the given sentences to explain the 50
 Completers hiking challenge to a new audience?
 
-¢ The Highpointers Club is a hiking club.
+- The Highpointers Club is a hiking club.
 
-¢ One of the main goals among club members is to reach the highest points in all fifty US
+- One of the main goals among club members is to reach the highest points in all fifty US
 states.
 
-e Those who achieve this are called 50 Completers.
+- Those who achieve this are called 50 Completers.
 
-¢ In Suk Han became a 50 Completer on November 15, 2013.
+- In Suk Han became a 50 Completer on November 15, 2013.
 
-¢ The highest point in West Virginia is Soruce Knob, at 4,863 ft.
-e The highest point in Colorado is Mount Elbert, at 14,440 ft.
+- The highest point in West Virginia is Soruce Knob, at 4,863 ft.
+- The highest point in Colorado is Mount Elbert, at 14,440 ft.
 
 A. Hikers aiming to count themselves among the 50 Completers must reach not only West
 Virginia's Spruce Knob but also the even higher peak of Mount Elbert in Colorado.
@@ -1093,13 +1093,13 @@ Answer: B
 Which choice most effectively uses information from the given sentences to introduce Marie
 Hall to a new audience?
 
-e Antonio Stradivari (1644-1737) was an Italian instrument maker.
+- Antonio Stradivari (1644-1737) was an Italian instrument maker.
 
-e¢ He made about 1,000 violins in his lifetime.
+- He made about 1,000 violins in his lifetime.
 
-e Musicians prize his Stradivarius violins for their famed sound quality.
+- Musicians prize his Stradivarius violins for their famed sound quality.
 
-e The Marie Hall Stradivarius is named for former owner Marie Hall, a British violinist.
+- The Marie Hall Stradivarius is named for former owner Marie Hall, a British violinist.
 
 A. Of the 1,000 or so violins Antonio Stradivari made, only about 500 exist today.
 B. Marie Hall was a British violinist who once owned a Stradivarius violin.
@@ -1114,17 +1114,16 @@ Answer: B
 
 The student wants to support Browner’s claim about Louis Ballard's compositions. Which
 choice most effectively uses relevant information from the notes to accomplish this goal?
-While researching a topic, a student has taken the following notes:
 
-e Louis Ballard was a classical composer and citizen of the Quapaw Tribe.
+- Louis Ballard was a classical composer and citizen of the Quapaw Tribe.
 
-¢ Ballard's composition Desert Trilogy was nominated for the Pulitzer Prize in music in
+- Ballard's composition Desert Trilogy was nominated for the Pulitzer Prize in music in
 1971.
 
-e His composition Washington Festival Suite incorporates a Pueblo log drum, a
+- His composition Washington Festival Suite incorporates a Pueblo log drum, a
 traditional Native instrument.
 
-e Ethnomusicologist Tara Browner claims that Ballard’s compositions rely on elements
+- Ethnomusicologist Tara Browner claims that Ballard’s compositions rely on elements
 originating within Native musical traditions.
 
 A. According to Browner, composer Louis Ballard, who wrote Desert Trilogy, relies on
@@ -1147,22 +1146,21 @@ Answer: B
 The student wants to present the study's research methods. Which choice most effectively
 uses relevant information from the notes to accomplish this goal?
 
-While researching a topic, a student has taken the following notes:
 
-e Suzanne K. Birner led a study analyzing rocks on the seafloor to better understand the
+- Suzanne K. Birner led a study analyzing rocks on the seafloor to better understand the
 history of Earth's mantle.
 
-e Rock samples were collected from two seafloor ridges.
+- Rock samples were collected from two seafloor ridges.
 
-e The researchers determined the samples’ period of formation (the Archean eon) and
+- The researchers determined the samples’ period of formation (the Archean eon) and
 oxidation level (extremely low).
 
-e¢ High temperatures in the Archean likely caused the rocks’ low oxidation.
+- High temperatures in the Archean likely caused the rocks’ low oxidation.
 
-e Birner’s team suggests the oxidation of Earth's mantle has remained stable over time,
+- Birner’s team suggests the oxidation of Earth's mantle has remained stable over time,
 contrary to previous theories.
 
-e The findings help explain the unique conditions that allowed life to develop on Earth.
+- The findings help explain the unique conditions that allowed life to develop on Earth.
 A. To further analyze the origins of Earth’s unique conditions, researchers focused on rocks
 from the Archean eon, when Earth's temperatures were extremely high.
 
@@ -1183,21 +1181,20 @@ The student wants to place the 1821 Declaration of Independence in the context o
 changing political beliefs. Which choice most effectively uses relevant information from the
 notes to accomplish this goal?
 
-While researching a topic, a student has taken the following notes:
 
-e Leaders of the Province of Guatemala proclaimed independence for Central America
+- Leaders of the Province of Guatemala proclaimed independence for Central America
 from the Spanish Empire on September 15, 1821.
 
-e¢ The accompanying Declaration of Independence was written by Honduran scholar and
+- The accompanying Declaration of Independence was written by Honduran scholar and
 politician José Cecilio del Valle.
 
-e¢ The 1812 Spanish Constitution had provided some degree of independence for Central
+- The 1812 Spanish Constitution had provided some degree of independence for Central
 America, but it was repealed by the Spanish king in 1814.
 
-e Valle, a loyal advisor to the Spanish Empire's administrators in Central America, had
+- Valle, a loyal advisor to the Spanish Empire's administrators in Central America, had
 long opposed independence.
 
-e He changed his mind after Colonel Rafael del Riego’s 1820 revolt, which demanded the
+- He changed his mind after Colonel Rafael del Riego’s 1820 revolt, which demanded the
 return of rights lost in 1814.
 
 A. A change in Valle’s political beliefs that occurred when the Spanish king repealed the 1812
@@ -1220,7 +1217,7 @@ American independence, needed to change his political beliefs.
 **Answer:** B
 **Difficulty:** Unknown (22 questions)
 
-**1.** If $9x+4=67$ what is the value of $90x+40:$
+**1.** If  9x+4=67  what is the value of  90x+40: 
 
 
 A. 7
@@ -1229,7 +1226,8 @@ C. 130
 D. 670
 **Answer:** D
 
-**2.** $x^{\circ}$ P 72° r Note: Figure not drawn to scale. In the figure, line p is parallel to line r, and line t intersects both lines. What is the value of x?
+**2.** ![Q2 Graph](/pt1/q2.svg)
+Note: Figure not drawn to scale. In the figure, line p is parallel to line r, and line t intersects both lines. What is the value of x?
 A. 36
 B. 72
 C. 180
@@ -1239,33 +1237,33 @@ D. 252
 **3.** A length of 450 meters is equal to how many decimeters? (1 meter = 10 decimeters)
 **Answer:** 4500
 
-**4.** The equation $58=2x+2y$ gives the perimeter of a rectangular garden that has length x, in feet, and width y, in feet. The width of the garden is 14 feet. What is the length, in feet, of the garden?
+**4.** The equation  58=2x+2y  gives the perimeter of a rectangular garden that has length x, in feet, and width y, in feet. The width of the garden is 14 feet. What is the length, in feet, of the garden?
 **Answer:** 15
 
-**5.** The relationship between the variables and y is defined by an exponential equation. When $x=0$, the value of y is 40, and for every increase in the value of x by 1, the corresponding value of y increases by 50% of its previous value. Which equation represents this relationship?
-A. $y=40(1.50)^{x}$
-B. $y=40(1.05)^{x}$
-C. $y=50(1.40)^{x}$
-D. $y=50(1.04)^{x}$
+**5.** The relationship between the variables and y is defined by an exponential equation. When  x=0 , the value of y is 40, and for every increase in the value of x by 1, the corresponding value of y increases by 50% of its previous value. Which equation represents this relationship?
+A.  y=40(1.50)^{x} 
+B.  y=40(1.05)^{x} 
+C.  y=50(1.40)^{x} 
+D.  y=50(1.04)^{x} 
 **Answer:** A
 
-**6.** The function f is defined by $f(x)=\frac{1}{8x}$. What is the value of $f(x)$ when $x=9$?
+**6.** The function f is defined by  f(x)=\frac{1}{8x} . What is the value of  f(x)  when  x=9 ?
 **Answer:** 0138
 
-**7.** The function f is defined by $f(x)=3x-\frac{1}{4}$. What is the y-intercept of the graph of $y=f(x)$ in the xy-plane?
-A. $(0,-\frac{1}{4})$
-B. $(0,-3)$
+**7.** The function f is defined by  f(x)=3x-\frac{1}{4} . What is the y-intercept of the graph of  y=f(x)  in the xy-plane?
+A.  (0,-\frac{1}{4}) 
+B.  (0,-3) 
 C. (0,3)
 D. (0,4)
 **Answer:** A
 
-**8.** $x+6y=28$
+**8.**  x+6y=28 
 
 
-$6y=14$
+ 6y=14 
 
 
-The solution to the given system of equations is $(x,y)$. What is the value of x?
+The solution to the given system of equations is  (x,y) . What is the value of x?
 **Answer:** 14
 
 **9.** The length of a side of square X is 9 centimeters. The area of rectangle Y is 32 square centimeters. What is the total area, in square centimeters, of square X and rectangle Y?
@@ -1282,60 +1280,56 @@ C. 70
 D. 207
 **Answer:** C
 
-**11.** y -8- 6- 4- 2- -6 9 6. -4- 6 8- The complete graph of $y=f(x)$ is shown. For how many values of does $f(x)=0?$
+**11.** ![Q11 Graph](/pt1/q11.svg)
+The complete graph of  y=f(x)  is shown. For how many values of x does  f(x)=0 ?
 A. One
 B. Two
 C. Three
 D. Four
 **Answer:** C
 
-**12.** $b^{2}+4c=7d$ The given equation relates the real numbers $b_{\prime}$, $c_{\prime}$ and d, where $d>\frac{4}{7}c$. Which equation correctly expresses b in terms of c and d?
-A. $b=\frac{7d+4c}{2}$
-B. $b=\frac{7d-4c}{2}$
-C. $b=\pm\sqrt{7d+4c}$
-D. $b=\pm\sqrt{7d-4c}$
+**12.**  b^{2}+4c=7d  The given equation relates the real numbers  b_{\prime} ,  c_{\prime}  and d, where  d>\frac{4}{7}c . Which equation correctly expresses b in terms of c and d?
+A.  b=\frac{7d+4c}{2} 
+B.  b=\frac{7d-4c}{2} 
+C.  b=\pm\sqrt{7d+4c} 
+D.  b=\pm\sqrt{7d-4c} 
 **Answer:** D
 
-**13.** $x^{2}-\frac{81}{16}=0$ How many distinct real solutions does the given equation have?
+**13.**  x^{2}-\frac{81}{16}=0  How many distinct real solutions does the given equation have?
 A. Zero
 B. Exactly one
 C. Exactly two
 D. Infinitely many
 **Answer:** C
 
-**14.** B $B^{\prime}$ A C $A^{\prime}$ $C^{\prime}$ Note: Figures not drawn to scale. Triangles ABC and $A^{\prime}B^{\prime}C^{\prime}$ are shown. Triangle ABC is dilated by a scale factor of 6 to form triangle $A^{\prime}B^{\prime}C^{\prime}$. If the length of $\overline{AB}$ is 18, what is the length of $\overline{A^{\prime}B^{\prime}}?$
+**14.** ![Q14 Graph](/pt1/q14.svg)
+Triangles ABC and  A'B'C'  are shown. Triangle ABC is dilated by a scale factor of 6 to form triangle  A'B'C' . If the length of  \overline{AB}  is 18, what is the length of  \overline{A'B'} ?
 A. 3
 B. 6
 C. 24
 D. 108
 **Answer:** D
 
-**15.** What is the radius of the circle in the xy-plane defined by $(x+3)^{2}+(y+9)^{2}=361$?
+**15.** What is the radius of the circle in the xy-plane defined by  (x+3)^{2}+(y+9)^{2}=361 ?
 **Answer:** 19
 
-**16.** In the xy-plane, which of the following does NOT contain any points that are part of the solution set to $5x-7y>35!$
+**16.** In the xy-plane, which of the following does NOT contain any points that are part of the solution set to  5x-7y>35 ?
 
 
 A. The x-axis
-B. The region where $x>0$ and $y>0$
-C. The region where $x<0$ and $y<0$
-D. The region where $x<0$ and $y>0$
+B. The region where  x>0  and  y>0 
+C. The region where  x<0  and  y<0 
+D. The region where  x<0  and  y>0 
 **Answer:** D
 
 **17.** The table shows the distribution of people in a certain city by age group.
 
-* Less than 18 years old: 26%
-
-
-* 18-40 years old: 21%
-
-
-* 41-65 years old: 29%
-
-
-* Greater than 65 years old: 24%
-
-
+| Age group | Proportion |
+|---|---|
+| Less than 18 years old | 26% |
+| 18–40 years old | 21% |
+| 41–65 years old | 29% |
+| Greater than 65 years old | 24% |
 
 If a person in this city is selected at random, which of the following is closest to the probability of selecting a person who is greater than 65 years old, given that the person is at least 18 years old?
 A. 0.24
@@ -1344,11 +1338,11 @@ C. 0.50
 D. 0.92
 **Answer:** B
 
-**18.** Line h is defined by $\frac{1}{2}x+\frac{1}{9}y-54=0.$ Line j is perpendicular to line h in the xy-plane. What is the slope of line j?
-A. $-\frac{9}{2}$
-B. $-\frac{2}{9}$
-C. $\frac{9}{2}$
-D. $\frac{2}{9}$
+**18.** Line h is defined by  \frac{1}{2}x+\frac{1}{9}y-54=0.  Line j is perpendicular to line h in the xy-plane. What is the slope of line j?
+A.  -\frac{9}{2} 
+B.  -\frac{2}{9} 
+C.  \frac{9}{2} 
+D.  \frac{2}{9} 
 **Answer:** D
 
 **19.** a, 26, 29, b, 31, 47, с For the given data set, the data values are listed in ascending order, where a, b, and c are constants. For this data set, the mean is 36, the median is 29, and the range is 72. What is the value of c?
@@ -1358,29 +1352,23 @@ C. 81
 D. 98
 **Answer:** C
 
-**20.** S 37 Note: Figurehot2drawn202caleF e R In triangle QRS shown, $QR<RS$.[cite: $\frac{37}{\cos~Q}$[cite: $\frac{37}{\sin~Q}$[cite: $\overline{QS}$[cite: $a $y="9(\frac{a}{7})^{x+c}-b$[cite:" 21. Answer: 1] 37 A. B. C. D. D[cite: How Q[cite: Which a, and are b, c constants cos cross does equation expression given graph in length many of positive represents sin such that the times where x-axis, xy-plane>7$ and $b>c?$
-A. Zero
-B. One
-C. Two
-D. Three
+**20.** ![Q20 Graph](/pt1/q20.svg)
+In triangle QRS shown,  QR < RS . Which expression represents the length of  \overline{QS} ?
+A.  37 \sin Q 
+B.  \frac{37}{\sin Q} 
+C.  37 \cos Q 
+D.  \frac{37}{\cos Q} 
 **Answer:** B
 
-**22.** A certain town has an area of 4.29 square miles. What is the area, in square yards, of this town? (1 mile = 1,760 yards)
+**21.** A certain town has an area of 4.29 square miles. What is the area, in square yards, of this town? (1 mile = 1,760 yards)
 A. 410
 B. 7,550
 C. 722,051
 D. 13,288,704
 **Answer:** D
 
-$(x-16)(x-12)(x+9)(x+19)=0$ What is a positive solution to the given equation?
+**22.**  (x-16)(x-12)(x+9)(x+19)=0  What is a positive solution to the given equation?
 **Answer:** 12
-
-**22.** (Repeated number in text) $x^{2}-2x=28$ What is one of the solutions to the given equation?
-A. $\sqrt{28}$
-B. $1+\sqrt{29}$
-C. 29
-D. $28+\sqrt{2}$
-**Answer:** B
 
 ---
 
@@ -1391,135 +1379,129 @@ D. $28+\sqrt{2}$
 **Difficulty:** hard (22 questions)
 
 **1.** Zuri has a goal to run at least 16 miles per week while training for a race. This week, she has run 4 miles. If x represents the additional number of miles Zuri needs to run this week to meet her goal, which inequality represents this situation?
-A. $4-x\le16$
-B. $4+x\le16$
-C. $4-x\ge16$
-D. $4+x\ge16$
+A.  4-x\le16 
+B.  4+x\le16 
+C.  4-x\ge16 
+D.  4+x\ge16 
 **Answer:** D
 
-**2.** r S k $w^{\circ}$ $x^{\circ}$ $y^{\circ}$ $z^{\circ}$ Note: Figure not drawn to scale. In the figure shown, line k intersects lines r and s. If $w=147,$ which additional piece of information is sufficient to prove that lines r and s are parallel?
-A. $x=33$
-B. $y=147$
-C. $w+y=180$
-D. $y+z=180$
+**2.** ![Q2 Graph](/pt1/q2_m2.svg)
+Note: Figure not drawn to scale. In the figure shown, line k intersects lines r and s. If  w=147,  which additional piece of information is sufficient to prove that lines r and s are parallel?
+A.  x=33 
+B.  y=147 
+C.  w+y=180 
+D.  y+z=180 
 **Answer:** B
 
 **3.**
 
-* Number of food tickets: 10 | Total amount paid: $44.00
+| Number of food tickets | Total amount paid |
+|---|---|
+| 10 | $44.00 |
+| 15 | $51.50 |
+| 25 | $66.50 |
 
-
-* Number of food tickets: 15 | Total amount paid: $51.50
-
-
-* Number of food tickets: 25 | Total amount paid: $66.50
-
-
-
-At a fundraiser, a family pays a fixed entrance fee. They then purchase food tickets, which each have the same cost. The table shows the relationship between the number of food tickets, that are purchased and the total amount paid $y_{1}$ in dollars, for both the entrance fee and the food tickets. Which equation represents the relationship between and y?
-A. $y=\frac{3}{2}x+29$
-B. $y=\frac{3}{2}x-56$
-C. $y=\frac{2}{3}x+\frac{112}{3}$
-D. $y=\frac{2}{3}x+\frac{58}{3}$
+At a fundraiser, a family pays a fixed entrance fee. They then purchase food tickets, which each have the same cost. The table shows the relationship between the number of food tickets, that are purchased and the total amount paid  y_{1}  in dollars, for both the entrance fee and the food tickets. Which equation represents the relationship between and y?
+A.  y=\frac{3}{2}x+29 
+B.  y=\frac{3}{2}x-56 
+C.  y=\frac{2}{3}x+\frac{112}{3} 
+D.  y=\frac{2}{3}x+\frac{58}{3} 
 **Answer:** A
 
-**4.** A group of 10 gardeners recorded data on the germination rates of their tomato crop for one growing season. The scatterplot shows the relationship between the number of tomato seeds planted, $x_{1}$ and the number of tomato seeds that germinated, y, for each of the gardeners. A line of best fit is also shown. 500 400 300 200 100 X 100 200 300 400 500 Which of the following is the best interpretation of the slope of the line of best fit in this context?
+**4.** ![Q4 Graph](/pt1/q4_m2.svg)
+A group of 10 gardeners recorded data on the germination rates of their tomato crop for one growing season. The scatterplot shows the relationship between the number of tomato seeds planted,  x_{1}  and the number of tomato seeds that germinated, y, for each of the gardeners. A line of best fit is also shown. Which of the following is the best interpretation of the slope of the line of best fit in this context?
 A. The number of tomato seeds planted is predicted to increase by 60 seeds every 100 days.
 B. The number of tomato seeds planted is predicted to increase by 300 seeds every 100 days.
 C. The number of tomato seeds that germinate is predicted to increase by 60 seeds for every additional 100 tomato seeds that are planted.
 D. The number of tomato seeds that germinate is predicted to increase by 300 seeds for every additional 100 tomato seeds that are planted.
 **Answer:** C
 
-**5.** The graph of $2x+y=11$ in the xy-plane is a line. What is the slope of the line?
+**5.** The graph of  2x+y=11  in the xy-plane is a line. What is the slope of the line?
 **Answer:** -2
 
-**6.** $f(x)=2x+3$
+**6.**  f(x)=2x+3 
 
 
-$g(x)=7x-2$
+ g(x)=7x-2 
 
 
-$h(x)=5x+6$
+ h(x)=5x+6 
 
 
-The functions f, g, and h are defined as shown. If $f(x)\cdot g(x)-h(x)=ax^{2}+bx+c_{r}$ where a, b, and c are constants, what is the value of b?
+The functions f, g, and h are defined as shown. If  f(x)\cdot g(x)-h(x)=ax^{2}+bx+c_{r}  where a, b, and c are constants, what is the value of b?
 A. -5
 B. 12
 C. 20
 D. 22
 **Answer:** B
 
-**7.** The function f is defined by $f(x)=\frac{x+11}{5}$, and $f(a)=-18$ where a is a constant. What is the value of a?
+**7.** The function f is defined by  f(x)=\frac{x+11}{5} , and  f(a)=-18  where a is a constant. What is the value of a?
 A. -101
 B. -79
-C. $-\frac{79}{5}$
-D. $-\frac{7}{5}$
+C.  -\frac{79}{5} 
+D.  -\frac{7}{5} 
 **Answer:** A
 
 **8.** The table shows values of x and their corresponding values of y for three points on line j in the xy-plane.
 
-* X: 0, y: -10
+| x | y |
+|---|---|
+| 0 | -10 |
+| 1 | -4 |
+| 2 | 2 |
 
-
-* X: -4, y: 1
-
-
-* X: 2, y: 2
-
-
-
-Line k also lies in the xy-plane and is defined by the equation $y=4x.$ At what point $(x,y)$ do lines j and k intersect?
+Line k also lies in the xy-plane and is defined by the equation  y=4x.  At what point  (x,y)  do lines j and k intersect?
 A. (5,20)
 B. (5, -44)
 C. (6, 24)
 D. (6, 26)
 **Answer:** A
 
-**9.** $h(t)=-16t^{2}+b$ The function h estimates an object's height, in feet, above the ground t seconds after the object is dropped, where b is a constant. The function estimates that the object is 19.36 feet above the ground when it is dropped at $t=0$ How many seconds after being dropped does the function estimate the object will hit the ground?
+**9.**  h(t)=-16t^{2}+b  The function h estimates an object's height, in feet, above the ground t seconds after the object is dropped, where b is a constant. The function estimates that the object is 19.36 feet above the ground when it is dropped at  t=0  How many seconds after being dropped does the function estimate the object will hit the ground?
 **Answer:** 1.1
 
-**10.** $|4x-3|=-9$ How many solutions does the given equation have?
+**10.**  |4x-3|=-9  How many solutions does the given equation have?
 A. Zero
 B. One
 C. Two
 D. Infinitely many
 **Answer:** A
 
-**11.** The function h is defined by $h(x)=a^{x}+b$, where a and b are positive constants. The graph of $y=h(x)$ in the xy-plane passes through the points (0, 10) and (2, 13). What is the value of ab?
+**11.** The function h is defined by  h(x)=a^{x}+b , where a and b are positive constants. The graph of  y=h(x)  in the xy-plane passes through the points (0, 10) and (2, 13). What is the value of ab?
 A. 13
 B. 18
 C. 20
 D. 26
 **Answer:** B
 
-**12.** A circle has center P, and points A and B lie on the circle. The measure of arc AB is 45° and the length of arc AB is $4\pi$ units. What is the length, in units, of the radius of the circle?
+**12.** A circle has center P, and points A and B lie on the circle. The measure of arc AB is 45° and the length of arc AB is  4\pi  units. What is the length, in units, of the radius of the circle?
 **Answer:** 16
 
-**13.** The function f is defined by $f(x)=56(0.19)^{x}.$ For any positive integer $n_{1}$ the value of $f(n)$ is $p\%$ less than the value of $f(n-1)$ What is the value of p?
+**13.** The function f is defined by  f(x)=56(0.19)^{x}.  For any positive integer  n_{1}  the value of  f(n)  is  p\%  less than the value of  f(n-1)  What is the value of p?
 A. 19
 B. 44
 C. 56
 D. 81
 **Answer:** D
 
-**14.** $x^{2}+(\sqrt{k-3})x+42=0$ In the given equation, k is a constant. The equation has exactly one real solution. What is the value of k?
+**14.**  x^{2}+(\sqrt{k-3})x+42=0  In the given equation, k is a constant. The equation has exactly one real solution. What is the value of k?
 A. 171
 B. 168
 C. 165
 D. 45
 **Answer:** A
 
-**15.** $x^{2}+y^{2}=36$
+**15.**  x^{2}+y^{2}=36 
 
 
-$y=mx+\frac{b}{4}$
+ y=mx+\frac{b}{4} 
 
 
-In the given system of equations, m and b are negative constants. In the xy-plane, the graphs of the equations in the given system intersect at the point $(-5,y)$, where $y<0.$ Which expression represents the value of b?
-A. $-\frac{5m}{4}+\frac{\sqrt{11}}{4}$
-B. $\frac{5m}{4}-\frac{\sqrt{11}}{4}$
-C. $-20m+4\sqrt{11}$
-D. $20m-4\sqrt{11}$
+In the given system of equations, m and b are negative constants. In the xy-plane, the graphs of the equations in the given system intersect at the point  (-5,y) , where  y<0.  Which expression represents the value of b?
+A.  -\frac{5m}{4}+\frac{\sqrt{11}}{4} 
+B.  \frac{5m}{4}-\frac{\sqrt{11}}{4} 
+C.  -20m+4\sqrt{11} 
+D.  20m-4\sqrt{11} 
 **Answer:** D
 
 **16.** A biologist mixed a solution that is 0.3% sodium chloride by mass with a solution that is 0.15% sodium chloride by mass to obtain a new solution, which has a mass of 80 grams and contains 0.21 grams of sodium chloride. How many grams of 0.3% sodium chloride solution did the biologist use?
@@ -1531,27 +1513,15 @@ D. 79.86
 
 **17.** For data set A, the table summarizes the distribution of the number of pieces of mail received by a business each day during a period of 11 days.
 
-* Pieces of mail: 0 | Days: 2
-
-
-* Pieces of mail: 3 | Days: 2
-
-
-* Pieces of mail: 4 | Days: 2
-
-
-* Pieces of mail: 5 | Days: 2
-
-
-* Pieces of mail: 6 | Days: 1
-
-
-* Pieces of mail: 7 | Days: 1
-
-
-* Pieces of mail: 13 | Days: 1
-
-
+| Pieces of mail | Days |
+|---|---|
+| 0 | 2 |
+| 3 | 2 |
+| 4 | 2 |
+| 5 | 2 |
+| 6 | 1 |
+| 7 | 1 |
+| 13 | 1 |
 
 The data value 13 is removed from data set A to create data set B, which consists of the remaining 10 data values. Which statement best compares the median of data set A and the median of data set B?
 A. The median of data set B is less than the median of data set A.
@@ -1560,24 +1530,22 @@ C. The median of data set B is equal to the median of data set A.
 D. There is not enough information to compare the medians of the two data sets.
 **Answer:** C
 
-**18.** $\frac{x}{5}+\frac{y}{9}=\frac{47}{45}$ An engineer connects resistors in series, where the resistors in the series have a total resistance of $\frac{47}{45}$ ohms. In this series, there are resistors of type A, which each have a resistance of a ohms, and y resistors of type B, which each have a resistance of b ohms. The given equation represents this situation. According to this equation, what is the positive difference between the value of a and the value of b?
+**18.**  \frac{x}{5}+\frac{y}{9}=\frac{47}{45}  An engineer connects resistors in series, where the resistors in the series have a total resistance of  \frac{47}{45}  ohms. In this series, there are resistors of type A, which each have a resistance of a ohms, and y resistors of type B, which each have a resistance of b ohms. The given equation represents this situation. According to this equation, what is the positive difference between the value of a and the value of b?
 A. 47
 B. 4
-C. $\frac{47}{45}$
-D. $\frac{4}{45}$
+C.  \frac{47}{45} 
+D.  \frac{4}{45} 
 **Answer:** D
 
-**19.** $9x^{2}+8=nx$ In the given equation, n is a constant. The equation has exactly one solution. What is the value of $\frac{n^{2}}{8}$
+**19.**  9x^{2}+8=nx  In the given equation, n is a constant. The equation has exactly one solution. What is the value of  \frac{n^{2}}{8} 
 **Answer:** 36
 
 **20.** The table gives the areas and perimeters of two similar rectangles, where n is a constant.
 
-* Rectangle A | Area: 630 square inches | Perimeter: 210 inches
-
-
-* Rectangle B | Area: 2,520 square inches | Perimeter: n inches
-
-
+| | Area | Perimeter |
+|---|---|---|
+| Rectangle A | 630 square inches | 210 inches |
+| Rectangle B | 2,520 square inches | n inches |
 
 What is the value of n?
 A. 2,100
@@ -1589,19 +1557,19 @@ D. 420
 **21.** The mass of object A is 444% of the mass of object B, and the mass of object A is 0.740% of the mass of object C. If the mass of object C is p% of the mass of object B, what is the value of p?
 **Answer:** 60000
 
-**22.** Which expression is a factor of $y^{2}(x-3)-25(x-3)^{3}?$
+**22.** Which expression is a factor of  y^{2}(x-3)-25(x-3)^{3}? 
 
 
-A. $y(x-3)$
+A.  y(x-3) 
 
 
-B. $(x-5)(x-3)$
+B.  (x-5)(x-3) 
 
 
-C. $y+x-3$
+C.  y+x-3 
 
 
-D. $y+5x-15$
+D.  y+5x-15 
 
 
-**Answer:** D</RS$.[cite:>
+**Answer:** D</RS .[cite:>

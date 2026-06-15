@@ -2,7 +2,7 @@
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
-import { GraduationCap, ClipboardList, ArrowRight, Plus, Users, Sparkles } from 'lucide-react';
+import { GraduationCap, ClipboardList, ArrowRight, Plus, Users, Sparkles, Activity, FileText, BarChart3, Clock } from 'lucide-react';
 import {
     FloatingPageShapes, itemRevealVariants, pageRevealVariants, staggerContainerVariants, sectionRevealVariants
 } from '@/components/SiteMotion';
@@ -11,11 +11,46 @@ import { useClassroomStore } from '@/store/classroomStore';
 export default function TeacherHomePage() {
     const shouldReduceMotion = useReducedMotion();
     const { classrooms, students, assignments, seed } = useClassroomStore();
+    const [todayLabel, setTodayLabel] = useState('');
 
-    useEffect(() => { seed(); }, [seed]);
+    useEffect(() => { 
+        seed(); 
+        setTodayLabel(
+            new Intl.DateTimeFormat('en-US', {
+              weekday: 'long',
+              month: 'long',
+              day: 'numeric',
+              year: 'numeric',
+            }).format(new Date())
+        );
+    }, [seed]);
 
     const totalStudents    = students.length;
     const totalAssignments = assignments.length;
+
+    const quickLinks = [
+        {
+          title: 'Classrooms',
+          body: 'Manage your student rosters, view class-wide performance, and handle join codes.',
+          href: '/teacher/classes',
+          icon: GraduationCap,
+          accent: 'from-sky-500 via-blue-600 to-indigo-700',
+        },
+        {
+          title: 'Assignments',
+          body: 'Upload PDFs, curate question banks, and dispatch targeted homework to students.',
+          href: '/teacher/assignments',
+          icon: ClipboardList,
+          accent: 'from-amber-400 via-orange-500 to-red-500',
+        },
+        {
+          title: 'Analytics & Mocks',
+          body: 'Track detailed score trajectories, run live mock exams, and identify weak spots.',
+          href: '/teacher/analytics',
+          icon: BarChart3,
+          accent: 'from-emerald-400 via-emerald-500 to-teal-600',
+        },
+    ];
 
     return (
         <div className="relative min-h-screen pt-4 pb-12 px-4 sm:px-6 lg:px-8">
@@ -36,91 +71,182 @@ export default function TeacherHomePage() {
                     <div className="absolute bottom-0 right-0 h-48 w-64 translate-x-10 translate-y-10 rounded-full bg-blue-300/10 blur-3xl" />
 
                     <motion.div className="relative grid gap-8 xl:grid-cols-[1.15fr_0.85fr]" variants={staggerContainerVariants}>
-                        <motion.div variants={itemRevealVariants}>
-                            <div className="site-hero-chip inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.24em]">
+                        <motion.div className="flex flex-col" variants={itemRevealVariants}>
+                            <div className="site-hero-chip inline-flex w-fit items-center gap-2 rounded-full px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.24em]">
                                 <Sparkles className="h-3.5 w-3.5" />
-                                Teacher Portal
+                                Teacher control center
                             </div>
 
-                            <h1 className="site-hero-title mt-4 text-4xl font-black leading-[1.04] tracking-[-0.04em] sm:text-5xl">
-                                Teacher Dashboard
-                            </h1>
-                            <p className="site-hero-body mt-4 max-w-2xl text-[15px] leading-7 sm:text-[17px]">
-                                Manage your classes, track student progress, and assign coursework.
-                            </p>
+                            <div className="mt-5 max-w-3xl">
+                                <p className="site-hero-kicker text-sm font-medium">{todayLabel}</p>
+                                <h1 className="site-hero-title mt-3 max-w-2xl text-4xl font-black leading-[1.02] tracking-[-0.04em] sm:text-5xl lg:text-[4.3rem]">
+                                    Empower your students to succeed.
+                                </h1>
+                                <p className="site-hero-body mt-4 font-semibold text-indigo-600 dark:text-indigo-400">
+                                    Manage your classes, track progress effortlessly, and assign coursework with AI-driven insights from a single dashboard.
+                                </p>
+                            </div>
+
+                            <div className="mt-8 flex flex-wrap gap-3">
+                                <Link
+                                    href="/teacher/assignments/create"
+                                    className="inline-flex items-center gap-2 rounded-full bg-[linear-gradient(135deg,#6366f1,#4f46e5)] px-5 py-2.5 text-sm font-bold text-white transition hover:scale-[1.02] hover:brightness-110 shadow-lg shadow-indigo-500/20"
+                                >
+                                    New Assignment
+                                    <Plus className="h-4 w-4" />
+                                </Link>
+                                <Link
+                                    href="/teacher/classes"
+                                    className="site-hero-secondary-btn inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-bold transition hover:scale-[1.02] shadow-sm"
+                                >
+                                    View Classes
+                                    <ArrowRight className="h-4 w-4" />
+                                </Link>
+                            </div>
+
+                            <motion.div className="mt-10" variants={staggerContainerVariants}>
+                                <div className="grid gap-4 sm:grid-cols-3">
+                                    <motion.div className="site-hero-stat rounded-[26px] p-4" variants={itemRevealVariants}>
+                                        <p className="site-hero-kicker text-[11px] font-bold uppercase tracking-[0.22em]">Classes</p>
+                                        <p className="site-hero-title mt-3 text-3xl font-black tracking-[-0.04em]">{classrooms.length}</p>
+                                        <p className="site-hero-body mt-1 text-sm">Active classrooms</p>
+                                    </motion.div>
+                                    <motion.div className="site-hero-stat rounded-[26px] p-4" variants={itemRevealVariants}>
+                                        <p className="site-hero-kicker text-[11px] font-bold uppercase tracking-[0.22em]">Students</p>
+                                        <p className="site-hero-title mt-3 text-3xl font-black tracking-[-0.04em]">{totalStudents}</p>
+                                        <p className="site-hero-body mt-1 text-sm">Total enrolled students</p>
+                                    </motion.div>
+                                    <motion.div className="site-hero-stat rounded-[26px] p-4" variants={itemRevealVariants}>
+                                        <p className="site-hero-kicker text-[11px] font-bold uppercase tracking-[0.22em]">Assignments</p>
+                                        <p className="site-hero-title mt-3 text-3xl font-black tracking-[-0.04em]">{totalAssignments}</p>
+                                        <p className="site-hero-body mt-1 text-sm">Created & dispatched</p>
+                                    </motion.div>
+                                </div>
+                            </motion.div>
                         </motion.div>
 
-                        <motion.div className="grid gap-3 sm:grid-cols-3 xl: xl:justify-self-end" variants={staggerContainerVariants}>
-                            {[
-                                { label: 'Classes', value: classrooms.length },
-                                { label: 'Students', value: totalStudents },
-                                { label: 'Assignments', value: totalAssignments },
-                            ].map(({ label, value }) => (
-                                <motion.div key={label} className="site-hero-stat rounded-[24px] px-4 py-4" variants={itemRevealVariants}>
-                                    <p className="site-hero-kicker text-[10px] font-bold uppercase tracking-[0.22em]">{label}</p>
-                                    <p className="site-hero-title mt-2 text-3xl font-black tracking-[-0.05em]">{value}</p>
-                                </motion.div>
-                            ))}
+                        <motion.div className="flex flex-col gap-5" variants={staggerContainerVariants}>
+                            <motion.div className="site-panel flex min-h-[220px] flex-col rounded-[32px] p-6" variants={itemRevealVariants}>
+                                <div className="flex items-start justify-between gap-4">
+                                    <div>
+                                        <p className="site-hero-kicker text-[11px] font-bold uppercase tracking-[0.24em]">Live Activity</p>
+                                        <h2 className="site-hero-title mt-2 text-2xl font-black tracking-[-0.03em]">Active Mocks</h2>
+                                        <p className="site-hero-body mt-2 text-sm leading-6">
+                                            Monitor live test sessions taking place right now.
+                                        </p>
+                                    </div>
+                                    <div className="site-chip rounded-2xl p-3">
+                                        <Activity className="h-5 w-5 site-text-strong" />
+                                    </div>
+                                </div>
+                                <div className="mt-auto pt-6">
+                                    <div className="site-subpanel rounded-[22px] px-6 py-6 text-center flex flex-col items-center justify-center min-h-[90px]">
+                                        <p className="text-sm font-semibold text-indigo-600/80 dark:text-indigo-400/80 uppercase tracking-[0.15em] mb-1">Status</p>
+                                        <p className="text-[17px] font-bold text-slate-700 dark:text-slate-300">No active mocks running</p>
+                                    </div>
+                                </div>
+                            </motion.div>
+
+                            <motion.div className="site-panel rounded-[32px] p-6" variants={itemRevealVariants}>
+                                <div className="flex items-center gap-3">
+                                    <div className="rounded-2xl bg-indigo-100 p-3 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-400">
+                                        <Users className="h-5 w-5" />
+                                    </div>
+                                    <div>
+                                        <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-slate-400">Your network</p>
+                                        <h3 className="site-text-strong text-lg font-black tracking-[-0.03em]">Global Reach</h3>
+                                    </div>
+                                </div>
+                                <p className="site-text mt-4 text-sm leading-6">
+                                    You have {totalStudents} students engaging with your material. Keep the momentum going by dropping fresh assignments every week.
+                                </p>
+                            </motion.div>
                         </motion.div>
                     </motion.div>
                 </motion.section>
 
-                {/* Quick action cards */}
-                <motion.div className="grid gap-5 md:grid-cols-2" variants={staggerContainerVariants}>
-                    {/* Classes card */}
-                    <motion.div variants={itemRevealVariants}>
-                        <div className="site-panel rounded-[24px] p-6 border-t-4 border-t-indigo-500 h-full flex flex-col">
-                            <div className="flex items-center gap-2 mb-2">
-                                <GraduationCap className="h-6 w-6 text-indigo-500" />
-                                <h2 className="text-xl font-bold site-text-strong tracking-[-0.02em]">Classes</h2>
-                            </div>
-                            <p className="text-[14px] site-text-muted mb-5 leading-relaxed">
-                                Create and manage your classrooms. Students join with a unique code. Click a class to see the full roster and assignment progress.
-                            </p>
-                            <div className="mt-auto flex flex-col gap-2">
-                                <Link
-                                    href="/teacher/classes"
-                                    className="inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 transition hover:scale-[1.01] shadow-md"
-                                >
-                                    View Classes <ArrowRight className="h-4 w-4" />
-                                </Link>
-                                <Link
-                                    href="/teacher/classes"
-                                    className="inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-bold site-text site-subpanel transition hover:scale-[1.01]"
-                                >
-                                    <Plus className="h-4 w-4" /> Create New Class
-                                </Link>
+                <motion.section className="mt-6 grid gap-6 xl:grid-cols-[1.15fr_0.85fr]" variants={sectionRevealVariants}>
+                    <motion.div className="site-panel rounded-[32px] p-6 sm:p-7" variants={itemRevealVariants}>
+                        <div className="flex items-center justify-between gap-4">
+                            <div>
+                                <p className="site-text-faint text-[11px] font-bold uppercase tracking-[0.24em]">Primary paths</p>
+                                <h2 className="site-text-strong mt-2 text-3xl font-black tracking-[-0.04em]">Manage Your Space</h2>
                             </div>
                         </div>
+
+                        <motion.div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-1 2xl:grid-cols-3" variants={staggerContainerVariants}>
+                            {quickLinks.map((item) => {
+                                const Icon = item.icon;
+                                return (
+                                    <motion.div key={item.title} variants={itemRevealVariants} whileHover={shouldReduceMotion ? undefined : { scale: 1.02 }} transition={{ type: 'spring', stiffness: 260, damping: 20 }}>
+                                    <Link
+                                        key={item.title}
+                                        href={item.href}
+                                        className="site-card-strong group relative block w-full overflow-hidden rounded-[28px] p-5 transition hover:scale-[1.02] shadow-[0_12px_24px_rgba(0,0,0,0.12)] hover:shadow-[0_20px_40px_rgba(0,0,0,0.2)] dark:hover:shadow-[0_20px_40px_rgba(0,0,0,0.5)] hover:brightness-105 h-full"
+                                    >
+                                        <div className={`pointer-events-none absolute -right-10 top-1/2 h-24 w-24 -translate-y-1/2 bg-gradient-to-br ${item.accent} opacity-20 blur-2xl rotate-45 mix-blend-screen`} />
+                                        <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+                                        <div className="flex items-start justify-between gap-4">
+                                            <div className={`rounded-[20px] bg-gradient-to-br ${item.accent} p-3 text-white shadow-[0_8px_16px_rgba(0,0,0,0.2),inset_0_1px_0_rgba(255,255,255,0.4)]`}>
+                                                <Icon className="h-5 w-5" />
+                                            </div>
+                                            <ArrowRight className="site-text-faint h-5 w-5 transition group-hover:scale-110" />
+                                        </div>
+                                        <h3 className="site-text-strong mt-4 text-xl font-black tracking-[-0.03em]">{item.title}</h3>
+                                        <p className="mt-2 max-w-xl text-sm leading-6 site-text">{item.body}</p>
+                                    </Link>
+                                    </motion.div>
+                                );
+                            })}
+                        </motion.div>
                     </motion.div>
 
-                    {/* Assignments card */}
-                    <motion.div variants={itemRevealVariants} className="flex flex-col gap-4">
-                        <div className="site-panel rounded-[24px] p-6 border-t-4 border-t-emerald-500 flex-1 flex flex-col">
-                            <div className="flex items-center gap-2 mb-2">
-                                <ClipboardList className="h-6 w-6 text-emerald-500" />
-                                <h2 className="text-xl font-bold site-text-strong tracking-[-0.02em]">Assignments</h2>
+                    <motion.div className="site-panel rounded-[32px] p-6 sm:p-7 flex flex-col" variants={itemRevealVariants}>
+                        <div className="flex items-center justify-between gap-4 mb-6">
+                            <div>
+                                <p className="text-[11px] font-bold uppercase tracking-[0.24em] text-slate-400">Recent Activity</p>
+                                <h2 className="site-text-strong mt-2 text-3xl font-black tracking-[-0.04em]">Latest Assignments</h2>
                             </div>
-                            <p className="text-[14px] site-text-muted mb-5 leading-relaxed">
-                                Upload a PDF or paste text. Our AI extracts every multiple-choice question so you can review each one and set the correct answers before sending to your class.
-                            </p>
-                            <div className="mt-auto flex flex-col gap-2">
-                                <Link
-                                    href="/teacher/assignments/create"
-                                    className="inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-bold text-white bg-emerald-600 hover:bg-emerald-700 transition hover:scale-[1.01] shadow-md"
-                                >
-                                    <Plus className="h-4 w-4" /> New Assignment
-                                </Link>
-                                <Link
-                                    href="/teacher/assignments"
-                                    className="inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-bold site-text site-subpanel transition hover:scale-[1.01]"
-                                >
-                                    View All <ArrowRight className="h-4 w-4" />
-                                </Link>
-                            </div>
+                            <Clock className="h-5 w-5 text-slate-400" />
                         </div>
+
+                        {assignments.length === 0 ? (
+                            <div className="site-subpanel rounded-[22px] px-6 py-8 text-center flex flex-col items-center justify-center flex-1">
+                                <FileText className="h-8 w-8 text-slate-300 mb-3" />
+                                <p className="text-sm font-semibold site-text-muted mb-2">No assignments yet</p>
+                                <Link href="/teacher/assignments/create" className="text-indigo-500 font-bold text-sm hover:underline">Create your first</Link>
+                            </div>
+                        ) : (
+                            <motion.div className="space-y-3" variants={staggerContainerVariants}>
+                                {assignments.slice(0, 4).map((a, index) => (
+                                    <motion.div
+                                        key={a.id}
+                                        variants={itemRevealVariants}
+                                        className="site-subpanel rounded-[24px] border border-slate-200 dark:border-slate-700 p-4 transition hover:border-indigo-500/30 hover:shadow-[0_12px_20px_rgba(99,102,241,0.06)] group"
+                                    >
+                                        <Link href={`/teacher/assignments/${a.id}`} className="flex gap-4">
+                                            <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-[18px] bg-slate-100 text-slate-800 dark:bg-slate-800 dark:text-slate-200 group-hover:bg-indigo-600 group-hover:text-white transition-colors shadow-sm">
+                                                <FileText className="h-5 w-5" />
+                                            </div>
+                                            <div className="flex-1">
+                                                <div className="flex items-center justify-between">
+                                                    <p className="site-text-strong text-[15px] font-black tracking-[-0.02em] group-hover:text-indigo-600 transition-colors">{a.title}</p>
+                                                    <p className="text-[10px] font-bold site-text-muted uppercase tracking-wider">{new Date(a.createdAt).toLocaleDateString()}</p>
+                                                </div>
+                                                <p className="site-text-muted mt-1 text-sm font-medium">
+                                                    {a.subject} &middot; <span className="site-text-strong">{a.questions.length}</span> questions
+                                                </p>
+                                            </div>
+                                        </Link>
+                                    </motion.div>
+                                ))}
+                                <Link href="/teacher/assignments" className="block w-full py-3 text-center text-sm font-bold text-indigo-600 dark:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 rounded-xl transition mt-2">
+                                    View All Assignments
+                                </Link>
+                            </motion.div>
+                        )}
                     </motion.div>
-                </motion.div>
+                </motion.section>
             </motion.div>
         </div>
     );

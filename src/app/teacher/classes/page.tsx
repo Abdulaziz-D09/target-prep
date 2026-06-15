@@ -11,6 +11,7 @@ import {
     sectionRevealVariants
 } from '@/components/SiteMotion';
 import { useClassroomStore } from '@/store/classroomStore';
+import { CustomSelect } from '@/components/CustomSelect';
 
 const GRADES = ['9th Grade', '10th Grade', '11th Grade', '12th Grade', 'Mixed'];
 
@@ -80,7 +81,7 @@ export default function ClassesPage() {
                                 Manage your classrooms and student groups.
                             </p>
                         </motion.div>
-                        <motion.div className="flex xl:justify-end" variants={itemRevealVariants}>
+                        <motion.div className="flex flex-col sm:flex-row gap-3 xl:justify-end" variants={itemRevealVariants}>
                             <button
                                 onClick={() => setIsCreateOpen(true)}
                                 className="inline-flex items-center gap-2 rounded-full px-6 py-3 text-[15px] font-bold text-white transition hover:scale-[1.03] shadow-md bg-indigo-600 hover:bg-indigo-700 shrink-0"
@@ -213,13 +214,12 @@ export default function ClassesPage() {
                                 </div>
                                 <div>
                                     <label className="block text-[11px] font-bold uppercase tracking-widest site-text-muted mb-2">Grade Level</label>
-                                    <select
+                                    <CustomSelect
                                         value={newGrade}
-                                        onChange={(e) => setNewGrade(e.target.value)}
-                                        className="w-full px-4 py-3 rounded-xl site-subpanel bg-transparent outline-none border-2 border-transparent focus:border-indigo-500 transition text-[15px] font-semibold site-text-strong cursor-pointer"
-                                    >
-                                        {GRADES.map((g) => <option key={g} value={g}>{g}</option>)}
-                                    </select>
+                                        onChange={setNewGrade}
+                                        options={GRADES.map(g => ({ value: g, label: g }))}
+                                        buttonClassName="w-full flex items-center justify-between px-4 py-3 rounded-xl site-subpanel bg-transparent outline-none border-2 border-transparent focus:border-indigo-500 transition text-[15px] font-semibold site-text-strong cursor-pointer"
+                                    />
                                 </div>
                             </div>
 

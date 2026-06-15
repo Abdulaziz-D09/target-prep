@@ -97,14 +97,7 @@ export function cleanOCR(text: string): string {
     out = out.replace(reg, fixed);
   }
 
-  // 3. Generic split fix: a single lowercase consonant followed by a space and another lowercase word.
-  // We ONLY do this if it's not a valid single-letter word ("a" or "i").
-  out = out.replace(/\b([bcdfghjklmnpqrstvwxyz]) ([a-z]{2,})\b/gi, '$1$2');
-
-  // 4. Fix split suffixes: word followed by space and "tion", "ing", "ly", "ment", "ness"
-  out = out.replace(/\b([a-z]{3,}) (tion|ing|ly|ment|ness)\b/gi, '$1$2');
-
-  // 5. Collapse runs of 2+ spaces into one
+  // 3. Collapse runs of 2+ spaces into one
   out = out.replace(/ {2,}/g, ' ');
 
   return out;
@@ -482,12 +475,12 @@ function PremiumTable({seg}:{seg:Extract<Seg,{kind:'table'}>}){
           <span className="text-[13px] font-bold text-white tracking-wide">{title}</span>
         </div>
       )}
-      <div className="overflow-x-auto">
+      <div>
         <table className="w-full text-[13.5px] border-collapse">
           <thead>
             <tr className="bg-gradient-to-r from-slate-100 to-slate-50">
               {header.map((c,i)=>(
-                <th key={i} className="px-4 py-3 text-left font-bold text-slate-600 border-b-2 border-slate-200 whitespace-nowrap text-[11.5px] tracking-widest uppercase">{c}</th>
+                <th key={i} className="px-4 py-3 text-left font-bold text-slate-600 border-b-2 border-slate-200 text-[11.5px] tracking-widest uppercase">{c}</th>
               ))}
             </tr>
           </thead>
@@ -497,7 +490,7 @@ function PremiumTable({seg}:{seg:Extract<Seg,{kind:'table'}>}){
                 {row.map((cell,ci)=>{
                   const nd=cell.toLowerCase().includes('not detected');
                   return(
-                    <td key={ci} className={`px-4 py-2.5 border-b border-slate-100 whitespace-nowrap ${
+                    <td key={ci} className={`px-4 py-2.5 border-b border-slate-100 ${
                       ci===0?'font-semibold text-slate-800'
                       :nd?'text-slate-400 italic text-[12px]'
                       :'text-slate-600 tabular-nums'}`}>
@@ -519,22 +512,6 @@ function PremiumTable({seg}:{seg:Extract<Seg,{kind:'table'}>}){
  * Splits text on _____ (5+ underscores) and renders the blank as a
  * styled underline span that matches the real SAT Bluebook interface.
  */
-function renderWithBlanks(text: string): React.ReactNode {
-  const parts = text.split(/(_{5,})/g);
-  return parts.map((part, i) => {
-    if (/^_{5,}$/.test(part)) {
-      return (
-        <span
-          key={i}
-          className="inline-block border-b-2 border-slate-800 min-w-[80px] mx-1 align-bottom"
-          aria-label="blank"
-        />
-      );
-    }
-    return <span key={i}>{part}</span>;
-  });
-}
-
 /* ── Paragraph-aware text block ─────────────────────────── */
 /** Renders a text segment split on paragraph breaks (\n\n or \n), giving
  *  "Text 1" / "Text 2" introductions a styled pill label + divider. */
@@ -549,18 +526,25 @@ function TextBlock({
   isHighlightModeActive: boolean,
 }) {
   const { content, offset } = seg;
-  // Split into paragraphs on two-or-more consecutive newlines
-  const paragraphs = content
-    .replace(/\r\n/g, '\n')
-    .split(/\n{2,}/)
-    .map(p => p.replace(/\n/g, ' ').replace(/ {2,}/g, ' ').trim())
-    .filter(Boolean);
-
+  
+  // Split into paragraphs on two-or-more consecutive newlines.
+  // We use content.split to preserve exact offset positioning.
+  const paragraphs = content.replace(/\r\n/g, '\n').split(/\n{2,}/);
   const paraData = [];
-  let cumOffset = 0;
-  for (const para of paragraphs) {
-    paraData.push({ para, paraOff: offset + cumOffset });
-    cumOffset += para.length + 2;
+  let currentPos = 0;
+  
+  for (let i = 0; i < paragraphs.length; i++) {
+    const rawPara = paragraphs[i];
+    const trimmedPara = rawPara.trim();
+    if (trimmedPara) {
+      const trimStart = rawPara.indexOf(trimmedPara);
+      const paraOff = offset + currentPos + trimStart;
+      paraData.push({
+        para: trimmedPara,
+        paraOff
+      });
+    }
+    currentPos += rawPara.length + (i < paragraphs.length - 1 ? 2 : 0); // 2 is length of \n\n
   }
 
   return (
@@ -597,32 +581,82 @@ function TextBlock({
           );
         }
 
-        const hl = highlights
-          .filter(h => h.start >= paraOff && h.start < paraOff + para.length)
-          .map(h => ({...h, start: h.start - paraOff, end: h.end - paraOff}));
-
         // Detect bullet lists starting with '• ' (after cleanOCR normalization)
         const isBulletList = para.startsWith('• ') || para.includes('\n• ');
         if (isBulletList) {
-          const lines = para.split('\n').filter(Boolean);
-          // Find any intro text before the first bullet
-          const firstBulletIdx = lines.findIndex(l => l.startsWith('• '));
+          const lines = para.split('\n');
+          // Find the index of the first bullet
+          const firstBulletIdx = lines.findIndex(l => l.trim().startsWith('•'));
           const introLines = firstBulletIdx > 0 ? lines.slice(0, firstBulletIdx) : [];
           const bulletLines = lines.slice(firstBulletIdx);
+
+          let lineOffset = 0;
+          const renderedIntro = [];
+          
+          for (let li = 0; li < introLines.length; li++) {
+            const line = introLines[li];
+            const lineStart = para.indexOf(line, lineOffset);
+            const absoluteLineOff = paraOff + lineStart;
+            
+            const hl = highlights
+              .filter(h => h.start >= absoluteLineOff && h.start < absoluteLineOff + line.length)
+              .map(h => ({...h, start: h.start - absoluteLineOff, end: h.end - absoluteLineOff}));
+              
+            renderedIntro.push(
+              <div key={`intro-${li}`} className="mb-2">
+                <HighlightableText
+                  text={line}
+                  className="text-[16px] leading-[1.9] text-[#111827]"
+                  highlights={hl}
+                  onAddHighlight={h => onAddHighlight({...h, start: h.start + absoluteLineOff, end: h.end + absoluteLineOff})}
+                  onRemoveHighlight={onRemoveHighlight}
+                  onUpdateHighlight={onUpdateHighlight}
+                  isHighlightModeActive={isHighlightModeActive}
+                />
+              </div>
+            );
+            lineOffset = lineStart + line.length;
+          }
+
+          const renderedBullets = [];
+          for (let bi = 0; bi < bulletLines.length; bi++) {
+            const line = bulletLines[bi];
+            if (!line.trim()) continue;
+            
+            const lineStart = para.indexOf(line, lineOffset);
+            const absoluteLineOff = paraOff + lineStart;
+            
+            const bulletPrefixMatch = line.match(/^•\s*/);
+            const prefixLength = bulletPrefixMatch ? bulletPrefixMatch[0].length : 0;
+            const bulletText = line.slice(prefixLength);
+            const textAbsoluteOff = absoluteLineOff + prefixLength;
+            
+            const hl = highlights
+              .filter(h => h.start >= textAbsoluteOff && h.start < textAbsoluteOff + bulletText.length)
+              .map(h => ({...h, start: h.start - textAbsoluteOff, end: h.end - textAbsoluteOff}));
+              
+            renderedBullets.push(
+              <li key={`bullet-${bi}`} className="flex items-start gap-3">
+                <span className="text-slate-400 mt-[3px] flex-shrink-0">•</span>
+                <HighlightableText
+                  text={bulletText}
+                  className="text-[16px] leading-[1.8] text-[#111827] flex-1"
+                  highlights={hl}
+                  onAddHighlight={h => onAddHighlight({...h, start: h.start + textAbsoluteOff, end: h.end + textAbsoluteOff})}
+                  onRemoveHighlight={onRemoveHighlight}
+                  onUpdateHighlight={onUpdateHighlight}
+                  isHighlightModeActive={isHighlightModeActive}
+                />
+              </li>
+            );
+            lineOffset = lineStart + line.length;
+          }
+
           return (
             <div key={pi} className="space-y-3">
-              {introLines.map((line, li) => (
-                <p key={li} className="text-[16px] leading-[1.9] text-[#111827]">{line}</p>
-              ))}
+              {renderedIntro}
               <ul className="space-y-2 pl-1">
-                {bulletLines.map((bullet, idx) => (
-                  <li key={idx} className="flex items-start gap-3">
-                    <span className="text-slate-400 mt-[3px] flex-shrink-0">•</span>
-                    <span className="text-[16px] leading-[1.8] text-[#111827]">
-                      {renderWithBlanks(bullet.replace(/^•\s*/, '').trim())}
-                    </span>
-                  </li>
-                ))}
+                {renderedBullets}
               </ul>
             </div>
           );
@@ -631,35 +665,80 @@ function TextBlock({
         // Legacy: detect inline bullet points starting with '* '
         const isStarList = para.includes('* ') && para.split('* ').length > 2;
         if (isStarList) {
-          const parts = para.split('* ').filter(p => p.trim() !== '');
-          const intro = para.substring(0, para.indexOf('* ')).trim();
-          const bullets = parts.slice(intro ? 1 : 0);
+          const parts = para.split('* ');
+          const intro = parts[0].trim();
+          const bullets = parts.slice(1);
+          
+          let currentPos = 0;
+          const renderedIntro = [];
+          
+          if (intro) {
+            const introStart = para.indexOf(intro, currentPos);
+            const absoluteIntroOff = paraOff + introStart;
+            const hl = highlights
+              .filter(h => h.start >= absoluteIntroOff && h.start < absoluteIntroOff + intro.length)
+              .map(h => ({...h, start: h.start - absoluteIntroOff, end: h.end - absoluteIntroOff}));
+              
+            renderedIntro.push(
+              <div key="intro" className="mb-2">
+                <HighlightableText
+                  text={intro}
+                  className="text-[16px] leading-[1.9] text-[#111827]"
+                  highlights={hl}
+                  onAddHighlight={h => onAddHighlight({...h, start: h.start + absoluteIntroOff, end: h.end + absoluteIntroOff})}
+                  onRemoveHighlight={onRemoveHighlight}
+                  onUpdateHighlight={onUpdateHighlight}
+                  isHighlightModeActive={isHighlightModeActive}
+                />
+              </div>
+            );
+            currentPos = introStart + intro.length;
+          }
+          
+          const renderedBullets = [];
+          for (let bi = 0; bi < bullets.length; bi++) {
+            const bulletRaw = bullets[bi];
+            const bulletTrimmed = bulletRaw.trim();
+            if (!bulletTrimmed) continue;
+            
+            const bulletStart = para.indexOf(bulletRaw, currentPos);
+            const trimmedStart = bulletStart + bulletRaw.indexOf(bulletTrimmed);
+            const absoluteBulletOff = paraOff + trimmedStart;
+            
+            const hl = highlights
+              .filter(h => h.start >= absoluteBulletOff && h.start < absoluteBulletOff + bulletTrimmed.length)
+              .map(h => ({...h, start: h.start - absoluteBulletOff, end: h.end - absoluteBulletOff}));
+              
+            renderedBullets.push(
+              <li key={`bullet-${bi}`} className="flex items-start gap-3">
+                <span className="text-slate-400 mt-[3px] flex-shrink-0">•</span>
+                <HighlightableText
+                  text={bulletTrimmed}
+                  className="text-[16px] leading-[1.8] text-[#111827] flex-1"
+                  highlights={hl}
+                  onAddHighlight={h => onAddHighlight({...h, start: h.start + absoluteBulletOff, end: h.end + absoluteBulletOff})}
+                  onRemoveHighlight={onRemoveHighlight}
+                  onUpdateHighlight={onUpdateHighlight}
+                  isHighlightModeActive={isHighlightModeActive}
+                />
+              </li>
+            );
+            currentPos = bulletStart + bulletRaw.length;
+          }
+
           return (
             <div key={pi} className="space-y-3">
-              {intro && <p className="text-[16px] leading-[1.9] text-[#111827]">{intro}</p>}
+              {renderedIntro}
               <ul className="space-y-2 pl-1">
-                {bullets.map((bullet, idx) => (
-                  <li key={idx} className="flex items-start gap-3">
-                    <span className="text-slate-400 mt-[3px] flex-shrink-0">•</span>
-                    <span className="text-[16px] leading-[1.8] text-[#111827]">
-                      {renderWithBlanks(bullet.trim())}
-                    </span>
-                  </li>
-                ))}
+                {renderedBullets}
               </ul>
             </div>
           );
         }
 
-        // Check if this paragraph contains a blank (5+ underscores)
-        const hasBlanks = /_{5,}/.test(para);
-        if (hasBlanks) {
-          return (
-            <p key={pi} className="text-[16px] leading-[1.9] text-[#111827]">
-              {renderWithBlanks(para)}
-            </p>
-          );
-        }
+        const hl = highlights
+          .filter(h => h.start >= paraOff && h.start < paraOff + para.length)
+          .map(h => ({...h, start: h.start - paraOff, end: h.end - paraOff}));
 
         return (
           <HighlightableText

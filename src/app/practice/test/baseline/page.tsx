@@ -8,6 +8,7 @@ import { HighlightableText } from '@/components/HighlightableText';
 import DesmosCalculator from '@/components/DesmosCalculator';
 import { ReferenceSheet } from '@/components/ReferenceSheet';
 import { cleanOCR } from '@/components/PassageRenderer';
+import { MathText } from '@/components/MathText';
 import Link from 'next/link';
 import { AnimatePresence, motion } from 'framer-motion';
 
@@ -68,6 +69,10 @@ export default function BaselineTestPage() {
     const [isTimerHidden, setIsTimerHidden] = useState(false);
     const [isDirectionsOpen, setIsDirectionsOpen] = useState(false);
     const [isEliminationMode, setIsEliminationMode] = useState(false);
+    const [fsWarningCountdown, setFsWarningCountdown] = useState<number | null>(null);
+    const [isKickedOut, setIsKickedOut] = useState(false);
+    const [isExiting, setIsExiting] = useState(false);
+    const [expandedImage, setExpandedImage] = useState<string | null>(null);
     const [isHighlightActive, setIsHighlightActive] = useState(false);
     const [leftPanelWidth, setLeftPanelWidth] = useState(50);
     const [isDragging, setIsDragging] = useState(false);
@@ -453,8 +458,8 @@ export default function BaselineTestPage() {
                                                             </div>
                                                         )}
                                                         {q.image && (
-                                                            <div className="mb-4 rounded-xl overflow-hidden border border-slate-200 bg-slate-50 flex items-center justify-center">
-                                                                <img src={q.image} alt="Question figure" className="max-w-full max-h-[280px] object-contain p-2" />
+                                                            <div className="mb-6 border border-slate-200 rounded-xl overflow-hidden bg-slate-50 flex items-center justify-center p-4">
+                                                                <img src={q.image} alt="Question figure" className="max-w-full max-h-[250px] object-contain cursor-pointer hover:opacity-90 transition-opacity" onClick={() => setExpandedImage(q.image)} />
                                                             </div>
                                                         )}
                                                         <h4 className="text-lg font-medium text-slate-900 mb-6">{cleanOCR(q.question || '')}</h4>
@@ -773,9 +778,30 @@ export default function BaselineTestPage() {
     const currentEliminations = eliminatedAnswers[questionKey] || [];
 
     return (
-        <div
-            className="h-[100dvh] flex flex-col bg-slate-50 font-[system-ui,-apple-system,BlinkMacSystemFont,'Segoe_UI',Roboto,sans-serif] overflow-hidden"
-        >
+        <>
+            {/* Modal for expanded image */}
+            {expandedImage && (
+                <div 
+                    className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 sm:p-8 cursor-pointer"
+                    onClick={() => setExpandedImage(null)}
+                >
+                    <div className="relative max-w-5xl w-full max-h-full flex items-center justify-center cursor-default" onClick={e => e.stopPropagation()}>
+                        <button 
+                            onClick={() => setExpandedImage(null)}
+                            className="absolute -top-12 right-0 md:-right-12 md:top-0 w-10 h-10 bg-white rounded-full flex items-center justify-center text-slate-800 hover:bg-slate-200 transition-colors z-[100] shadow-lg border border-slate-200"
+                        >
+                            <X className="w-6 h-6" />
+                        </button>
+                        <img 
+                            src={expandedImage} 
+                            alt="Expanded question figure" 
+                            className="max-w-full max-h-[85vh] object-contain bg-white rounded-xl shadow-2xl p-4"
+                        />
+                    </div>
+                </div>
+            )}
+            
+            <div className="absolute inset-0 z-50 flex flex-col bg-slate-50 font-[system-ui,-apple-system,BlinkMacSystemFont,'Segoe_UI',Roboto,sans-serif] overflow-hidden">
             {/* Bluebook Official Header */}
             <header className="bg-white/90 backdrop-blur-xl border-b border-slate-200/80 px-6 py-2.5 flex items-center justify-between z-30 shrink-0 relative shadow-[0_2px_10px_rgba(0,0,0,0.02)]">
                 {/* Left: Directions Dropdown */}
@@ -918,7 +944,7 @@ export default function BaselineTestPage() {
             </AnimatePresence>
 
             {/* Split Pane Content Area */}
-            <main className="flex-1 flex overflow-hidden bg-white pb-[70px]">
+            <main className="flex-1 flex overflow-hidden bg-white">
                 {!showCheckWork ? (
                     <div className="w-full bg-white flex overflow-hidden relative">
 
@@ -980,8 +1006,8 @@ export default function BaselineTestPage() {
                         )}
 
                         {/* Right Pane (Question Area) */}
-                        <div className={`overflow-y-auto p-4 lg:p-10 pl-4 lg:pl-8 flex justify-center bg-white ${!isDragging && currentSection?.name === 'Math' ? 'transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]' : ''}`} style={{ width: (currentSection?.name === 'Math' && !isDesmosOpen) ? '100%' : `${100 - leftPanelWidth}%` }}>
-                            <div className="w-full max-w-[800px] flex flex-col" ref={contentRef}>
+                        <div className={`overflow-y-auto p-4 lg:p-10 pl-4 lg:pl-8 bg-white ${!isDragging && currentSection?.name === 'Math' ? 'transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]' : ''}`} style={{ width: (currentSection?.name === 'Math' && !isDesmosOpen) ? '100%' : `${100 - leftPanelWidth}%` }}>
+                            <div className="w-full max-w-[800px] mx-auto flex flex-col pb-10" ref={contentRef}>
 
                                 {/* Header: Connected Question Number & Mark for Review & ABC */}
                                 <div className="flex items-center mb-6 mt-4 w-full  bg-white border border-[#E5E7EB] rounded-[12px] shadow-sm h-[44px]">
@@ -1013,27 +1039,49 @@ export default function BaselineTestPage() {
                                 {/* Question Content */}
                                 {/* Math question image/graph */}
                                 {currentQuestion?.image && (
-                                    <div className="mb-5 rounded-xl overflow-hidden border border-slate-200 bg-slate-50 flex items-center justify-center">
+                                    <div className="mb-5 flex items-center justify-center">
                                         <img
                                             src={currentQuestion.image}
                                             alt="Question figure"
-                                            className="max-w-full max-h-[320px] object-contain p-2"
+                                            className="max-w-full max-h-[200px] object-contain cursor-pointer hover:opacity-90 transition-opacity"
+                                            onClick={() => setExpandedImage(currentQuestion.image)}
                                         />
                                     </div>
                                 )}
                                 <div className="text-[18px] text-[#111827] mb-6 leading-relaxed">
-                                    <HighlightableText
-                                        text={cleanOCR(currentQuestion?.question || '')}
-                                        highlights={highlights[`q-${questionKey}`] || []}
-                                        onAddHighlight={(h) => addHighlight(`q-${questionKey}`, { ...h, id: Math.random().toString(36).substring(2, 11) })}
-                                        onRemoveHighlight={(id) => removeHighlight(`q-${questionKey}`, id)}
-                                        onUpdateHighlight={(id, updates) => updateHighlight(`q-${questionKey}`, id, updates)}
-                                        isHighlightModeActive={isHighlightActive}
-                                    />
+                                    {currentQuestion?.type === 'Math' || currentQuestion?.type === 'Math (SPR)' ? (
+                                        <MathText
+                                            text={cleanOCR(currentQuestion?.question || '')}
+                                            style={{ fontSize: 18, lineHeight: 1.7, display: 'block' }}
+                                        />
+                                    ) : (
+                                        <HighlightableText
+                                            text={cleanOCR(currentQuestion?.question || '')}
+                                            highlights={highlights[`q-${questionKey}`] || []}
+                                            onAddHighlight={(h) => addHighlight(`q-${questionKey}`, { ...h, id: Math.random().toString(36).substring(2, 11) })}
+                                            onRemoveHighlight={(id) => removeHighlight(`q-${questionKey}`, id)}
+                                            onUpdateHighlight={(id, updates) => updateHighlight(`q-${questionKey}`, id, updates)}
+                                            isHighlightModeActive={isHighlightActive}
+                                        />
+                                    )}
                                 </div>
 
-                                {/* Answer Options */}
+                                {/* Answer Options or SPR Input */}
                                 <div className="space-y-4 w-full relative pl-[2px] pt-[2px]">
+                                    {currentQuestion?.type === 'Math (SPR)' || (currentQuestion?.options && currentQuestion.options.length === 0) ? (
+                                        <div className="flex flex-col gap-2">
+                                            <input
+                                                type="text"
+                                                id="spr-answer-input"
+                                                value={typeof userAnswers[questionKey] === 'string' ? userAnswers[questionKey] as string : typeof userAnswers[questionKey] === 'number' ? String(userAnswers[questionKey]) : ''}
+                                                onChange={(e) => selectAnswer(questionKey, e.target.value)}
+                                                className="w-[200px] h-[52px] border-2 border-[#D1D5DB] rounded-[8px] px-4 text-[18px] font-mono font-bold text-[#111827] focus:outline-none focus:border-[#111827] transition-colors bg-white"
+                                                autoComplete="off"
+                                                spellCheck={false}
+                                            />
+
+                                        </div>
+                                    ) : null}
                                     {currentQuestion?.options.map((opt, i) => {
                                         const isSelected = userAnswers[questionKey] === i;
                                         const isEliminated = currentEliminations.includes(i);
@@ -1071,7 +1119,11 @@ export default function BaselineTestPage() {
                                                     {/* Answer Text */}
                                                     <div className="flex-1 p-4 flex items-center">
                                                         <span className={`text-[17px] font-sans ${isEliminated ? 'text-slate-400' : 'text-[#111827]'}`}>
-                                                            {cleanOCR(opt || '')}
+                                                            {currentQuestion?.type === 'Math' || currentQuestion?.type === 'Math (SPR)' ? (
+                                                                <MathText text={cleanOCR(opt || '')} />
+                                                            ) : (
+                                                                cleanOCR(opt || '')
+                                                            )}
                                                         </span>
                                                     </div>
 
@@ -1108,6 +1160,9 @@ export default function BaselineTestPage() {
                                         );
                                     })}
                                 </div>
+                                
+                                {/* Spacer to prevent Option D from touching footer due to flex overflow bugs */}
+                                <div className="h-24 shrink-0 w-full"></div>
                             </div>
                         </div>
                     </div>
@@ -1176,7 +1231,7 @@ export default function BaselineTestPage() {
             </main>
 
             {/* Premium Bottom Navigation Bar */}
-            <footer className="bg-white/80 backdrop-blur-lg border-t border-slate-200/80 px-8 h-[76px] flex items-center justify-between shrink-0 absolute bottom-0 left-0 right-0 z-40 shadow-[0_-2px_15px_rgba(0,0,0,0.03)]">
+            <footer className="bg-white/80 backdrop-blur-lg border-t border-slate-200/80 px-8 h-[76px] flex items-center justify-between shrink-0 z-40 shadow-[0_-2px_15px_rgba(0,0,0,0.03)]">
                 <div className="w-48"></div>
 
                 {!showCheckWork && (
@@ -1293,6 +1348,7 @@ export default function BaselineTestPage() {
 
             <ReferenceSheet isOpen={isReferenceOpen} onClose={() => setIsReferenceOpen(false)} />
         </div>
+        </>
     );
 }
 

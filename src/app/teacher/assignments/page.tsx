@@ -58,7 +58,7 @@ export default function AssignmentsPage() {
                                 Click an assignment to view class results and student breakdown.
                             </p>
                         </motion.div>
-                        <motion.div className="flex xl:justify-end" variants={itemRevealVariants}>
+                        <motion.div className="flex flex-col sm:flex-row gap-3 xl:justify-end" variants={itemRevealVariants}>
                             <Link
                                 href="/teacher/assignments/create"
                                 className="inline-flex items-center gap-2 rounded-full px-6 py-3 text-[15px] font-bold text-white transition hover:scale-[1.03] shadow-md bg-indigo-600 hover:bg-indigo-700 shrink-0"

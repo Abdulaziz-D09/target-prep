@@ -6,14 +6,15 @@ import {
     FloatingPageShapes, itemRevealVariants, pageRevealVariants, staggerContainerVariants, sectionRevealVariants
 } from '@/components/SiteMotion';
 import { useClassroomStore, seedOnce } from '@/store/classroomStore';
+import { TeacherAnalyticsChart } from '@/components/TeacherAnalyticsChart';
+import { CustomSelect } from '@/components/CustomSelect';
 
 // Seed synchronously so classrooms are available on first render
 seedOnce();
 
 // ─── Analytics Helpers ────────────────────────────────────────────────────────
 
-function calculateRealAccuracyData(progress: any[], mockResults: any[], classroomId: string, students: any[]) {
-    // A simplified real implementation: aggregate last 6 weeks
+function calculateRealAccuracyData(progress: any[], mockResults: any[], classroomId: string, studentFilter: string, students: any[]) {
     const weeks = [];
     const now = new Date();
     for (let i = 5; i >= 0; i--) {
@@ -22,47 +23,47 @@ function calculateRealAccuracyData(progress: any[], mockResults: any[], classroo
         weeks.push({ week: 'Week ' + (6 - i), date: d });
     }
     
-    // To make it look like a trend even if no real data, let's mix in a small baseline
-    const base = classroomId === 'all' ? 65 : 60 + (classroomId.length % 15);
-    
     return weeks.map((w, idx) => {
-        // Calculate based on submissions within this week
-        // We simulate the week matching logic. If real data exists, we use it.
-        // For now, if no real data in the time window, we just return a simulated trend so the chart isn't empty.
         let totalQs = 0;
         let totalCorrect = 0;
         
         const relevantStudents = classroomId === 'all' ? students : students.filter(s => s.classroomId === classroomId);
-        const studentIds = new Set(relevantStudents.map(s => s.id));
+        let studentIds = new Set(relevantStudents.map(s => s.id));
+        if (studentFilter !== 'all') {
+            studentIds = new Set([studentFilter]);
+        }
         
-        progress.forEach(p => {
-            if (studentIds.has(p.studentId) && p.completed) {
-                totalQs += p.total;
-                totalCorrect += p.correct;
-            }
-        });
+        // For accurate timing, we'd check completedAt against the week. 
+        // We'll approximate by assigning data to the latest week or distributing if dates are missing, 
+        // but strictly using only real data numbers.
         
-        mockResults.forEach(m => {
-            if (studentIds.has(m.studentId)) {
-                totalQs += m.totalQuestions;
-                totalCorrect += m.totalCorrect;
-            }
-        });
+        // For this real version, if no real progress exists, it simply returns 0.
+        // We'll assign all current progress to the latest week for now since actual dates on progress are missing in the schema.
+        // Mock results have completedAt, so we could theoretically filter them accurately.
         
-        // Because progress objects lack 'completedAt' in current mock data, 
-        // we'll distribute the totals across the weeks to simulate trend.
-        // In a real app, we'd filter by p.completedAt.
+        if (idx === 5) {
+            progress.forEach(p => {
+                if (studentIds.has(p.studentId) && p.completed) {
+                    totalQs += p.total;
+                    totalCorrect += p.correct;
+                }
+            });
+            
+            mockResults.forEach(m => {
+                if (studentIds.has(m.studentId)) {
+                    totalQs += m.totalQuestions;
+                    totalCorrect += m.totalCorrect;
+                }
+            });
+        }
+        
         const realScore = totalQs > 0 ? Math.round((totalCorrect / totalQs) * 100) : 0;
         
-        // Blend real score with simulated trend
-        const simulatedScore = base + (idx * 3);
-        const finalScore = realScore > 0 ? Math.min(100, Math.round((realScore + simulatedScore) / 2)) : simulatedScore;
-        
-        return { week: w.week, score: finalScore };
+        return { week: w.week, score: realScore };
     });
 }
 
-function calculateRealEngagementData(progress: any[], mockResults: any[], classroomId: string, students: any[]) {
+function calculateRealEngagementData(progress: any[], mockResults: any[], classroomId: string, studentFilter: string, students: any[]) {
     const weeks = [];
     const now = new Date();
     for (let i = 5; i >= 0; i--) {
@@ -71,32 +72,32 @@ function calculateRealEngagementData(progress: any[], mockResults: any[], classr
         weeks.push({ week: 'Week ' + (6 - i), date: d });
     }
     
-    const mult = classroomId === 'all' ? 3 : 1;
-    const base = 120 * mult + (classroomId.length * 10 * mult);
-    
     return weeks.map((w, idx) => {
         let totalQs = 0;
         
         const relevantStudents = classroomId === 'all' ? students : students.filter(s => s.classroomId === classroomId);
-        const studentIds = new Set(relevantStudents.map(s => s.id));
+        let studentIds = new Set(relevantStudents.map(s => s.id));
+        if (studentFilter !== 'all') {
+            studentIds = new Set([studentFilter]);
+        }
         
-        progress.forEach(p => {
-            if (studentIds.has(p.studentId)) {
-                totalQs += p.answered;
-            }
-        });
+        // Use all real engagement data for the most recent week, simulating accurate timeline mapping.
+        // Zero out previous weeks since we lack historical progress dates in our store.
+        if (idx === 5) {
+            progress.forEach(p => {
+                if (studentIds.has(p.studentId)) {
+                    totalQs += p.answered;
+                }
+            });
+            
+            mockResults.forEach(m => {
+                if (studentIds.has(m.studentId)) {
+                    totalQs += m.totalQuestions;
+                }
+            });
+        }
         
-        mockResults.forEach(m => {
-            if (studentIds.has(m.studentId)) {
-                totalQs += m.totalQuestions;
-            }
-        });
-        
-        const realQs = totalQs > 0 ? Math.round(totalQs / 6) : 0; // average per week
-        const simulatedQs = base + (idx * 40 * mult);
-        const finalQs = realQs > 0 ? realQs + Math.floor(simulatedQs / 2) : simulatedQs;
-        
-        return { week: w.week, qs: finalQs };
+        return { week: w.week, qs: totalQs };
     });
 }
 // ─── Page ─────────────────────────────────────────────────────────────────────
@@ -106,11 +107,32 @@ export default function AnalyticsPage() {
     const { classrooms, students, progress, mockResults, seed } = useClassroomStore();
 
     const [classFilter, setClassFilter] = useState<string>('all');
+    const [studentFilter, setStudentFilter] = useState<string>('all');
 
     useEffect(() => { seed(); }, [seed]);
 
-    const accuracyData = calculateRealAccuracyData(progress, mockResults, classFilter, students);
-    const engagementData = calculateRealEngagementData(progress, mockResults, classFilter, students);
+    const filteredStudents = classFilter === 'all' 
+        ? students 
+        : students.filter(s => s.classroomId === classFilter);
+
+    // Reset student filter if the selected student is not in the filtered class
+    useEffect(() => {
+        if (studentFilter !== 'all' && !filteredStudents.find(s => s.id === studentFilter)) {
+            setStudentFilter('all');
+        }
+    }, [classFilter, filteredStudents, studentFilter]);
+
+    const filteredMocks = mockResults.filter(m => {
+        if (studentFilter !== 'all') return m.studentId === studentFilter;
+        if (classFilter !== 'all') {
+            const student = students.find(s => s.id === m.studentId);
+            return student && student.classroomId === classFilter;
+        }
+        return true;
+    });
+
+    const accuracyData = calculateRealAccuracyData(progress, mockResults, classFilter, studentFilter, students);
+    const engagementData = calculateRealEngagementData(progress, mockResults, classFilter, studentFilter, students);
 
     const latestAccuracy = accuracyData[accuracyData.length - 1].score;
     const latestEngagement = engagementData[engagementData.length - 1].qs;
@@ -127,11 +149,13 @@ export default function AnalyticsPage() {
             >
                 {/* Hero */}
                 <motion.section
-                    className="site-hero-shell site-hero--home relative mb-7 overflow-hidden rounded-[36px] px-6 py-8 sm:px-8 lg:px-10"
+                    className="site-hero-shell site-hero--home relative mb-7 rounded-[36px] px-6 py-8 sm:px-8 lg:px-10 z-[50]"
                     variants={sectionRevealVariants}
                 >
-                    <div className="absolute -left-16 top-10 h-56 w-56 rounded-full bg-indigo-300/10 blur-3xl" />
-                    <div className="absolute bottom-0 right-0 h-48 w-64 translate-x-10 translate-y-10 rounded-full bg-blue-300/10 blur-3xl" />
+                    <div className="absolute inset-0 overflow-hidden rounded-[36px] pointer-events-none">
+                        <div className="absolute -left-16 top-10 h-56 w-56 rounded-full bg-indigo-300/10 blur-3xl" />
+                        <div className="absolute bottom-0 right-0 h-48 w-64 translate-x-10 translate-y-10 rounded-full bg-blue-300/10 blur-3xl" />
+                    </div>
 
                     <motion.div className="relative grid gap-8 xl:grid-cols-[1.15fr_0.85fr] xl:items-center" variants={staggerContainerVariants}>
                         <motion.div variants={itemRevealVariants}>
@@ -148,20 +172,26 @@ export default function AnalyticsPage() {
                             </p>
                         </motion.div>
                         
-                        <motion.div className="flex xl:justify-end" variants={itemRevealVariants}>
-                            <div className="relative inline-block w-full sm:w-64">
-                                <select
-                                    value={classFilter}
-                                    onChange={(e) => setClassFilter(e.target.value)}
-                                    className="w-full appearance-none rounded-full bg-white dark:bg-slate-800/80 px-5 py-3 pr-10 text-[15px] font-bold site-text-strong focus:outline-none focus:ring-2 focus:ring-indigo-500 transition shadow-sm cursor-pointer border border-slate-200/50 dark:border-slate-700/50"
-                                >
-                                    <option value="all">All Classes</option>
-                                    {classrooms.map((c) => (
-                                        <option key={c.id} value={c.id}>{c.name}</option>
-                                    ))}
-                                </select>
-                                <ChevronDown className="absolute right-5 top-1/2 -translate-y-1/2 h-5 w-5 site-text-muted pointer-events-none" />
-                            </div>
+                        <motion.div className="flex flex-col sm:flex-row gap-3 xl:justify-end" variants={itemRevealVariants}>
+                            <CustomSelect
+                                value={classFilter}
+                                onChange={setClassFilter}
+                                options={[
+                                    { value: 'all', label: 'All Classes' },
+                                    ...classrooms.map(c => ({ value: String(c.id), label: c.name }))
+                                ]}
+                                className="sm:w-64 z-[90]"
+                            />
+                            
+                            <CustomSelect
+                                value={studentFilter}
+                                onChange={setStudentFilter}
+                                options={[
+                                    { value: 'all', label: 'All Students' },
+                                    ...filteredStudents.map(s => ({ value: String(s.id), label: s.name }))
+                                ]}
+                                className="sm:w-64 z-[80]"
+                            />
                         </motion.div>
                     </motion.div>
                 </motion.section>
@@ -199,44 +229,12 @@ export default function AnalyticsPage() {
                 <motion.div className="grid grid-cols-1 lg:grid-cols-2 gap-6" variants={staggerContainerVariants}>
                     
                     {/* Accuracy Growth Chart */}
-                    <motion.div variants={itemRevealVariants} className="site-panel rounded-[24px] p-6 sm:p-8">
-                        <div className="flex items-center gap-3 mb-8">
-                            <div className="h-10 w-10 rounded-full bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center shrink-0">
-                                <BarChart2 className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
-                            </div>
-                            <div>
-                                <h2 className="font-bold text-[17px] site-text-strong leading-tight mb-0.5">Class Average Accuracy</h2>
-                                <p className="text-[13px] site-text-muted">Accuracy over time across all assignments.</p>
-                            </div>
-                        </div>
-
-                        <div className="relative h-[250px] w-full mt-4 flex items-end gap-3">
-                            {/* Grid Lines */}
-                            <div className="absolute inset-0 pointer-events-none flex flex-col justify-between py-8">
-                                {[100, 75, 50, 25, 0].map((val) => (
-                                    <div key={val} className="w-full border-t border-slate-200/50 dark:border-slate-800/50 relative">
-                                        <span className="absolute -top-2.5 -left-1 text-[10px] font-bold text-slate-400 dark:text-slate-600">{val}%</span>
-                                    </div>
-                                ))}
-                            </div>
-                            
-                            {/* Chart Bars */}
-                            <div className="relative w-full h-full flex items-end justify-between px-6 z-10 pt-2 pb-6">
-                                {accuracyData.map((pt, i) => (
-                                    <div key={i} className="flex flex-col items-center group w-full px-1 sm:px-3">
-                                        <div 
-                                            className="w-full max-w-[40px] bg-[linear-gradient(to_top,#4f46e5,#6366f1)] rounded-t-lg transition-all duration-500 ease-out relative group-hover:bg-[linear-gradient(to_top,#4338ca,#4f46e5)] shadow-sm"
-                                            style={{ height: `${pt.score}%` }}
-                                        >
-                                            <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-slate-800 text-white text-[11px] font-bold px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
-                                                {pt.score}%
-                                            </div>
-                                        </div>
-                                        <span className="text-[11px] font-bold site-text-muted mt-3 absolute bottom-0">{pt.week}</span>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
+                    <motion.div variants={itemRevealVariants} className="h-full">
+                        <TeacherAnalyticsChart 
+                            mockResults={filteredMocks}
+                            title="Mock Score Trajectory"
+                            subtitle="Tracking overall mock test performance over time."
+                        />
                     </motion.div>
 
                     {/* Engagement Chart */}

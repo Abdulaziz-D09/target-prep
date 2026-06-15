@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
+import { createClient } from '@/lib/supabase/client';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -25,6 +26,7 @@ export type Student = {
   scorePredictor?: string;
   history?: { date: string; accuracy: number }[];
   mockSessionId?: string;
+  user_id?: string;
 };
 
 export type QuestionOption = { A: string; B: string; C: string; D: string };
@@ -93,6 +95,16 @@ export type StudentProgress = {
   correct: number;
   total: number;
   completed: boolean;
+};
+
+export type QuestionHistoryEntry = {
+  id: string;
+  studentId: string;
+  assignmentId: string;
+  questionId: string;
+  chosenOption: string;
+  isCorrect: boolean;
+  answeredAt: string;
 };
 
 // ─── Seed data ────────────────────────────────────────────────────────────────
@@ -171,6 +183,7 @@ type State = {
   students: Student[];
   assignments: Assignment[];
   progress: StudentProgress[];
+  questionHistory: QuestionHistoryEntry[];
   mockSessions: MockSession[];
   mockResults: MockResult[];
   joinedClassroomIds: string[];
@@ -196,6 +209,9 @@ type Actions = {
   joinMock: (code: string, studentId: string) => { success: boolean; error?: string; session?: MockSession; assignedTestId?: string };
   submitMockResult: (result: Omit<MockResult, 'id' | 'completedAt'>) => void;
   deleteMockResult: (id: string) => void;
+  syncWithSupabase: () => Promise<void>;
+  submitAssignmentProgress: (studentId: string, assignmentId: string, answered: number, correct: number, total: number, completed: boolean) => void;
+  logQuestionAnswer: (studentId: string, assignmentId: string, questionId: string, chosenOption: string, isCorrect: boolean) => void;
 };
 
 function normalizeAssignmentTimeLimit(assignment: Assignment): Assignment {
@@ -214,6 +230,7 @@ export const useClassroomStore = create<State & Actions>()(
       students: [],
       assignments: [],
       progress: [],
+      questionHistory: [],
       mockSessions: [],
       mockResults: [],
       joinedClassroomIds: [],
@@ -240,6 +257,7 @@ export const useClassroomStore = create<State & Actions>()(
           students: [],
           assignments: [],
           progress: [],
+          questionHistory: [],
           seeded: true,
         });
       },
@@ -253,6 +271,21 @@ export const useClassroomStore = create<State & Actions>()(
           createdAt: new Date().toISOString(),
         };
         set((s) => ({ classrooms: [...s.classrooms, cls] }));
+
+        createClient().auth.getSession().then(({ data: { session } }) => {
+          if (session?.user) {
+            createClient().from('classrooms').insert({
+              id: cls.id,
+              name: cls.name,
+              grade: cls.grade,
+              join_code: cls.joinCode,
+              teacher_id: session.user.id
+            }).then(({ error }) => {
+              if (error) console.error('Error syncing addClassroom:', error);
+            });
+          }
+        });
+
         return cls;
       },
 
@@ -261,6 +294,10 @@ export const useClassroomStore = create<State & Actions>()(
           classrooms: s.classrooms.filter((c) => c.id !== id),
           students: s.students.filter((st) => st.classroomId !== id),
         }));
+
+        createClient().from('classrooms').delete().eq('id', id).then(({ error }) => {
+          if (error) console.error('Error syncing deleteClassroom:', error);
+        });
       },
 
       addAssignment: (data) => {
@@ -270,10 +307,26 @@ export const useClassroomStore = create<State & Actions>()(
           createdAt: new Date().toISOString(),
         });
         set((s) => ({ assignments: [...s.assignments, asgn] }));
+
+        createClient().from('assignments').insert({
+          id: asgn.id,
+          title: asgn.title,
+          subject: asgn.subject,
+          classroom_ids: asgn.classroomIds,
+          questions: asgn.questions,
+          time_limit_minutes: asgn.timeLimitMinutes,
+          allow_exit: asgn.allowExit
+        }).then(({ error }) => {
+          if (error) console.error('Error syncing addAssignment:', error);
+        });
       },
 
       deleteAssignment: (id) => {
         set((s) => ({ assignments: s.assignments.filter((a) => a.id !== id) }));
+
+        createClient().from('assignments').delete().eq('id', id).then(({ error }) => {
+          if (error) console.error('Error syncing deleteAssignment:', error);
+        });
       },
 
       joinClassroom: (code) => {
@@ -292,6 +345,26 @@ export const useClassroomStore = create<State & Actions>()(
             joinedClassroomIds: [...s.joinedClassroomIds, cls.id],
             students: [...s.students, newStudent]
         }));
+
+        createClient().auth.getSession().then(({ data: { session } }) => {
+          const userId = session?.user?.id;
+          if (userId) {
+            set((s) => ({
+              students: s.students.map(stu => stu.id === newStudent.id ? { ...stu, user_id: userId } : stu)
+            }));
+          }
+          createClient().from('students').insert({
+            id: newStudent.id,
+            name: newStudent.name,
+            classroom_id: newStudent.classroomId,
+            joined_at: newStudent.joinedAt,
+            avatar: newStudent.avatar,
+            user_id: userId
+          }).then(({ error }) => {
+            if (error) console.error('Error syncing joinClassroom:', error);
+          });
+        });
+
         return true;
       },
 
@@ -305,28 +378,97 @@ export const useClassroomStore = create<State & Actions>()(
           status: 'upcoming'
         };
         set((state) => ({ mockSessions: [...state.mockSessions, newSession] }));
+
+        createClient().from('mock_sessions').insert({
+          id: newSession.id,
+          title: newSession.title,
+          place: newSession.place,
+          date: newSession.date,
+          time_limit_minutes: newSession.timeLimitMinutes,
+          max_students: newSession.maxStudents,
+          attached_test_ids: newSession.attachedTestIds,
+          join_code: newSession.joinCode,
+          status: newSession.status,
+          strict_mode: newSession.strictMode,
+          host: newSession.host,
+          custom_tests: newSession.customTests,
+          subject: newSession.subject,
+          distribution_mode: newSession.distributionMode,
+          student_assignments: newSession.studentAssignments,
+          join_locked: newSession.joinLocked,
+          join_deadline: newSession.joinDeadline
+        }).then(({ error }) => {
+          if (error) console.error('Error syncing createMockSession:', error);
+        });
+
         return newSession;
       },
-      updateMockSession: (id, updates) => set((state) => ({
-        mockSessions: state.mockSessions.map((s) => 
-          s.id === id ? { ...s, ...updates } : s
-        )
-      })),
-      updateMockSessionStatus: (id, status) => set((state) => ({
-        mockSessions: state.mockSessions.map(s => s.id === id ? { ...s, status } : s)
-      })),
-      assignTestToStudent: (mockId, studentId, testId) => set((state) => ({
-        mockSessions: state.mockSessions.map(s => {
-            if (s.id === mockId) {
-                const assignments = s.studentAssignments || {};
-                return { ...s, studentAssignments: { ...assignments, [studentId]: testId } };
-            }
-            return s;
-        })
-      })),
-      removeStudent: (studentId) => set((state) => ({
-          students: state.students.filter(s => s.id !== studentId)
-      })),
+      updateMockSession: (id, updates) => {
+        set((state) => ({
+          mockSessions: state.mockSessions.map((s) => 
+            s.id === id ? { ...s, ...updates } : s
+          )
+        }));
+
+        const dbUpdates: any = {};
+        if (updates.title !== undefined) dbUpdates.title = updates.title;
+        if (updates.place !== undefined) dbUpdates.place = updates.place;
+        if (updates.date !== undefined) dbUpdates.date = updates.date;
+        if (updates.timeLimitMinutes !== undefined) dbUpdates.time_limit_minutes = updates.timeLimitMinutes;
+        if (updates.maxStudents !== undefined) dbUpdates.max_students = updates.maxStudents;
+        if (updates.attachedTestIds !== undefined) dbUpdates.attached_test_ids = updates.attachedTestIds;
+        if (updates.status !== undefined) dbUpdates.status = updates.status;
+        if (updates.strictMode !== undefined) dbUpdates.strict_mode = updates.strictMode;
+        if (updates.host !== undefined) dbUpdates.host = updates.host;
+        if (updates.customTests !== undefined) dbUpdates.custom_tests = updates.customTests;
+        if (updates.subject !== undefined) dbUpdates.subject = updates.subject;
+        if (updates.distributionMode !== undefined) dbUpdates.distribution_mode = updates.distributionMode;
+        if (updates.studentAssignments !== undefined) dbUpdates.student_assignments = updates.studentAssignments;
+        if (updates.joinLocked !== undefined) dbUpdates.join_locked = updates.joinLocked;
+        if (updates.joinDeadline !== undefined) dbUpdates.join_deadline = updates.joinDeadline;
+
+        createClient().from('mock_sessions').update(dbUpdates).eq('id', id).then(({ error }) => {
+          if (error) console.error('Error syncing updateMockSession:', error);
+        });
+      },
+      updateMockSessionStatus: (id, status) => {
+        set((state) => ({
+          mockSessions: state.mockSessions.map(s => s.id === id ? { ...s, status } : s)
+        }));
+
+        createClient().from('mock_sessions').update({ status }).eq('id', id).then(({ error }) => {
+          if (error) console.error('Error syncing updateMockSessionStatus:', error);
+        });
+      },
+      assignTestToStudent: (mockId, studentId, testId) => {
+        set((state) => ({
+          mockSessions: state.mockSessions.map(s => {
+              if (s.id === mockId) {
+                  const assignments = s.studentAssignments || {};
+                  return { ...s, studentAssignments: { ...assignments, [studentId]: testId } };
+              }
+              return s;
+          })
+        }));
+
+        const updatedSession = get().mockSessions.find(s => s.id === mockId);
+        if (updatedSession) {
+          createClient().from('mock_sessions').update({
+            student_assignments: updatedSession.studentAssignments
+          }).eq('id', mockId).then(({ error }) => {
+            if (error) console.error('Error syncing assignTestToStudent:', error);
+          });
+        }
+      },
+      removeStudent: (studentId) => {
+        set((state) => ({
+            students: state.students.filter(s => s.id !== studentId)
+        }));
+
+        createClient().from('students').delete().eq('id', studentId).then(({ error }) => {
+          if (error) console.error('Error syncing removeStudent:', error);
+        });
+      },
       registerForMock: (mockId, studentInfo) => {
         let result: any = { success: false };
         set((state) => {
@@ -358,6 +500,31 @@ export const useClassroomStore = create<State & Actions>()(
 
             return { students: updatedStudents };
         });
+
+        if (result.success && result.student) {
+          createClient().auth.getSession().then(({ data: { session } }) => {
+            const userId = session?.user?.id;
+            if (userId) {
+              set((s) => ({
+                students: s.students.map(stu => stu.id === result.student.id ? { ...stu, user_id: userId } : stu)
+              }));
+            }
+            createClient().from('students').upsert({
+              id: result.student.id,
+              name: result.student.name,
+              school: result.student.school,
+              grade_level: result.student.gradeLevel,
+              classroom_id: result.student.classroomId || null,
+              joined_at: result.student.joinedAt,
+              avatar: result.student.avatar,
+              mock_session_id: result.student.mockSessionId,
+              user_id: userId
+            }).then(({ error }) => {
+              if (error) console.error('Error syncing registerForMock:', error);
+            });
+          });
+        }
+
         return result;
       },
       joinMock: (code, studentId) => {
@@ -375,39 +542,299 @@ export const useClassroomStore = create<State & Actions>()(
                 return state; 
             }
 
-            result = { success: true, session };
-
+            let assignedTestId = '1';
             if (session.studentAssignments && session.studentAssignments[student.id]) {
-                result.assignedTestId = session.studentAssignments[student.id];
-            } else if (session.customTests && session.customTests.length > 0) {
-                result.assignedTestId = session.customTests[Math.floor(Math.random() * session.customTests.length)].id;
-            } else if (session.attachedTestIds && session.attachedTestIds.length > 0) {
-                result.assignedTestId = session.attachedTestIds[Math.floor(Math.random() * session.attachedTestIds.length)];
+                assignedTestId = session.studentAssignments[student.id];
             } else {
-                result.assignedTestId = '1';
+                if (session.customTests && session.customTests.length > 0) {
+                    assignedTestId = session.customTests[Math.floor(Math.random() * session.customTests.length)].id;
+                } else if (session.attachedTestIds && session.attachedTestIds.length > 0) {
+                    assignedTestId = session.attachedTestIds[Math.floor(Math.random() * session.attachedTestIds.length)];
+                }
+            }
+
+            result = { success: true, session, assignedTestId };
+
+            const hasAssignment = session.studentAssignments && session.studentAssignments[student.id];
+            if (!hasAssignment) {
+                const updatedSessions = state.mockSessions.map(s => {
+                    if (s.id === session.id) {
+                        const assignments = s.studentAssignments || {};
+                        return { ...s, studentAssignments: { ...assignments, [student.id]: assignedTestId } };
+                    }
+                    return s;
+                });
+                
+                // Sync to Supabase
+                const assignments = { ...(session.studentAssignments || {}), [student.id]: assignedTestId };
+                createClient().from('mock_sessions').update({
+                    student_assignments: assignments
+                }).eq('id', session.id).then(({ error }) => {
+                    if (error) console.error('Error syncing random assignment in joinMock:', error);
+                });
+
+                return {
+                    ...state,
+                    mockSessions: updatedSessions
+                };
             }
 
             return state;
         });
         return result;
       },
-      submitMockResult: (result) => set((state) => {
+      submitMockResult: (result) => {
         const newResult: MockResult = {
           ...result,
           id: 'res-' + Date.now(),
           completedAt: new Date().toISOString()
         };
-        return { mockResults: [...state.mockResults, newResult] };
-      }),
-      deleteMockSession: (id) => set((state) => ({
-        mockSessions: state.mockSessions.filter(s => s.id !== id),
-        mockResults: state.mockResults.filter(r => r.mockId !== id)
-      })),
-      deleteMockResult: (id) => set((state) => ({
-        mockResults: state.mockResults.filter(r => r.id !== id)
-      })),
+        set((state) => ({ mockResults: [...state.mockResults, newResult] }));
+
+        createClient().from('mock_results').insert({
+          id: newResult.id,
+          mock_id: newResult.mockId,
+          student_id: newResult.studentId,
+          assigned_test_id: newResult.assignedTestId,
+          score: newResult.score,
+          total_correct: newResult.totalCorrect,
+          total_questions: newResult.totalQuestions,
+          completed_at: newResult.completedAt,
+          english_score: newResult.englishScore,
+          math_score: newResult.mathScore,
+          time_spent: newResult.timeSpent,
+          answers: newResult.answers,
+          kicked_out: newResult.kickedOut
+        }).then(({ error }) => {
+          if (error) console.error('Error syncing submitMockResult:', error);
+        });
+      },
+      deleteMockSession: (id) => {
+        set((state) => ({
+          mockSessions: state.mockSessions.filter(s => s.id !== id),
+          mockResults: state.mockResults.filter(r => r.mockId !== id)
+        }));
+
+        createClient().from('mock_sessions').delete().eq('id', id).then(({ error }) => {
+          if (error) console.error('Error syncing deleteMockSession:', error);
+        });
+      },
+      deleteMockResult: (id) => {
+        set((state) => ({
+          mockResults: state.mockResults.filter(r => r.id !== id)
+        }));
+
+        createClient().from('mock_results').delete().eq('id', id).then(({ error }) => {
+          if (error) console.error('Error syncing deleteMockResult:', error);
+        });
+      },
       leaveClassroom: (id) => {
         set((s) => ({ joinedClassroomIds: s.joinedClassroomIds.filter((cId) => cId !== id) }));
+
+        createClient().auth.getSession().then(({ data: { session } }) => {
+          if (session?.user) {
+            set((s) => ({
+              students: s.students.filter(stu => !(stu.classroomId === id && stu.user_id === session.user.id))
+            }));
+            createClient().from('students').delete().eq('user_id', session.user.id).eq('classroom_id', id).then(({ error }) => {
+              if (error) console.error('Error syncing leaveClassroom:', error);
+            });
+          }
+        });
+      },
+
+      syncWithSupabase: async () => {
+        try {
+          const supabase = createClient();
+          const { data: { session } } = await supabase.auth.getSession();
+          if (!session?.user) return;
+
+          const [
+            classroomsRes, 
+            studentsRes, 
+            assignmentsRes, 
+            progressRes, 
+            mockSessionsRes, 
+            mockResultsRes,
+            questionHistoryRes
+          ] = await Promise.all([
+            supabase.from('classrooms').select('*'),
+            supabase.from('students').select('*'),
+            supabase.from('assignments').select('*'),
+            supabase.from('student_progress').select('*'),
+            supabase.from('mock_sessions').select('*'),
+            supabase.from('mock_results').select('*'),
+            supabase.from('question_history').select('*'),
+          ]);
+
+          const updates: Partial<State> = {};
+
+          if (classroomsRes.data) {
+            updates.classrooms = classroomsRes.data.map(c => ({
+              id: c.id,
+              name: c.name,
+              grade: c.grade,
+              joinCode: c.join_code,
+              createdAt: c.created_at,
+            }));
+          }
+
+          if (studentsRes.data) {
+            updates.students = studentsRes.data.map(s => ({
+              id: s.id,
+              name: s.name,
+              classroomId: s.classroom_id,
+              joinedAt: s.joined_at,
+              avatar: s.avatar,
+              school: s.school,
+              gradeLevel: s.grade_level,
+              plannedExamDate: s.planned_exam_date,
+              scorePredictor: s.score_predictor,
+              history: s.history || [],
+              mockSessionId: s.mock_session_id,
+              user_id: s.user_id,
+            }));
+
+            const studentProfiles = studentsRes.data.filter(s => s.user_id === session.user.id);
+            updates.joinedClassroomIds = studentProfiles.map(s => s.classroom_id).filter(Boolean);
+          }
+
+          if (assignmentsRes.data) {
+            updates.assignments = assignmentsRes.data.map(a => ({
+              id: a.id,
+              title: a.title,
+              subject: a.subject,
+              classroomIds: a.classroom_ids || [],
+              questions: a.questions || [],
+              timeLimitMinutes: a.time_limit_minutes,
+              allowExit: a.allow_exit,
+              createdAt: a.created_at,
+            }));
+          }
+
+          if (progressRes.data) {
+            updates.progress = progressRes.data.map(p => ({
+              studentId: p.student_id,
+              assignmentId: p.assignment_id,
+              answered: p.answered,
+              correct: p.correct,
+              total: p.total,
+              completed: p.completed,
+            }));
+          }
+
+          if (mockSessionsRes.data) {
+            updates.mockSessions = mockSessionsRes.data.map(m => ({
+              id: m.id,
+              title: m.title,
+              place: m.place,
+              date: m.date,
+              timeLimitMinutes: m.time_limit_minutes,
+              maxStudents: m.max_students,
+              attachedTestIds: m.attached_test_ids || [],
+              joinCode: m.join_code,
+              createdAt: m.created_at,
+              status: m.status,
+              strictMode: m.strict_mode,
+              host: m.host,
+              customTests: m.custom_tests || [],
+              subject: m.subject,
+              distributionMode: m.distribution_mode,
+              studentAssignments: m.student_assignments || {},
+              joinLocked: m.join_locked,
+              joinDeadline: m.join_deadline,
+            }));
+          }
+
+          if (mockResultsRes.data) {
+            updates.mockResults = mockResultsRes.data.map(r => ({
+              id: r.id,
+              mockId: r.mock_id,
+              studentId: r.student_id,
+              assignedTestId: r.assigned_test_id,
+              score: r.score,
+              totalCorrect: r.total_correct,
+              totalQuestions: r.total_questions,
+              completedAt: r.completed_at,
+              englishScore: r.english_score,
+              mathScore: r.math_score,
+              timeSpent: r.time_spent,
+              answers: r.answers || {},
+              kickedOut: r.kicked_out,
+            }));
+          }
+
+          if (questionHistoryRes.data) {
+            updates.questionHistory = questionHistoryRes.data.map((q: any) => ({
+              id: q.id,
+              studentId: q.student_id,
+              assignmentId: q.assignment_id,
+              questionId: q.question_id,
+              chosenOption: q.chosen_option,
+              isCorrect: q.is_correct,
+              answeredAt: q.answered_at,
+            }));
+          }
+
+          set(updates);
+        } catch (err) {
+          console.warn('Failed to sync classrooms data with Supabase:', err);
+        }
+      },
+      submitAssignmentProgress: (studentId, assignmentId, answered, correct, total, completed) => {
+        const progressItem: StudentProgress = {
+          studentId,
+          assignmentId,
+          answered,
+          correct,
+          total,
+          completed
+        };
+        set((state) => {
+          const index = state.progress.findIndex(p => p.studentId === studentId && p.assignmentId === assignmentId);
+          const newProgress = [...state.progress];
+          if (index !== -1) {
+            newProgress[index] = progressItem;
+          } else {
+            newProgress.push(progressItem);
+          }
+          return { progress: newProgress };
+        });
+
+        createClient().from('student_progress').upsert({
+          student_id: studentId,
+          assignment_id: assignmentId,
+          answered,
+          correct,
+          total,
+          completed
+        }).then(({ error }) => {
+          if (error) console.error('Error syncing submitAssignmentProgress:', error);
+        });
+      },
+      logQuestionAnswer: (studentId, assignmentId, questionId, chosenOption, isCorrect) => {
+        const entry: QuestionHistoryEntry = {
+          id: `qh-${Date.now()}-${Math.random().toString(36).substr(2, 5)}`,
+          studentId,
+          assignmentId,
+          questionId,
+          chosenOption,
+          isCorrect,
+          answeredAt: new Date().toISOString()
+        };
+        set((state) => ({ questionHistory: [...state.questionHistory, entry] }));
+
+        createClient().from('question_history').insert({
+          id: entry.id,
+          student_id: studentId,
+          assignment_id: assignmentId,
+          question_id: questionId,
+          chosen_option: chosenOption,
+          is_correct: isCorrect,
+          answered_at: entry.answeredAt
+        }).then(({ error }) => {
+          if (error) console.error('Error syncing logQuestionAnswer:', error);
+        });
       },
     }),
     {

@@ -83,10 +83,33 @@ export function LatexRenderer({ text, className = '' }: LatexRendererProps) {
           // parse bold text
           const boldParts = after.split(/(\*\*.*?\*\*)/g);
           const boldSegments = boldParts.map((bp, bpIdx) => {
-            if (bp.startsWith('**') && bp.endsWith('**')) {
-              return <strong key={bpIdx} className="font-black text-slate-900 block mt-5 mb-2 text-lg uppercase tracking-wider">{bp.slice(2, -2)}</strong>;
+            const isBold = bp.startsWith('**') && bp.endsWith('**');
+            const innerText = isBold ? bp.slice(2, -2) : bp;
+            
+            const blankParts = innerText.split(/(_{5,})/g);
+            const renderedContent = blankParts.map((bPart, bIdx) => {
+              if (/^_{5,}$/.test(bPart)) {
+                return (
+                  <span
+                    key={bIdx}
+                    className="inline-block border-b-2 border-slate-800 text-transparent select-all select-text min-w-[80px] mx-1 align-bottom"
+                    aria-label="blank"
+                  >
+                    {bPart}
+                  </span>
+                );
+              }
+              return bPart;
+            });
+
+            if (isBold) {
+              return (
+                <strong key={bpIdx} className="font-black text-slate-900 block mt-5 mb-2 text-lg uppercase tracking-wider">
+                  {renderedContent}
+                </strong>
+              );
             }
-            return <span key={bpIdx}>{bp}</span>;
+            return <span key={bpIdx}>{renderedContent}</span>;
           });
           
           segments.push(<span key={`${index}-end`} className="whitespace-pre-wrap">{boldSegments}</span>);

@@ -459,7 +459,7 @@ export default function BaselineTestPage() {
                                                         )}
                                                         {q.image && (
                                                             <div className="mb-6 border border-slate-200 rounded-xl overflow-hidden bg-slate-50 flex items-center justify-center p-4">
-                                                                <img src={q.image} alt="Question figure" className="max-w-full max-h-[250px] object-contain cursor-pointer hover:opacity-90 transition-opacity" onClick={() => setExpandedImage(q.image)} />
+                                                                <img src={q.image} alt="Question figure" className="max-w-full max-h-[250px] object-contain cursor-pointer hover:opacity-90 transition-opacity" onClick={() => setExpandedImage(q.image || null)} />
                                                             </div>
                                                         )}
                                                         <h4 className="text-lg font-medium text-slate-900 mb-6">{cleanOCR(q.question || '')}</h4>
@@ -1044,7 +1044,7 @@ export default function BaselineTestPage() {
                                             src={currentQuestion.image}
                                             alt="Question figure"
                                             className="max-w-full max-h-[200px] object-contain cursor-pointer hover:opacity-90 transition-opacity"
-                                            onClick={() => setExpandedImage(currentQuestion.image)}
+                                            onClick={() => setExpandedImage(currentQuestion.image || null)}
                                         />
                                     </div>
                                 )}

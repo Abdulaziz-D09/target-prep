@@ -1,6 +1,6 @@
 'use client';
 import { motion, useReducedMotion } from 'framer-motion';
-import { Sparkles, Trophy, Calendar, Target, Activity, Calculator, BookOpen, ArrowUpRight } from 'lucide-react';
+import { Sparkles, Trophy, Calendar, Target, Activity, Calculator, BookOpen, ArrowUpRight, FileText } from 'lucide-react';
 import {
     FloatingPageShapes,
     staggerContainerVariants,
@@ -122,10 +122,10 @@ export default function StudentMocksAnalyticsPage() {
                         {/* Section Breakdowns */}
                         <motion.section className="grid gap-4 grid-cols-2" variants={staggerContainerVariants}>
                             {[
-                                { label: 'Mocks Taken', value: stats.totalMocks, icon: FileText },
-                                { label: 'Average Score', value: stats.averageScore || '--', icon: Target },
-                                { label: 'High Score', value: stats.highScore || '--', icon: Trophy },
-                                { label: 'Latest Score', value: stats.latestScore || '--', icon: Activity },
+                                { label: 'Mocks Taken', value: stats.total, icon: FileText },
+                                { label: 'Average Score', value: stats.avg || '--', icon: Target },
+                                { label: 'High Score', value: stats.highest || '--', icon: Trophy },
+                                { label: 'Latest Score', value: myResults.length > 0 ? (myResults[myResults.length - 1].score || '--') : '--', icon: Activity },
                             ].map((stat) => (
                                 <motion.article key={stat.label} className="site-panel rounded-[28px] p-5 sm:p-6 flex flex-col justify-between aspect-[4/3] sm:aspect-auto sm:min-h-[140px]" variants={itemRevealVariants}>
                                     <div className="flex items-center gap-2 text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.2em] site-text-muted self-start">

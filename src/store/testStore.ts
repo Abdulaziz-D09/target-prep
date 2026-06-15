@@ -8,7 +8,7 @@ interface TestState {
     currentSectionIndex: number;
     currentModuleIndex: number;
     currentQuestionIndex: number;
-    userAnswers: Record<string, number>;
+    userAnswers: Record<string, number | string>;
     flaggedQuestions: Record<string, boolean>;
     eliminatedAnswers: Record<string, number[]>; // Array of eliminated option indices
     timeRemaining: number;
@@ -31,7 +31,7 @@ export interface CompletedTest {
     totalScore: number;
     totalCorrect: number;
     totalQuestions: number;
-    answers: Record<string, number>;
+    answers: Record<string, number | string>;
     eliminated: Record<string, number[]>;
 }
 
@@ -48,7 +48,7 @@ export interface Highlight {
 interface TestActions {
     startTest: (testId: number) => void;
     beginTimer: () => void;
-    selectAnswer: (questionKey: string, answerIndex: number) => void;
+    selectAnswer: (questionKey: string, answerIndex: number | string) => void;
     toggleFlag: (questionKey: string) => void;
     toggleElimination: (questionKey: string, answerIndex: number) => void;
     addHighlight: (questionKey: string, highlight: Highlight) => void;

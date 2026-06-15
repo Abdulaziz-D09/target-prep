@@ -1,8 +1,8 @@
-import { createClient as createSupabaseClient } from '@supabase/supabase-js'
+import { createClient as createSupabaseClient, type SupabaseClient } from '@supabase/supabase-js'
 
-let supabase: ReturnType<typeof createSupabaseClient> | null = null
+let supabase: SupabaseClient | null = null
 
-export function createClient() {
+export function createClient(): SupabaseClient {
   if (!supabase) {
     supabase = createSupabaseClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,

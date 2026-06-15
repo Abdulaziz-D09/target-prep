@@ -626,7 +626,7 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
                                                                     src={q.image} 
                                                                     alt="Question figure" 
                                                                     className="max-w-full max-h-[250px] object-contain cursor-pointer hover:opacity-90 transition-opacity" 
-                                                                    onClick={() => setExpandedImage(q.image)}
+                                                                    onClick={() => setExpandedImage(q.image || null)}
                                                                 />
                                                             </div>
                                                         )}
@@ -1289,7 +1289,7 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
                                             src={currentQuestion.image}
                                             alt="Question figure"
                                             className="max-w-full max-h-[200px] object-contain cursor-pointer hover:opacity-90 transition-opacity"
-                                            onClick={() => setExpandedImage(currentQuestion.image)}
+                                            onClick={() => setExpandedImage(currentQuestion.image || null)}
                                         />
                                     </div>
                                 )}

@@ -29,22 +29,11 @@ export default async function LoginPage({
           </div>
 
           <h1 className="text-4xl lg:text-5xl font-extrabold tracking-tight mb-4 leading-tight">
-            Master the SAT with <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400">precision</span>.
+            Prepare for the SAT <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400">effectively</span>.
           </h1>
           <p className="text-slate-400 text-base lg:text-lg mb-6 leading-relaxed max-w-md">
-            Join the elite platform designed to adapt, challenge, and elevate your performance. The most intelligent way to prepare.
+            Practice with realistic tests and improve your score with targeted preparation.
           </p>
-
-          <div className="flex items-center gap-4 text-sm text-slate-500 font-medium">
-            <div className="flex -space-x-3">
-              {[1, 2, 3, 4].map((i) => (
-                <div key={i} className={`w-8 h-8 rounded-full border-2 border-[#121826] bg-slate-800 flex items-center justify-center text-xs overflow-hidden`}>
-                  <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${i}&backgroundColor=6366f1`} alt="avatar" />
-                </div>
-              ))}
-            </div>
-            <p>Trusted by 10,000+ students</p>
-          </div>
         </div>
 
         {/* Right Side: Auth Form */}

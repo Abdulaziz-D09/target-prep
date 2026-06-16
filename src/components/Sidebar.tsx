@@ -18,6 +18,7 @@ const studentNavItems: NavItem[] = [
     { href: '/dashboard', label: 'Home', icon: Home },
     { href: '/study-plan', label: 'Study Vault', icon: Map },
     { href: '/practice', label: 'Practice Tests', icon: FileText },
+
     { href: '/question-bank', label: 'Question Bank', icon: LayoutGrid },
     { href: '/classroom', label: 'Classroom', icon: GraduationCap },
     { href: '/progress', label: 'Progress', icon: BarChart2 },
@@ -161,7 +162,7 @@ export default function Sidebar() {
         event.preventDefault();
     };
 
-    // Hide sidebar completely on full-screen practice, assignments, and temporary full-focus flows
+    // Hide sidebar on practice test mode, classroom assignments, or if explicitly toggled
     if (pathname.startsWith('/practice/test/') || pathname.startsWith('/classroom/assignment/') || isTemporarilyHidden) {
         return null;
     }
@@ -493,17 +494,17 @@ export default function Sidebar() {
                                                 </div>
                                             </div>
                                             
-                                            <div className={`rounded-2xl p-4 border ${isLightTone ? 'bg-slate-50 border-slate-100' : 'bg-white/[0.02] border-white/5'}`}>
-                                                <label className="text-[11px] font-bold uppercase tracking-widest text-slate-400 mb-2 block">Birthdate</label>
-                                                <input 
-                                                    type="date" required
-                                                    value={profileForm.birthdate} 
-                                                    onChange={e => setProfileForm({...profileForm, birthdate: e.target.value})}
-                                                    className={`w-full rounded-xl border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/50 ${isLightTone ? 'bg-white border-slate-200 text-slate-900' : 'bg-black/20 border-white/10 text-white [&::-webkit-calendar-picker-indicator]:invert-[0.8]'}`}
-                                                />
-                                            </div>
                                             {user?.user_metadata?.role !== 'teacher' && (
                                                 <>
+                                                    <div className={`rounded-2xl p-4 border ${isLightTone ? 'bg-slate-50 border-slate-100' : 'bg-white/[0.02] border-white/5'}`}>
+                                                        <label className="text-[11px] font-bold uppercase tracking-widest text-slate-400 mb-2 block">Birthdate</label>
+                                                        <input 
+                                                            type="date" required
+                                                            value={profileForm.birthdate} 
+                                                            onChange={e => setProfileForm({...profileForm, birthdate: e.target.value})}
+                                                            className={`w-full rounded-xl border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/50 ${isLightTone ? 'bg-white border-slate-200 text-slate-900' : 'bg-black/20 border-white/10 text-white [&::-webkit-calendar-picker-indicator]:invert-[0.8]'}`}
+                                                        />
+                                                    </div>
                                                     <div className={`rounded-2xl p-4 border ${isLightTone ? 'bg-slate-50 border-slate-100' : 'bg-white/[0.02] border-white/5'}`}>
                                                         <label className="text-[11px] font-bold uppercase tracking-widest text-slate-400 mb-2 block">Current School</label>
                                                         <input 
@@ -549,12 +550,12 @@ export default function Sidebar() {
                                                 <p className="text-[11px] font-bold uppercase tracking-widest text-slate-400 mb-1">Role</p>
                                                 <p className={`text-sm font-semibold capitalize ${isLightTone ? 'text-slate-700' : 'text-slate-200'}`}>{user?.user_metadata?.role || 'Student'}</p>
                                             </div>
-                                            <div className={`rounded-2xl p-4 border ${isLightTone ? 'bg-slate-50 border-slate-100' : 'bg-white/[0.02] border-white/5'}`}>
-                                                <p className="text-[11px] font-bold uppercase tracking-widest text-slate-400 mb-1">Birthdate</p>
-                                                <p className={`text-sm font-semibold ${isLightTone ? 'text-slate-700' : 'text-slate-200'}`}>{user?.user_metadata?.birthdate || 'Not specified'}</p>
-                                            </div>
                                             {user?.user_metadata?.role !== 'teacher' && (
                                                 <>
+                                                    <div className={`rounded-2xl p-4 border ${isLightTone ? 'bg-slate-50 border-slate-100' : 'bg-white/[0.02] border-white/5'}`}>
+                                                        <p className="text-[11px] font-bold uppercase tracking-widest text-slate-400 mb-1">Birthdate</p>
+                                                        <p className={`text-sm font-semibold ${isLightTone ? 'text-slate-700' : 'text-slate-200'}`}>{user?.user_metadata?.birthdate || 'Not specified'}</p>
+                                                    </div>
                                                     <div className={`rounded-2xl p-4 border ${isLightTone ? 'bg-slate-50 border-slate-100' : 'bg-white/[0.02] border-white/5'}`}>
                                                         <p className="text-[11px] font-bold uppercase tracking-widest text-slate-400 mb-1">Current School</p>
                                                         <p className={`text-sm font-semibold ${isLightTone ? 'text-slate-700' : 'text-slate-200'}`}>{user?.user_metadata?.school || 'Not specified'}</p>

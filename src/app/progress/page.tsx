@@ -191,7 +191,7 @@ export default function ProgressPage() {
                                     <p className="site-hero-title mt-2 text-2xl sm:text-3xl font-black tracking-[-0.04em] text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-400">
                                         {Math.max(400, stats.avg - 30)}–{Math.min(1600, stats.avg + 30)}
                                     </p>
-                                    <p className="site-hero-body mt-1 text-[10px] font-medium leading-tight">M: {Math.round((stats.avg / 2) - 10)}–{Math.round((stats.avg / 2) + 20)}<br/>E: {Math.round((stats.avg / 2) - 20)}–{Math.round((stats.avg / 2) + 10)}</p>
+                                    <p className="site-hero-body mt-1 text-[10px] font-medium leading-tight">M: {Math.max(200, Math.round((stats.avg / 2) - 10))}–{Math.min(800, Math.round((stats.avg / 2) + 20))}<br/>E: {Math.max(200, Math.round((stats.avg / 2) - 20))}–{Math.min(800, Math.round((stats.avg / 2) + 10))}</p>
                                 </div>
                             </motion.article>
                         </motion.section>

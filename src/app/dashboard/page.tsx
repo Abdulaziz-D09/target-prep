@@ -279,8 +279,8 @@ export default function HomePage() {
 
   // Mock predicted score
   const predictedScoreRange = stats.avgScore > 0 ? `${Math.max(400, stats.avgScore - 30)}–${Math.min(1600, stats.avgScore + 30)}` : '--';
-  const mathRange = stats.avgScore > 0 ? `${Math.round(((stats.avgScore / 2) - 10) / 10) * 10}–${Math.round(((stats.avgScore / 2) + 20) / 10) * 10}` : '';
-  const engRange = stats.avgScore > 0 ? `${Math.round(((stats.avgScore / 2) - 20) / 10) * 10}–${Math.round(((stats.avgScore / 2) + 10) / 10) * 10}` : '';
+  const mathRange = stats.avgScore > 0 ? `${Math.max(200, Math.round(((stats.avgScore / 2) - 10) / 10) * 10)}–${Math.min(800, Math.round(((stats.avgScore / 2) + 20) / 10) * 10)}` : '';
+  const engRange = stats.avgScore > 0 ? `${Math.max(200, Math.round(((stats.avgScore / 2) - 20) / 10) * 10)}–${Math.min(800, Math.round(((stats.avgScore / 2) + 10) / 10) * 10)}` : '';
 
   const quickLinks = [
     {

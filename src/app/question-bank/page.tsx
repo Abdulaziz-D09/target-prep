@@ -9,6 +9,7 @@ import {
 } from 'lucide-react';
 import ebrwData from '@/data/ebrw_bank.json';
 import mathData from '@/data/math_bank.json';
+import { proceduralMathQuestions } from '@/data/proceduralMath';
 import { HighlightableText } from '@/components/HighlightableText';
 import { PassageRenderer } from '@/components/PassageRenderer';
 import { Highlight } from '@/store/testStore';
@@ -156,13 +157,24 @@ function isGarbled(text: string): boolean {
 
 function isValidMathQuestion(q: RawBankQuestion): boolean {
     if (!q.question || isGarbled(q.question)) return false;
+    // The user explicitly requested to remove all questions that are just an image of the question
+    if (q.image) return false;
+    
     const isNumeric = q.answerType === 'numeric' ||
         (q.answerText && !q.options) ||
         (Array.isArray(q.acceptableAnswers) && q.acceptableAnswers.length > 0);
     if (isNumeric) return true; // SPR questions don't need options
-    // MC must have 4 clean options
-    if (!Array.isArray(q.options) || q.options.length < 4) return false;
-    if (q.options.some(o => isGarbled(o))) return false;
+    
+    // MC must have at least 2 clean options
+    if (!Array.isArray(q.options) || q.options.length < 2) return false;
+    
+    // Options shouldn't contain explanation text, but can be short (e.g. "4", "2x")
+    const optionIsGarbled = (opt: string) => {
+        const t = (opt || '').toLowerCase();
+        return t.includes('choice a is incorrect') || t.includes('is incorrect.');
+    };
+    
+    if (q.options.some(o => optionIsGarbled(o))) return false;
     return true;
 }
 
@@ -194,25 +206,26 @@ const allEnglishQuestions: Question[] = (ebrwData as RawBankQuestion[])
         };
     });
 
-const allMathQuestions: Question[] = (mathData as RawBankQuestion[])
-    .filter(isValidMathQuestion)
-    .map((q) => ({
-        id: q.id,
-        type: q.type || 'Math',
-        passage: q.passage || '',
-        question: q.question || '',
-        options: Array.isArray(q.options) ? q.options : [],
-        answer: typeof q.answer === 'number' ? q.answer : undefined,
-        answerType: q.answerType || (typeof q.answer === 'number' ? 'multiple_choice' : 'numeric'),
-        answerText: q.answerText,
-        acceptableAnswers: Array.isArray(q.acceptableAnswers) ? q.acceptableAnswers : undefined,
-        explanation: q.explanation || '',
-        difficulty: q.difficulty || 'Medium',
-        domain: q.domain || 'Math',
-        skill: q.skill || 'Math',
-        image: q.image,
-        imageLayout: q.imageLayout,
-    }));
+const allMathQuestions: Question[] = [
+    ...(mathData as RawBankQuestion[]).filter(isValidMathQuestion),
+    ...(proceduralMathQuestions as RawBankQuestion[])
+].map((q) => ({
+    id: q.id,
+    type: q.type || 'Math',
+    passage: q.passage || '',
+    question: q.question || '',
+    options: Array.isArray(q.options) ? q.options : [],
+    answer: typeof q.answer === 'number' ? q.answer : undefined,
+    answerType: q.answerType || (typeof q.answer === 'number' ? 'multiple_choice' : 'numeric'),
+    answerText: q.answerText,
+    acceptableAnswers: Array.isArray(q.acceptableAnswers) ? q.acceptableAnswers : undefined,
+    explanation: q.explanation || '',
+    difficulty: q.difficulty || 'Medium',
+    domain: q.domain || 'Math',
+    skill: q.skill || 'Math',
+    image: q.image,
+    imageLayout: q.imageLayout,
+}));
 
 const allQuestionBankQuestions = [...allEnglishQuestions, ...allMathQuestions];
 
@@ -1469,28 +1482,27 @@ function QuizView({
                                     })}
                                 </div>
                                 ) : (
-                                    <div className="mb-6 rounded-[20px] border border-slate-200 bg-slate-50/80 p-5" style={{ animation: 'qb-slideUp 0.35s ease both' }}>
-                                        <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-slate-400">Student-produced response</p>
-                                        <div className="mt-3 flex flex-col gap-3">
-                                            <input
-                                                type="text"
-                                                inputMode="decimal"
-                                                value={currentNumericResponse}
-                                                onChange={(event) => handleNumericResponseChange(event.target.value)}
-                                                onKeyDown={(event) => {
-                                                    if (event.key === 'Enter' && canCheck) {
-                                                        event.preventDefault();
-                                                        handleCheck();
-                                                    }
-                                                }}
-                                                disabled={isChecked}
-                                                placeholder="Enter your answer"
-                                                className="w-full rounded-2xl border border-slate-300 bg-white px-4 py-2.5 text-[16px] font-semibold text-slate-900 shadow-sm outline-none transition placeholder:text-slate-400 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 disabled:cursor-not-allowed disabled:bg-slate-100"
-                                            />
-                                            <p className="text-[13px] leading-6 text-slate-500">
-                                                Enter a decimal or fraction. Equivalent values are accepted when they match the correct answer.
-                                            </p>
-                                        </div>
+                                    <div className="mb-6 w-full max-w-[280px]" style={{ animation: 'qb-slideUp 0.35s ease both' }}>
+                                        <input
+                                            type="text"
+                                            inputMode="decimal"
+                                            value={currentNumericResponse}
+                                            onChange={(event) => handleNumericResponseChange(event.target.value)}
+                                            onKeyDown={(event) => {
+                                                if (event.key === 'Enter' && canCheck) {
+                                                    event.preventDefault();
+                                                    handleCheck();
+                                                }
+                                            }}
+                                            disabled={isChecked}
+                                            className={`w-full h-[48px] rounded-[6px] border bg-white px-4 text-[18px] font-bold shadow-sm outline-none transition disabled:cursor-not-allowed text-left ${
+                                                isChecked 
+                                                    ? 'border-emerald-500 ring-2 ring-emerald-100 disabled:bg-emerald-50 text-emerald-900' 
+                                                    : (wrongAttemptsForCurrent.includes(cleanNumericInput(currentNumericResponse)) && cleanNumericInput(currentNumericResponse).length > 0)
+                                                        ? 'border-red-500 ring-2 ring-red-100 text-red-900 bg-red-50/50' 
+                                                        : 'border-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 disabled:bg-slate-100 text-slate-900'
+                                            }`}
+                                        />
                                     </div>
                                 )}
                                 
@@ -1519,8 +1531,17 @@ function QuizView({
                                     </div>
                                 ) : showImageOnLeft && q.image ? (
                                     <div className="rounded-[20px] border border-slate-100 bg-white p-4 shadow-[0_8px_25px_rgba(15,23,42,0.04)]" style={{ animation: 'qb-slideUp 0.4s ease both' }}>
-                                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                                        <img src={q.image} alt="Question image" className="max-w-full h-auto w-full max-h-[200px] rounded-lg object-contain cursor-pointer hover:opacity-90 transition-opacity" onClick={() => setExpandedImage(q.image || null)} />
+                                        {q.imageLayout?.stem ? (
+                                            <div onClick={() => setExpandedImage(q.image || null)} className="cursor-pointer hover:opacity-90 transition-opacity w-full">
+                                                <MathImageSlice 
+                                                    src={q.image} 
+                                                    crop={q.imageLayout.stem} 
+                                                    alt="Question Image"
+                                                />
+                                            </div>
+                                        ) : (
+                                            <img src={q.image} alt="Question image" className="max-w-full h-auto w-full max-h-[200px] rounded-lg object-contain cursor-pointer hover:opacity-90 transition-opacity" onClick={() => setExpandedImage(q.image || null)} />
+                                        )}
                                     </div>
                                 ) : (
                                     <div className="mt-8 rounded-[20px] border border-dashed border-slate-200 bg-slate-50/70 px-6 py-16 text-center text-[17px] italic text-slate-400">
@@ -1573,8 +1594,17 @@ function QuizView({
 
                                 {q.image && !showImageOnLeft && (
                                     <div className="mb-5 rounded-xl overflow-hidden border border-slate-100 flex justify-center bg-slate-50 p-4" style={{ animation: 'qb-slideUp 0.2s ease both' }}>
-                                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                                        <img src={q.image} alt="Question image" className="max-w-full h-auto max-h-[200px] object-contain rounded-lg shadow-sm cursor-pointer hover:opacity-90 transition-opacity" onClick={() => setExpandedImage(q.image || null)} />
+                                        {q.imageLayout?.stem ? (
+                                            <div onClick={() => setExpandedImage(q.image || null)} className="cursor-pointer hover:opacity-90 transition-opacity w-full">
+                                                <MathImageSlice 
+                                                    src={q.image} 
+                                                    crop={q.imageLayout.stem} 
+                                                    alt="Question Image"
+                                                />
+                                            </div>
+                                        ) : (
+                                            <img src={q.image} alt="Question image" className="max-w-full h-auto max-h-[200px] object-contain rounded-lg shadow-sm cursor-pointer hover:opacity-90 transition-opacity" onClick={() => setExpandedImage(q.image || null)} />
+                                        )}
                                     </div>
                                 )}
 
@@ -1685,28 +1715,27 @@ function QuizView({
                                     })}
                                 </div>
                                 ) : (
-                                    <div className="mb-6 rounded-[20px] border border-slate-200 bg-slate-50/80 p-5" style={{ animation: 'qb-slideUp 0.35s ease both' }}>
-                                        <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-slate-400">Student-produced response</p>
-                                        <div className="mt-3 flex flex-col gap-3">
-                                            <input
-                                                type="text"
-                                                inputMode="decimal"
-                                                value={currentNumericResponse}
-                                                onChange={(event) => handleNumericResponseChange(event.target.value)}
-                                                onKeyDown={(event) => {
-                                                    if (event.key === 'Enter' && canCheck) {
-                                                        event.preventDefault();
-                                                        handleCheck();
-                                                    }
-                                                }}
-                                                disabled={isChecked}
-                                                placeholder="Enter your answer"
-                                                className="w-full rounded-2xl border border-slate-300 bg-white px-4 py-2.5 text-[16px] font-semibold text-slate-900 shadow-sm outline-none transition placeholder:text-slate-400 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 disabled:cursor-not-allowed disabled:bg-slate-100"
-                                            />
-                                            <p className="text-[13px] leading-6 text-slate-500">
-                                                Enter a decimal or fraction. Equivalent values are accepted when they match the correct answer.
-                                            </p>
-                                        </div>
+                                    <div className="mb-6 w-full max-w-[280px]" style={{ animation: 'qb-slideUp 0.35s ease both' }}>
+                                        <input
+                                            type="text"
+                                            inputMode="decimal"
+                                            value={currentNumericResponse}
+                                            onChange={(event) => handleNumericResponseChange(event.target.value)}
+                                            onKeyDown={(event) => {
+                                                if (event.key === 'Enter' && canCheck) {
+                                                    event.preventDefault();
+                                                    handleCheck();
+                                                }
+                                            }}
+                                            disabled={isChecked}
+                                            className={`w-full h-[48px] rounded-[6px] border bg-white px-4 text-[18px] font-bold shadow-sm outline-none transition disabled:cursor-not-allowed text-left ${
+                                                isChecked 
+                                                    ? 'border-emerald-500 ring-2 ring-emerald-100 disabled:bg-emerald-50 text-emerald-900' 
+                                                    : (wrongAttemptsForCurrent.includes(cleanNumericInput(currentNumericResponse)) && cleanNumericInput(currentNumericResponse).length > 0)
+                                                        ? 'border-red-500 ring-2 ring-red-100 text-red-900 bg-red-50/50' 
+                                                        : 'border-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 disabled:bg-slate-100 text-slate-900'
+                                            }`}
+                                        />
                                     </div>
                                 )}
                                 

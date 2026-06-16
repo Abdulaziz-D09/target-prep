@@ -981,7 +981,7 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
                 </div>
             )}
             
-            <div className="absolute inset-0 z-50 bg-[#F3F4F6] font-sans overflow-hidden flex flex-col">
+            <div className="absolute inset-0 z-50 bg-[#F3F4F6] font-['Verdana',_sans-serif] overflow-hidden flex flex-col">
             {/* Strict Mode Fullscreen Warning */}
             {fsWarningCountdown !== null && !isKickedOut && (
                 <div className="fixed inset-0 z-[100] flex items-center justify-center bg-red-900/90 backdrop-blur-md">
@@ -1368,7 +1368,7 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
 
                                                     {/* Answer Text */}
                                                     <div className="flex-1 p-4 flex items-center bg-transparent">
-                                                        <span className={`text-[17px] font-sans ${isEliminated ? 'text-slate-400' : 'text-[#111827]'}`}>
+                                                        <span className={`text-[17px] ${isEliminated ? 'text-slate-400' : 'text-[#111827]'}`}>
                                                             {currentSection?.name === 'Math' ? (
                                                                 <MathText text={cleanOCR(opt || '').replace(/^\s*[A-D][\.\)]\s*/, '')} />
                                                             ) : (

@@ -1045,7 +1045,7 @@ function QuizView({
                     </div>
                 </div>
             )}
-            <div className="absolute inset-0 flex flex-col overflow-hidden bg-slate-50">
+            <div className="absolute inset-0 flex flex-col overflow-hidden bg-slate-50 font-['Verdana',_sans-serif]">
             {/* Bluebook Official Header */}
             <header className="bg-white/90 backdrop-blur-xl border-b border-slate-200/80 px-6 py-2.5 flex items-center justify-between z-30 shrink-0 relative shadow-[0_2px_10px_rgba(0,0,0,0.02)]">
                 {/* Left: Back */}

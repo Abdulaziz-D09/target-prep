@@ -801,7 +801,7 @@ export default function BaselineTestPage() {
                 </div>
             )}
             
-            <div className="absolute inset-0 z-50 flex flex-col bg-slate-50 font-[system-ui,-apple-system,BlinkMacSystemFont,'Segoe_UI',Roboto,sans-serif] overflow-hidden">
+            <div className="absolute inset-0 z-50 flex flex-col bg-slate-50 font-['Verdana',_sans-serif] overflow-hidden">
             {/* Bluebook Official Header */}
             <header className="bg-white/90 backdrop-blur-xl border-b border-slate-200/80 px-6 py-2.5 flex items-center justify-between z-30 shrink-0 relative shadow-[0_2px_10px_rgba(0,0,0,0.02)]">
                 {/* Left: Directions Dropdown */}
@@ -1119,7 +1119,7 @@ export default function BaselineTestPage() {
 
                                                     {/* Answer Text */}
                                                     <div className="flex-1 p-4 flex items-center">
-                                                        <span className={`text-[17px] font-sans ${isEliminated ? 'text-slate-400' : 'text-[#111827]'}`}>
+                                                        <span className={`text-[17px] ${isEliminated ? 'text-slate-400' : 'text-[#111827]'}`}>
                                                             {currentQuestion?.type === 'Math' || currentQuestion?.type === 'Math (SPR)' ? (
                                                                 <MathText text={cleanOCR(opt || '')} />
                                                             ) : (

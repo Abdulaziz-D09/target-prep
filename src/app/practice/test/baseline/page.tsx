@@ -851,6 +851,15 @@ export default function BaselineTestPage() {
 
                 {/* Right Controls */}
                 <div className="flex items-center justify-end flex-1 gap-2">
+                    {currentSection?.name !== 'Math' && (
+                        <button
+                            onClick={() => setIsHighlightActive(!isHighlightActive)}
+                            className={`flex flex-col items-center justify-center gap-1.5 w-[80px] h-[64px] rounded-lg transition-colors border border-transparent ${isHighlightActive ? 'bg-slate-200 text-slate-900 shadow-inner' : 'hover:bg-black/5 text-slate-700'}`}
+                        >
+                            <Highlighter className="w-[24px] h-[24px]" />
+                            <span className="font-bold text-[12px] leading-none">Highlight</span>
+                        </button>
+                    )}
                     {currentSection?.name === 'Math' && (
                         <>
                             <button
@@ -1002,20 +1011,30 @@ export default function BaselineTestPage() {
                             <div className="w-full max-w-[800px] mx-auto flex flex-col pb-10" ref={contentRef}>
 
                                 {/* Header: Connected Question Number & Mark for Review & ABC */}
-                                <div className="flex items-center mb-6 mt-4 w-full  bg-white border border-[#E5E7EB] rounded-[12px] shadow-sm h-[44px]">
+                                <div className="flex items-center mb-6 mt-4 w-full bg-white border border-[#E5E7EB] rounded-[12px] shadow-sm h-[44px]">
                                     {/* Number */}
-                                    <div className="bg-[#111827] text-white font-bold text-[15px] w-[58px] h-[44px] flex flex-shrink-0 items-center justify-center rounded-[11px] mr-auto">
+                                    <div className="bg-[#111827] text-white font-bold text-[15px] w-[58px] h-[44px] flex flex-shrink-0 items-center justify-center rounded-l-[11px]">
                                         {currentQuestionIndex + 1}
                                     </div>
 
                                     {/* Mark for Review */}
                                     <button
                                         onClick={() => toggleFlag(questionKey)}
-                                        className="flex items-center gap-2 px-4 h-full text-[#4B5563] text-[15px] transition-colors justify-end bg-transparent group/mfr hover:bg-slate-50 rounded-[11px]"
+                                        className="flex flex-1 items-center gap-2 px-4 h-full text-[#4B5563] text-[15px] transition-colors justify-start bg-transparent group/mfr hover:bg-slate-50"
                                     >
                                         <Bookmark className={`w-[16px] h-[16px] transition-colors ${flaggedQuestions[questionKey] ? 'fill-slate-600 text-slate-600' : 'text-slate-400 group-hover/mfr:text-slate-600'}`} />
                                         <span className={flaggedQuestions[questionKey] ? 'font-bold' : 'font-medium group-hover/mfr:font-bold'}>Mark for Review</span>
                                     </button>
+
+                                    {/* ABC Elimination (Right) */}
+                                    <div className="w-[58px] h-[44px] flex flex-shrink-0 items-center justify-center border-l border-[#E5E7EB] rounded-r-[11px] bg-transparent">
+                                        <button
+                                            onClick={() => setIsEliminationMode(!isEliminationMode)}
+                                            className={`flex items-center justify-center w-full h-full font-bold text-[14px] transition-colors rounded-r-[11px] ${isEliminationMode ? 'bg-[#111827] text-white' : 'text-slate-700 hover:bg-slate-50'}`}
+                                        >
+                                            <span className="line-through decoration-[#ef4444] decoration-[2px]">ABC</span>
+                                        </button>
+                                    </div>
                                 </div>
 
                                 {/* Question Content */}
@@ -1037,9 +1056,14 @@ export default function BaselineTestPage() {
                                             style={{ fontSize: 18, lineHeight: 1.7, display: 'block' }}
                                         />
                                     ) : (
-                                        <div className="text-[18px] text-[#111827] leading-relaxed">
-                                            {cleanOCR(currentQuestion?.question || '')}
-                                        </div>
+                                        <HighlightableText
+                                            text={cleanOCR(currentQuestion?.question || '')}
+                                            highlights={highlights[`q-${questionKey}`] || []}
+                                            onAddHighlight={(h) => addHighlight(`q-${questionKey}`, { ...h, id: Math.random().toString(36).substring(2, 11) })}
+                                            onRemoveHighlight={(id) => removeHighlight(`q-${questionKey}`, id)}
+                                            onUpdateHighlight={(id, updates) => updateHighlight(`q-${questionKey}`, id, updates)}
+                                            isHighlightModeActive={isHighlightActive}
+                                        />
                                     )}
                                 </div>
 
@@ -1068,6 +1092,12 @@ export default function BaselineTestPage() {
                                             <div key={i} className="flex items-center gap-4 relative w-full group">
                                                 {/* The box itself */}
                                                 <label
+                                                    onClick={(e) => {
+                                                        if (isEliminationMode) {
+                                                            e.preventDefault();
+                                                            toggleElimination(questionKey, i);
+                                                        }
+                                                    }}
                                                     htmlFor={`opt-${i}`}
                                                     className={`relative flex-1 border min-h-[44px] rounded-[12px] flex items-stretch cursor-pointer transition-all duration-200 overflow-hidden ${isSelected ? 'border-indigo-600 shadow-[inset_0_0_0_1px_#4f46e5,0_2px_8px_rgba(79,70,229,0.15)] bg-indigo-50/30' : 'border-[#E5E7EB] hover:border-slate-400 bg-white hover:bg-slate-50 shadow-sm'}`}
                                                 >
@@ -1097,14 +1127,40 @@ export default function BaselineTestPage() {
                                                             )}
                                                         </span>
                                                     </div>
+
+                                                    {/* Strike-through line */}
+                                                    {isEliminated && (
+                                                        <div className="absolute top-1/2 left-0 w-full h-[1.5px] bg-slate-500 pointer-events-none -translate-y-[50%]"></div>
+                                                    )}
                                                 </label>
+
+                                                {/* Eliminate/Undo button absolutely positioned outside the box on the right */}
+                                                <div className="w-[50px] flex items-center justify-start flex-shrink-0">
+                                                    {isEliminationMode && (
+                                                        <button
+                                                            onClick={(e) => {
+                                                                e.preventDefault();
+                                                                e.stopPropagation();
+                                                                toggleElimination(questionKey, i);
+                                                            }}
+                                                            className="flex items-center justify-center transition-colors z-20 group/btn"
+                                                            title={isEliminated ? "Undo Elimination" : "Eliminate Option"}
+                                                        >
+                                                            {isEliminated ? (
+                                                                <span className="font-bluebook text-[14px] font-bold text-[#111827] underline decoration-[#111827] decoration-[1.5px] underline-offset-[3px] hover:text-slate-700">Undo</span>
+                                                            ) : (
+                                                                <div className="w-[28px] h-[28px] rounded-full border-[1px] border-slate-900 flex items-center justify-center relative bg-white transition-colors group-hover/btn:bg-slate-100 opacity-50 hover:opacity-100">
+                                                                    <span className="font-bold text-slate-900 text-[12px]">{letter}</span>
+                                                                    <div className="absolute w-[38px] h-[1.5px] bg-slate-900 rotate-0"></div>
+                                                                </div>
+                                                            )}
+                                                        </button>
+                                                    )}
+                                                </div>
                                             </div>
                                         );
                                     })}
                                 </div>
-                                
-                                {/* Spacer to prevent Option D from touching footer due to flex overflow bugs */}
-                                <div className="h-24 shrink-0 w-full"></div>
                             </div>
                         </div>
                     </div>

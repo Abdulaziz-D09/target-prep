@@ -558,7 +558,7 @@ html {
 @keyframes fadeInSlideUp {
   from {
     opacity: 0;
-    transform: translateY(16px);
+    transform: translateY(8px);
   }
 
   to {
@@ -568,7 +568,7 @@ html {
 }
 
 .fade-in {
-  animation: fadeInSlideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: fadeInSlideUp 0.3s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
 }
 
 .view-section {
@@ -576,7 +576,7 @@ html {
   max-width: 72rem;
   margin-left: auto;
   margin-right: auto;
-  animation: fadeInSlideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: fadeInSlideUp 0.3s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
 }
 
 /* Ultra Premium Minimalist Cards */

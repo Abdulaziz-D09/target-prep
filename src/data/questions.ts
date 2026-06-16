@@ -2760,6 +2760,7 @@ export const satDates = [
     { month: 'MAY', date: 'May 2, 2026', target: '2026-05-02T08:00:00', registrationDeadline: 'April 17, 2026', lateRegistrationDeadline: 'April 21, 2026', changeDeadline: 'April 21, 2026' },
     { month: 'JUN', date: 'June 6, 2026', target: '2026-06-06T08:00:00', registrationDeadline: 'May 22, 2026', lateRegistrationDeadline: 'May 26, 2026', changeDeadline: 'May 26, 2026' },
     { month: 'AUG', date: 'August 22, 2026', target: '2026-08-22T08:00:00', registrationDeadline: 'August 7, 2026', lateRegistrationDeadline: 'August 11, 2026', changeDeadline: 'August 11, 2026' },
+    { month: 'SEP', date: 'September 12, 2026', target: '2026-09-12T08:00:00', registrationDeadline: 'August 28, 2026', lateRegistrationDeadline: 'September 1, 2026', changeDeadline: 'September 1, 2026' },
     { month: 'OCT', date: 'October 3, 2026', target: '2026-10-03T08:00:00', registrationDeadline: 'September 18, 2026', lateRegistrationDeadline: 'September 22, 2026', changeDeadline: 'September 22, 2026' },
     { month: 'NOV', date: 'November 7, 2026', target: '2026-11-07T08:00:00', registrationDeadline: 'October 23, 2026', lateRegistrationDeadline: 'October 27, 2026', changeDeadline: 'October 27, 2026' },
     { month: 'DEC', date: 'December 5, 2026', target: '2026-12-05T08:00:00', registrationDeadline: 'November 20, 2026', lateRegistrationDeadline: 'November 24, 2026', changeDeadline: 'November 24, 2026' },

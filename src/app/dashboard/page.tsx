@@ -156,6 +156,7 @@ function getCountdown(targetMs: number): Countdown {
 const SCORE_RELEASE_DATES = [
   { name: 'June SAT', date: 'June 22, 2026', target: '2026-06-22T16:30:00+05:00', testTarget: '2026-06-06T08:00:00' },
   { name: 'August SAT', date: 'September 5, 2026', target: '2026-09-05T16:30:00+05:00', testTarget: '2026-08-22T08:00:00' },
+  { name: 'September SAT', date: 'September 25, 2026', target: '2026-09-25T16:30:00+05:00', testTarget: '2026-09-12T08:00:00' },
   { name: 'October SAT', date: 'October 17, 2026', target: '2026-10-17T16:30:00+05:00', testTarget: '2026-10-03T08:00:00' },
   { name: 'November SAT', date: 'November 20, 2026', target: '2026-11-20T16:30:00+05:00', testTarget: '2026-11-07T08:00:00' },
   { name: 'December SAT', date: 'December 19, 2026', target: '2026-12-19T16:30:00+05:00', testTarget: '2026-12-05T08:00:00' },

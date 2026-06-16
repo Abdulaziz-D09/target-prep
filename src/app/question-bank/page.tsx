@@ -1506,8 +1506,6 @@ function QuizView({
                                     </div>
                                 )}
                                 
-                                {/* Spacer to prevent Option D from touching footer due to flex overflow bugs */}
-                                <div className="h-24 shrink-0 w-full"></div>
                             </div>
                         </div>
                     </div>
@@ -1739,8 +1737,6 @@ function QuizView({
                                     </div>
                                 )}
                                 
-                                {/* Spacer to prevent Option D from touching footer due to flex overflow bugs */}
-                                <div className="h-24 shrink-0 w-full"></div>
                             </div>
                         </div>
                     </>

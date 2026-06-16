@@ -1073,7 +1073,7 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
 
                 {/* Right Controls */}
                 <div className="flex items-center justify-end flex-1 gap-2">
-                    {currentSection?.name === 'Math' ? (
+                    {currentSection?.name === 'Math' && (
                         <>
                             <button
                                 onClick={() => setIsDesmosOpen(!isDesmosOpen)}

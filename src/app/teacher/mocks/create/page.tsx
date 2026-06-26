@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Sparkles, CheckCircle, Upload, FileText, X, Loader2, BookOpen, Calculator } from 'lucide-react';
+import { Sparkles, CheckCircle, Upload, FileText, X, Loader2, BookOpen, Calculator, Image as ImageIcon } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useClassroomStore } from '@/store/classroomStore';
 import { createClient } from '@/lib/supabase/client';
@@ -42,6 +42,8 @@ export default function TeacherMocksCreatePage() {
     const [scanError, setScanError] = useState('');
     const [reviewingTest, setReviewingTest] = useState<{ file: File, questions: any[] } | null>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
+    const imageInputRef = useRef<HTMLInputElement>(null);
+    const [uploadingImageIdx, setUploadingImageIdx] = useState<number | null>(null);
 
     useEffect(() => {
         seed();
@@ -155,6 +157,29 @@ export default function TeacherMocksCreatePage() {
             setScanError('Failed to scan document.');
         } finally {
             setIsScanning(false);
+        }
+    };
+
+    const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file || uploadingImageIdx === null || !reviewingTest) return;
+        
+        try {
+            const formData = new FormData();
+            formData.append('file', file);
+            const res = await fetch('/api/upload-image', { method: 'POST', body: formData });
+            const data = await res.json();
+            if (data.url) {
+                const newQs = [...reviewingTest.questions];
+                newQs[uploadingImageIdx].imageUrl = data.url;
+                newQs[uploadingImageIdx].imagePosition = newQs[uploadingImageIdx].imagePosition || 'after-stem';
+                setReviewingTest({ ...reviewingTest, questions: newQs });
+            }
+        } catch (err) {
+            console.error('Failed to upload image', err);
+        } finally {
+            setUploadingImageIdx(null);
+            if (e.target) e.target.value = '';
         }
     };
 
@@ -535,8 +560,60 @@ export default function TeacherMocksCreatePage() {
                                                         />
                                                     </div>
                                                 )}
+
+                                                {q.imageUrl && q.imagePosition === 'before-stem' && (
+                                                    <div className="mb-4 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 max-h-64 flex justify-center bg-slate-50 dark:bg-slate-900/50">
+                                                        <img src={q.imageUrl} alt="Question image" className="object-contain max-h-64" />
+                                                    </div>
+                                                )}
+
                                                 <div className="font-semibold site-text-strong text-[15px] leading-relaxed">
                                                     {q.question ? <LatexRenderer text={q.question} /> : '(No question text)'}
+                                                </div>
+
+                                                {q.imageUrl && q.imagePosition === 'after-stem' && (
+                                                    <div className="mt-4 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 max-h-64 flex justify-center bg-slate-50 dark:bg-slate-900/50">
+                                                        <img src={q.imageUrl} alt="Question image" className="object-contain max-h-64" />
+                                                    </div>
+                                                )}
+
+                                                {/* Image controls */}
+                                                <div className="mt-4 flex flex-wrap items-center gap-3">
+                                                    <button 
+                                                        onClick={() => { setUploadingImageIdx(idx); imageInputRef.current?.click(); }}
+                                                        disabled={uploadingImageIdx !== null}
+                                                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border-2 border-slate-200 dark:border-slate-700 site-subpanel text-[12px] font-bold site-text hover:border-blue-400 dark:hover:border-blue-600 transition disabled:opacity-50"
+                                                    >
+                                                        {uploadingImageIdx === idx ? <Loader2 className="h-4 w-4 animate-spin" /> : <ImageIcon className="h-4 w-4" />}
+                                                        {q.imageUrl ? 'Change Image' : 'Add Image'}
+                                                    </button>
+
+                                                    {q.imageUrl && (
+                                                        <>
+                                                            <select 
+                                                                value={q.imagePosition || 'after-stem'}
+                                                                onChange={(e) => {
+                                                                    const newQs = [...reviewingTest.questions];
+                                                                    newQs[idx].imagePosition = e.target.value;
+                                                                    setReviewingTest({ ...reviewingTest, questions: newQs });
+                                                                }}
+                                                                className="px-2 py-1.5 rounded-lg border-2 border-slate-200 dark:border-slate-700 site-subpanel text-[12px] font-bold site-text focus:outline-none focus:border-blue-500"
+                                                            >
+                                                                <option value="before-stem">Before Question</option>
+                                                                <option value="after-stem">After Question</option>
+                                                            </select>
+                                                            <button 
+                                                                onClick={() => {
+                                                                    const newQs = [...reviewingTest.questions];
+                                                                    newQs[idx].imageUrl = undefined;
+                                                                    setReviewingTest({ ...reviewingTest, questions: newQs });
+                                                                }}
+                                                                className="flex items-center gap-1 px-2 py-1.5 text-[12px] font-bold text-rose-500 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-900/20 rounded-lg transition"
+                                                            >
+                                                                <X className="h-3.5 w-3.5" /> Remove
+                                                            </button>
+                                                        </>
+                                                    )}
                                                 </div>
                                             </div>
                                         </div>
@@ -600,6 +677,8 @@ export default function TeacherMocksCreatePage() {
                     </div>
                 )}
             </AnimatePresence>
+            {/* Hidden file input for images */}
+            <input type="file" accept="image/*" className="hidden" ref={imageInputRef} onChange={handleImageUpload} />
         </div>
     );
 }

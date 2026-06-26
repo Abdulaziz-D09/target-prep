@@ -1,6 +1,7 @@
 import { login } from './actions'
 import { ArrowRight } from 'lucide-react'
 import Link from 'next/link'
+import { SubmitButton } from './SubmitButton'
 
 export default async function LoginPage({
   searchParams,
@@ -64,7 +65,7 @@ export default async function LoginPage({
               </div>
             )}
 
-            <form className="space-y-3">
+            <form action={login} className="space-y-3">
               <div className="space-y-1.5">
                 <label className="text-sm font-medium text-slate-300 ml-1">Email Address</label>
                 <div className="relative">
@@ -95,12 +96,7 @@ export default async function LoginPage({
               </div>
 
               <div className="pt-2">
-                <button 
-                  formAction={login}
-                  className="w-full bg-indigo-500 hover:bg-indigo-600 text-white font-medium rounded-xl px-4 py-3 shadow-lg shadow-indigo-500/25 transition-all flex items-center justify-center gap-2 group"
-                >
-                  Log In <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </button>
+                <SubmitButton />
               </div>
             </form>
 

@@ -4,9 +4,11 @@ export type ModuleKey =
   | 'english-m1'
   | 'english-m2-easy'
   | 'english-m2-hard'
+  | 'english-section'
   | 'math-m1'
   | 'math-m2-easy'
-  | 'math-m2-hard';
+  | 'math-m2-hard'
+  | 'math-section';
 
 export type ModuleButton = {
   key: string;
@@ -147,6 +149,18 @@ export function resolvePracticeTest(testId: number, moduleKey?: string | null): 
         color: 'blue',
         sections: [{ name: englishSection.name, modules: [englishSection.modules[1]] }],
       };
+    case 'english-section':
+      return {
+        id: selected.id,
+        title: `${selected.title} · English Section`,
+        description: '',
+        type: 'Individual Section',
+        duration: formatDuration(englishSection.modules[0].timeMinutes + englishSection.modules[1].timeMinutes),
+        totalQuestions: englishSection.modules[0].questions.length + englishSection.modules[1].questions.length,
+        moduleCount: 2,
+        color: 'blue',
+        sections: [englishSection],
+      };
     case 'math-m1':
       return {
         id: selected.id,
@@ -182,6 +196,18 @@ export function resolvePracticeTest(testId: number, moduleKey?: string | null): 
         moduleCount: 1,
         color: 'blue',
         sections: [{ name: mathSection.name, modules: [mathSection.modules[1]] }],
+      };
+    case 'math-section':
+      return {
+        id: selected.id,
+        title: `${selected.title} · Math Section`,
+        description: '',
+        type: 'Individual Section',
+        duration: formatDuration(mathSection.modules[0].timeMinutes + mathSection.modules[1].timeMinutes),
+        totalQuestions: mathSection.modules[0].questions.length + mathSection.modules[1].questions.length,
+        moduleCount: 2,
+        color: 'blue',
+        sections: [mathSection],
       };
     default:
       return {

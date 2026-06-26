@@ -9,7 +9,7 @@ import { HighlightableText } from '@/components/HighlightableText';
 import DesmosCalculator from '@/components/DesmosCalculator';
 import { ReferenceSheet } from '@/components/ReferenceSheet';
 import { cleanOCR, PassageRenderer } from '@/components/PassageRenderer';
-import { MathText } from '@/components/MathText';
+import { LatexRenderer } from '@/components/LatexRenderer';
 import Link from 'next/link';
 import { AnimatePresence, motion } from 'framer-motion';
 
@@ -62,7 +62,8 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
                                         id: q.id,
                                         question: q.question || q.text || q.stem || '',
                                         passage: q.passage || undefined,
-                                        image: q.image || undefined,
+                                        image: q.imageUrl || q.image || undefined,
+                                        imagePosition: q.imagePosition || undefined,
                                         options: q.options,
                                         answer: q.answer,
                                         explanation: q.explanation || 'No explanation provided.',
@@ -77,6 +78,19 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
                 } as any;
             }
         }
+    }
+
+    if (test && mockSession && mockSession.customQuestions) {
+        // Deep clone to prevent mutating global catalog
+        test = JSON.parse(JSON.stringify(test));
+        test.sections.forEach((sec: any) => {
+            sec.modules.forEach((mod: any) => {
+                mod.questions = mod.questions.map((q: any) => {
+                    const override = mockSession.customQuestions?.[q.id];
+                    return override ? { ...q, ...override } : q;
+                });
+            });
+        });
     }
 
     const {
@@ -121,6 +135,7 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
     const [isExiting, setIsExiting] = useState(false);
     const fsCountdownRef = useRef<ReturnType<typeof setInterval> | null>(null);
     const [expandedImage, setExpandedImage] = useState<string | null>(null);
+    const [confirmDialog, setConfirmDialog] = useState<{ unanswered: number; onConfirm: () => void } | null>(null);
 
     const clearActiveSession = () => {
         if (typeof window === 'undefined') return;
@@ -223,7 +238,7 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
                 // Out of compliance
                 if (!fsCountdownRef.current) {
                     lostComplianceAt = Date.now();
-                    setFsWarningCountdown(5);
+                    setFsWarningCountdown(mockSession?.strictToleranceSeconds ?? 5);
                     fsCountdownRef.current = setInterval(() => {
                         if (!lostComplianceAt) return;
                         const elapsed = Math.floor((Date.now() - lostComplianceAt) / 1000);
@@ -352,14 +367,21 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
     useEffect(() => {
         if (transitionState !== 'none' || showResults || !test) return;
 
+        let lastTick = Date.now();
         const timer = setInterval(() => {
-            useTestStore.setState((s) => {
-                if (s.timeRemaining <= 1) {
-                    handleNext();
-                    return { timeRemaining: 0 };
-                }
-                return { timeRemaining: s.timeRemaining - 1 };
-            });
+            const now = Date.now();
+            const elapsed = Math.floor((now - lastTick) / 1000);
+            if (elapsed >= 1) {
+                lastTick += elapsed * 1000;
+                useTestStore.setState((s) => {
+                    const nextTime = s.timeRemaining - elapsed;
+                    if (nextTime <= 0) {
+                        handleNext();
+                        return { timeRemaining: 0 };
+                    }
+                    return { timeRemaining: nextTime };
+                });
+            }
         }, 1000);
         return () => clearInterval(timer);
     }, [transitionState, showResults, currentModuleIndex, currentSectionIndex, test]);
@@ -367,20 +389,27 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
     // Break countdown timer
     useEffect(() => {
         if (transitionState !== 'break') return;
+        let lastTick = Date.now();
         const timer = setInterval(() => {
-            setBreakTimeRemaining(prev => {
-                if (prev <= 1) {
-                    clearInterval(timer);
-                    return 0;
-                }
-                return prev - 1;
-            });
+            const now = Date.now();
+            const elapsed = Math.floor((now - lastTick) / 1000);
+            if (elapsed >= 1) {
+                lastTick += elapsed * 1000;
+                setBreakTimeRemaining(prev => {
+                    const nextTime = prev - elapsed;
+                    if (nextTime <= 0) {
+                        clearInterval(timer);
+                        return 0;
+                    }
+                    return nextTime;
+                });
+            }
         }, 1000);
         return () => clearInterval(timer);
     }, [transitionState]);
 
     useEffect(() => {
-        if (!hasInitialized || !isFullTest || currentTestId !== testId) return;
+        if (!hasInitialized || currentTestId !== testId) return;
 
         if (showResults) {
             clearActiveSession();
@@ -414,16 +443,7 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
         timeRemaining,
     ]);
 
-    if (isExiting) {
-        return (
-            <div className="h-full flex items-center justify-center bg-slate-50 fixed inset-0 z-[9999]">
-                <div className="flex flex-col items-center gap-4">
-                    <div className="w-10 h-10 rounded-full border-[3px] border-slate-200 border-t-blue-600 animate-spin"></div>
-                    <p className="text-slate-500 font-medium animate-pulse">Loading...</p>
-                </div>
-            </div>
-        );
-    }
+
 
     if (!test) return <div className="p-8 text-slate-800">Test not found</div>;
 
@@ -440,6 +460,33 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
 
     const handleNext = () => {
         if (showCheckWork) {
+            let unanswered = 0;
+            for (let i = 0; i < totalQuestions; i++) {
+                const key = `${currentSectionIndex}-${currentModuleIndex}-${i}`;
+                if (userAnswers[key] === undefined) {
+                    unanswered++;
+                }
+            }
+            
+            if (unanswered > 0) {
+                setConfirmDialog({
+                    unanswered,
+                    onConfirm: () => {
+                        setConfirmDialog(null);
+                        setShowCheckWork(false);
+                        if (currentModuleIndex < currentSection.modules.length - 1) {
+                            setTransitionState('moduleEnd');
+                        } else if (currentSectionIndex < test.sections.length - 1) {
+                            setBreakTimeRemaining(600);
+                            setTransitionState('break');
+                        } else {
+                            finishTest(false);
+                        }
+                    }
+                });
+                return;
+            }
+
             setShowCheckWork(false);
             if (currentModuleIndex < currentSection.modules.length - 1) {
                 setTransitionState('moduleEnd');
@@ -535,8 +582,23 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
     };
 
     const questionKey = `${currentSectionIndex}-${currentModuleIndex}-${currentQuestionIndex}`;
+    // When practising an individual m2 module, currentModuleIndex is always 0 but the true module is 2
+    const displayModuleNumber = (moduleKey === 'english-m2-hard' || moduleKey === 'english-m2-easy' || moduleKey === 'math-m2-hard' || moduleKey === 'math-m2-easy')
+        ? 2
+        : currentModuleIndex + 1;
     const isLastQuestion = currentQuestionIndex === totalQuestions - 1;
     const isFinalStep = currentModuleIndex === currentSection?.modules.length - 1 && currentSectionIndex === test.sections.length - 1;
+
+    if (isExiting) {
+        return (
+            <div className="h-full flex items-center justify-center bg-slate-50 absolute inset-0 z-[9999]">
+                <div className="flex flex-col items-center gap-4">
+                    <div className="w-10 h-10 rounded-full border-[3px] border-slate-200 border-t-blue-600 animate-spin"></div>
+                    <p className="text-slate-500 font-medium animate-pulse">Loading...</p>
+                </div>
+            </div>
+        );
+    }
 
     if (showResults || isExternalReview) {
         const r = isExternalReview ? externalReviewTestParam : useTestStore.getState().completedTests.slice(-1)[0];
@@ -621,11 +683,11 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
                                                             </div>
                                                         )}
                                                         {q.image && (
-                                                            <div className="mb-6 border border-slate-200 rounded-xl overflow-hidden bg-slate-50 flex items-center justify-center p-4">
+                                                            <div className="mb-6 flex items-center justify-center">
                                                                 <img 
                                                                     src={q.image} 
                                                                     alt="Question figure" 
-                                                                    className="max-w-full max-h-[250px] object-contain cursor-pointer hover:opacity-90 transition-opacity" 
+                                                                    className="max-w-full max-h-[350px] object-contain cursor-pointer hover:opacity-90 transition-opacity" 
                                                                     onClick={() => setExpandedImage(q.image || null)}
                                                                 />
                                                             </div>
@@ -680,14 +742,26 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
             );
         }
 
+        const completionTitle = searchParams.get('mockId') 
+            ? 'Mock Exam Complete' 
+            : isFullTest 
+                ? 'Your Practice Test Is Complete' 
+                : moduleKey?.includes('section') 
+                    ? 'Your Section Practice Is Complete' 
+                    : 'Your Module Practice Is Complete';
+                    
+        const completionMessage = isFullTest
+            ? `Congratulations! You have finished all sections of this ${searchParams.get('mockId') ? 'mock' : 'practice'} test. Your answers have been saved.`
+            : `Great job! You have finished this specific ${moduleKey?.includes('section') ? 'section' : 'module'}. Your answers have been saved.`;
+
         return (
-            <div className="flex items-center justify-center bg-white p-8 fade-in fixed inset-0 z-50">
+            <div className="flex items-center justify-center bg-white p-8 fade-in absolute inset-0 z-50">
                 <div className="max-w-md w-full text-center">
                     <div className="w-20 h-20 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-8">
                         <CheckCircle className="w-10 h-10 text-emerald-600" />
                     </div>
-                    <h2 className="text-3xl font-bold text-slate-900 mb-4 tracking-tight">Your {searchParams.get('mockId') ? 'Mock' : 'Practice'} Test Is Complete</h2>
-                    <p className="text-slate-500 mb-4 leading-relaxed text-[16px]">Congratulations! You have finished all sections of this {searchParams.get('mockId') ? 'mock' : 'practice'} test. Your answers have been saved.</p>
+                    <h2 className="text-3xl font-bold text-slate-900 mb-4 tracking-tight">{completionTitle}</h2>
+                    <p className="text-slate-500 mb-4 leading-relaxed text-[16px]">{completionMessage}</p>
                     <p className="text-slate-500 mb-10 leading-relaxed text-[16px]">
                         {searchParams.get('mockId') ? (
                             <>To view your score and rank, head to your <strong className="text-slate-700">Mock History</strong> page.</>
@@ -713,7 +787,7 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
 
     if (isIntroScreen && !isExternalReview) {
         return (
-            <div className="flex items-center justify-center bg-white p-8 fade-in fixed inset-0 z-50">
+            <div className="flex items-center justify-center bg-white p-8 fade-in absolute inset-0 z-50">
                 <div className="max-w-3xl w-full">
                     <h1 className="text-[2.15rem] font-bold text-slate-900 mb-8 pb-4 border-b border-slate-200">
                         {mockId ? 'Target Prep Mock Exam' : 'Target Prep Full-length Practice Test'}
@@ -775,7 +849,7 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
             const firstModuleQCount = firstSection?.modules[0]?.questions.length || 27;
 
             return (
-                <div className="flex items-center justify-center bg-white p-8 fade-in fixed inset-0 z-50">
+                <div className="flex items-center justify-center bg-white p-8 fade-in absolute inset-0 z-50">
                     <div className="max-w-3xl w-full">
                         <h1 className="text-3xl font-bold text-slate-900 mb-8 pb-4 border-b border-slate-200">
                             Section 1: English (Reading and Writing)
@@ -837,7 +911,7 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
                 startNextPart();
             }, 3000);
             return (
-                <div className="flex flex-col items-center justify-center bg-white p-8 fade-in fixed inset-0 z-50">
+                <div className="flex flex-col items-center justify-center bg-white p-8 fade-in absolute inset-0 z-50">
                     <h2 className="text-[26px] font-normal text-[#3b82f6] mb-6">This Module Is Over</h2>
                     <div className="text-center text-[#111827] space-y-3 mb-10 text-[15px]">
                         <p>All your work has been saved.</p>
@@ -856,7 +930,7 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
             const breakFormatted = `${breakMins}:${breakSecs.toString().padStart(2, '0')}`;
 
             return (
-                <div className="flex bg-[#1a1a1a] text-white fade-in fixed inset-0 z-50">
+                <div className="flex bg-[#1a1a1a] text-white fade-in absolute inset-0 z-50">
                     {/* Left Side — Timer */}
                     <div className="w-[45%] flex flex-col items-center justify-center relative">
                         <div className="border border-white/30 rounded-lg px-10 py-8 text-center mb-8">
@@ -905,7 +979,7 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
             const nextModuleQCount = nextSection?.modules[0]?.questions.length || 22;
 
             return (
-                <div className="flex items-center justify-center bg-white p-8 fade-in fixed inset-0 z-50">
+                <div className="flex items-center justify-center bg-white p-8 fade-in absolute inset-0 z-50">
                     <div className="max-w-3xl w-full">
                         <h1 className="text-3xl font-bold text-slate-900 mb-8 pb-4 border-b border-slate-200">Section 2: Math</h1>
 
@@ -1029,7 +1103,7 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
                 {/* Left: Directions Dropdown */}
                 <div className="flex-1">
                     <div className="flex flex-col ml-4">
-                        <span className="font-bold text-[#111827] text-[15px] leading-snug">Section {currentSection?.name === 'Math' ? 2 : 1}, Module {currentModuleIndex + 1}: {currentSection?.name}</span>
+                        <span className="font-bold text-[#111827] text-[15px] leading-snug">Section {currentSection?.name === 'Math' ? 2 : 1}, Module {displayModuleNumber}: {currentSection?.name}</span>
                         <button
                             onClick={() => setIsDirectionsOpen(!isDirectionsOpen)}
                             className="flex items-center gap-1.5 text-[#374151] font-bold text-[13px] hover:bg-black/5 py-1 rounded transition-colors -ml-1 pl-1 w-fit pr-2"
@@ -1055,7 +1129,7 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
                 {/* Center: Timer */}
                 <div className="flex flex-col items-center justify-center flex-1 absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 w-[180px]">
                     {!isTimerHidden ? (
-                        <div className="timer-digits font-bold text-[20px] tracking-wider text-slate-800 flex items-center justify-center gap-2 bg-slate-100/80 backdrop-blur-sm px-5 py-1.5 rounded-full border border-slate-200 shadow-inner">
+                        <div className="font-bold text-[17px] tracking-wide text-slate-800 flex items-center justify-center gap-2 bg-slate-100/80 backdrop-blur-sm px-5 py-1.5 rounded-full border border-slate-200 shadow-inner">
                             {formatBluebookTime(timeRemaining)}
                         </div>
                     ) : (
@@ -1087,7 +1161,7 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
                                 className="flex flex-col items-center justify-center gap-1.5 w-[80px] h-[64px] rounded-lg hover:bg-black/5 text-slate-700 transition-colors"
                             >
                                 <FileText className="w-[24px] h-[24px]" />
-                                <span className="font-bold text-[12px] leading-none text-slate-500">Reference</span>
+                                <span className="font-bold text-[12px] leading-none">Reference</span>
                             </button>
                         </>
                     )}
@@ -1173,6 +1247,37 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
                 )}
             </AnimatePresence>
 
+            {/* Custom Unanswered Questions Confirm Modal */}
+            {confirmDialog && (
+                <div className="fixed inset-0 z-[200] flex items-center justify-center p-4">
+                    <div className="absolute inset-0 bg-slate-900/50 backdrop-blur-sm" onClick={() => setConfirmDialog(null)} />
+                    <div className="relative w-full max-w-[440px] overflow-hidden rounded-[24px] bg-white shadow-[0_24px_60px_rgba(0,0,0,0.25)] p-8">
+                        <div className="w-14 h-14 rounded-2xl bg-red-50 flex items-center justify-center mb-5">
+                            <AlertCircle className="w-7 h-7 text-red-500" />
+                        </div>
+                        <h2 className="text-[22px] font-black tracking-tight text-slate-900 mb-2">
+                            {confirmDialog.unanswered} Unanswered {confirmDialog.unanswered === 1 ? 'Question' : 'Questions'}
+                        </h2>
+                        <p className="text-[14px] text-slate-500 leading-6 mb-8">
+                            You have <strong className="text-slate-800">{confirmDialog.unanswered} unanswered {confirmDialog.unanswered === 1 ? 'question' : 'questions'}</strong> in this section. Once you submit, you will not be able to return to these questions.
+                        </p>
+                        <div className="flex items-center gap-3 justify-end">
+                            <button
+                                onClick={() => setConfirmDialog(null)}
+                                className="px-5 py-2.5 rounded-full text-sm font-bold text-slate-600 hover:bg-slate-100 transition"
+                            >
+                                Go Back
+                            </button>
+                            <button
+                                onClick={confirmDialog.onConfirm}
+                                className="px-6 py-2.5 rounded-full text-sm font-bold bg-red-500 text-white hover:bg-red-600 shadow-md transition"
+                            >
+                                Submit Anyway
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
 
             {/* Split Pane Content Area */}
             <main className="flex-1 flex overflow-hidden bg-white">
@@ -1204,6 +1309,17 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
                         ) : (
                             <div className="overflow-y-auto bg-white" style={{ width: `${leftPanelWidth}%` }}>
                                 <div className="p-4 lg:p-10 pr-4 lg:pr-8 max-w-[800px] w-full mx-auto">
+                                    {/* Reading question: show image above passage in left pane only if no explicit imagePosition is set */}
+                                    {currentQuestion?.image && currentSection?.name !== 'Math' && !currentQuestion?.imagePosition && (
+                                        <div className="mb-5 flex items-center justify-center">
+                                            <img
+                                                src={currentQuestion.image}
+                                                alt="Question figure"
+                                                className="max-w-full max-h-[400px] object-contain cursor-pointer hover:opacity-90 transition-opacity"
+                                                onClick={() => setExpandedImage(currentQuestion.image || null)}
+                                            />
+                                        </div>
+                                    )}
                                     {(() => {
                                         if (!currentQuestion?.passage) return false;
                                         const cleanP = cleanOCR(currentQuestion.passage);
@@ -1256,26 +1372,26 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
                             <div className="w-full max-w-[800px] mx-auto flex flex-col pb-10">
 
                                 {/* Header: Connected Question Number & Mark for Review & ABC */}
-                                <div className="flex items-center mb-6 mt-4 w-full bg-white border border-[#E5E7EB] rounded-[12px] shadow-sm h-[54px]">
-                                    {/* Number */}
-                                    <div className="bg-[#111827] text-white font-bold text-[16px] w-[64px] h-[54px] flex flex-shrink-0 items-center justify-center rounded-l-[11px]">
+                                <div className="flex items-center w-full h-[54px] mb-4 mt-2">
+                                    {/* Number - standalone rounded square */}
+                                    <div className="bg-[#111827] text-white font-bold text-[16px] w-[54px] h-[54px] rounded-[10px] flex-shrink-0 flex items-center justify-center relative z-10 shadow-sm">
                                         {currentQuestionIndex + 1}
                                     </div>
 
-                                    {/* Mark for Review */}
+                                    {/* Mark for Review - middle bar with top/bottom border connecting exactly to the squares */}
                                     <button
                                         onClick={() => toggleFlag(questionKey)}
-                                        className="flex flex-1 items-center gap-2 px-4 h-full text-[#4B5563] text-[15px] transition-colors justify-start bg-transparent group/mfr hover:bg-slate-50"
+                                        className="flex flex-1 items-center gap-2 px-6 h-[54px] text-[#4B5563] transition-colors justify-start bg-white border-t border-b border-[#D1D5DB] group/mfr hover:bg-slate-50 relative z-0 -mx-[12px]"
                                     >
-                                        <Bookmark className={`w-[16px] h-[16px] transition-colors ${flaggedQuestions[questionKey] ? 'fill-slate-600 text-slate-600' : 'text-slate-400 group-hover/mfr:text-slate-600'}`} />
-                                        <span className={flaggedQuestions[questionKey] ? 'font-bold' : 'font-medium group-hover/mfr:font-bold'}>Mark for Review</span>
+                                        <Bookmark className={`w-[14px] h-[14px] transition-colors ${flaggedQuestions[questionKey] ? 'fill-slate-600 text-slate-600' : 'text-slate-400 group-hover/mfr:text-slate-600'}`} />
+                                        <span className={flaggedQuestions[questionKey] ? 'font-bold text-[14px]' : 'font-medium text-[14px] group-hover/mfr:font-bold'}>Mark for Review</span>
                                     </button>
 
-                                    {/* ABC Elimination (Right) */}
-                                    <div className="w-[64px] h-[54px] flex flex-shrink-0 items-center justify-center border-l border-[#E5E7EB] rounded-r-[11px] bg-transparent">
+                                    {/* ABC - standalone rounded square */}
+                                    <div className="w-[54px] h-[54px] flex-shrink-0 flex items-center justify-center rounded-[10px] border border-[#D1D5DB] bg-white relative z-10 shadow-sm">
                                         <button
                                             onClick={() => setIsEliminationMode(!isEliminationMode)}
-                                            className={`flex items-center justify-center w-full h-full font-bold text-[15px] transition-colors rounded-r-[11px] ${isEliminationMode ? 'bg-[#111827] text-white' : 'text-slate-700 hover:bg-slate-50'}`}
+                                            className={`flex items-center justify-center w-full h-full font-bold text-[14px] transition-colors rounded-[10px] ${isEliminationMode ? 'bg-[#111827] text-white' : 'text-slate-700 hover:bg-slate-50'}`}
                                         >
                                             <span className="line-through decoration-[#ef4444] decoration-[2px]">ABC</span>
                                         </button>
@@ -1283,24 +1399,26 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
                                 </div>
 
                                 {/* Question Content */}
-                                {/* Math question image/graph */}
-                                {currentQuestion?.image && (
-                                    <div className="mb-5 flex items-center justify-center">
+                                {/* Math question image/graph — or custom positioned image */}
+                                {currentQuestion?.image && (currentQuestion?.imagePosition === 'before-stem' || (!currentQuestion?.imagePosition && currentSection?.name === 'Math')) && (
+                                    <div className="mb-1 flex items-center justify-center overflow-hidden">
                                         <img
                                             src={currentQuestion.image}
-                                            alt="Question figure"
-                                            className="max-w-full max-h-[200px] object-contain cursor-pointer hover:opacity-90 transition-opacity"
+                                            alt="Question image"
+                                            className="max-w-[70%] object-contain object-top cursor-pointer hover:opacity-90 transition-opacity"
+                                            style={{maxHeight: '280px'}}
                                             onClick={() => setExpandedImage(currentQuestion.image || null)}
                                         />
                                     </div>
                                 )}
-                                <div className="text-[18px] text-[#111827] mb-6 leading-relaxed">
+                                <div className="text-[16px] text-[#111827] mb-3 leading-[1.7]">
                                     {currentSection?.name === 'Math' ? (
-                                        <MathText
+                                        <LatexRenderer
                                             text={cleanOCR(
                                                 currentQuestion?.question || currentQuestion?.passage || ''
                                             ).replace(/^\s*\d+[\.\)]\s*/, '')}
-                                            style={{ fontSize: 18, lineHeight: 1.7, display: 'block' }}
+                                            className="block"
+                                            removeBlankLines={true}
                                         />
                                     ) : (
                                         <HighlightableText
@@ -1313,17 +1431,28 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
                                         />
                                     )}
                                 </div>
+                                {currentQuestion?.image && currentQuestion?.imagePosition === 'after-stem' && (
+                                    <div className="mt-4 mb-4 flex items-center justify-center overflow-hidden">
+                                        <img
+                                            src={currentQuestion.image}
+                                            alt="Question image"
+                                            className="max-w-[70%] object-contain object-top cursor-pointer hover:opacity-90 transition-opacity"
+                                            style={{maxHeight: '280px'}}
+                                            onClick={() => setExpandedImage(currentQuestion.image || null)}
+                                        />
+                                    </div>
+                                )}
 
                                 {/* Answer Options or SPR Input */}
-                                <div className="space-y-4 w-full relative pl-[2px] pt-[2px]">
-                                    {currentQuestion?.type === 'Math (SPR)' || (currentQuestion?.options && currentQuestion.options.length === 0) ? (
+                                <div className="space-y-2 w-full relative pl-[2px] pt-[2px]">
+                                    {currentQuestion?.type === 'Math (SPR)' ? (
                                         <div className="flex flex-col gap-2">
                                             <input
                                                 type="text"
                                                 id="spr-answer-input"
                                                 value={typeof userAnswers[questionKey] === 'string' ? userAnswers[questionKey] as string : typeof userAnswers[questionKey] === 'number' ? String(userAnswers[questionKey]) : ''}
                                                 onChange={(e) => selectAnswer(questionKey, e.target.value)}
-                                                className="w-[200px] h-[52px] border-2 border-[#D1D5DB] rounded-[8px] px-4 text-[18px] font-mono font-bold text-[#111827] text-left focus:outline-none focus:border-[#111827] transition-colors bg-white"
+                                                className="w-[280px] h-[52px] border-2 border-[#D1D5DB] rounded-[8px] px-4 text-[17px] font-mono font-bold text-[#111827] text-left focus:outline-none focus:border-[#111827] transition-colors bg-white"
                                                 autoComplete="off"
                                                 spellCheck={false}
                                             />
@@ -1346,7 +1475,7 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
                                                         }
                                                     }}
                                                     htmlFor={`opt-${i}`}
-                                                    className={`relative w-full border h-auto min-h-[64px] rounded-[12px] flex items-stretch cursor-pointer transition-all duration-200 overflow-hidden ${isSelected ? 'border-[#111827] shadow-[inset_0_0_0_1px_#111827] z-10' : 'border-[#E5E7EB] hover:border-slate-400 shadow-sm'}`}
+                                                    className={`relative w-full border h-auto min-h-[56px] rounded-[10px] flex items-stretch cursor-pointer transition-all duration-200 overflow-hidden ${isSelected ? 'border-[#111827] shadow-[inset_0_0_0_1px_#111827] z-10' : 'border-[#E5E7EB] hover:border-slate-400 shadow-sm'}`}
                                                 >
                                                     <input
                                                         type="radio"
@@ -1360,20 +1489,16 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
                                                     />
 
                                                     {/* Letter Box (Circular) */}
-                                                    <div className="w-[60px] flex-shrink-0 flex items-center justify-center bg-transparent">
-                                                        <div className={`w-[34px] h-[34px] rounded-full flex items-center justify-center font-bold text-[15px] border-[1.5px] transition-all ${isSelected ? 'border-[#111827] bg-[#111827] text-white shadow-md' : 'border-[#D1D5DB] text-[#4B5563] bg-white group-hover:border-[#9CA3AF] group-hover:text-[#111827]'}`}>
+                                                    <div className="w-[52px] flex-shrink-0 flex items-center justify-center bg-transparent">
+                                                        <div className={`w-[30px] h-[30px] rounded-full flex items-center justify-center font-bold text-[14px] border-[1.5px] transition-all ${isSelected ? 'border-[#111827] bg-[#111827] text-white shadow-md' : 'border-[#D1D5DB] text-[#4B5563] bg-white group-hover:border-[#9CA3AF] group-hover:text-[#111827]'}`}>
                                                             {letter}
                                                         </div>
                                                     </div>
 
                                                     {/* Answer Text */}
-                                                    <div className="flex-1 p-4 flex items-center bg-transparent">
-                                                        <span className={`text-[17px] ${isEliminated ? 'text-slate-400' : 'text-[#111827]'}`}>
-                                                            {currentSection?.name === 'Math' ? (
-                                                                <MathText text={cleanOCR(opt || '').replace(/^\s*[A-D][\.\)]\s*/, '')} />
-                                                            ) : (
-                                                                cleanOCR(opt || '').replace(/^\s*[A-D][\.\)]\s*/, '')
-                                                            )}
+                                                    <div className="flex-1 px-3 py-3 flex items-center bg-transparent">
+                                                        <span className={`text-[16px] ${isEliminated ? 'text-slate-400' : 'text-[#111827]'}`}>
+                                                            <LatexRenderer text={cleanOCR(opt || '').replace(/^\s*[A-D][\.\)]\s*/, '')} />
                                                         </span>
                                                     </div>
 
@@ -1518,14 +1643,14 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
 
             {/* Question Navigation Panel Overlay */}
             {isNavPanelOpen && (
-                <div className="fixed inset-0 z-50 flex items-end justify-center sm:items-center p-4 bg-black/40 backdrop-blur-sm" onClick={() => setIsNavPanelOpen(false)}>
+                <div className="absolute inset-0 z-50 flex items-end justify-center sm:items-center p-4 bg-black/40 backdrop-blur-sm" onClick={() => setIsNavPanelOpen(false)}>
                     <div
                         className="bg-white w-full max-w-3xl rounded-xl shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200"
                         onClick={e => e.stopPropagation()}
                     >
                         <div className="border-b border-[#E5E7EB] p-6 flex justify-between items-center bg-[#F9FAFB]">
                             <h3 className="font-bold text-lg text-[#111827]">
-                                Section {currentSection?.name === 'Math' ? 2 : 1}, Module {currentModuleIndex + 1}: {currentSection?.name}
+                                Section {currentSection?.name === 'Math' ? 2 : 1}, Module {displayModuleNumber}: {currentSection?.name}
                             </h3>
                             <button onClick={() => setIsNavPanelOpen(false)} className="p-2 rounded-md hover:bg-[#E5E7EB] text-[#4B5563] transition-colors">
                                 <X className="w-5 h-5" />

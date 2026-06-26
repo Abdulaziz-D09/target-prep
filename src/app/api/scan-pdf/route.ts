@@ -57,7 +57,7 @@ Rules:
 // ─── Gemini config ────────────────────────────────────────────────────────────
 
 const GEMINI_BASE_URL = 'https://generativelanguage.googleapis.com';
-const GEMINI_MODELS = ['gemini-2.5-flash-lite', 'gemini-2.5-flash', 'gemini-flash-latest'] as const;
+const GEMINI_MODELS = ['gemini-1.5-flash', 'gemini-2.5-flash', 'gemini-flash-latest'] as const;
 const FILE_STATUS_POLL_INTERVAL_MS = 700;
 const MAX_FILE_STATUS_POLLS = 12;
 

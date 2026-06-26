@@ -1,36 +1,35 @@
-import { createClient as createSupabaseClient } from '@supabase/supabase-js'
+import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
 export async function updateSession(request: NextRequest) {
-  let supabaseResponse = NextResponse.next({ request })
+  let supabaseResponse = NextResponse.next({
+    request,
+  })
 
-  const supabase = createSupabaseClient(
+  const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
-      auth: {
-        flowType: 'pkce',
-        detectSessionInUrl: false,
-        persistSession: true,
-        autoRefreshToken: true,
-        storage: {
-          getItem: (key) => request.cookies.get(key)?.value ?? null,
-          setItem: (key, value) => {
-            request.cookies.set(key, value)
-            supabaseResponse = NextResponse.next({ request })
-            supabaseResponse.cookies.set(key, value)
-          },
-          removeItem: (key) => {
-            request.cookies.delete(key)
-            supabaseResponse = NextResponse.next({ request })
-            supabaseResponse.cookies.delete(key)
-          },
+      cookies: {
+        getAll() {
+          return request.cookies.getAll()
+        },
+        setAll(cookiesToSet) {
+          cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value))
+          supabaseResponse = NextResponse.next({
+            request,
+          })
+          cookiesToSet.forEach(({ name, value, options }) =>
+            supabaseResponse.cookies.set(name, value, options)
+          )
         },
       },
     }
   )
 
-  const { data: { user } } = await supabase.auth.getUser()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
 
   const protectedRoutes = ['/dashboard', '/classroom', '/practice', '/teacher', '/study-plan', '/question-bank']
   const isProtectedRoute = protectedRoutes.some(route => request.nextUrl.pathname.startsWith(route))

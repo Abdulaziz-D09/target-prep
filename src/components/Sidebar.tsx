@@ -57,6 +57,7 @@ export default function Sidebar() {
     
     const [mobileOpen, setMobileOpen] = useState(false);
     const [isTemporarilyHidden, setIsTemporarilyHidden] = useState(false);
+    const [navigatingTo, setNavigatingTo] = useState<string | null>(null);
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
     const [isEditingProfile, setIsEditingProfile] = useState(false);
     const [user, setUser] = useState<any>(null);
@@ -131,8 +132,8 @@ export default function Sidebar() {
     }, [siteTone]);
 
     useEffect(() => {
-        syncDocumentTone(siteTone);
-    }, [siteTone]);
+        setNavigatingTo(null);
+    }, [pathname, searchParams]);
 
     const isActive = (href: string) => {
         if (href === '/dashboard/mocks/history') {
@@ -158,8 +159,11 @@ export default function Sidebar() {
 
     const handleNavClick = (event: MouseEvent<HTMLAnchorElement>, href: string, active: boolean) => {
         setMobileOpen(false);
-        if (!active) return;
-        event.preventDefault();
+        if (!active) {
+            setNavigatingTo(href);
+        } else {
+            event.preventDefault();
+        }
     };
 
     // Hide sidebar on practice test mode, classroom assignments, or if explicitly toggled
@@ -279,11 +283,14 @@ export default function Sidebar() {
                                     <Icon className="h-[17px] w-[17px]" />
                                 </motion.span>
                                 <motion.span
-                                    className="relative z-10 tracking-tight"
+                                    className="relative z-10 tracking-tight flex items-center gap-2"
                                     variants={navLabelVariants}
                                     transition={shouldReduceMotion ? undefined : { type: 'spring', stiffness: 260, damping: 22 }}
                                 >
                                     {item.label}
+                                    {navigatingTo === item.href && (
+                                        <div className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-current border-t-transparent opacity-70" />
+                                    )}
                                 </motion.span>
                                 {item.badge && (
                                     <span className={`ml-auto relative z-10 rounded-full px-2 py-0.5 text-[9px] font-black uppercase tracking-widest ${

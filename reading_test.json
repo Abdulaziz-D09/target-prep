@@ -1,0 +1,720 @@
+[
+  {
+    "questions": [
+      {
+        "num": 1,
+        "passage": "Scientists have used machine learning tools to study elephant sounds, uncovering a sophisticated communication system. The tools ______ unique patterns in the rumbling sounds elephants make. The scientists claim that these patterns are specific calls the\nelephants use for individuals, similar to names.",
+        "question": "Which choice completes the text with the most logical and precise word or phrase?",
+        "options": [
+          "created",
+          "corrected",
+          "detected",
+          "scattered"
+        ],
+        "answer": 2,
+        "type": "Reading and Writing"
+      },
+      {
+        "num": 2,
+        "passage": "The following text is from Chinua Achebe\u2019s 1964 novel <i>Arrow of God</i>. The novel is set in\nNigeria in the 1920s. Ezeulu, who is the religious leader for several villages, announces when\nthe annual yam harvest can begin.\n\nWhenever Ezeulu <u>considered</u> the immensity of his power over the year and the\ncrops and, therefore, over the people he wondered if it was real. It was true he\nnamed the day for the feast of the Pumpkin Leaves and for the New Yam feast;\nbut he did not choose it. He was merely a watchman. His power was no more than\nthe power of a child over a goat that was said to be his.\n\n\u00a91964 by Chinua Achebe",
+        "question": "As used in the text, what does the word \u201cconsidered\u201d most nearly mean?",
+        "options": [
+          "Pondered",
+          "Anticipated",
+          "Allowed",
+          "Respected"
+        ],
+        "answer": 0,
+        "type": "Reading and Writing"
+      },
+      {
+        "num": 3,
+        "passage": "The following text is adapted from John Matheus\u2019s 1925 short story \u201cFog.\u201d\n\nThe fog extended its tentacles over city and river, gradually obliterating traces of\nfamiliar landscapes. At five-thirty the old Panhandle bridge, supported by\nmassive sandstone pillars, stalwart, as when erected fifty years before to serve a\ngeneration now passed behind the portals of life, had become a spectral outline\nagainst the sky.",
+        "question": "As used in the text, what does the word \u201ctraces\u201d most nearly mean?",
+        "options": [
+          "Debris",
+          "Copies",
+          "Indications",
+          "Remembrances"
+        ],
+        "answer": 2,
+        "type": "Reading and Writing"
+      },
+      {
+        "num": 4,
+        "passage": "Microplastics are a common pollutant in large masses of water like glaciers. High\nconcentrations and ______ among particles\u2014variations in size, shape, and material\u2014make it \nonerous to comprehensively classify the microplastics in a water sample, so Ojeda-Benitez\net al. are exploring a device to help quickly and accurately identify certain characteristics.",
+        "question": "Which choice completes the text with the most logical and precise word or phrase?",
+        "options": [
+          "restraints",
+          "inconsistencies",
+          "incompatibilities",
+          "disruptions"
+        ],
+        "answer": 1,
+        "type": "Reading and Writing"
+      },
+      {
+        "num": 5,
+        "passage": "The following text is adapted from Henry James's 1881 novel <i>The Portrait of a Lady</i>.\n\nEverything Osmond did was pose\u2014pose so subtly considered that if one were not\non the lookout one mistook it for impulse. Ralph had never met a man who lived\nso much in the land of <u>consideration</u>. His tastes, his studies, his\naccomplishments, his collections, were all for a purpose.",
+        "question": "As used in the text, what does the word \u201cconsideration\u201d most nearly mean?",
+        "options": [
+          "Deference",
+          "Calculation",
+          "Indecision",
+          "Courtesy"
+        ],
+        "answer": 1,
+        "type": "Reading and Writing"
+      },
+      {
+        "num": 6,
+        "passage": "Adult glass eels can be found off the coast of Maine, but the eels begin their lives in the\nSargasso Sea, a biodiverse area in the North Atlantic Ocean where they are born and later\nreturn to breed. Though biologists believe they have identified the general area in the\nSargasso Sea that is crucial to the endangered eels\u2019 survival, little is yet known about how\nthe animals spawn there. Scientists believe that solving the mystery will lead to better\nconservation of glass eels and their habitat, <u>helping in turn to sustain several other species\nthat rely on them as a food source.</u>",
+        "question": "Which choice best describes the function of the underlined portion in the text as a whole?",
+        "options": [
+          "It presents a finding from a study that identifies the circumstances required to ensure the\nsurvival of glass eels.",
+          "It suggests that scientists are more concerned about other species than about glass eels\u2019\nhabitat.",
+          "It indicates that the benefit of understanding glass eels\u2019 spawning behavior extends\nbeyond the eels.",
+          "It discusses a role that glass eels and other species serve in supporting the ecosystem of\nthe Sargasso Sea."
+        ],
+        "answer": 2,
+        "type": "Reading and Writing"
+      },
+      {
+        "num": 7,
+        "passage": "Tomi Adeyemi's first published work, the inventive West African-inspired fantasy novel\n<i>Children of Blood and Bone</i>, has intriguing things to say about the relationship between\nidentity and power. Adeyemi works in a decades-long tradition going back to writers such as\nSamuel Delany and Octavia Butler, who wove cultural elements of the Black diaspora into\ntheir science fiction and fantasy in a movement known as Afrofuturism. At its core, the\nmovement is characterized by speculation, not just about distant futures or other planets but\nalso about alternate versions of our shared past. Afrofuturism\u2019s meditations on authority\nreinvigorate the creative potential of fiction.",
+        "question": "Which choice best describes the overall structure of the text?",
+        "options": [
+          "It notes the political stance of an author, compares that author's book to other earlier\nworks, and then analyzes the influence of political events on the book.",
+          "It praises a newly published author, compares that author with others who might appear\nsuperficially similar, and then points out the features of that author's work that make it\nunique.",
+          "It introduces an intriguing debut work, contextualizes that work as part of an ongoing\nliterary tradition, and then describes important themes of that tradition.",
+          "It summarizes a book, describes characteristics of the artistic movement of which the\nbook is a part, and then points out the features the book shares with more widely read\nworks."
+        ],
+        "answer": 2,
+        "type": "Reading and Writing"
+      },
+      {
+        "num": 8,
+        "passage": "Founded in 1904, the Hispanic Society of America showcases the arts and cultures of\nSpanish-speaking and Portuguese-speaking regions around the world, including Latin\nAmerica. It is located in New York City and has more than 18,000 objects in its museum\ncollection. Since 2000, a number of other institutions devoted to Latino cultures have\nopened in the United States. A notable example is LA Plaza de Cultura y Artes in Los\nAngeles. It focuses on Mexican American art and culture.",
+        "question": "Which statement about the Hispanic Society of America is best supported by the text?",
+        "options": [
+          "Its collection includes over 18,000 objects.",
+          "It is no longer located in New York City.",
+          "It was founded after 2000.",
+          "It is visited by more people than any other Latino cultural institution in the US."
+        ],
+        "answer": 0,
+        "type": "Reading and Writing"
+      },
+      {
+        "num": 9,
+        "passage": "In a 2024 study, Corrine Walsh and colleagues examined whether the composition of soil\nmicrobial communities could affect plants\u2019 flavor chemistry. Whereas Baslam et al. (2011)\nshowed that adding specific bacterial or fungal strains to soil can yield increased flavonoid\ncontent in spinach crops, Walsh and team applied intact microbial communities gathered\nfrom ecologically distinct settings across Colorado, including areas of ponderosa pine forest\nand irrigated pasture, to mustard plants and evaluated the flavor compounds in the plants\u2019\nseeds. This ensured that the microbial conditions in their experiment would better reflect the\nvariation and complexity of naturally occurring communities.",
+        "question": "Based on the text, what is the most likely reason Walsh and colleagues chose to avoid the\nmethod used in the spinach study?",
+        "options": [
+          "The composition of microorganisms in the soil in the spinach study may not have been\nrepresentative of a naturally existing composition.",
+          "The microbial community in the soil from the spinach study affected plants\u2019 nutrition, not\ntheir flavor chemistry.",
+          "The microbial community in the soil from the spinach study likely included similar species\nto those in wild soils.",
+          "The diversity of species of microorganisms in the soil from the spinach study was already\nabnormally high before the researchers added further microorganisms."
+        ],
+        "answer": 0,
+        "type": "Reading and Writing"
+      },
+      {
+        "num": 10,
+        "passage": "__TABLE__\nHome Console and Computer Games of the 1980s\n\nTitle | Approximate units sold worldwide | Genre | Developer\n--- | --- | --- | ---\nSuper Mario Brothers 2 | 7,460,000 | platformer | Nintendo EAD\nIce Hockey | 2,420,000 | sports | Nintendo R&D2\nWhere in the World Is Carmen Sandiego? | 4,000,000 | education | Broderbund\nTetris | 43,000,000 | puzzle | Nintendo R&D1\n__ENDTABLE__\n\nA student is writing a paper on the global rise of the home video game industry during the\n1980s. The student is researching the relative popularity of various genres of console and\ncomputer games. Looking at the information in the table, the student finds that the games in\nthe genres of ______",
+        "question": "Which choice most effectively uses data from the table to complete the statement?",
+        "options": [
+          "puzzle and sports sold nearly the same number of units.",
+          "platformer and education sold nearly the same number of units.",
+          "puzzle and platformer outsold the games in the other genres.",
+          "platformer and sports outsold the games in the other genres."
+        ],
+        "answer": 2,
+        "type": "Reading and Writing"
+      },
+      {
+        "num": 11,
+        "passage": "__IMAGE__ Mean Adhesion Strength of Graphite and Acrylamide Gel, at Varying Voltages\n![Mean Adhesion Strength of Graphite and Acrylamide Gel, at Varying Voltages](/graphs/q11-adhesion-graph.png)\n__ENDIMAGE__\n\nWenhao Xu and colleagues demonstrated that applying a low direct current electrical field to\ngraphite (a conductor) and an acrylamide (AAm) gel can increase how strongly materials\nadhere to each other. At some voltages, adhesion strength\u2014as measured in kilopascals\n(kPa) of stress needed to pull the materials apart\u2014was high (more than 30 kPa). But the\nmere application of a direct current electrical field with positive voltage is not sufficient to\ncause increased adhesion, as evidenced by the fact that ______",
+        "question": "Which choice most effectively uses data from the graph to complete the statement?",
+        "options": [
+          "at 0 V, mean adhesion strength was equal to 0 kPa.",
+          "at 3 V, mean adhesion strength reached its highest observed level at approximately 40 kPa.",
+          "at 2 V, mean adhesion strength was lower than it was at both 1 V and 3 V.",
+          "at 1 V, mean adhesion strength was approximately equal to adhesion strength at 0 V."
+        ],
+        "answer": 3,
+        "type": "Reading and Writing"
+      },
+      {
+        "num": 12,
+        "passage": "__TABLE__\nEffect of Various Soil Treatments on Mean Pineapple Fruit Weight and Size\n\nSoil treatment | Weight (grams) | Length (centimeters) | Diameter (centimeters)\n--- | --- | --- | ---\nControl | 825.9 | 6.14 | 13.63\nBiochar | 915.7 | 6.56 | 13.63\nCompost | 864.8 | 6.15 | 13.22\nBiochar and compost | 979.3 | 6.76 | 13.68\nBiochar and NPK fertilizer | 1032.1 | 6.78 | 13.96\n__ENDTABLE__\n\nWorking in Ghana, Emmanuel Hanyabui and colleagues compared the impact on pineapple\ngrowth of different combinations of soil additives, including NPK fertilizer (an inorganic\nfertilizer containing nitrogen, phosphorus, and potassium), organic compost, and biochar (a\ncarbon-rich material produced from organic waste matter). Based on data in the table,\npineapple farmers with no access to inorganic soil additives would likely increase the weight\nand size of their fruits by the greatest amount by using ______",
+        "question": "Which choice most effectively uses data from the table to complete the text?",
+        "options": [
+          "compost alone.",
+          "biochar alone.",
+          "biochar and compost.",
+          "biochar and NPK fertilizer."
+        ],
+        "answer": 2,
+        "type": "Reading and Writing"
+      },
+      {
+        "num": 13,
+        "passage": "Neuroscientist Artin Arshamian and his team sought to determine what affects a person's\nperception of an odor as pleasant: is it culture, personal taste, or aspects of human\nanatomy? The team assessed odor preferences in ten groups of people with different modes\nof living (urban, agricultural, and hunter-gatherer) including urban dwellers from a large city\nin Thailand and the Seri people from a small community in Mexico. The team observed that\nacross cultures, people generally rated odors about the same: vanillin, which smells like\nvanilla, was typically rated more pleasant than galbazine, which smells like peanuts. The\nteam therefore concluded that ______",
+        "question": "Which choice most logically completes the text?",
+        "options": [
+          "culture likely plays more of a role in a person's perception of how pleasant an odor is than\ndoes human anatomy.",
+          "a person's mode of living likely doesn\u2019t have a large influence on that person's perception\nof whether an odor is pleasant or unpleasant.",
+          "a person who lives in an urban area is more likely to encounter the odor of vanillin than is\na person who lives in a small community.",
+          "a person who perceives certain odors as pleasant will likely perceive the odors as roughly\nequal in pleasantness."
+        ],
+        "answer": 1,
+        "type": "Reading and Writing"
+      },
+      {
+        "num": 14,
+        "passage": "Outi Tervo and team studied the effect of human-caused noise on narwhals (<i>Monodon\nmonoceros</i>), arctic marine mammals that are sensitive to acoustic changes in their\nenvironment. Hypothesizing that elevated sound levels affect foraging among narwhals,\nTervo's team compared narwhal diving behaviors in natural sound conditions with those\nbehaviors in two human-caused sound exposure conditions\u2014ship sounds and ship sounds\ncoupled with sonic pulses. Both exposure conditions resulted in significant decreases in the\nnumber and target depth of deep dives (associated with foraging) relative to natural\nconditions. However, differences between diving behaviors in the two exposure types were\nnegligible, a finding that could be attributed to the fact that ______",
+        "question": "Which choice most logically completes the text?",
+        "options": [
+          "sonic pulses can be heard at significantly greater ocean depths than ship sounds can.",
+          "ship sounds contribute so much to the overall sound level that the addition of sonic\npulses has little effect on the narwhals\u2019 auditory environment.",
+          "narwhals forage at shallower depths in the presence of ship sounds alone than in the\npresence of ship sounds coupled with sonic pulses.",
+          "the narwhals weren't as sensitive to human-caused sounds as the researchers had\npredicted."
+        ],
+        "answer": 1,
+        "type": "Reading and Writing"
+      },
+      {
+        "num": 15,
+        "passage": "Jesse Trevifio's 1976 painting Mis Hermanos was featured in the Smithsonian\u2018s 2013\nexhibition Our America: The Latino Presence in American Art. The piece ______ chosen for\nthe exhibition by curator E. Carmen Ramos.",
+        "question": "Which choice completes the text so that it conforms to the conventions of Standard English?",
+        "options": [
+          "is",
+          "had been",
+          "will be",
+          "is being"
+        ],
+        "answer": 1,
+        "type": "Reading and Writing"
+      },
+      {
+        "num": 16,
+        "passage": "Mia Heavener's 2019 novel <i>Under Nushagak Bluff</i>, which takes place in a mid-twentieth-\ncentury rural Alaskan fishing ______ the story of three Yup\u2019ik women who grapple with the\nrise of commercial fisheries and other changes affecting their community.",
+        "question": "Which choice completes the text so that it conforms to the conventions of Standard English?",
+        "options": [
+          "village: tells",
+          "village. Tells",
+          "village, tells",
+          "village tells"
+        ],
+        "answer": 2,
+        "type": "Reading and Writing"
+      },
+      {
+        "num": 17,
+        "passage": "Many works of the Greek historian Strabo (1st century BCE) are ______ his <i>Geographica</i>, a\ndescriptive history of the ancient world, is an extant work: it can still be read.",
+        "question": "Which choice completes the text so that it conforms to the conventions of Standard English?",
+        "options": [
+          "lost. Conversely,",
+          "lost and conversely,",
+          "lost, conversely,",
+          "lost, and conversely"
+        ],
+        "answer": 0,
+        "type": "Reading and Writing"
+      },
+      {
+        "num": 18,
+        "passage": "Enacted in 1944, Iceland\u2019s 4,089-word constitution, in contrast to Spain's, which was\nenacted in 1978 and contains a far greater number (17,608) of words, ______ as the 2nd\nshortest in the world. Such data are studied by constitutional scholars like George Tsebelis,\nwho can use them to draw broader conclusions.",
+        "question": "Which choice completes the text so that it conforms to the conventions of Standard English?",
+        "options": [
+          "have ranked",
+          "rank",
+          "are ranking",
+          "ranks"
+        ],
+        "answer": 3,
+        "type": "Reading and Writing"
+      },
+      {
+        "num": 19,
+        "passage": "Working on an unimaginably small scale of billionths of a meter, nanoengineers have found\nways to leverage cerium oxide ______ to improve treatments for certain conditions related to\noxidative stress.",
+        "question": "Which choice completes the text so that it conforms to the conventions of Standard English?",
+        "options": [
+          "nanoparticles\u2019 properties\u2019",
+          "nanoparticles properties",
+          "nanoparticles\u2019 properties",
+          "nanoparticle\u2019s properties"
+        ],
+        "answer": 2,
+        "type": "Reading and Writing"
+      },
+      {
+        "num": 20,
+        "passage": "Recordings of electrical activity in the brain, ______ increased activity in brain areas\nassociated with suppressing motor functions.",
+        "question": "Which choice completes the text so that it conforms to the conventions of Standard English?",
+        "options": [
+          "electrograms show that while responding to hypothetical match scenarios, the most\nhighly skilled soccer players have",
+          "hypothetical match scenario responses show that the most highly skilled soccer players\ncaptured in electrograms have",
+          "the most highly skilled soccer players responding to hypothetical match scenarios have\nelectrograms that show",
+          "responses to hypothetical match scenarios show that the most highly skilled soccer\nplayers have electrograms with"
+        ],
+        "answer": 0,
+        "type": "Reading and Writing"
+      },
+      {
+        "num": 21,
+        "passage": "A team led by Portuguese researcher Isabel C.F.R. Ferreira found that many species of\nmushrooms contain chemicals called phenolic compounds, such as cinnamic acid and\ncatechin. ______ Ferreira detected cinnamic acid in <i>Agaricus blazei</i> mushrooms and\ncatechin in <i>Lentinus edodes</i> mushrooms.",
+        "question": "Which choice completes the text with the most logical transition?",
+        "options": [
+          "For this reason,",
+          "However,",
+          "Nevertheless,",
+          "For example,"
+        ],
+        "answer": 3,
+        "type": "Reading and Writing"
+      },
+      {
+        "num": 22,
+        "passage": "Resins play several important roles in maintaining the health of conifers and many other\nkinds of trees. ______ resins quickly seal wounds, which helps prevent harmful insects and\nfungi from entering trees. These sticky substances also help trees retain water that is\nneeded for them to survive.",
+        "question": "Which choice completes the text with the most logical transition?",
+        "options": [
+          "Regardless,",
+          "Next,",
+          "However,",
+          "For example,"
+        ],
+        "answer": 3,
+        "type": "Reading and Writing"
+      },
+      {
+        "num": 23,
+        "passage": "While some researchers have identified the planet Kepler-296e as potentially habitable, it\u2019s\nunlikely that humanity will be able to take advantage of its favorable conditions anytime soon\n\u2014it's 737 light years away. ______ humanity must first focus on making planets within our\nsolar system more habitable.",
+        "question": "Which choice completes the text with the most logical transition?",
+        "options": [
+          "Likewise,",
+          "Instead,",
+          "For example,",
+          "Next,"
+        ],
+        "answer": 1,
+        "type": "Reading and Writing"
+      },
+      {
+        "num": 24,
+        "passage": "The Tres Zapotes archaeological site is located in our home state of Veracruz, Mexico. ______ \nan 8.5-ton stone statue of a human head was left behind by the ancient Olmec\ncivilization. In the nearby state of Tabasco was another stone statue that weighs 19.8 tons.",
+        "question": "Which choice completes the text with the most logical transition?",
+        "options": [
+          "In other words,",
+          "Here,",
+          "Similarly,",
+          "Therefore,"
+        ],
+        "answer": 1,
+        "type": "Reading and Writing"
+      },
+      {
+        "num": 25,
+        "passage": "Ina 1948 article titled \u201cThe Language of Lines,\u201d Brazilian photographer Jos\u00e9 Yalenti argued\nthat black-and-white photography's distinctive\u2014and in his view, superior\u2014use of lines is\nwhat elevates the medium to the status of fine art. ______ Yalenti insisted that conveying\nperspective through linear forms is photography's \u201cindisputable and exclusive domain,\u201d\ncreating a visual language surpassing even celebrated painters\u2019 works.",
+        "question": "Which choice completes the text with the most logical transition?",
+        "options": [
+          "Indeed,",
+          "In any case,",
+          "However,",
+          "Even so,"
+        ],
+        "answer": 0,
+        "type": "Reading and Writing"
+      },
+      {
+        "num": 26,
+        "passage": "While researching a topic, a student has taken the following notes:\n\ne\u00a2 A merchant ship is any ship hired to carry cargo or passengers.\n\u00a2 A ship\u2019s carrying capacity is also known as its deadweight tonnage (DWT).\n\u00a2 In 2021, there were a total of 1,323 merchant ships registered in the Bahamas.\ne The combined DWT of these ships was 74.3 million tons.",
+        "question": "The student wants to emphasize the combined deadweight tonnage of the Bahamas\u2019\nmerchant ships in 2021. Which choice most effectively uses relevant information from the\nnotes to accomplish this goal?",
+        "options": [
+          "The carrying capacity of a merchant ship is also known as deadweight tonnage.",
+          "In 2021, the Bahamas had 1,323 merchant ships hired to carry cargo or passengers.",
+          "Combined, the Bahamas\u2019 merchant ships had a deadweight tonnage of 74.3 million tons\nin 2021.",
+          "There were a total of 1,323 merchant ships\u2014ships hired to carry cargo or passengers\u2014\nregistered in the Bahamas in 2021."
+        ],
+        "answer": 2,
+        "type": "Reading and Writing"
+      },
+      {
+        "num": 27,
+        "passage": "While researching a topic, a student has taken the following notes:\n\ne Louis Ballard was a classical composer and citizen of the Quapaw Tribe.\n\n\u00a2 Ballard's composition <i>Desert Trilogy</i> was nominated for the Pulitzer Prize in music in",
+        "question": "The student wants to support Browner's claim about Louis Ballard\u2019s compositions. Which\nchoice most effectively uses relevant information from the notes to accomplish this goal?",
+        "options": [],
+        "answer": -1,
+        "type": "Reading and Writing"
+      },
+      {
+        "num": 1971,
+        "passage": "e His composition <i>Devil\u2019s Promenade</i> incorporates a Seneca cow-horn rattle, a\ntraditional Native instrument.",
+        "question": "e\u00a2 Ethnomusicologist Tara Browner claims that Ballard\u2019s compositions rely on elements\noriginating within Native musical traditions.",
+        "options": [
+          "According to Browner, composer Louis Ballard, who wrote <i>Desert Trilogy</i>, relies on\nelements with origins in Native musical traditions.",
+          "Classical composer Louis Ballard, who wrote <i>Devil\u2019s Promenade</i>, was nominated for the\nPulitzer Prize in music in 1971.",
+          "Browner posits that Louis Ballard\u2019s compositions rely on elements originating within\nNative musical traditions; <i>Devil\u2019s Promenade</i> affirms this assertion, incorporating a Seneca\ncow-horn rattle.",
+          "Browner claims that Louis Ballard\u2019s compositions, one of which was nominated for the\nPulitzer Prize, rely on elements originating within Native musical traditions."
+        ],
+        "answer": 2,
+        "type": "Reading and Writing"
+      }
+    ]
+  },
+  {
+    "questions": [
+      {
+        "num": 1,
+        "passage": "In the search for new impact craters on Mars, the roles of seismic monitoring and orbital\nimaging as data sources are ______: when vibrations detected with seismic monitoring\nindicate roughly where an impact has occurred, researchers can use orbital images of that\nrelatively limited area of the rocky surface to precisely locate a new crater.",
+        "question": "Which choice completes the text with the most logical and precise word or phrase?",
+        "options": [
+          "redundant",
+          "exhaustive",
+          "complementary",
+          "interchangeable"
+        ],
+        "answer": 2,
+        "type": "Reading and Writing"
+      },
+      {
+        "num": 2,
+        "passage": "Though copies of <i>The Adventures of Indiana Jones in Wenceslas Square in Prague on\nJanuary 16, 1989</i>\u2014an underground computer game that was created anonymously in 1989\nas an act of political protest against the authoritarian regime of what was then\nCzechoslovakia\u2014were originally distributed ______, the game is now readily available online\nfor anyone to play.",
+        "question": "Which choice completes the text with the most logical and precise word or phrase?",
+        "options": [
+          "succinctly",
+          "dispassionately",
+          "surreptitiously",
+          "disingenuously"
+        ],
+        "answer": 2,
+        "type": "Reading and Writing"
+      },
+      {
+        "num": 3,
+        "passage": "If some specific predictions in Alvin Toffler\u2019s 1970 book <i>Future Shock</i> seem ludicrous now\u2014\npeople do not wear paper clothing while living in underwater cities\u2014Toffler's fundamental\nclaim that rapid technological and social change will leave people feeling disoriented and\natomized seems, in our age of disequilibrium and fragmentation, remarkably ______.",
+        "question": "Which choice completes the text with the most logical and precise word or phrase?",
+        "options": [
+          "prescient",
+          "articulate",
+          "iconoclastic",
+          "equivocal"
+        ],
+        "answer": 0,
+        "type": "Reading and Writing"
+      },
+      {
+        "num": 4,
+        "passage": "A conclusive demonstration of the logical certainty of the honeycomb conjecture, posed in\nthe first century BCE, ______mathematicians\u2019 efforts until Thomas C. Hales presented the\nfirst valid proof of the conjecture in 1999.",
+        "question": "Which choice completes the text with the most logical and precise word or phrase?",
+        "options": [
+          "defied",
+          "prefigured",
+          "epitomized",
+          "displaced"
+        ],
+        "answer": 0,
+        "type": "Reading and Writing"
+      },
+      {
+        "num": 5,
+        "passage": "Establishing protected areas (PAs), such as Abrolhos Marine Park in Brazil, is a common\nconservation strategy, but because PAs restrict some kinds of economic activity, it\u2019s widely\nthought that they hinder economic development. This perception is driven in part by the fact\nthat economic assessments often don\u2019t capture the indirect effects of tourism linked to PAs.\nBut Heng Zhu et al. found that tourism associated with Abrolhos boosts local demand for\ngoods and services in other economic sectors, resulting in, for instance, increased income\nfrom fishing in nearby areas.",
+        "question": "Which choice best describes the overall structure of the text?",
+        "options": [
+          "It states a hypothesis that accounts for why PAs generally negatively impact local\neconomies, outlines how a research team's findings support that hypothesis, and then\nsuggests how a novel methodology led a separate team of researchers to a different\nconclusion.",
+          "It makes a generalization about the difficulty of using PAs to reconcile economic and\nconservation priorities, demonstrates why most PAs fall short of achieving that goal, and\nthen holds up a particular PA as an example of how that goal can be achieved.",
+          "It introduces a widely held belief about the effect PAs have on the economy, proposes a\nreason for that belief's prevalence, and then details a study whose findings seemingly\nconflict with that belief.",
+          "It explains how PAs typically affect economic development in the regions where they are\nestablished, summarizes the findings of several economic studies that support this\nexplanation, and then concedes that a particular PA is an exception to the general trend."
+        ],
+        "answer": 2,
+        "type": "Reading and Writing"
+      },
+      {
+        "num": 6,
+        "passage": "Most Native languages belong to language families, or groups of languages whose structural\nand lexical correspondence likely derives from their descent from a single language spoken\nlong ago. A minority\u2014such as Washoe, which is spoken in California and Nevada, and\nChitimacha, which is spoken in Louisiana\u2014are isolates, having no demonstrable genealogical\nrelationship to other languages. <u>Yet Washoe and Chitimacha, like all isolates, are potentially\nremnants of families whose other members vanished before the historical record could\nattest to them, perhaps through the geographical expansion of extant families.</u>",
+        "question": "Which choice best describes the function of the underlined sentence in the text as a whole?",
+        "options": [
+          "It implies that a nonisolate language may have influenced both Washoe and Chitimacha to\nsuch a degree that their relationship to their former families is no longer discernible.",
+          "It suggests that the ancestral languages of both Washoe and Chitimacha were likely\nisolates that replaced nonisolate languages through geographic expansion in the distant\npast.",
+          "It asserts that the historical record tends to overrepresent nonisolate languages relative to\nisolates, such that the origins of Washoe and Chitimacha are obscure to scholars in the\npresent day.",
+          "It proposes that the distinction made between present-day nonisolate languages and\nisolates like Washoe and Chitimacha may not have been applicable in the distant past."
+        ],
+        "answer": 3,
+        "type": "Reading and Writing"
+      },
+      {
+        "num": 7,
+        "passage": "Text 1\n\nGood art often challenges and disrupts social and aesthetic norms, but the creation of public\nart\u2014paintings, sculptures, and performance pieces displayed in nonmuseum or\nnontheatrical public settings\u2014typically requires broad agreement among artists, civic\nofficials, and community members about the works\u2019 message and artistic goals. <u>Public art\nthat fails to appease eveyone by being sufficiently aesthetically and conceptually bland\nalmost inevitably provokes backlash.</u>\n\nText 2\n\nPublic art is commonly displayed in spaces intended for purposes other than meaningful\naesthetic engagement. Some critics of public art therefore note that norm-defying pieces\nthat aren't effectively integrated within their surroundings in a manner that primes passersby\nto appreciate the pieces\u2019 merits (as is often the case) tend to be regarded more unfavorably\nthan similarly provocative art encountered in museums is.",
+        "question": "Based on the texts, how would the critics mentioned in Text 2 most likely respond to the\nunderlined claim in Text 1?",
+        "options": [
+          "By disputing the notion that civic leaders and community members are easily placated by\nart that is intended mainly to reinforce social norms",
+          "By agreeing with the idea that only works of art that are universally appealing are suitable\nfor displaying in public spaces",
+          "By arguing that the reason members of the general public might disagree about a public\nartwork\u2019's merits is unrelated to the unconventionality of its appearance and ideas",
+          "By contending that the kinds of reactions controversial public artworks often receive\naren't exclusively the result of attributes inherent in the works themselves"
+        ],
+        "answer": 3,
+        "type": "Reading and Writing"
+      },
+      {
+        "num": 8,
+        "passage": "The following text is adapted from Mark Twain's 1876 novel <i>The Adventures of Tom Sawyer</i>.\nAunt Polly is having dinner with Tom, her mischievous young nephew.\n\nAunt Polly asked [Tom] questions that were full of guile, and very deep\u2014for she\nwanted to trap him into damaging revealments. Like many other simple-hearted\nsouls, it was her pet vanity to believe she was endowed with a talent for dark and\nmysterious diplomacy, and she loved to contemplate her most transparent\ndevices as marvels of low cunning.",
+        "question": "Which choice best describes how Aunt Polly is presented in the text?",
+        "options": [
+          "The narrator gently makes fun of Aunt Polly\u2019s mistaken confidence in her subtlety.",
+          "The narrator humorously exaggerates Aunt Polly's view of herself as an intellectual.",
+          "The narrator characterizes Aunt Polly as being excessively nosy about other people's\nprivate lives.",
+          "The narrator emphasizes that Aunt Polly's intentions are good even when she behaves\nimpolitely."
+        ],
+        "answer": 0,
+        "type": "Reading and Writing"
+      },
+      {
+        "num": 9,
+        "passage": "",
+        "question": "Which statement about the use of hydrogen in the petroleum and heating industries is most\nstrongly supported by the text?\nFrom petroleum refining to fuel for residential heating, hydrogen has many applications.\nCurrently, producing hydrogen is carbon intensive, but Alexandra M. Oliveira is one of many\nscholars investigating the feasibility of large-scale production of hydrogen through\nelectrolysis, a process that emits no carbon when renewable energy is used. Oliveira\nsuggests that although some obstacles may prevent electrolytic hydrogen from dominating\nenergy systems, there is utility in its ability to decarbonize the petroleum and heating\nindustries, where reducing carbon emissions is especially challenging.",
+        "options": [
+          "The adoption of electrolytic hydrogen by these industries has been impeded by concerns\nabout how carbon intensive its production is.",
+          "Development of applications for electrolytic hydrogen is less advanced in these industries\nthan it is in most other carbon-intensive industries.",
+          "At least some of electrolytic hydrogen\u2019s potential to lessen these industries\u2019 carbon\nemissions is as yet unrealized.",
+          "The fact that large-scale electrolytic hydrogen production is not yet available has limited\nthese industries\u2019 interest in pursuing hydrogen-based applications."
+        ],
+        "answer": 2,
+        "type": "Reading and Writing"
+      },
+      {
+        "num": 10,
+        "passage": "In subtropical Asia, <i>Apis dorsata</i> (giant honeybee) plays an essential role in pollinating a wide\nvariety of crops and wild plants. To study how different agricultural land covers affect the\nspecies, Rika Raffiudin and colleagues monitored the foraging activity of the bees as well as\nthe pollen content of the honey from <i>A. dorsata</i> colonies at two sites in Indonesia: Kampar,\ncharacterized by its surrounding monoculture farms (growing a single crop), and Kerinci, a\nforest-agriculture site where multiple crops, including hot peppers and coffee, are grown\nnearby. The researchers concluded that a lack of crop variety may reduce total pollen\ncollection by <i>A. dorsata</i>.",
+        "question": "Which finding, if true, would most directly support the researchers\u2019 conclusion?",
+        "options": [
+          "Significantly fewer bees were observed engaging in foraging activities with the crops\nsurrounding Kerinci than with the crops surrounding Kampar.",
+          "Honey samples from Kerinci bee colonies contained significantly higher concentrations of\npollen than honey samples from Kampar bee colonies did.",
+          "Pollen in honey samples from Kampar bee colonies was predominantly sourced from a\nsingle plant species, whereas pollen in honey samples from Kerinci bee colonies was\nsourced from multiple different plant species.",
+          "In one Kerinci bee colony, a greater proportion of bees returned to their nests with pollen\nthan returned without pollen, whereas the inverse was observed in a second Kerinci bee\ncolony."
+        ],
+        "answer": 1,
+        "type": "Reading and Writing"
+      },
+      {
+        "num": 11,
+        "passage": "In 2009, the US state of Montana enacted rate stability regulations (RSRs), constraining\ninsurance companies\u2019 latitude to raise premiums (the recurring fees policyholders pay to\nmaintain insurance policies) once policies are in effect. Although RSRs are intended to\nbenefit consumers, Naoki Aizawa and Ami Ko note that RSRs could curtail insurers\u2019 profits to\nsuch a degree that insurers abandon the market, thereby reducing the competitive pressure\nthat typically restrains premium prices for newly issued policies. To determine whether this\noccurred in Montana, students first collect data on the number of insurers in the state for a\nfew years leading up to and following 2009 and the premium prices for new policies offered\nby those insurers.",
+        "question": "Based on the text, what would be the most reasonable next step for the students to take to\naccomplish their goal?",
+        "options": [
+          "Compare changes over time in the premium price data the students have collected with\nchanges over time in premium prices for policies that were already in effect during the same\nperiod in an otherwise similar state that had not enacted RSRs",
+          "Compare changes over time within each of the two types of data the students have\ncollected with changes over time in analogous data for the same period from an otherwise\nsimilar state that had not enacted RSRs",
+          "Compare changes over time within each of the two types of data the students have\ncollected with changes over time in the same types of data from Montana for a period\nbeginning several years after 2009",
+          "Compare changes over time in the insurer-number data the students have collected with\nchanges over time in insurer-number data from another state that enacted RSRs but not\nduring the same period"
+        ],
+        "answer": 1,
+        "type": "Reading and Writing"
+      },
+      {
+        "num": 12,
+        "passage": "Variously, researchers have closely examined obsidian artifacts to understand ancient social\nand economic structures, as in Raymond V. Sidrys\u2019s 1976 study, or to glean aspects of\ncultural identity, as in Dennis Ogburn and colleagues\u2019 2009 study. Studies of the Malia\narchaeological site on the Mediterranean island of Crete have shown that significant\nchanges to building styles\u2014changes consistent with an influx of people from another culture\nelsewhere in the Mediterranean\u2014occurred from the Middle Bronze Age to the Late Bronze\nAge. In a 2022 study, however, Tristan Carter and Vassilis Kilikoglou found that obsidian-\nobject production methods at Malia stayed remarkably consistent during this architectural\ntransition, which they interpret as indicative of local cultural continuity in the Middle and Late\nBronze Ages.",
+        "question": "Which finding, if true, would most directly weaken Carter and Kilikoglou\u2019s argument?",
+        "options": [
+          "The obsidian used to produce objects at Malia was transported to Crete from the same\nsource elsewhere in the Mediterranean throughout the Middle and Late Bronze Ages.",
+          "The methods used to produce obsidian objects at Malia during the Middle and Late\nBronze Ages were also used by some other Mediterranean cultures in the period.",
+          "The obsidian-object production method that was most common among other\nMediterranean cultures during the Middle and Late Bronze Ages was more efficient than the\nmethod used at Malia.",
+          "Changes to buildings like those that occurred at Malia have not been linked to changes in\nobsidian-object production methods in other Mediterranean cultures during the Middle and\nLate Bronze Ages."
+        ],
+        "answer": 1,
+        "type": "Reading and Writing"
+      },
+      {
+        "num": 13,
+        "passage": "The presence of other individuals of the same species has been observed to mitigate stress\nin highly social mammals. To investigate whether this phenomenon, known as social\nbuffering, also occurs in reptiles, researchers led by Chelsea E. Martin monitored stress\nresponses in wild southern Pacific rattlesnakes (<i>Crotalus helleri</i>) in three experimental\ntreatments: when alone, with a rope, and with a companion <i>C. helleri</i>. The researchers\ncompared the percent change between baseline and peak heart rate in response to a\n(harmless) disturbance, with higher values indicating higher stress levels.",
+        "question": "Which finding, if true, would most directly support the idea that social buffering occurs\namong <i>C. helleri</i>?",
+        "options": [
+          "Average peak heart rates were highest among solitary <i>C. helleri</i>, but no differences were\nobserved in average peak heart rates between <i>C. helleri</i> with a companion and <i>C. helleri</i> with\na rope.",
+          "C. helleri with a companion displayed a lower average baseline heart rate and lower\naverage peak heart rate than did solitary C. helleri or C. helleri with a rope.",
+          "The average percent change in heart rate was lower among C. helleri with a companion\nthan among solitary C. helleri and C. helleri with a rope.",
+          "Solitary C. helleri had higher average baseline heart rates than did C. helleri in the other\ntreatments, but the average percent change in heart rate was smaller among solitary C.\nhelleri than among C. helleri with a companion."
+        ],
+        "answer": 2,
+        "type": "Reading and Writing"
+      },
+      {
+        "num": 14,
+        "passage": "__TABLE__\nHighest Major Summits in India\n\nSummit | Elevation (meters) | Mountain range | Prominence (meters)\n--- | --- | --- | ---\nKangto | 7,060 | Assam Himalaya | 2,195\nSaser Kangri III | 7,495 | Saser Karakoram | 850\nLangpo | 6,965 | Sikkim Himalaya | 560\nSri Kailash | 6,932 | Garhwal Himalaya | 1,092\nMount Lakshmi | 6,983 | Rimo Karakoram | 800\n__ENDTABLE__\n\nMountain summits are often described in terms of their elevation, or height above sea level.\nBut a summit's elevation may not be as good an indication of how high the mountain appears\nto observers as is the summit's prominence, or its height above its surroundings, and these\nvalues can differ significantly. For example, the Indian mountain of ______",
+        "question": "Which choice most effectively uses data from the table to complete the example?",
+        "options": [
+          "Saser Kangri III has an elevation of 7,495 meters but a considerably lower prominence of\n850 meters.",
+          "Kangto has a much higher prominence than does Langpo.",
+          "Kangto has a high prominence but is from a different mountain range than Mount\nLakshmi, which has a lower prominence.",
+          "Sri Kailash has an elevation of 6,932 meters and is considered the highest mountain from\nthe Garhwal Himalaya range."
+        ],
+        "answer": 0,
+        "type": "Reading and Writing"
+      },
+      {
+        "num": 15,
+        "passage": "Whereas Joan Lockard's 1984 study of captive gorillas reported more right-handedness\nthan left-handedness, Jane Goodall's 1963 study of wild chimpanzees did not. According to\na meta-analysis of studies of nonhuman primates, captive populations are more likely to be\ndescribed as right-handed than wild populations are. Statistical analysis indicates a\nhandedness study would need a minimum of 176 individuals to show a representative result;\nhowever, the study by Lockard included a total population of 8, and the study by Goodall\nincluded a total population of 8. This suggests that ______",
+        "question": "Which choice most logically completes the text?",
+        "options": [
+          "neither the study by Lockard nor the study by Goodall provides sufficient evidence to\nmake a meaningful comparison about handedness in primates.",
+          "the study by Lockard reliably represents handedness in captive primates, but the study by\nGoodall likely does not reliably represent handedness in wild primates.",
+          "Goodall likely underestimated the prevalence of right-handedness among the wild\nchimpanzees in the study.",
+          "the study by Lockard reliably represents handedness in captive primates but not in wild\nprimates."
+        ],
+        "answer": 0,
+        "type": "Reading and Writing"
+      },
+      {
+        "num": 16,
+        "passage": "Interested in how the color of dogs\u2019 irises affects human responses to dogs, Akitsugu Konno\net al. showed images of 12 dogs\u2019 faces to human participants and asked them to rate the\ndogs\u2019 kindness and trustworthiness as well as the likelihood that they would interact with or\nkeep the dogs. The researchers had previously adjusted the images so that each dog was\npresented in two versions, one with light irises and one with dark irises. They distributed the\nimages such that no participant saw both the light and dark versions of the same dog. Konno\net al. found that participants responded more positively to the latter. The study\u2019s design\nallowed the researchers to exclude the possibility that the results ______",
+        "question": "Which choice most logically completes the text?",
+        "options": [
+          "may have been different if participants had been able to see the dogs\u2019 irises in person\ninstead of only seeing images that included the dogs' irises.",
+          "reflected a preference on the part of participants for facial features that happened to\ncoincide with dark irises in the dogs depicted in the images.",
+          "were a function of participants emphasizing the colors of the dogs' irises over the dogs\u2019\nkindness and trustworthiness when reacting to the images.",
+          "could be explained by participants having preexisting positive feelings about dogs with\ndark irises or preexisting negative feelings about dogs with light irises."
+        ],
+        "answer": 1,
+        "type": "Reading and Writing"
+      },
+      {
+        "num": 17,
+        "passage": "Growing as large as three meters in diameter, the leaves of the giant Amazonian waterlily\nfeature a complex network of radiating veins that provide structural ______ in thickness from\nthe center to the edges, these veins allow the leaves to maintain their large size and\nbuoyancy with minimal material, optimizing light capture and photosynthesis.",
+        "question": "Which choice completes the text so that it conforms to the conventions of Standard English?",
+        "options": [
+          "support. Decreasing",
+          "support, decreasing",
+          "support, while decreasing",
+          "support decreasing"
+        ],
+        "answer": 0,
+        "type": "Reading and Writing"
+      },
+      {
+        "num": 18,
+        "passage": "Charles Dickens's classic 1850 novel about a young man named David Copperfield has a title\nthat is instantly recognizable to many readers: <i>David Copperfield</i>. Dickens's novel originally\nhad a different while writing and editing, Dickens had planned to call the novel <i>Mag\u2019s\nDiversions</i>.",
+        "question": "Which choice completes the text so that it conforms to the conventions of Standard English?",
+        "options": [
+          "title, though;",
+          "title, though,",
+          "title; though",
+          "title, though"
+        ],
+        "answer": 0,
+        "type": "Reading and Writing"
+      },
+      {
+        "num": 19,
+        "passage": "On <i>Guard</i> is a 1997 photograph by Iranian artist Shirin Neshat. Like many of Neshat's photos,\nthe work features a pair of hands. Clasping a microphone, one hand ______ covered in\nPersian script, the hands imply an out-of-frame figure on the edge of speaking.",
+        "question": "Which choice completes the text so that it conforms to the conventions of Standard English?",
+        "options": [
+          "is bare and the other is",
+          "bare, the other is",
+          "bare and the other",
+          "is bare, the other"
+        ],
+        "answer": 2,
+        "type": "Reading and Writing"
+      },
+      {
+        "num": 20,
+        "passage": "The exoplanet Pi Mensae d was discovered using an indirect approach to planetary\ndetection, the radial velocity method. Compared to that of the direct imaging method,\n______ the effect these exoplanets have on nearby stars.",
+        "question": "Which choice completes the text so that it conforms to the conventions of Standard English?",
+        "options": [
+          "the detection of distant exoplanets, too dim to be observed in the radial velocity method's\nvast zone of discovery, is based on",
+          "the radial velocity method's zone of discovery is vast, as distant exoplanets too dim to be\nobserved are detected by",
+          "the radial velocity method, with its vast zone of discovery, detects exoplanets that are too\ndim to be observed by",
+          "distant exoplanets too dim to be observed are detected within the radial velocity method\u2019s\nvast zone of discovery through"
+        ],
+        "answer": 1,
+        "type": "Reading and Writing"
+      },
+      {
+        "num": 21,
+        "passage": "In the eastern Chinese city of Suzhou, known as a hub for silk manufacturing, a unique\ntradition of embroidery ______ back over two thousand years\u2014one that includes iconic\ndouble-sided stitching with different images on each side\u2014remains popular with modern\naudiences, preserving the city\u2019s cultural heritage.",
+        "question": "Which choice completes the text so that it conforms to the conventions of Standard English?",
+        "options": [
+          "dates",
+          "date",
+          "has dated",
+          "dating"
+        ],
+        "answer": 3,
+        "type": "Reading and Writing"
+      },
+      {
+        "num": 22,
+        "passage": "Giant dust plumes from the Sahara Desert that blow across the Atlantic Ocean can have\ncomplex and opposing effects on tropical cyclones. On one hand, the dust can enhance the\nformation of ice clouds in the cyclone\u2019s core, increasing precipitation. ______ the dust can\nlower sea surface temperatures around the cyclone's core, weakening the storm.",
+        "question": "Which choice completes the text with the most logical transition?",
+        "options": [
+          "In other words,",
+          "For example,",
+          "On the other hand,",
+          "Previously,"
+        ],
+        "answer": 2,
+        "type": "Reading and Writing"
+      },
+      {
+        "num": 23,
+        "passage": "In 1908, some 298 years after Galileo Galilei and Simon Marius independently discovered\nJupiter's four largest moons (lo, Europa, Ganymede, and Callisto), scientists discovered the moon Pasiphae in orbit around Jupiter. ______ researchers have discovered eighty moons orbiting Jupiter.",
+        "question": "Which choice completes the text with the most logical transition?",
+        "options": [
+          "To date,",
+          "In other words,",
+          "For example,",
+          "Rather,"
+        ],
+        "answer": 0,
+        "type": "Reading and Writing"
+      },
+      {
+        "num": 24,
+        "passage": "When ordering the branches of the Colville River system, cartographers tend to begin with\nthe riverway\u2019s lowest point, the Colville River. ______ hydrologists begin at the top of the\nriver system, with the Siksikpuk River and other tributaries fed by the riverway\u2019s source,\nAlaska\u2019s De Long Mountains.",
+        "question": "Which choice completes the text with the most logical transition?",
+        "options": [
+          "In a similar way,",
+          "For example,",
+          "By contrast,",
+          "In other words,"
+        ],
+        "answer": 2,
+        "type": "Reading and Writing"
+      },
+      {
+        "num": 25,
+        "passage": "The Sultanate of Brunei, a Malay sea power based on the northern coast of Borneo that\nreached its height around 1600 CE, is considered a thalassocracy\u2014a geopolitical entity\nwhose hegemony resulted from control of the sea rather than of land. Historians classify\nthalassocracies as distinct from tellurocracies, or land-based powers. ______the Ottoman\nEmpire (1300s-\u20141900s CE) is known for both land and sea supremacy.",
+        "question": "Which choice completes the text with the most logical transition?",
+        "options": [
+          "For example, tellurocracies have long overpowered their rivals:",
+          "Likewise, thalassocracies are sea-based powers:",
+          "In other words, empires are classified according to their source of power:",
+          "Of course, the distinction is not always so neat:"
+        ],
+        "answer": 3,
+        "type": "Reading and Writing"
+      },
+      {
+        "num": 26,
+        "passage": "While researching a topic, a student has taken the following notes:\n\ne The farm-size transition hypothesis predicts that economic pressures associated with\nmodernization result in smaller farms amalgamating into larger-scale commercial\nfarms.\n\ne Masters et al. (2013): The average farm size in Asia \u201calready has or will soon begin to\nrise.\u201d\n\n\u00a2 Promkhambut et al. (2023) argue that small rice farms in Thailand have adopted\nmodern farming methods without a significant scaling-up of farm size.\n\n\u00a2 Promkhambut et al.: \u201cThe persistence of [small] rice farms [in Thailand] does not\nrepresent a \u2018failure\u2019 to modernize...or a \u2018truncated\u2019 transition\u2014it is a response to\nmodernization.\u201d",
+        "question": "The student wants to make and support a claim regarding the applicability of the farm-size\ntransition hypothesis to Thailand. Which choice most effectively uses relevant information\nfrom the notes to accomplish this goal?",
+        "options": [
+          "Taken together, the studies by Masters et al. and Promkhambut et al. suggest that rice\nfarms in Thailand have responded to the economic pressures associated with modernization\nby expanding in size.",
+          "The predicted shift to large-scale commercial farming may not hold true for rice farms in\nThailand, where, according to Proomkhambut et al., rice farms have remained small as they\u2019ve\nmodernized.",
+          "Masters et al. report that the average farm size \u201calready has or will soon begin to rise\u201d in\nAsia, a finding that is consistent with the farm-size transition hypothesis.",
+          "Although the farm-size transition hypothesis may be applicable to some countries in Asia,\nit is inconsistent with the development of rice farming in Thailand."
+        ],
+        "answer": 3,
+        "type": "Reading and Writing"
+      },
+      {
+        "num": 27,
+        "passage": "While researching a topic, a student has taken the following notes:\n\n\u00a2 Melissa Cody is a Din\u00e9 (Navajo) textile artist known for blending traditional\nDin\u00e9 designs (stripes, zigzags, and diamond patterns) with nontraditional elements.\n\n\u00a2 Cody's work incorporates arrangements of shapes or text inspired by video game\ngraphics and pop culture references.\n\n\u00a2 Cody: \u201cI'ma child of \u201880s video game culture...| grew up with this world of pixelization.\u201d\n\n\u00a2 Cody: \u201cThe things we consider tradition now weren't considered tradition when they\nfirst came about.\u201d\n\ne Her tapestry <i>Only Love Can Break Your Heart</i> features pop song lyrics in a blocky\ndigital font over a jagged diamond pattern.\n\n\u00a2 Her tapestry <i>Walking Off No Water Mesa</i> features rectangular panes revealing a\nstylized landscape patterned by contrasting colored diamonds.",
+        "question": "The student wants to connect a quotation to a particular nontraditional design element in\nCody's work. Which choice most effectively uses relevant information from the notes to\naccomplish this goal?",
+        "options": [
+          "Cody's tapestry <i>Only Love Can Break Your Heart</i> features a jagged diamond pattern, a\ntraditional design element that \u201cwe consider tradition now.\u201d",
+          "The pop song lyrics in a blocky digital font in <i>Only Love Can Break Your Heart</i> reflect\nCody's childhood familiarity with blocky video game graphics\u2014what she calls \u201cthis world of\npixelization.\u201d",
+          "According to Cody, some elements of Walking Off No Water Mesa, such as contrasting\ncolored diamonds, \u201cweren't considered tradition when they first came about.\u201d",
+          "Cody's background as \u201ca child of \u201880s video game culture\u201d factored into her decision to\nblend traditional and nontraditional design elements in Walking Off No Water Mesa."
+        ],
+        "answer": 1,
+        "type": "Reading and Writing"
+      }
+    ]
+  }
+]

@@ -208,7 +208,7 @@ const allEnglishQuestions: Question[] = (ebrwData as RawBankQuestion[])
 
 const allMathQuestions: Question[] = [
     ...(mathData as RawBankQuestion[]).filter(isValidMathQuestion),
-    ...(proceduralMathQuestions as RawBankQuestion[])
+    ...proceduralMathQuestions,
 ].map((q) => ({
     id: q.id,
     type: q.type || 'Math',
@@ -856,11 +856,17 @@ function QuizView({
 
     useEffect(() => {
         if (isPaused) return;
+        let lastTick = Date.now();
         const interval = setInterval(() => {
-            setQuestionTimes(prev => ({
-                ...prev,
-                [idx]: (prev[idx] || 0) + 1
-            }));
+            const now = Date.now();
+            const elapsed = Math.floor((now - lastTick) / 1000);
+            if (elapsed >= 1) {
+                lastTick += elapsed * 1000;
+                setQuestionTimes(prev => ({
+                    ...prev,
+                    [idx]: (prev[idx] || 0) + elapsed
+                }));
+            }
         }, 1000);
         return () => clearInterval(interval);
     }, [isPaused, idx]);
@@ -896,6 +902,8 @@ function QuizView({
     }, [isDragging]);
 
     const q = questions[idx];
+    const globalIdx = allQuestionBankQuestions.findIndex(x => x.id === q?.id);
+    const displayNum = globalIdx >= 0 ? globalIdx + 1 : idx + 1;
     const isMathQuestion = q?.type === 'Math';
     const isChecked = !!resolvedQuestions[idx];
     const wrongAttemptsForCurrent = incorrectAttempts[idx] || [];
@@ -1052,7 +1060,7 @@ function QuizView({
                 <div className="flex flex-1 items-center">
                     <button
                         onClick={onBack}
-                        className="ml-2 inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-bold text-slate-700 transition hover:border-slate-300 hover:bg-slate-50"
+                        className="ml-2 inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-bold text-slate-700 transition hover:border-slate-300 hover:bg-slate-50 font-['Verdana',_sans-serif]"
                     >
                         <ArrowLeft className="h-4 w-4" />
                         Go Back
@@ -1060,9 +1068,17 @@ function QuizView({
                 </div>
 
                 {/* Center: Stopwatch Timer */}
-                <div className="flex flex-col items-center justify-center flex-1 absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 w-[260px]">
+                <div className="flex flex-col items-center justify-center flex-1 w-[260px]">
                     {!isTimerHidden ? (
-                        <div className="timer-digits font-bold text-[20px] tracking-wider text-slate-800 flex items-center justify-center gap-2 bg-slate-100/80 backdrop-blur-sm px-5 py-1.5 rounded-full border border-slate-200 shadow-inner">
+                        <div 
+                            className="font-bold text-[17px] tracking-wide text-slate-800 flex items-center justify-center gap-2 bg-slate-100/80 backdrop-blur-sm px-5 py-1.5 rounded-full border border-slate-200 shadow-inner cursor-pointer"
+                            onClick={(e) => {
+                                if (e.detail === 3) {
+                                    setQuestionTimes(prev => ({ ...prev, [idx]: 0 }));
+                                }
+                            }}
+                            title="Triple-click to reset timer"
+                        >
                             {formatTime(questionTimes[idx] || 0)}
                         </div>
                     ) : (
@@ -1103,7 +1119,7 @@ function QuizView({
                                 className={`flex flex-col items-center justify-center gap-1.5 w-[80px] h-[64px] rounded-lg transition-colors border border-transparent ${isReferenceOpen ? 'bg-slate-200 text-slate-900 shadow-inner' : 'hover:bg-black/5 text-slate-700'}`}
                             >
                                 <FileText className="w-[24px] h-[24px]" />
-                                <span className="font-bold text-[12px] leading-none text-slate-500">Reference</span>
+                                <span className="font-bold text-[12px] leading-none">Reference</span>
                             </button>
                         </>
                     )}
@@ -1332,33 +1348,33 @@ function QuizView({
                         {/* Math Question + Answers (centered, moves right when Desmos opens) */}
                         <div
                             ref={rightPanelRef}
-                            className={`overflow-y-auto bg-white flex justify-center ${!isDragging ? 'transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]' : ''}`}
+                            className={`overflow-y-auto bg-white flex justify-center p-4 lg:p-10 pl-4 lg:pl-8 ${!isDragging ? 'transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]' : ''}`}
                             style={{ width: isDesmosOpen ? `${100 - leftPanelWidth}%` : '100%' }}
                         >
-                            <div className="p-6 lg:p-10 w-full max-w-[800px] pb-10">
+                            <div className="w-full max-w-[800px] mx-auto flex flex-col pb-10">
 
                                 {/* Header: Connected Question Number & Mark for Review & ABC */}
-                                <div className="flex items-center mb-6 mt-4 w-full bg-white border border-[#E5E7EB] rounded-[12px] shadow-sm h-[54px]">
-                                    {/* Number */}
-                                    <div className="bg-[#111827] text-white font-bold text-[16px] w-[64px] h-[54px] flex flex-shrink-0 items-center justify-center rounded-l-[11px]">
+                                <div className="flex items-center w-full h-[54px] mb-4 mt-2">
+                                    {/* Number - standalone rounded square */}
+                                    <div className="bg-[#111827] text-white font-bold text-[16px] w-[54px] h-[54px] rounded-[10px] flex-shrink-0 flex items-center justify-center relative z-10 shadow-sm">
                                         {idx + 1}
                                     </div>
 
                                     {/* Mark for Review (Middle) */}
                                     <button
                                         onClick={() => handleToggleReview(idx)}
-                                        className="flex flex-1 items-center gap-2 px-4 h-full text-[#4B5563] text-[15px] transition-colors justify-start bg-transparent group/mfr hover:bg-slate-50"
+                                        className="flex flex-1 items-center gap-2 px-6 h-[54px] text-[#4B5563] transition-colors justify-start bg-white border-t border-b border-[#D1D5DB] group/mfr hover:bg-slate-50 relative z-0 -mx-[12px]"
                                     >
-                                        <Bookmark className={`w-[16px] h-[16px] transition-colors ${flaggedQuestions[idx] ? 'fill-slate-600 text-slate-600' : 'text-slate-400 group-hover/mfr:text-slate-600'}`} />
-                                        <span className={flaggedQuestions[idx] ? 'font-bold' : 'font-medium group-hover/mfr:font-bold'}>Mark for Review</span>
+                                        <Bookmark className={`w-[14px] h-[14px] transition-colors ${flaggedQuestions[idx] ? 'fill-slate-600 text-slate-600' : 'text-slate-400 group-hover/mfr:text-slate-600'}`} />
+                                        <span className={flaggedQuestions[idx] ? 'font-bold text-[14px]' : 'font-medium text-[14px] group-hover/mfr:font-bold'}>Mark for Review</span>
                                     </button>
 
                                     {/* ABC Elimination (Right) */}
-                                    <div className="w-[64px] h-[54px] flex flex-shrink-0 items-center justify-center border-l border-[#E5E7EB] rounded-r-[11px] bg-transparent">
+                                    <div className="w-[54px] h-[54px] flex-shrink-0 flex items-center justify-center rounded-[10px] border border-[#D1D5DB] bg-white relative z-10 shadow-sm">
                                         {isMultipleChoiceQuestion(q) && (
                                         <button
                                             onClick={() => setIsEliminationMode(!isEliminationMode)}
-                                            className={`flex items-center justify-center w-full h-full font-bold text-[14px] transition-colors rounded-r-[11px] ${isEliminationMode ? 'bg-[#111827] text-white' : 'text-slate-700 hover:bg-slate-50'}`}
+                                            className={`flex items-center justify-center w-full h-full font-bold text-[14px] transition-colors rounded-[10px] ${isEliminationMode ? 'bg-[#111827] text-white' : 'text-slate-700 hover:bg-slate-50'}`}
                                         >
                                             <span className="line-through decoration-[#ef4444] decoration-[2px]">ABC</span>
                                         </button>
@@ -1369,17 +1385,17 @@ function QuizView({
                                 {q.image && (
                                     <div className="mb-5 rounded-xl overflow-hidden border border-slate-100 flex justify-center bg-slate-50 p-4" style={{ animation: 'qb-slideUp 0.2s ease both' }}>
                                         {/* eslint-disable-next-line @next/next/no-img-element */}
-                                        <img src={q.image} alt="Question image" className="max-w-full h-auto max-h-[200px] object-contain rounded-lg shadow-sm cursor-pointer hover:opacity-90 transition-opacity" onClick={() => setExpandedImage(q.image || null)} />
+                                        <img src={q.image} alt="Question image" className="max-w-full h-auto max-h-[400px] object-contain rounded-lg shadow-sm cursor-pointer hover:opacity-90 transition-opacity" onClick={() => setExpandedImage(q.image || null)} />
                                     </div>
                                 )}
 
                                 {/* Question text */}
                                 {showQuestionCard && (
-                                    <div className="bg-white rounded-xl border border-slate-100 p-5 mb-5 shadow-sm" style={{ animation: 'qb-slideUp 0.3s ease both' }}>
-                                        <div className="text-[16px] text-slate-900 font-semibold leading-relaxed">
+                                    <div className="mb-3" style={{ animation: 'qb-slideUp 0.3s ease both' }}>
+                                        <div className="text-[16px] text-[#111827] leading-[1.7]">
                                             <HighlightableText
                                                 text={q.question || ''}
-                                                className="text-[16px] leading-8 text-slate-900"
+                                                className="text-[16px] leading-[1.7] text-[#111827]"
                                                 highlights={highlights[`q-${idx}`] || []}
                                                 onAddHighlight={(h) => setHighlights(p => ({ ...p, [`q-${idx}`]: [...(p[`q-${idx}`] || []), { ...h, id: Math.random().toString(36).substr(2, 9) }] }))}
                                                 onRemoveHighlight={(id) => setHighlights(p => ({ ...p, [`q-${idx}`]: (p[`q-${idx}`] || []).filter(x => x.id !== id) }))}
@@ -1392,7 +1408,7 @@ function QuizView({
 
                                 {/* Answer options or numeric input */}
                                 {isMultipleChoiceQuestion(q) ? (
-                                <div className="space-y-4 w-full relative pl-[2px] pt-[2px] mb-6">
+                                <div className="space-y-2 w-full relative pl-[2px] pt-[2px] mb-6">
                                     {q.options.map((opt, i) => {
                                         const isSelected = sel === i;
                                         const isEliminated = currentEliminations.includes(i);
@@ -1401,9 +1417,9 @@ function QuizView({
                                         const isCorrectSelection = isChecked && i === q.answer;
                                         const optionText = cleanOptionText(opt);
 
-                                        let boxClass = `relative w-full border h-auto min-h-[64px] rounded-[12px] flex items-stretch transition-all duration-200 overflow-hidden ${(isChecked || isTriedWrong) ? 'cursor-default pointer-events-none' : 'cursor-pointer'} select-text group`;
-                                        let circleWrapperClass = 'w-[60px] flex-shrink-0 flex items-center justify-center bg-transparent';
-                                        let circleClass = 'w-[34px] h-[34px] rounded-full flex items-center justify-center font-bold text-[15px] border-[1.5px] transition-all';
+                                        let boxClass = `relative w-full border h-auto min-h-[56px] rounded-[10px] flex items-stretch transition-all duration-200 overflow-hidden ${(isChecked || isTriedWrong) ? 'cursor-default pointer-events-none' : 'cursor-pointer'} select-text group`;
+                                        let circleWrapperClass = 'w-[52px] flex-shrink-0 flex items-center justify-center bg-transparent';
+                                        let circleClass = 'w-[30px] h-[30px] rounded-full flex items-center justify-center font-bold text-[14px] border-[1.5px] transition-all';
                                         const textTone = isEliminated ? 'text-slate-400' : 'text-[#111827]';
 
                                         if (isCorrectSelection) {
@@ -1443,7 +1459,7 @@ function QuizView({
                                                     <div className={`relative z-10 flex-1 ${textTone} p-4 flex items-center bg-transparent`}>
                                                         <HighlightableText
                                                             text={optionText || `Option ${letter}`}
-                                                            className="text-[17px] leading-[1.7] text-inherit"
+                                                            className="text-[15px] leading-[1.6] text-inherit"
                                                             highlights={highlights[`opt-${idx}-${i}`] || []}
                                                             onAddHighlight={(h) => setHighlights(p => ({ ...p, [`opt-${idx}-${i}`]: [...(p[`opt-${idx}-${i}`] || []), { ...h, id: Math.random().toString(36).substr(2, 9) }] }))}
                                                             onRemoveHighlight={(id) => setHighlights(p => ({ ...p, [`opt-${idx}-${i}`]: (p[`opt-${idx}-${i}`] || []).filter(x => x.id !== id) }))}
@@ -1495,7 +1511,7 @@ function QuizView({
                                                 }
                                             }}
                                             disabled={isChecked}
-                                            className={`w-full h-[48px] rounded-[6px] border bg-white px-4 text-[18px] font-bold shadow-sm outline-none transition disabled:cursor-not-allowed text-left ${
+                                            className={`w-full h-[48px] rounded-[6px] border bg-white px-4 text-[17px] font-bold shadow-sm outline-none transition disabled:cursor-not-allowed text-left ${
                                                 isChecked 
                                                     ? 'border-emerald-500 ring-2 ring-emerald-100 disabled:bg-emerald-50 text-emerald-900' 
                                                     : (wrongAttemptsForCurrent.includes(cleanNumericInput(currentNumericResponse)) && cleanNumericInput(currentNumericResponse).length > 0)
@@ -1514,12 +1530,11 @@ function QuizView({
                     <>
                         {/* Left Panel — Passage */}
                         <div className="overflow-y-auto bg-white" style={{ width: `${leftPanelWidth}%` }}>
-                            <div className="p-8 max-w-[800px] mx-auto">
+                            <div className="p-4 lg:p-10 pr-4 lg:pr-8 max-w-[800px] w-full mx-auto">
                                 {q.passage ? (
-                                    <div className="rounded-[20px] border border-slate-100 bg-white px-6 py-7 shadow-[0_8px_25px_rgba(15,23,42,0.04)]" style={{ animation: 'qb-slideUp 0.4s ease both' }}>
+                                    <div className="py-2" style={{ animation: 'qb-slideUp 0.4s ease both' }}>
                                         <PassageRenderer
                                             text={q.passage}
-                                            className="text-[16px] leading-[1.9] text-[#111827] dark:text-slate-200"
                                             highlights={highlights[`p-${idx}`] || []}
                                             onAddHighlight={(h) => setHighlights(p => ({ ...p, [`p-${idx}`]: [...(p[`p-${idx}`] || []), { ...h, id: Math.random().toString(36).substr(2, 9) }] }))}
                                             onRemoveHighlight={(id) => setHighlights(p => ({ ...p, [`p-${idx}`]: (p[`p-${idx}`] || []).filter(x => x.id !== id) }))}
@@ -1538,7 +1553,7 @@ function QuizView({
                                                 />
                                             </div>
                                         ) : (
-                                            <img src={q.image} alt="Question image" className="max-w-full h-auto w-full max-h-[200px] rounded-lg object-contain cursor-pointer hover:opacity-90 transition-opacity" onClick={() => setExpandedImage(q.image || null)} />
+                                            <img src={q.image} alt="Question image" className="max-w-full h-auto w-full max-h-[400px] rounded-lg object-contain cursor-pointer hover:opacity-90 transition-opacity" onClick={() => setExpandedImage(q.image || null)} />
                                         )}
                                     </div>
                                 ) : (
@@ -1558,31 +1573,31 @@ function QuizView({
                         </div>
 
                         {/* Right Panel — Question + Answers */}
-                        <div ref={rightPanelRef} className="overflow-y-auto bg-white" style={{ width: `${100 - leftPanelWidth}%` }}>
-                            <div className="p-6 lg:p-10 max-w-[800px] mx-auto pb-10">
+                        <div ref={rightPanelRef} className="overflow-y-auto p-4 lg:p-10 pl-4 lg:pl-8 bg-white" style={{ width: `${100 - leftPanelWidth}%` }}>
+                            <div className="w-full max-w-[800px] mx-auto flex flex-col pb-10">
 
                                 {/* Header: Connected Question Number & Mark for Review & ABC */}
-                                <div className="flex items-center mb-6 mt-4 w-full bg-white border border-[#E5E7EB] rounded-[12px] shadow-sm h-[54px]">
-                                    {/* Number */}
-                                    <div className="bg-[#111827] text-white font-bold text-[16px] w-[64px] h-[54px] flex flex-shrink-0 items-center justify-center rounded-l-[11px]">
+                                <div className="flex items-center w-full h-[54px] mb-4 mt-2">
+                                    {/* Number - standalone rounded square */}
+                                    <div className="bg-[#111827] text-white font-bold text-[16px] w-[54px] h-[54px] rounded-[10px] flex-shrink-0 flex items-center justify-center relative z-10 shadow-sm">
                                         {idx + 1}
                                     </div>
 
                                     {/* Mark for Review (Middle) */}
                                     <button
                                         onClick={() => handleToggleReview(idx)}
-                                        className="flex flex-1 items-center gap-2 px-4 h-full text-[#4B5563] text-[15px] transition-colors justify-start bg-transparent group/mfr hover:bg-slate-50"
+                                        className="flex flex-1 items-center gap-2 px-6 h-[54px] text-[#4B5563] transition-colors justify-start bg-white border-t border-b border-[#D1D5DB] group/mfr hover:bg-slate-50 relative z-0 -mx-[12px]"
                                     >
-                                        <Bookmark className={`w-[16px] h-[16px] transition-colors ${flaggedQuestions[idx] ? 'fill-slate-600 text-slate-600' : 'text-slate-400 group-hover/mfr:text-slate-600'}`} />
-                                        <span className={flaggedQuestions[idx] ? 'font-bold' : 'font-medium group-hover/mfr:font-bold'}>Mark for Review</span>
+                                        <Bookmark className={`w-[14px] h-[14px] transition-colors ${flaggedQuestions[idx] ? 'fill-slate-600 text-slate-600' : 'text-slate-400 group-hover/mfr:text-slate-600'}`} />
+                                        <span className={flaggedQuestions[idx] ? 'font-bold text-[14px]' : 'font-medium text-[14px] group-hover/mfr:font-bold'}>Mark for Review</span>
                                     </button>
 
                                     {/* ABC Elimination (Right) */}
-                                    <div className="w-[64px] h-[54px] flex flex-shrink-0 items-center justify-center border-l border-[#E5E7EB] rounded-r-[11px] bg-transparent">
+                                    <div className="w-[54px] h-[54px] flex-shrink-0 flex items-center justify-center rounded-[10px] border border-[#D1D5DB] bg-white relative z-10 shadow-sm">
                                         {isMultipleChoiceQuestion(q) && (
                                         <button
                                             onClick={() => setIsEliminationMode(!isEliminationMode)}
-                                            className={`flex items-center justify-center w-full h-full font-bold text-[14px] transition-colors rounded-r-[11px] ${isEliminationMode ? 'bg-[#111827] text-white' : 'text-slate-700 hover:bg-slate-50'}`}
+                                            className={`flex items-center justify-center w-full h-full font-bold text-[14px] transition-colors rounded-[10px] ${isEliminationMode ? 'bg-[#111827] text-white' : 'text-slate-700 hover:bg-slate-50'}`}
                                         >
                                             <span className="line-through decoration-[#ef4444] decoration-[2px]">ABC</span>
                                         </button>
@@ -1601,17 +1616,16 @@ function QuizView({
                                                 />
                                             </div>
                                         ) : (
-                                            <img src={q.image} alt="Question image" className="max-w-full h-auto max-h-[200px] object-contain rounded-lg shadow-sm cursor-pointer hover:opacity-90 transition-opacity" onClick={() => setExpandedImage(q.image || null)} />
+                                            <img src={q.image} alt="Question image" className="max-w-full h-auto max-h-[400px] object-contain rounded-lg shadow-sm cursor-pointer hover:opacity-90 transition-opacity" onClick={() => setExpandedImage(q.image || null)} />
                                         )}
                                     </div>
                                 )}
 
                                 {showQuestionCard && (
-                                    <div className="bg-white rounded-xl border border-slate-100 p-5 mb-5 shadow-sm" style={{ animation: 'qb-slideUp 0.3s ease both' }}>
-                                        <div className="text-[18px] text-slate-900 leading-relaxed">
+                                    <div className="mb-3" style={{ animation: 'qb-slideUp 0.3s ease both' }}>
+                                        <div className="text-[16px] text-[#111827] leading-[1.7]">
                                             <HighlightableText
                                                 text={q.question || ''}
-                                                className="text-[18px] leading-[1.8] text-slate-900"
                                                 highlights={highlights[`q-${idx}`] || []}
                                                 onAddHighlight={(h) => setHighlights(p => ({ ...p, [`q-${idx}`]: [...(p[`q-${idx}`] || []), { ...h, id: Math.random().toString(36).substr(2, 9) }] }))}
                                                 onRemoveHighlight={(id) => setHighlights(p => ({ ...p, [`q-${idx}`]: (p[`q-${idx}`] || []).filter(x => x.id !== id) }))}
@@ -1623,7 +1637,7 @@ function QuizView({
                                 )}
 
                                 {isMultipleChoiceQuestion(q) ? (
-                                <div className="space-y-4 w-full relative pl-[2px] pt-[2px] mb-6">
+                                <div className="space-y-2 w-full relative pl-[2px] pt-[2px] mb-6">
                                     {q.options.map((opt, i) => {
                                         const isSelected = sel === i;
                                         const isEliminated = currentEliminations.includes(i);
@@ -1632,9 +1646,9 @@ function QuizView({
                                         const isCorrectSelection = isChecked && i === q.answer;
                                         const optionText = cleanOptionText(opt);
 
-                                        let boxClass = `relative w-full border h-auto min-h-[64px] rounded-[12px] flex items-stretch transition-all duration-200 overflow-hidden ${(isChecked || isTriedWrong) ? 'cursor-default pointer-events-none' : 'cursor-pointer'} select-text group`;
-                                        let circleWrapperClass = 'w-[60px] flex-shrink-0 flex items-center justify-center bg-transparent';
-                                        let circleClass = 'w-[34px] h-[34px] rounded-full flex items-center justify-center font-bold text-[15px] border-[1.5px] transition-all';
+                                        let boxClass = `relative w-full border h-auto min-h-[56px] rounded-[10px] flex items-stretch transition-all duration-200 overflow-hidden ${(isChecked || isTriedWrong) ? 'cursor-default pointer-events-none' : 'cursor-pointer'} select-text group`;
+                                        let circleWrapperClass = 'w-[52px] flex-shrink-0 flex items-center justify-center bg-transparent';
+                                        let circleClass = 'w-[30px] h-[30px] rounded-full flex items-center justify-center font-bold text-[14px] border-[1.5px] transition-all';
                                         const textTone = isEliminated ? 'text-slate-400' : 'text-[#111827]';
 
                                         if (isCorrectSelection) {
@@ -1674,7 +1688,7 @@ function QuizView({
                                                     <div className={`relative z-10 flex-1 ${textTone} p-4 flex items-center bg-transparent`}>
                                                         <HighlightableText
                                                             text={optionText || `Option ${letter}`}
-                                                            className="text-[17px] leading-[1.7] text-inherit"
+                                                            className="text-[15px] leading-[1.6] text-inherit"
                                                             highlights={highlights[`opt-${idx}-${i}`] || []}
                                                             onAddHighlight={(h) => setHighlights(p => ({ ...p, [`opt-${idx}-${i}`]: [...(p[`opt-${idx}-${i}`] || []), { ...h, id: Math.random().toString(36).substr(2, 9) }] }))}
                                                             onRemoveHighlight={(id) => setHighlights(p => ({ ...p, [`opt-${idx}-${i}`]: (p[`opt-${idx}-${i}`] || []).filter(x => x.id !== id) }))}
@@ -1726,7 +1740,7 @@ function QuizView({
                                                 }
                                             }}
                                             disabled={isChecked}
-                                            className={`w-full h-[48px] rounded-[6px] border bg-white px-4 text-[18px] font-bold shadow-sm outline-none transition disabled:cursor-not-allowed text-left ${
+                                            className={`w-full h-[48px] rounded-[6px] border bg-white px-4 text-[17px] font-bold shadow-sm outline-none transition disabled:cursor-not-allowed text-left ${
                                                 isChecked 
                                                     ? 'border-emerald-500 ring-2 ring-emerald-100 disabled:bg-emerald-50 text-emerald-900' 
                                                     : (wrongAttemptsForCurrent.includes(cleanNumericInput(currentNumericResponse)) && cleanNumericInput(currentNumericResponse).length > 0)

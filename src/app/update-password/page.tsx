@@ -1,5 +1,6 @@
 import { updatePassword } from '../login/actions'
 import { ArrowRight, Lock } from 'lucide-react'
+import { SubmitButton } from '../login/SubmitButton'
 
 export default async function UpdatePasswordPage({
   searchParams,
@@ -42,7 +43,7 @@ export default async function UpdatePasswordPage({
               </div>
             )}
 
-            <form className="space-y-4">
+            <form action={updatePassword} className="space-y-4">
               <div className="space-y-1.5">
                 <label className="text-sm font-medium text-slate-300 ml-1">New Password</label>
                 <div className="relative">
@@ -70,12 +71,7 @@ export default async function UpdatePasswordPage({
               </div>
 
               <div className="pt-2">
-                <button 
-                  formAction={updatePassword}
-                  className="w-full bg-indigo-500 hover:bg-indigo-600 text-white font-medium rounded-xl px-4 py-3 shadow-lg shadow-indigo-500/25 transition-all flex items-center justify-center gap-2 group"
-                >
-                  Update Password <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </button>
+                <SubmitButton text="Update Password" />
               </div>
             </form>
           </div>

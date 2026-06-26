@@ -1,0 +1,135 @@
+import re
+import json
+
+def parse_module(text, start_marker, end_marker=None):
+    start = text.find(start_marker)
+    if start == -1: return []
+    end = text.find(end_marker, start) if end_marker else len(text)
+    section_text = text[start:end]
+    
+    questions = []
+    
+    # We can split on "Answer:" to get each chunk since every question ends with Answer: [A-D] or a number
+    parts = section_text.split('\nAnswer:')
+    
+    for i in range(len(parts) - 1):
+        q_chunk = parts[i].strip()
+        ans_chunk = parts[i+1].split('\n')[0].strip()
+        
+        q_chunk = q_chunk.strip()
+        q_num = i + 1
+        
+        opt_matches = list(re.finditer(r'\n([A-D])\.\s+', '\n' + q_chunk))
+        
+        options = []
+        passage = ""
+        question = ""
+        
+        # Remove any leading digits + dot like "2."
+        q_chunk = re.sub(r'^\s*\d+\.\s*\n*', '', q_chunk).strip()
+        
+        # remove headers
+        if 'hard (27 questions)' in q_chunk:
+             q_chunk = q_chunk.split('hard (27 questions)')[-1].strip()
+        if 'hard (22' in q_chunk:
+             q_chunk = q_chunk.split('questions)')[-1].strip()
+             
+        if len(opt_matches) == 4:
+            # We have options A, B, C, D
+            opts_start = opt_matches[0].start() - 1
+            main_text = q_chunk[:opts_start].strip()
+            
+            for j in range(4):
+                start_idx = opt_matches[j].end() - 1
+                end_idx = opt_matches[j+1].start() - 1 if j < 3 else len(q_chunk)
+                options.append(q_chunk[start_idx:end_idx].strip())
+        else:
+            main_text = q_chunk
+            
+        # For Reading/Writing vs Math
+        # Math questions often don't have a separate passage, just a question.
+        if "Math" in start_marker:
+            question = main_text
+            passage = ""
+        else:
+            lines = main_text.split('\n\n')
+            if len(lines) > 1:
+                question = lines[-1].strip()
+                passage = '\n\n'.join(lines[:-1]).strip()
+            else:
+                passage = main_text
+                question = ""
+            
+        # Formatting answers
+        ans_idx = -1
+        if ans_chunk in ['A', 'B', 'C', 'D']:
+            ans_idx = ord(ans_chunk) - 65
+            
+        q_obj = {
+            "num": q_num,
+            "passage": passage,
+            "question": question,
+            "options": options,
+            "answer": ans_idx if ans_idx != -1 else ans_chunk
+        }
+        questions.append(q_obj)
+        
+    return questions
+
+with open("test2_questions.txt", "r") as f:
+    text = f.read()
+    
+eng_m2 = parse_module(text, "Section 1, Module 2: Reading and Writing, Difficulty:\n\nhard", "Section 2, Module 1: Math")
+math_m2 = parse_module(text, "Section: Section 2, Module 2: Math, Difficulty: hard (22")
+
+def format_ts_questions(questions, mod_type, start_id):
+    lines = []
+    lines.append("[\n")
+    for i, q in enumerate(questions):
+        q_type = "Reading and Writing" if mod_type == "reading" else ("Math (Multiple Choice)" if len(q['options']) > 0 else "Math (SPR)")
+        lines.append("    {\n")
+        lines.append(f'        "id": "pt2-{mod_type}-m2-q{q["num"]}",\n')
+        lines.append(f'        "num": {q["num"]},\n')
+        lines.append(f'        "type": "{q_type}",\n')
+        if q['passage']:
+            lines.append(f'        "passage": {json.dumps(q["passage"])},\n')
+        if q['question']:
+            lines.append(f'        "question": {json.dumps(q["question"])},\n')
+        if 'options' in q and len(q['options']) > 0:
+            lines.append(f'        "options": {json.dumps(q["options"], indent=12).replace("]","        ]")},\n')
+        else:
+            lines.append(f'        "options": [],\n')
+        
+        ans = q['answer']
+        if isinstance(ans, int):
+            lines.append(f'        "answer": {ans},\n')
+        else:
+            lines.append(f'        "answer": "{ans}",\n')
+            
+        lines.append(f'        "difficulty": "Hard"\n')
+        lines.append("    }" + ("," if i < len(questions) - 1 else "") + "\n")
+    lines.append("];\n")
+    return "".join(lines)
+
+eng_ts = "const pt2_englishModule2: Question[] = " + format_ts_questions(eng_m2, "reading", 1)
+math_ts = "const pt2_mathModule2: Question[] = " + format_ts_questions(math_m2, "math", 1)
+
+# Now inject these into questions.ts
+with open('src/data/questions.ts', 'r') as f:
+    content = f.read()
+
+# Replace english module 2
+eng_start = content.find("const pt2_englishModule2: Question[] = [")
+# Find the next declaration to bound the end
+eng_end = content.find("const pt2_mathModule1: Question[] = [")
+content = content[:eng_start] + eng_ts + "\n" + content[eng_end:]
+
+# Replace math module 2
+math_start = content.find("const pt2_mathModule2: Question[] = [")
+math_end = len(content)
+content = content[:math_start] + math_ts
+
+with open('src/data/questions.ts', 'w') as f:
+    f.write(content)
+    
+print(f"Injected {len(eng_m2)} English M2 and {len(math_m2)} Math M2 questions.")

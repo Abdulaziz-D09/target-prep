@@ -185,7 +185,7 @@ export function HighlightableText({
     }, [contentKey, highlights]);
 
     return (
-        <div className={`relative break-words whitespace-pre-wrap font-sans text-base leading-relaxed text-[#374151] [text-wrap:pretty] ${className ?? ''}`}>
+        <div className={`relative break-words whitespace-normal [text-wrap:pretty] ${className ?? ''}`}>
             {/* The Text Container */}
             <div ref={containerRef} className={`${isHighlightModeActive ? 'selection:bg-slate-200 selection:text-black cursor-text' : ''}`}>
                 <div key={contentKey}>

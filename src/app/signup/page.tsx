@@ -2,7 +2,7 @@
 
 import { useState, use } from 'react'
 import { signup } from '../login/actions'
-import { ArrowRight, GraduationCap, Briefcase } from 'lucide-react'
+import { ArrowRight, GraduationCap, Briefcase, Loader2 } from 'lucide-react'
 import Link from 'next/link'
 
 export default function SignupPage({
@@ -39,10 +39,13 @@ export default function SignupPage({
   return (
     <div className="min-h-screen w-full flex bg-[#121826] text-white overflow-hidden relative selection:bg-indigo-500/30">
       
-      {/* Background Atmosphere */}
-      <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] bg-indigo-600/20 blur-[120px] rounded-full mix-blend-screen" />
-        <div className="absolute bottom-[-20%] right-[-10%] w-[50%] h-[50%] bg-purple-600/20 blur-[120px] rounded-full mix-blend-screen" />
+      {/* Vibrant Background Atmosphere */}
+      <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden bg-gradient-to-br from-[#0f172a] via-[#1e1b4b] to-[#312e81]">
+        <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] bg-rose-500/40 blur-[140px] rounded-full mix-blend-screen" />
+        <div className="absolute bottom-[-20%] right-[-10%] w-[60%] h-[60%] bg-teal-400/30 blur-[140px] rounded-full mix-blend-screen" />
+        <div className="absolute top-[30%] left-[40%] w-[40%] h-[40%] bg-amber-500/20 blur-[150px] rounded-full mix-blend-screen" />
+        <div className="absolute bottom-[10%] left-[10%] w-[40%] h-[40%] bg-indigo-500/40 blur-[120px] rounded-full mix-blend-screen" />
+        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay"></div>
       </div>
 
       <div className="relative z-10 w-full min-h-screen grid lg:grid-cols-2 p-4 md:p-8">
@@ -66,9 +69,10 @@ export default function SignupPage({
 
         {/* Right Side: Auth Form */}
         <div className="flex flex-col justify-center w-full max-w-[480px] mx-auto lg:mr-auto lg:ml-12 my-8 lg:my-0">
-          <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-6 shadow-2xl relative overflow-hidden">
+          <div className="bg-white/10 backdrop-blur-2xl border border-white/20 rounded-[2rem] p-8 shadow-[0_0_40px_rgba(79,70,229,0.15)] relative overflow-hidden">
             {/* Top Shine */}
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-px bg-gradient-to-r from-transparent via-indigo-500/50 to-transparent" />
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-4/5 h-[2px] bg-gradient-to-r from-transparent via-rose-400/50 to-transparent" />
+            <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full blur-2xl" />
             
             <div className="md:hidden flex items-center justify-center gap-4 mb-6">
               <div className="h-14 w-14 flex items-center justify-center rounded-2xl overflow-hidden shadow-lg shadow-indigo-500/20">
@@ -211,10 +215,16 @@ export default function SignupPage({
                 <button 
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full bg-indigo-500 hover:bg-indigo-600 text-white font-medium rounded-xl px-4 py-3 shadow-lg shadow-indigo-500/25 transition-all flex items-center justify-center gap-2 group disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full bg-gradient-to-r from-indigo-500 via-purple-500 to-rose-500 hover:from-indigo-600 hover:via-purple-600 hover:to-rose-600 text-white font-bold rounded-xl px-4 py-3.5 shadow-[0_0_20px_rgba(168,85,247,0.4)] hover:shadow-[0_0_30px_rgba(168,85,247,0.6)] transition-all flex items-center justify-center gap-2 group hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {isSubmitting ? 'Creating Account...' : `Create ${accountType === 'student' ? 'Student' : 'Teacher'} Account`} 
-                  {!isSubmitting && <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />}
+                  {isSubmitting ? (
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                  ) : (
+                    <>
+                      {`Create ${accountType === 'student' ? 'Student' : 'Teacher'} Account`} 
+                      <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                    </>
+                  )}
                 </button>
               </div>
             </form>

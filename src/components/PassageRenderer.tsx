@@ -97,8 +97,12 @@ export function cleanOCR(text: string): string {
     out = out.replace(reg, fixed);
   }
 
-  // 3. Collapse runs of 2+ spaces into one
+  // 3. Collapse runs of 2+ spaces into one (but preserve newlines)
   out = out.replace(/ {2,}/g, ' ');
+
+  // 4. Ensure __TABLE__ and __ENDTABLE__ markers are on their own lines for proper rendering later
+  out = out.replace(/\s*__TABLE__\s*/g, '\n__TABLE__\n');
+  out = out.replace(/\s*__ENDTABLE__\s*/g, '\n__ENDTABLE__\n');
 
   return out;
 }
@@ -469,40 +473,32 @@ function PremiumTable({seg}:{seg:Extract<Seg,{kind:'table'}>}){
   const{title,header,rows}=seg;
   if(!header.length&&!rows.length)return null;
   return(
-    <div className="my-6 rounded-2xl overflow-hidden border border-slate-200/80 shadow-2xl bg-white">
+    <div style={{display: 'block', margin: '16px 0', overflow: 'hidden'}}>
       {title&&(
-        <div style={HDR} className="px-5 py-3.5">
-          <span className="text-[13px] font-bold text-white tracking-wide">{title}</span>
-        </div>
+        <div className="mb-2 text-[13px] font-semibold text-slate-700">{title}</div>
       )}
-      <div>
-        <table className="w-full text-[13.5px] border-collapse">
-          <thead>
-            <tr className="bg-gradient-to-r from-slate-100 to-slate-50">
-              {header.map((c,i)=>(
-                <th key={i} className="px-4 py-3 text-left font-bold text-slate-600 border-b-2 border-slate-200 text-[11.5px] tracking-widest uppercase">{c}</th>
+      <table style={{fontSize: '15px', borderCollapse: 'collapse', border: '2px solid #888'}}>
+        <thead>
+          <tr>
+            {header.map((c,i)=>(
+              <th key={i} style={{border: '1px solid #888', padding: '8px 24px', textAlign: 'center', fontWeight: 600, background: '#fff', fontStyle: 'italic'}}>
+                {c}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((row,ri)=>(
+            <tr key={ri}>
+              {row.map((cell,ci)=>(
+                <td key={ci} style={{border: '1px solid #888', padding: '8px 24px', textAlign: 'center', background: '#fff', color: '#111'}}>
+                  {cell}
+                </td>
               ))}
             </tr>
-          </thead>
-          <tbody>
-            {rows.map((row,ri)=>(
-              <tr key={ri} className={`transition-colors duration-75 ${ri%2===0?'bg-white':'bg-slate-50/70'} hover:bg-indigo-50/40`}>
-                {row.map((cell,ci)=>{
-                  const nd=cell.toLowerCase().includes('not detected');
-                  return(
-                    <td key={ci} className={`px-4 py-2.5 border-b border-slate-100 ${
-                      ci===0?'font-semibold text-slate-800'
-                      :nd?'text-slate-400 italic text-[12px]'
-                      :'text-slate-600 tabular-nums'}`}>
-                      {cell}
-                    </td>
-                  );
-                })}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 }
@@ -582,11 +578,11 @@ function TextBlock({
         }
 
         // Detect bullet lists starting with '• ' (after cleanOCR normalization)
-        const isBulletList = para.startsWith('• ') || para.includes('\n• ');
+        const isBulletList = para.match(/^[•\-]\s/m);
         if (isBulletList) {
           const lines = para.split('\n');
           // Find the index of the first bullet
-          const firstBulletIdx = lines.findIndex(l => l.trim().startsWith('•'));
+          const firstBulletIdx = lines.findIndex(l => l.trim().match(/^[•\-]\s/));
           const introLines = firstBulletIdx > 0 ? lines.slice(0, firstBulletIdx) : [];
           const bulletLines = lines.slice(firstBulletIdx);
 
@@ -626,7 +622,7 @@ function TextBlock({
             const lineStart = para.indexOf(line, lineOffset);
             const absoluteLineOff = paraOff + lineStart;
             
-            const bulletPrefixMatch = line.match(/^•\s*/);
+            const bulletPrefixMatch = line.match(/^[•\-]\s*/);
             const prefixLength = bulletPrefixMatch ? bulletPrefixMatch[0].length : 0;
             const bulletText = line.slice(prefixLength);
             const textAbsoluteOff = absoluteLineOff + prefixLength;
@@ -655,7 +651,7 @@ function TextBlock({
           return (
             <div key={pi} className="space-y-3">
               {renderedIntro}
-              <ul className="space-y-2 pl-1">
+              <ul className="space-y-1 pl-1">
                 {renderedBullets}
               </ul>
             </div>
@@ -729,7 +725,7 @@ function TextBlock({
           return (
             <div key={pi} className="space-y-3">
               {renderedIntro}
-              <ul className="space-y-2 pl-1">
+              <ul className="space-y-1 pl-1">
                 {renderedBullets}
               </ul>
             </div>

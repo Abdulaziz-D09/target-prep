@@ -15,6 +15,7 @@ export default function SidebarWrapper() {
     pathname.startsWith('/forgot-password') || 
     pathname.startsWith('/verify-code') ||
     pathname.startsWith('/verify-reset-code') ||
+    pathname.startsWith('/update-password') ||
     pathname.startsWith('/practice/test') ||
     pathname.startsWith('/practice/topic') ||
     pathname.startsWith('/lobby')

@@ -1,6 +1,7 @@
 import { resetPassword } from '../login/actions'
 import { ArrowRight, ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
+import { SubmitButton } from '../login/SubmitButton'
 
 export default async function ForgotPasswordPage({
   searchParams,
@@ -52,7 +53,7 @@ export default async function ForgotPasswordPage({
               </div>
             )}
 
-            <form className="space-y-4">
+            <form action={resetPassword} className="space-y-4">
               <div className="space-y-1.5">
                 <label className="text-sm font-medium text-slate-300 ml-1">Email Address</label>
                 <div className="relative">
@@ -67,12 +68,7 @@ export default async function ForgotPasswordPage({
               </div>
 
               <div className="pt-2">
-                <button 
-                  formAction={resetPassword}
-                  className="w-full bg-indigo-500 hover:bg-indigo-600 text-white font-medium rounded-xl px-4 py-3 shadow-lg shadow-indigo-500/25 transition-all flex items-center justify-center gap-2 group"
-                >
-                  Send Reset Link <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </button>
+                <SubmitButton text="Send Reset Link" />
               </div>
             </form>
           </div>

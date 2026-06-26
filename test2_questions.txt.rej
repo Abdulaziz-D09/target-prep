@@ -1,0 +1,380 @@
+@@ -207,32 +189,25 @@
+ 
+ Which choice most effectively uses data from the table to complete the statement?
+ 
++__TABLE__
+ Home Console and Computer Games of the 1980s
+ 
+-Approximate number of
+-
+-Title units sold worldwide Genre Developer
+-; Nintendo
+-Super Mario Brothers 2 7,460,000 platformer EAD
+-Nintendo
+-Ice Hockey 2,420,000 sports
+-R&D2
+-Where in the World Is .
+-. 4,000,000 education Broderbund
+-Carmen Sandiego?
+-; Nintendo
+-Tetris 43,000,000 puzzle
+-R&D1
++Title | Approximate units sold worldwide | Genre | Developer
++--- | --- | --- | ---
++Super Mario Brothers 2 | 7,460,000 | platformer | Nintendo EAD
++Ice Hockey | 2,420,000 | sports | Nintendo R&D2
++Where in the World Is Carmen Sandiego? | 4,000,000 | education | Broderbund
++Tetris | 43,000,000 | puzzle | Nintendo R&D1
++__ENDTABLE__
+ 
+ A student is writing a paper on the global rise of the home video game industry during the
+ 1980s. The student is researching the relative popularity of various genres of console and
+ computer games. Looking at the information in the table, the student finds that the games in
+-the genres of
++the genres of ______
+ 
+ A. puzzle and sports sold nearly the same number of units.
+ B. platformer and education sold nearly the same number of units.
+ C. puzzle and platformer outsold the games in the other genres.
+-
+ D. platformer and sports outsold the games in the other genres.
+ 
+ Answer: C
+@@ -240,74 +215,53 @@
+ 11.
+ Which choice most effectively uses data from the graph to complete the statement?
+ 
+-Mean Adhesion Strength of
+-Graphite and Acrylamide Gel,
+-at Varying Voltages
+-
+-we 45
+-& 40
+-35
+-® 30
+-® 25
+-% 20
+-c 15
+-$ 10
+-£ 5
+-<0 5 1 2 3
+-Voltage (V)
+-
+-—A— graphite—AAm pair
++__IMAGE__ Mean Adhesion Strength of Graphite and Acrylamide Gel, at Varying Voltages
++![Mean Adhesion Strength of Graphite and Acrylamide Gel, at Varying Voltages](/graphs/q11-adhesion-graph.png)
++__ENDIMAGE__
+ 
+ Wenhao Xu and colleagues demonstrated that applying a low direct current electrical field to
+ graphite (a conductor) and an acrylamide (AAm) gel can increase how strongly materials
+ adhere to each other. At some voltages, adhesion strength—as measured in kilopascals
+ (kPa) of stress needed to pull the materials apart—was high (more than 30 kPa). But the
+ mere application of a direct current electrical field with positive voltage is not sufficient to
+-cause increased adhesion, as evidenced by the fact that
++cause increased adhesion, as evidenced by the fact that ______
+ 
+-A. at 0 V, mean adhesion strength was equal to O kPa.
++A. at 0 V, mean adhesion strength was equal to 0 kPa.
+ 
+-B. at 3 V, mean adhesion strength reached its highest observed level at approximately 30
+-kPa.
++B. at 3 V, mean adhesion strength reached its highest observed level at approximately 40 kPa.
+ 
+ C. at 2 V, mean adhesion strength was lower than it was at both 1 V and 3 V.
+ 
+-D. at 1 V, mean adhesion strength was approximately equal to adhesion strength at O V.
++D. at 1 V, mean adhesion strength was approximately equal to adhesion strength at 0 V.
+ 
+ Answer: D
+ 
+ 12.
+ 
+ Which choice most effectively uses data from the table to complete the text?
+-Effect of Various Soil Treatments on Mean Pineapple Fruit Weight and Size
+ 
+-Weight Length Diameter
+-
+-Soil treatment (grams) (centimeters) (centimeters)
+-Control 825.9 6.14 13.63
+-Biochar 915.7 6.56 13.63
+-Compost 864.8 6.15 13.22
+-Biochar and
+-
+-979.3 6.76 13.68
+-
+-compost
+-Biochar and NPK
++__TABLE__
++Effect of Various Soil Treatments on Mean Pineapple Fruit Weight and Size
+ 
+-a 1032.1 6.78 13.96
+-fertilizer
++Soil treatment | Weight (grams) | Length (centimeters) | Diameter (centimeters)
++--- | --- | --- | ---
++Control | 825.9 | 6.14 | 13.63
++Biochar | 915.7 | 6.56 | 13.63
++Compost | 864.8 | 6.15 | 13.22
++Biochar and compost | 979.3 | 6.76 | 13.68
++Biochar and NPK fertilizer | 1032.1 | 6.78 | 13.96
++__ENDTABLE__
+ 
+ Working in Ghana, Emmanuel Hanyabui and colleagues compared the impact on pineapple
+ growth of different combinations of soil additives, including NPK fertilizer (an inorganic
+ fertilizer containing nitrogen, phosphorus, and potassium), organic compost, and biochar (a
+ carbon-rich material produced from organic waste matter). Based on data in the table,
+ pineapple farmers with no access to inorganic soil additives would likely increase the weight
+-and size of their fruits by the greatest amount by using
++and size of their fruits by the greatest amount by using ______
+ 
+ A. compost alone.
+ B. biochar alone.
+ C. biochar and compost.
+-
+ D. biochar and NPK fertilizer.
+ 
+ Answer: C
+@@ -1514,18 +1460,17 @@
+ 200 squirrels in the area in the year 2003, and that at the end of each 4-year period for the
+ next 20 years, the number of squirrels in the area was 120% more than the number at the
+ end of the previous 4-year period. Which of the following equations represents this model,
+-where N is the estimated number of squirrels in this area t years after 2003, and
++where $N$ is the estimated number of squirrels in this area $t$ years after 2003, and
+ 
+-0<t< 20?
++$0 \le t \le 20$?
+ 
+-A. N = 200(2.20)*
+-At
++A. $N = 200(2.20)^{4t}$
+ 
+-B. N = 200(1.20)
++B. $N = 200(1.20)^{4t}$
+ 
+-C. N = 200(1.20)#
++C. $N = 200(1.20)^{\frac{t}{4}}$
+ 
+-b. N = 200(2.20)#
++D. $N = 200(2.20)^{\frac{t}{4}}$
+ 
+ Answer: D
+ 
+@@ -1534,102 +1479,95 @@
+ 
+ NotA . iguH\not dHiwn to scalA
+ 
+-In the figure shown, line k intersects lines r and s. If w = 141, which additional piece of
++In the figure shown, line $k$ intersects lines $r$ and $s$. If $w = 141$, which additional piece of
++information is sufficient to prove that lines $r$ and $s$ are parallel?
+ 
+-information is sufficient to prove that lines 7 and s are parallel?
++A. $x = 39$
+ 
+-A.
++B. $y = 141$
+ 
+-x = 39
+-B.
++C. $w + y = 180$
+ 
+-y= 141
+-w+y = 180
++D. $y + z = 180$
+ 
+-D.
+-y+z=180
+ Answer: B
+ 
+ 2.
+ 
+-A line passes through the points (4, 7) and (18, 28) in the xy-plane. What is the slope of the
++A line passes through the points $(4, 7)$ and $(18, 28)$ in the $xy$-plane. What is the slope of the
+ line?
+ 
+ Answer: 3/2
+ 
+ 3.
+ 
+-The length of a rectangle's diagonal is 1/106, and the length of one of the rectangle's sides
+-is 9. What is the perimeter of the rectangle?
++The length of a rectangle's diagonal is $\sqrt{106}$, and the length of one of the rectangle's sides
++is $9$. What is the perimeter of the rectangle?
+ 
+ A.
+ 106
++
+ B.
+ 45
++
+ C.
+ 28
+-D.
+ 
++D.
+ 14
+ 
+ Answer: C
+ 
+-(5a + 6)(8a — 5) =0
++$(5x + 6)(8x - 5) = 0$
+ Which of the following is a solution to the given equation?
+ 
+-8
+-A. —=
+-is)
+-|
+-oa
++A. $-\frac{8}{5}$
++
++B. $-\frac{6}{5}$
++
++C. $-\frac{5}{6}$
+ 
+-c. —3
++D. $-\frac{5}{8}$
+ 
+-5
+-D. se
+ Answer: B
++
+ 5.
+ 
+-The graph of 92 + y = 16 in the xy-plane is a line. What is the slope of the line?
++The graph of $9x + y = 16$ in the $xy$-plane is a line. What is the slope of the line?
+ 
+ Answer: -9
+ 
+-x? + y* = 3,185
+-y— 8x =0
++$x^2 + y^2 = 3,185$
++$y - 8x = 0$
+ 
+-A solution to the given system of equations is (a, y), where x < 0. What is the value of y?
++A solution to the given system of equations is $(x, y)$, where $x < 0$. What is the value of $y$?
+ 
+-A. —392
++A. $-392$
+ 
+-B. —56
++B. $-56$
+ 
+-Cc. —8
++C. $-8$
+ 
+-D. —7
++D. $-7$
+ 
+ Answer: B
+ 
+ 7.
+ 
+-The function f is defined by f(z) = 244, and f(a) = —15, where ais a constant. What is
+-
+-the value of a?
+-
+-A. —86
+-B. —64
++The function $f$ is defined by $f(x) = \frac{x+11}{5}$, and $f(a) = -15$, where $a$ is a constant. What is
++the value of $a$?
+ 
+-64
+-c, —
+-
+-4
+-D. —=
++A. $-86$
++B. $-64$
++C. $-\frac{64}{5}$
++D. $-\frac{4}{5}$
+ Answer: A
+ 
+ 8.
+ 
+-The equation y = —4.9(a — 8.9) + 12,400 gives the estimated height above ground, y, in
+-meters, of a plane, where «x is the number of seconds since it started a parabolic maneuver.
+-If this equation is graphed in the xy-plane, which of the following is the best interpretation of
++The equation $y = -4.9(x - 8.9)^2 + 12,400$ gives the estimated height above ground, $y$, in
++meters, of a plane, where $x$ is the number of seconds since it started a parabolic maneuver.
++If this equation is graphed in the $xy$-plane, which of the following is the best interpretation of
+ the vertex of the graph?
+ 
+ A.
+@@ -1748,59 +1681,53 @@
+ 
+ The triangle inequality theorem states that the sum of any two sides of a triangle must be
+ greater than the length of the third side. If a triangle has side lengths of 10 and 11, which
+-inequality represents the possible lengths, x, of the third side of the triangle?
++inequality represents the possible lengths, $x$, of the third side of the triangle?
+ 
+-A. xz < 21
+-B. xz > 21
+-C.1l<a2< 21
++A. $x < 21$
++B. $x > 21$
++C. $1 < x < 21$
++D. $x < 1$ or $x > 21$
+ 
+-D.2<lorz> 21
+ Answer: C
+ 
+ 17.
+ 
+-An area of 58.00 square nautical miles is equivalent to k square kilometers. To the nearest
+-tenth, what is the value of k? (1 nautical mile = 1.852 kilometers)
++An area of $58.00$ square nautical miles is equivalent to $k$ square kilometers. To the nearest
++tenth, what is the value of $k$? (**1 nautical mile = 1.852 kilometers**)
+ 
+ Answer: 198.9
+ 
+ 18.
+ 
+-A line in the xy-plane passes through the points (9, 1), (0, 8), and (c, 0). What is the value
+-of c?
++A line in the $xy$-plane passes through the points $(9, 1)$, $(0, 8)$, and $(c, 0)$. What is the value
++of $c$?
+ 
+ Answer: 72/7
+ 
+ 19.
+ 
+-zy y _ Al
+-7 +9 = $3
++$\frac{x}{7} + \frac{y}{9} = \frac{41}{63}$
+ 
+ An engineer connects resistors in series, where the resistors in the series have a total
+-resistance of ae ohms. In this series, there are x resistors of type A, which each have a
+-resistance of a ohms, and y resistors of type B, which each have a resistance of b ohms. The
++resistance of $41/63$ ohms. In this series, there are $x$ resistors of type A, which each have a
++resistance of $a$ ohms, and $y$ resistors of type B, which each have a resistance of $b$ ohms. The
+ given equation represents this situation. According to this equation, what is the positive
+-difference between the value of a and the value of b?
+-
+-A. 41
+-
+-B. 2
+-41
++difference between the value of $a$ and the value of $b$?
+ 
+-C. 63
+-
+-2
+-D. %
++A. $41$
++B. $2$
++C. $\frac{41}{63}$
++D. $\frac{2}{63}$
+ 
+ Answer: D
+ 
+ 20.
+ 
+-The table gives the areas and perimeters of two similar rectangles, where n is a constant.
++The table gives the areas and perimeters of two similar rectangles, where $n$ is a constant.
+ Area (square inches) || Perimeter (inches)
+-Rectangle B 2,640 n
++Rectangle B 2,640 $n$
+ 
+-What is the value of n?
++What is the value of $n$?
+ 
+ i
+ i

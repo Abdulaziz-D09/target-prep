@@ -4,7 +4,7 @@
       {
         "num": 1,
         "type": "Reading",
-        "question": "Which choice completes the text with the most logical and precise word or phrase?",
+        "question": "Which choice completes the text with the most logical and precise word or phrase?\n\nA study by Augusta D. Gaspar and Joana Carneiro Pinto found that a bank's corporate social\nresponsibility (CSR) efforts, including environmental and social campaigns, improve its\ncorporate image. When CSR was mentioned in bank marketing strategies, favorability scores\nassigned by study participants tended to the scores assigned by participants when\nCSR wasn't mentioned.",
         "options": [
           "identify",
           "disturb",
@@ -13,13 +13,12 @@
         ],
         "answer": 3,
         "difficulty": "Medium",
-        "id": "pt1-m1-q1",
-        "passage": "A study by Augusta D. Gaspar and Joana Carneiro Pinto found that a bank's corporate social\nresponsibility (CSR) efforts, including environmental and social campaigns, improve its\ncorporate image. When CSR was mentioned in bank marketing strategies, favorability scores\nassigned by study participants tended to the scores assigned by participants when\nCSR wasn't mentioned."
+        "id": "pt1-m1-q1"
       },
       {
         "num": 2,
         "type": "Reading",
-        "question": "Which choice completes the text with the most logical and precise word or phrase?",
+        "question": "Which choice completes the text with the most logical and precise word or phrase?\n\nResearchers have long debated the origins of silver used in European coins from the 600s\nthrough the early 800s CE. Geochemical analysis by Kershaw et al. of 49 coins dating to\n660-820 CE provides concrete evidence that reconciles two competing theories: early coins\nwere made from Byzantine silver, and later coins used Frankish silver, findings that provide\n\nfirm details in a previously area of study.",
         "options": [
           "esoteric",
           "authoritative",
@@ -28,13 +27,12 @@
         ],
         "answer": 3,
         "difficulty": "Medium",
-        "id": "pt1-m1-q2",
-        "passage": "Researchers have long debated the origins of silver used in European coins from the 600s\nthrough the early 800s CE. Geochemical analysis by Kershaw et al. of 49 coins dating to\n660-820 CE provides concrete evidence that reconciles two competing theories: early coins\nwere made from Byzantine silver, and later coins used Frankish silver, findings that provide\n\nfirm details in a previously area of study."
+        "id": "pt1-m1-q2"
       },
       {
         "num": 3,
         "type": "Reading",
-        "question": "As used in the text, what does the word \u201cmastery\u201d most nearly mean?",
+        "question": "As used in the text, what does the word \u201cmastery\u201d most nearly mean?\n\nThe following text is adapted from Alice Dunbar Nelson's 1899 short story \u201cThe Fisherman of\nPass Christian.\u201d Pass Christian is a city in the US state of Mississippi.\n\nThe swift breezes on the beach at Pass Christian meet and conflict as though\neach strove for the mastery of the air. The land-breeze blows down through the\n\npines, resinous, fragrant, cold, bringing breath-like memories of dim, dark woods\nshaded by myriad pine-needles. The breeze from the Gulf is warm and soft and\nlanguorous, blowing up from the south with its suggestion of tropical warmth.",
         "options": [
           "Familiarity",
           "Domination",
@@ -43,13 +41,12 @@
         ],
         "answer": 1,
         "difficulty": "Medium",
-        "id": "pt1-m1-q3",
-        "passage": "The following text is adapted from Alice Dunbar Nelson's 1899 short story \u201cThe Fisherman of\nPass Christian.\u201d Pass Christian is a city in the US state of Mississippi.\n\nThe swift breezes on the beach at Pass Christian meet and conflict as though\neach strove for the mastery of the air. The land-breeze blows down through the\n\npines, resinous, fragrant, cold, bringing breath-like memories of dim, dark woods\nshaded by myriad pine-needles. The breeze from the Gulf is warm and soft and\nlanguorous, blowing up from the south with its suggestion of tropical warmth."
+        "id": "pt1-m1-q3"
       },
       {
         "num": 4,
         "type": "Reading",
-        "question": "Which choice completes the text with the most logical and precise word or phrase?",
+        "question": "Which choice completes the text with the most logical and precise word or phrase?\n\nScience fiction has long served as a real-world technological advancements. Indeed,\nfrom Jules Verne's 1865 novel From the Earth to the Moon inspiring developments in\naerospace engineering to the television show Star Trek sparking the design of the ancestor\nof today's smartphones, these narratives have spurred many actual innovations.",
         "options": [
           "diversion from",
           "catalyst of",
@@ -58,13 +55,12 @@
         ],
         "answer": 1,
         "difficulty": "Medium",
-        "id": "pt1-m1-q4",
-        "passage": "Science fiction has long served as a real-world technological advancements. Indeed,\nfrom Jules Verne's 1865 novel From the Earth to the Moon inspiring developments in\naerospace engineering to the television show Star Trek sparking the design of the ancestor\nof today's smartphones, these narratives have spurred many actual innovations."
+        "id": "pt1-m1-q4"
       },
       {
         "num": 5,
         "type": "Reading",
-        "question": "Which choice completes the text with the most logical and precise word or phrase?",
+        "question": "Which choice completes the text with the most logical and precise word or phrase?\n\nAny effort to raise the toll that drivers must pay to use the Lewis and Clark Bridge, which\nspans the Ohio River to connect Indiana and Kentucky, should explain why a higher toll is\nnecessary; no amount of justification, however, is likely to persuade some drivers who\nbelieve the current toll is",
         "options": [
           "exorbitant",
           "contentious",
@@ -73,13 +69,12 @@
         ],
         "answer": 0,
         "difficulty": "Medium",
-        "id": "pt1-m1-q5",
-        "passage": "Any effort to raise the toll that drivers must pay to use the Lewis and Clark Bridge, which\nspans the Ohio River to connect Indiana and Kentucky, should explain why a higher toll is\nnecessary; no amount of justification, however, is likely to persuade some drivers who\nbelieve the current toll is"
+        "id": "pt1-m1-q5"
       },
       {
         "num": 6,
         "type": "Reading",
-        "question": "Which choice best describes the function of the underlined sentence in the text as a whole?",
+        "question": "Which choice best describes the function of the underlined sentence in the text as a whole?\n\nMoving beyond a simple \u201cpresent or absent\u201d designation, researchers created a new\nclassification system that allows for a nuanced understanding of bioluminescence in marine\norganisms that was unavailable under binary classification systems. The new six-point scale\nconsiders varying levels of supporting evidence used to identify bioluminescent species. For\nexample, the firefly squid scores 1 because of inconsistent reports, the emperor squid\nscores 4 because of its anatomical similarity to known luminous relatives, and the shaggy\nanglerfish scores 6 because of substantiated direct observations.",
         "options": [
           "It emphasizes the thoroughness of the research conducted.",
           "It explains how the new classification system was derived from the previous binary\nsystem.",
@@ -88,13 +83,12 @@
         ],
         "answer": 3,
         "difficulty": "Medium",
-        "id": "pt1-m1-q6",
-        "passage": "Moving beyond a simple \u201cpresent or absent\u201d designation, researchers created a new\nclassification system that allows for a nuanced understanding of bioluminescence in marine\norganisms that was unavailable under binary classification systems. The new six-point scale\nconsiders varying levels of supporting evidence used to identify bioluminescent species. For\nexample, the firefly squid scores 1 because of inconsistent reports, the emperor squid\nscores 4 because of its anatomical similarity to known luminous relatives, and the shaggy\nanglerfish scores 6 because of substantiated direct observations."
+        "id": "pt1-m1-q6"
       },
       {
         "num": 7,
         "type": "Reading",
-        "question": "Which choice best describes the function of the underlined portion in the text as a whole?",
+        "question": "Which choice best describes the function of the underlined portion in the text as a whole?\n\nPostcranial skeletal pneumaticity (PSP) refers to the presence of extensions of an animal's\nlungs and air sacs inside its bones. These extensions are known as pneumatic diverticula.\nfossilize, so paleontologists have relied on studies of living bird species to document these\nqualities, augmenting their findings from fossil analysis to glean additional insights into the\nrespiratory systems of extinct genera such as Tyrannosaurus, Euhelopus, and other\nCretaceous theropods and sauropods that may have also exhibited PSP.",
         "options": [
           "It presents information about the fossilization of pneumatic diverticula that has led\npaleontologists to question the applicability of studies of certain living species.",
           "It accounts for disagreements among paleontologists about how the respiratory systems\nof certain extinct genera functioned.",
@@ -103,13 +97,12 @@
         ],
         "answer": 3,
         "difficulty": "Medium",
-        "id": "pt1-m1-q7",
-        "passage": "Postcranial skeletal pneumaticity (PSP) refers to the presence of extensions of an animal's\nlungs and air sacs inside its bones. These extensions are known as pneumatic diverticula.\nfossilize, so paleontologists have relied on studies of living bird species to document these\nqualities, augmenting their findings from fossil analysis to glean additional insights into the\nrespiratory systems of extinct genera such as Tyrannosaurus, Euhelopus, and other\nCretaceous theropods and sauropods that may have also exhibited PSP."
+        "id": "pt1-m1-q7"
       },
       {
         "num": 8,
         "type": "Reading",
-        "question": "Which choice best describes the function of the underlined portion in the text as a whole?",
+        "question": "Which choice best describes the function of the underlined portion in the text as a whole?\n\nAdult glass eels can be found off the coast of Maine, but the eels begin their lives in the\nSargasso Sea, a biodiverse area in the North Atlantic Ocean where they are born and later\nreturn to breed. Though biologists believe they have identified the general area in the\nSargasso Sea that is crucial to the endangered eels\u2019 survival, little is yet known about how\nthe animals spawn there. Scientists believe that solving the mystery will lead to better\nconservation of glass eels and their habitat, helping_in turn to sustain several other species\n\nthat rely on them as a food source.",
         "options": [
           "It suggests that scientists are more concerned about other species than about glass eels\u2019\nhabitat.",
           "It indicates that the benefit of understanding glass eels\u2019 spawning behavior extends\nbeyond the eels.",
@@ -118,13 +111,12 @@
         ],
         "answer": 1,
         "difficulty": "Medium",
-        "id": "pt1-m1-q8",
-        "passage": "Adult glass eels can be found off the coast of Maine, but the eels begin their lives in the\nSargasso Sea, a biodiverse area in the North Atlantic Ocean where they are born and later\nreturn to breed. Though biologists believe they have identified the general area in the\nSargasso Sea that is crucial to the endangered eels\u2019 survival, little is yet known about how\nthe animals spawn there. Scientists believe that solving the mystery will lead to better\nconservation of glass eels and their habitat, helping_in turn to sustain several other species\n\nthat rely on them as a food source."
+        "id": "pt1-m1-q8"
       },
       {
         "num": 9,
         "type": "Reading",
-        "question": "According to the text, what is someone who professionally evaluates books called?",
+        "question": "According to the text, what is someone who professionally evaluates books called?\n\nSeesaw Girl was Linda Sue Park's debut novel. It was published in 1999. A debut novel is the\nfirst book that an author has published. Debut novels are especially interesting to literary\ncritics (people whose job it is to evaluate books) and readers because these books offer a\nlook at new voices in the literary world.",
         "options": [
           "A book publisher",
           "A literary critic",
@@ -133,13 +125,12 @@
         ],
         "answer": 1,
         "difficulty": "Medium",
-        "id": "pt1-m1-q9",
-        "passage": "Seesaw Girl was Linda Sue Park's debut novel. It was published in 1999. A debut novel is the\nfirst book that an author has published. Debut novels are especially interesting to literary\ncritics (people whose job it is to evaluate books) and readers because these books offer a\nlook at new voices in the literary world."
+        "id": "pt1-m1-q9"
       },
       {
         "num": 10,
         "type": "Reading",
-        "question": "Which choice most effectively uses data from the table to complete the statement?",
+        "question": "Which choice most effectively uses data from the table to complete the statement?\n\nMillions of Metric Tons of\nCopper Mined in 1995 and\n2020\n\nCountry 1995 2020\nIndonesia 0.44 0.51\nMexico 0.33 0.73\nPeru 0.38 2.15\nUnited States 1.85 1.20\n\nWhile doing research for a paper about metal exports, a student finds a table indicating how\nmuch copper was mined in each of four countries in 1995 and 2020. The student notes that\nin 1995, Mexico mined",
         "options": [
           "0.38 million metric tons of copper.",
           "0.33 million metric tons of copper.",
@@ -148,13 +139,12 @@
         ],
         "answer": 1,
         "difficulty": "Medium",
-        "id": "pt1-m1-q10",
-        "passage": "Millions of Metric Tons of\nCopper Mined in 1995 and\n2020\n\nCountry 1995 2020\nIndonesia 0.44 0.51\nMexico 0.33 0.73\nPeru 0.38 2.15\nUnited States 1.85 1.20\n\nWhile doing research for a paper about metal exports, a student finds a table indicating how\nmuch copper was mined in each of four countries in 1995 and 2020. The student notes that\nin 1995, Mexico mined"
+        "id": "pt1-m1-q10"
       },
       {
         "num": 11,
         "type": "Reading",
-        "question": "Which quotation from Peter Pan best supports the claim?",
+        "question": "Which quotation from Peter Pan best supports the claim?\n\nPeter Pan is a 1911 novel by J.M. Barrie. In the fantasy novel, Peter is a young boy who can\nfly. He brings Wendy, John, and Michael to Neverland, the mythical island where he lives.\nThe narrator suggests that activity on the island stops when Peter is away and starts again\nwhen he is about to return:",
         "options": [
           "\"The rock was very small now.\"",
           "\u201cWendy and John and Michael stood on tip-toe in the air to get their first sight of the\nisland.\u201d",
@@ -163,13 +153,12 @@
         ],
         "answer": 3,
         "difficulty": "Medium",
-        "id": "pt1-m1-q11",
-        "passage": "Peter Pan is a 1911 novel by J.M. Barrie. In the fantasy novel, Peter is a young boy who can\nfly. He brings Wendy, John, and Michael to Neverland, the mythical island where he lives.\nThe narrator suggests that activity on the island stops when Peter is away and starts again\nwhen he is about to return:"
+        "id": "pt1-m1-q11"
       },
       {
         "num": 12,
         "type": "Reading",
-        "question": "Which quotation from a translation of The Underdogs most effectively illustrates the claim?",
+        "question": "Which quotation from a translation of The Underdogs most effectively illustrates the claim?\n\nThe Underdogs is a 1915 novel by Mariano Azuela, originally written in Spanish. In the novel,\nAzuela depicts the character Camilla as experiencing a change in how she perceives her\nimmediate surroundings:",
         "options": [
           "\u201cCamilla stared up at the blue sky so [Luis] should not read the expression in her eyes.\u201d",
           "\u201cCamilla, standing on the beach of washed, round stones, caught a reflection of herself in\nthe waters.\u201d",
@@ -178,13 +167,12 @@
         ],
         "answer": 2,
         "difficulty": "Medium",
-        "id": "pt1-m1-q12",
-        "passage": "The Underdogs is a 1915 novel by Mariano Azuela, originally written in Spanish. In the novel,\nAzuela depicts the character Camilla as experiencing a change in how she perceives her\nimmediate surroundings:"
+        "id": "pt1-m1-q12"
       },
       {
         "num": 13,
         "type": "Reading",
-        "question": "Which finding, if true, would most directly weaken the researcher's claim?",
+        "question": "Which finding, if true, would most directly weaken the researcher's claim?\n\nThe Raramuri language of northern Mexico has 20 vowel and consonant sounds. In contrast,\nthe Taa language of southern Africa has over 100. Why would languages differ in this way?\nOne researcher has claimed that when modern humans arose in Africa, they spoke a single\nlanguage, but as humans gradually spread throughout Africa and then around the globe, that\nlanguage developed into new languages. Those developed into still more languages as small\nbands of humans spread even farther, with each new language retaining fewer sounds from\nhumanity's original language.",
         "options": [
           "A wider range of sounds is found across the languages of Africa as a whole than across\nthe languages of South America as a whole.",
           "Languages that emerged in Europe and Western Asia tend to have more sounds than\nlanguages that emerged in Africa do.",
@@ -193,13 +181,12 @@
         ],
         "answer": 1,
         "difficulty": "Medium",
-        "id": "pt1-m1-q13",
-        "passage": "The Raramuri language of northern Mexico has 20 vowel and consonant sounds. In contrast,\nthe Taa language of southern Africa has over 100. Why would languages differ in this way?\nOne researcher has claimed that when modern humans arose in Africa, they spoke a single\nlanguage, but as humans gradually spread throughout Africa and then around the globe, that\nlanguage developed into new languages. Those developed into still more languages as small\nbands of humans spread even farther, with each new language retaining fewer sounds from\nhumanity's original language."
+        "id": "pt1-m1-q13"
       },
       {
         "num": 14,
         "type": "Reading",
-        "question": "Which choice most logically completes the text?",
+        "question": "Which choice most logically completes the text?\n\nAntonia Olivia Dolan and colleagues had musicians and nonmusicians with clinically average\nhearing listen to recordings of nature sounds and music in popular genres like acoustic folk\nand funk and adjust the volume to optimize their listening enjoyment. The researchers found\nthat for a given recording that a musician and nonmusician identified as their favorite among\nthose included in the study, optimal volume tended to be higher for the musician than for the\nnonmusician. Thus, if a musician and nonmusician both identified Jose Gonzalez's\n\u201cHeartbeats\u201d as their favorite recording and the musician preferred to listen to it at a volume\nof 82.2 decibels, the nonmusician would be expected to",
         "options": [
           "find listening to \u201cHeartbeats\u201d at 82.2 decibels less enjoyable than listening to it at a lower\nvolume.",
           "prefer listening to other music at 82.2 decibels over listening to \u201cHeartbeats\u201d at that\nvolume.",
@@ -208,13 +195,12 @@
         ],
         "answer": 0,
         "difficulty": "Medium",
-        "id": "pt1-m1-q14",
-        "passage": "Antonia Olivia Dolan and colleagues had musicians and nonmusicians with clinically average\nhearing listen to recordings of nature sounds and music in popular genres like acoustic folk\nand funk and adjust the volume to optimize their listening enjoyment. The researchers found\nthat for a given recording that a musician and nonmusician identified as their favorite among\nthose included in the study, optimal volume tended to be higher for the musician than for the\nnonmusician. Thus, if a musician and nonmusician both identified Jose Gonzalez's\n\u201cHeartbeats\u201d as their favorite recording and the musician preferred to listen to it at a volume\nof 82.2 decibels, the nonmusician would be expected to"
+        "id": "pt1-m1-q14"
       },
       {
         "num": 15,
         "type": "Reading",
-        "question": "Which choice most logically completes the text?",
+        "question": "Which choice most logically completes the text?\n\nOuti Tervo and team studied the effect of human-caused noise on narwhals (Vonodon\nmonoceros), arctic marine mammals that are sensitive to acoustic changes in their\nenvironment. Hypothesizing that elevated sound levels affect foraging among narwhals,\nTervo's team compared narwhal diving behaviors in natural sound conditions with those\nbehaviors in two human-caused sound exposure conditions\u2014ship sounds and ship sounds\ncoupled with sonic pulses. Both exposure conditions resulted in significant decreases in the\nnumber and target depth of deep dives (associated with foraging) relative to natural\nconditions. However, differences between diving behaviors in the two exposure types were\nnegligible, a finding that could be attributed to the fact that",
         "options": [
           "narwhals forage at shallower depths in the presence of ship sounds alone than in the\npresence of ship sounds coupled with sonic pulses.",
           "sonic pulses can be heard at significantly greater ocean depths than ship sounds can.",
@@ -223,13 +209,12 @@
         ],
         "answer": 3,
         "difficulty": "Medium",
-        "id": "pt1-m1-q15",
-        "passage": "Outi Tervo and team studied the effect of human-caused noise on narwhals (Vonodon\nmonoceros), arctic marine mammals that are sensitive to acoustic changes in their\nenvironment. Hypothesizing that elevated sound levels affect foraging among narwhals,\nTervo's team compared narwhal diving behaviors in natural sound conditions with those\nbehaviors in two human-caused sound exposure conditions\u2014ship sounds and ship sounds\ncoupled with sonic pulses. Both exposure conditions resulted in significant decreases in the\nnumber and target depth of deep dives (associated with foraging) relative to natural\nconditions. However, differences between diving behaviors in the two exposure types were\nnegligible, a finding that could be attributed to the fact that"
+        "id": "pt1-m1-q15"
       },
       {
         "num": 16,
         "type": "Reading",
-        "question": "Which choice completes the text so that it conforms to the conventions of Standard English?",
+        "question": "Which choice completes the text so that it conforms to the conventions of Standard English?\n\nMany works of the Greek mathematician Euclid (3rd century BCE) are his Elements, a\n\ntreatise of mathematical knowledge, is an extant work: it can still be read.",
         "options": [
           "lost and conversely,",
           "lost, conversely,",
@@ -238,13 +223,12 @@
         ],
         "answer": 2,
         "difficulty": "Medium",
-        "id": "pt1-m1-q16",
-        "passage": "Many works of the Greek mathematician Euclid (3rd century BCE) are his Elements, a\n\ntreatise of mathematical knowledge, is an extant work: it can still be read."
+        "id": "pt1-m1-q16"
       },
       {
         "num": 17,
         "type": "Reading",
-        "question": "Which choice completes the text so that it conforms to the conventions of Standard English?",
+        "question": "Which choice completes the text so that it conforms to the conventions of Standard English?\n\nA 2024 study cataloged all the trees in Amsterdam to evaluate the biodiversity of the city's\nurban forest. The researchers, finding that administrative unit GK13 had a 0.62 ratio of native\n\nto non-native trees, efforts to improve the biodiversity of the trees in that unit and\n\nother areas with a similarly moderate ratio.",
         "options": [
           "recommended",
           "recommending",
@@ -253,13 +237,12 @@
         ],
         "answer": 0,
         "difficulty": "Medium",
-        "id": "pt1-m1-q17",
-        "passage": "A 2024 study cataloged all the trees in Amsterdam to evaluate the biodiversity of the city's\nurban forest. The researchers, finding that administrative unit GK13 had a 0.62 ratio of native\n\nto non-native trees, efforts to improve the biodiversity of the trees in that unit and\n\nother areas with a similarly moderate ratio."
+        "id": "pt1-m1-q17"
       },
       {
         "num": 18,
         "type": "Reading",
-        "question": "Which choice completes the text so that it conforms to the conventions of Standard English?",
+        "question": "Which choice completes the text so that it conforms to the conventions of Standard English?\n\nGrowing as large as three meters in diameter, the leaves of the giant Amazonian waterlily\nfeature a complex network of radiating veins that provide structural in thickness from\n\nthe center to the edges, these veins allow the leaves to maintain their large size and\nbuoyancy with minimal material, optimizing light capture and photosynthesis.",
         "options": [
           "support. Decreasing",
           "support decreasing",
@@ -268,13 +251,12 @@
         ],
         "answer": 0,
         "difficulty": "Medium",
-        "id": "pt1-m1-q18",
-        "passage": "Growing as large as three meters in diameter, the leaves of the giant Amazonian waterlily\nfeature a complex network of radiating veins that provide structural in thickness from\n\nthe center to the edges, these veins allow the leaves to maintain their large size and\nbuoyancy with minimal material, optimizing light capture and photosynthesis."
+        "id": "pt1-m1-q18"
       },
       {
         "num": 19,
         "type": "Reading",
-        "question": "Which choice completes the text so that it conforms to the conventions of Standard English?",
+        "question": "Which choice completes the text so that it conforms to the conventions of Standard English?\n\na US state when it ratified the US Constitution on December 12, 1787, was thereby\nempowered, via its representatives to the US Congress, to vote on whether to admit\nLouisiana as a state on April 30, 1812.",
         "options": [
           "Pennsylvania would officially become",
           "Pennsylvania had officially become",
@@ -283,13 +265,12 @@
         ],
         "answer": 3,
         "difficulty": "Medium",
-        "id": "pt1-m1-q19",
-        "passage": "a US state when it ratified the US Constitution on December 12, 1787, was thereby\nempowered, via its representatives to the US Congress, to vote on whether to admit\nLouisiana as a state on April 30, 1812."
+        "id": "pt1-m1-q19"
       },
       {
         "num": 20,
         "type": "Reading",
-        "question": "Which choice completes the text so that it conforms to the conventions of Standard English?",
+        "question": "Which choice completes the text so that it conforms to the conventions of Standard English?\n\nThough largely eclipsed by her success as a novelist, Jessie Redmon Fauset\u2019s contributions\nas literary editor of The Crisis, a New York City-based periodical whose influence was\n\narguably at its peak during her Harlem Renaissance-era tenure, in recent scholarship\n\nthat explores Fauset\u2019s instrumental role in shaping the magazine's aesthetic and debuting\nthe work of Langston Hughes and other emerging Black writers.",
         "options": [
           "has been revisited",
           "have been revisited",
@@ -298,13 +279,12 @@
         ],
         "answer": 1,
         "difficulty": "Medium",
-        "id": "pt1-m1-q20",
-        "passage": "Though largely eclipsed by her success as a novelist, Jessie Redmon Fauset\u2019s contributions\nas literary editor of The Crisis, a New York City-based periodical whose influence was\n\narguably at its peak during her Harlem Renaissance-era tenure, in recent scholarship\n\nthat explores Fauset\u2019s instrumental role in shaping the magazine's aesthetic and debuting\nthe work of Langston Hughes and other emerging Black writers."
+        "id": "pt1-m1-q20"
       },
       {
         "num": 21,
         "type": "Reading",
-        "question": "Which choice completes the text with the most logical transition?",
+        "question": "Which choice completes the text with the most logical transition?\n\nResins play several important roles in maintaining the health of conifers and many other\nkinds of trees.__\u2014\u2014_\u2014srresins quickly seal wounds, which helps prevent harmful insects and\nfungi from entering trees. These sticky substances also help trees retain water that is\nneeded for them to survive.",
         "options": [
           "For example,",
           "However,",
@@ -313,13 +293,12 @@
         ],
         "answer": 0,
         "difficulty": "Medium",
-        "id": "pt1-m1-q21",
-        "passage": "Resins play several important roles in maintaining the health of conifers and many other\nkinds of trees.__\u2014\u2014_\u2014srresins quickly seal wounds, which helps prevent harmful insects and\nfungi from entering trees. These sticky substances also help trees retain water that is\nneeded for them to survive."
+        "id": "pt1-m1-q21"
       },
       {
         "num": 22,
         "type": "Reading",
-        "question": "Which choice completes the text with the most logical transition?",
+        "question": "Which choice completes the text with the most logical transition?\n\nGiant dust plumes from the Sahara Desert that blow across the Atlantic Ocean can have\ncomplex and opposing effects on tropical cyclones. On one hand, the dust can enhance the\nformation of ice clouds in the cyclone\u2019s core, increasing precipitation. the dust can\nlower sea surface temperatures around the cyclone's core, weakening the storm.",
         "options": [
           "On the other hand,",
           "Previously,",
@@ -328,13 +307,12 @@
         ],
         "answer": 0,
         "difficulty": "Medium",
-        "id": "pt1-m1-q22",
-        "passage": "Giant dust plumes from the Sahara Desert that blow across the Atlantic Ocean can have\ncomplex and opposing effects on tropical cyclones. On one hand, the dust can enhance the\nformation of ice clouds in the cyclone\u2019s core, increasing precipitation. the dust can\nlower sea surface temperatures around the cyclone's core, weakening the storm."
+        "id": "pt1-m1-q22"
       },
       {
         "num": 23,
         "type": "Reading",
-        "question": "Which choice completes the text with the most logical transition?",
+        "question": "Which choice completes the text with the most logical transition?\n\nElvis Presley's iconic jumpsuit Red Pinwheel featured rhinestones arranged in pinwheel\npatterns. Historians note that adornments such as these added between twenty-five and\nfifty pounds to each of Elvis\u2019s stage outfits. the fabric used to make the outfits was\n\nlight and flexible, enabling freedom of motion.",
         "options": [
           "On the other hand,",
           "That is,",
@@ -343,13 +321,12 @@
         ],
         "answer": 0,
         "difficulty": "Medium",
-        "id": "pt1-m1-q23",
-        "passage": "Elvis Presley's iconic jumpsuit Red Pinwheel featured rhinestones arranged in pinwheel\npatterns. Historians note that adornments such as these added between twenty-five and\nfifty pounds to each of Elvis\u2019s stage outfits. the fabric used to make the outfits was\n\nlight and flexible, enabling freedom of motion."
+        "id": "pt1-m1-q23"
       },
       {
         "num": 24,
         "type": "Reading",
-        "question": "Which choice completes the text with the most logical transition?",
+        "question": "Which choice completes the text with the most logical transition?\n\nIn a 1998 study by Smith et al., the researchers used microhistological fecal analysis to\ndetermine the ratio of three plant subtypes (graminoids, forbs, and browse) within the diets\nof North American ungulates. The researchers did not perform this analysis on all such\nungulates, they focused exclusively on pronghorns and wild horses in New Mexico.",
         "options": [
           "regardless;",
           "in other words;",
@@ -358,13 +335,12 @@
         ],
         "answer": 3,
         "difficulty": "Medium",
-        "id": "pt1-m1-q24",
-        "passage": "In a 1998 study by Smith et al., the researchers used microhistological fecal analysis to\ndetermine the ratio of three plant subtypes (graminoids, forbs, and browse) within the diets\nof North American ungulates. The researchers did not perform this analysis on all such\nungulates, they focused exclusively on pronghorns and wild horses in New Mexico."
+        "id": "pt1-m1-q24"
       },
       {
         "num": 25,
         "type": "Reading",
-        "question": "Which choice completes the text with the most logical transition?",
+        "question": "Which choice completes the text with the most logical transition?\n\nThough its onboard laboratory allowed it to analyze rock samples on-site, the 2011 Mars\n\nCuriosity rover was unable to preserve samples for future analysis. when creating the\n\n2020 Mars Perseverance rover, robotics technologist Yumi lwashita and other members of\nNASA's Jet Propulsion Laboratory sought to implement a mechanism that could do exactly\nthat.",
         "options": [
           "Specifically,",
           "Earlier,",
@@ -373,13 +349,12 @@
         ],
         "answer": 2,
         "difficulty": "Medium",
-        "id": "pt1-m1-q25",
-        "passage": "Though its onboard laboratory allowed it to analyze rock samples on-site, the 2011 Mars\n\nCuriosity rover was unable to preserve samples for future analysis. when creating the\n\n2020 Mars Perseverance rover, robotics technologist Yumi lwashita and other members of\nNASA's Jet Propulsion Laboratory sought to implement a mechanism that could do exactly\nthat."
+        "id": "pt1-m1-q25"
       },
       {
         "num": 26,
         "type": "Reading",
-        "question": "Which choice completes the text with the most logical transition?",
+        "question": "Which choice completes the text with the most logical transition?\n\nAs lestyn Barr and his team of researchers discovered when establishing the glacial timeline\nof Antarctica, the Transantarctic Mountains\u2014a 3,500-km mountain range spanning the\ncontinent\u2014are home to glaciers of at least 60 million years in age. the researchers\n\nconcluded, Antarctica had glaciers long before the formation of its continent-wide ice sheet\n34 million years ago.",
         "options": [
           "Thus,",
           "By contrast,",
@@ -388,13 +363,12 @@
         ],
         "answer": 0,
         "difficulty": "Medium",
-        "id": "pt1-m1-q26",
-        "passage": "As lestyn Barr and his team of researchers discovered when establishing the glacial timeline\nof Antarctica, the Transantarctic Mountains\u2014a 3,500-km mountain range spanning the\ncontinent\u2014are home to glaciers of at least 60 million years in age. the researchers\n\nconcluded, Antarctica had glaciers long before the formation of its continent-wide ice sheet\n34 million years ago."
+        "id": "pt1-m1-q26"
       },
       {
         "num": 27,
         "type": "Reading",
-        "question": "Which choice most effectively uses information from the given sentences to emphasize\nEdison's reliance on Hammer?",
+        "question": "Which choice most effectively uses information from the given sentences to emphasize\nEdison's reliance on Hammer?\n\n- Thomas Edison is regarded as one of the most important inventors in US history.\n\n- Having received little formal schooling, Edison relied on specialist employees at his\nvarious laboratories and offices to complete the technical work for many of his\ninventions.\n\n- William Joseph Hammer was a laboratory assistant who worked at the Menlo Park\nlaboratory.\n\n- He is best known for curating the most comprehensive collection of historic light bulbs\nanywhere in the world.\n\n- William Symes Andrews was an electrical engineer who worked at the Edison Electric\nLight Company.\n\n- He is best known for establishing more than thirty power plants across New York and\nPennsylvania.",
         "options": [
           "William Joseph Hammer, a laboratory assistant, worked at the Menlo Park laboratory.",
           "William Joseph Hammer, a laboratory assistant, was known for his valuable contribution to\nthe field of technology.",
@@ -403,8 +377,7 @@
         ],
         "answer": 3,
         "difficulty": "Medium",
-        "id": "pt1-m1-q27",
-        "passage": "\u00a2 Thomas Edison is regarded as one of the most important inventors in US history.\n\ne Having received little formal schooling, Edison relied on specialist employees at his\nvarious laboratories and offices to complete the technical work for many of his\ninventions.\n\n\u00a2 William Joseph Hammer was a laboratory assistant who worked at the Menlo Park\nlaboratory.\n\n\u00a2 He is best known for curating the most comprehensive collection of historic light bulbs\nanywhere in the world.\n\n\u00a2 William Symes Andrews was an electrical engineer who worked at the Edison Electric\nLight Company.\n\n\u00a2 He is best known for establishing more than thirty power plants across New York and\nPennsylvania."
+        "id": "pt1-m1-q27"
       }
     ]
   },
@@ -413,7 +386,7 @@
       {
         "num": 1,
         "type": "Reading",
-        "question": "Which choice completes the text with the most logical and precise word or phrase?",
+        "question": "Which choice completes the text with the most logical and precise word or phrase?\n\nLouisa May Alcott contributed A Modern Mephistopheles to the No Name Series, a collection\nof novels published anonymously between 1876 and 1887. The series challenged readers to\nguess authors\u2019 identities, reflecting the era\u2019s fascination for literary mystery. This\n\napproach to publishing allowed Alcott to experiment beyond her established style.",
         "options": [
           "preliminary",
           "clandestine",
@@ -422,13 +395,12 @@
         ],
         "answer": 1,
         "difficulty": "Hard",
-        "id": "pt1-m2-q1",
-        "passage": "Louisa May Alcott contributed A Modern Mephistopheles to the No Name Series, a collection\nof novels published anonymously between 1876 and 1887. The series challenged readers to\nguess authors\u2019 identities, reflecting the era\u2019s fascination for literary mystery. This\n\napproach to publishing allowed Alcott to experiment beyond her established style."
+        "id": "pt1-m2-q1"
       },
       {
         "num": 2,
         "type": "Reading",
-        "question": "Which choice completes the text with the most logical and precise word or phrase?",
+        "question": "Which choice completes the text with the most logical and precise word or phrase?\n\nThough copies of The Adventures of Indiana Jones in Wenceslas Square in Prague on\nJanuary 16, 7989\u2014an underground computer game that was created anonymously in 1989\nas an act of political protest against the authoritarian regime of what was then\nCzechoslovakia\u2014were originally distributed , the game is now readily available online\n\nfor anyone to play.",
         "options": [
           "surreptitiously",
           "disingenuously",
@@ -437,13 +409,12 @@
         ],
         "answer": 0,
         "difficulty": "Hard",
-        "id": "pt1-m2-q2",
-        "passage": "Though copies of The Adventures of Indiana Jones in Wenceslas Square in Prague on\nJanuary 16, 7989\u2014an underground computer game that was created anonymously in 1989\nas an act of political protest against the authoritarian regime of what was then\nCzechoslovakia\u2014were originally distributed , the game is now readily available online\n\nfor anyone to play."
+        "id": "pt1-m2-q2"
       },
       {
         "num": 3,
         "type": "Reading",
-        "question": "Which choice completes the text with the most logical and precise word or phrase?",
+        "question": "Which choice completes the text with the most logical and precise word or phrase?\n\nIn their study of caterpillars in fragmented forests (formerly contiguous forests that have\nbeen broken into isolated patches by roads or other interruptions), Riley M. Anderson et al.\n\nstress that although fragmentation inevitably alterations to local ecological\n\nprocesses, the changes will likely have a greater impact on Nola triquetrana, a specialist\nfeeding on a limited number of plant species, than on a species like Himella intractata that\nfeeds on several.",
         "options": [
           "engenders",
           "preempts",
@@ -452,13 +423,12 @@
         ],
         "answer": 0,
         "difficulty": "Hard",
-        "id": "pt1-m2-q3",
-        "passage": "In their study of caterpillars in fragmented forests (formerly contiguous forests that have\nbeen broken into isolated patches by roads or other interruptions), Riley M. Anderson et al.\n\nstress that although fragmentation inevitably alterations to local ecological\n\nprocesses, the changes will likely have a greater impact on Nola triquetrana, a specialist\nfeeding on a limited number of plant species, than on a species like Himella intractata that\nfeeds on several."
+        "id": "pt1-m2-q3"
       },
       {
         "num": 4,
         "type": "Reading",
-        "question": "Which choice completes the text with the most logical and precise word or phrase?",
+        "question": "Which choice completes the text with the most logical and precise word or phrase?\n\nYuen Yuen Ang et al. argue that merely tallying the number of patents filed per year\n\nthe degree of innovation occurring: truly novel patents\u2014those, like a 2011 patent for an\nautomated navigation system for planes, that combine previously unaffiliated technological\ndomains\u2014are vastly outnumbered by nonnovel patents (e.g., a 2008 patent for a method of\nmaking soup).",
         "options": [
           "belies",
           "portends",
@@ -467,13 +437,12 @@
         ],
         "answer": 0,
         "difficulty": "Hard",
-        "id": "pt1-m2-q4",
-        "passage": "Yuen Yuen Ang et al. argue that merely tallying the number of patents filed per year\n\nthe degree of innovation occurring: truly novel patents\u2014those, like a 2011 patent for an\nautomated navigation system for planes, that combine previously unaffiliated technological\ndomains\u2014are vastly outnumbered by nonnovel patents (e.g., a 2008 patent for a method of\nmaking soup)."
+        "id": "pt1-m2-q4"
       },
       {
         "num": 5,
         "type": "Reading",
-        "question": "Which choice best states the function of the underlined sentence?",
+        "question": "Which choice best states the function of the underlined sentence?\n\nMagical realism, a style that weaves fantasy into realistic narratives, coalesced in Latin\nAmerica in the 1960s. It is associated with Gabriel Garcia Marquez, whose One Hundred\nYears of Solitude is a key text. The style was embraced by Mexican American writers, such\nas Ana Castillo, whose So Far from God draws on Mexican folktales as a source of fantasy.\nYet The Mixquiahuala Letters, also by Castillo, features no fantastical plot events. And\n\ndespite his popular reputation, Garcia Marquez himself wrote several works of strict realism,\nincluding_Chronicle of a Death Foretold.",
         "options": [
           "To identify an unrecognized point of similarity between Chronicle of a Death Foretold and\nSo Far from God",
           "To suggest that Mexican American authors who were influenced by Garcia Marquez may\nhave, in turn, influenced him",
@@ -482,8 +451,7 @@
         ],
         "answer": 2,
         "difficulty": "Hard",
-        "id": "pt1-m2-q5",
-        "passage": "Magical realism, a style that weaves fantasy into realistic narratives, coalesced in Latin\nAmerica in the 1960s. It is associated with Gabriel Garcia Marquez, whose One Hundred\nYears of Solitude is a key text. The style was embraced by Mexican American writers, such\nas Ana Castillo, whose So Far from God draws on Mexican folktales as a source of fantasy.\nYet The Mixquiahuala Letters, also by Castillo, features no fantastical plot events. And\n\ndespite his popular reputation, Garcia Marquez himself wrote several works of strict realism,\nincluding_Chronicle of a Death Foretold."
+        "id": "pt1-m2-q5"
       },
       {
         "num": 6,
@@ -502,7 +470,7 @@
       {
         "num": 7,
         "type": "Reading",
-        "question": "What does the text most directly suggest about translation apps?",
+        "question": "What does the text most directly suggest about translation apps?\n\nLinguist John McWhorter asserts that translation apps for smartphones and computers are\u2014\ndespite generally failing to convey many nuances\u2014increasingly obviating the need to learn\nnew languages. Advances in language processing technology have greatly boosted the\nutility of these apps for perfunctory tasks, like inquiring about an item on a menu, and\npassing interactions; be that as it may, richer communication (e.g., in business dealings or\nmeaningful personal exchanges) often hinges on conversational patterns and gradations of\nmeaning.",
         "options": [
           "They have improved remarkably over time but remain insufficient to support the\ncomplexity called for in certain interactions.",
           "They are coming to be embraced by international tourists but are viewed with skepticism\nby many business professionals.",
@@ -511,13 +479,12 @@
         ],
         "answer": 0,
         "difficulty": "Hard",
-        "id": "pt1-m2-q7",
-        "passage": "Linguist John McWhorter asserts that translation apps for smartphones and computers are\u2014\ndespite generally failing to convey many nuances\u2014increasingly obviating the need to learn\nnew languages. Advances in language processing technology have greatly boosted the\nutility of these apps for perfunctory tasks, like inquiring about an item on a menu, and\npassing interactions; be that as it may, richer communication (e.g., in business dealings or\nmeaningful personal exchanges) often hinges on conversational patterns and gradations of\nmeaning."
+        "id": "pt1-m2-q7"
       },
       {
         "num": 8,
         "type": "Reading",
-        "question": "Information in the text best supports which statement about Mohol bushbabies?",
+        "question": "Information in the text best supports which statement about Mohol bushbabies?\n\nOptimal foraging theory (OFT) holds that animals\u2019 foraging behaviors reflect cost-benefit\ntrade-offs that vary by species and with dynamic ecological circumstances. One such\ncircumstance is lunar intensity, which Mary V. Price and colleagues found to be negatively\nassociated with foraging by white-throated woodrats but Simon Kenneth Bearder and\ncolleagues found to be positively associated with foraging by Mohol bushbabies. This\ndiscrepancy is explicable in terms of OFT: the bushbabies\u2019 greater reliance on vision means\nthat higher lunar intensity benefits them more than it benefits the woodrats.",
         "options": [
           "lf increased lunar intensity imposed the same costs on the bushbabies that it imposes on\nwhite-throated woodrats, there would be no association between lunar intensity and the\nbushbabies\u2019 foraging.",
           "If the advantages that the bushbabies gain from increased lunar intensity explain the\nchange in their foraging behavior, those advantages are likely shared by some other species\nthat are not heavily reliant on vision.",
@@ -526,13 +493,12 @@
         ],
         "answer": 2,
         "difficulty": "Hard",
-        "id": "pt1-m2-q8",
-        "passage": "Optimal foraging theory (OFT) holds that animals\u2019 foraging behaviors reflect cost-benefit\ntrade-offs that vary by species and with dynamic ecological circumstances. One such\ncircumstance is lunar intensity, which Mary V. Price and colleagues found to be negatively\nassociated with foraging by white-throated woodrats but Simon Kenneth Bearder and\ncolleagues found to be positively associated with foraging by Mohol bushbabies. This\ndiscrepancy is explicable in terms of OFT: the bushbabies\u2019 greater reliance on vision means\nthat higher lunar intensity benefits them more than it benefits the woodrats."
+        "id": "pt1-m2-q8"
       },
       {
         "num": 9,
         "type": "Reading",
-        "question": "Which choice most effectively uses data from the table to complete the text?",
+        "question": "Which choice most effectively uses data from the table to complete the text?\n\nEffect of Various Soil Treatments on Mean Pineapple Fruit Weight and Size\n\nWeight Length Diameter\n\nSoil treatment (grams) (centimeters) (centimeters)\nControl 825.9 6.14 13.63\nBiochar 915.7 6.56 13.63\nCompost 864.8 6.15 13.22\nBiochar and\n\n979.3 6.76 13.68\n\ncompost\nBiochar and NPK\n\n- 1032.1 6.78 13.96\nfertilizer\n\nWorking in Ghana, Emmanuel Hanyabui and colleagues compared the impact on pineapple\ngrowth of different combinations of soil additives, including NPK fertilizer (an inorganic\nfertilizer containing nitrogen, phosphorus, and potassium), organic compost, and biochar (a\ncarbon-rich material produced from organic waste matter). Based on data in the table,\npineapple farmers with no access to inorganic soil additives would likely increase the weight\nand size of their fruits by the greatest amount by using",
         "options": [
           "biochar and NPK fertilizer.",
           "biochar and compost.",
@@ -541,13 +507,12 @@
         ],
         "answer": 1,
         "difficulty": "Hard",
-        "id": "pt1-m2-q9",
-        "passage": "Effect of Various Soil Treatments on Mean Pineapple Fruit Weight and Size\n\nWeight Length Diameter\n\nSoil treatment (grams) (centimeters) (centimeters)\nControl 825.9 6.14 13.63\nBiochar 915.7 6.56 13.63\nCompost 864.8 6.15 13.22\nBiochar and\n\n979.3 6.76 13.68\n\ncompost\nBiochar and NPK\n\n- 1032.1 6.78 13.96\nfertilizer\n\nWorking in Ghana, Emmanuel Hanyabui and colleagues compared the impact on pineapple\ngrowth of different combinations of soil additives, including NPK fertilizer (an inorganic\nfertilizer containing nitrogen, phosphorus, and potassium), organic compost, and biochar (a\ncarbon-rich material produced from organic waste matter). Based on data in the table,\npineapple farmers with no access to inorganic soil additives would likely increase the weight\nand size of their fruits by the greatest amount by using"
+        "id": "pt1-m2-q9"
       },
       {
         "num": 10,
         "type": "Reading",
-        "question": "Which choice best presents a conclusion about the habits of New Year's resolution makers\nthat is best supported by information in the text and the table?",
+        "question": "Which choice best presents a conclusion about the habits of New Year's resolution makers\nthat is best supported by information in the text and the table?\n\nPercentages of New Year's Resolution Makers Who Make Certain\nKinds of Resolutions\n\nType of resolution Age 18-29 Age 30-49 Age 50-64 Age 65+\n\nHealth and exercise 79 80 79 76\nFinances 68 63 56 47\nPersonal relationships 63 53 58 52\nHobbies 65 53 51 45\n\nA Pew Research Center survey conducted in January 2024 found that three out of ten US\nadults make at least one New Year's resolution (a promise for the year ahead), while half of\nthose who make a resolution make more than one. The survey asked participants what kinds\nof resolutions they made and separated them into several categories. The table presents\npercentages of people who make particular kinds of New Year's resolutions among those\n\nwho choose to make them, indexed by age bracket.",
         "options": [
           "The majority of US adults who make resolutions related to health and exercise also make\nresolutions in multiple additional categories.",
           "Resolution makers between the ages of 50 and 64 are more likely to make resolutions\nrelated to personal relationships and less likely to make resolutions related to finances than\n\nresolution makers between the ages of 30 and 49 are.",
@@ -556,13 +521,12 @@
         ],
         "answer": 1,
         "difficulty": "Hard",
-        "id": "pt1-m2-q10",
-        "passage": "Percentages of New Year's Resolution Makers Who Make Certain\nKinds of Resolutions\n\nType of resolution Age 18-29 Age 30-49 Age 50-64 Age 65+\n\nHealth and exercise 79 80 79 76\nFinances 68 63 56 47\nPersonal relationships 63 53 58 52\nHobbies 65 53 51 45\n\nA Pew Research Center survey conducted in January 2024 found that three out of ten US\nadults make at least one New Year's resolution (a promise for the year ahead), while half of\nthose who make a resolution make more than one. The survey asked participants what kinds\nof resolutions they made and separated them into several categories. The table presents\npercentages of people who make particular kinds of New Year's resolutions among those\n\nwho choose to make them, indexed by age bracket."
+        "id": "pt1-m2-q10"
       },
       {
         "num": 11,
         "type": "Reading",
-        "question": "Which quotation from a literary scholar would most directly support the claim in the underlined portion of the text?",
+        "question": "Which quotation from a literary scholar would most directly support the claim in the\n\nunderlined portion of the text?\nScholars cite One Hundred Years of Solitude, the 1967 novel by Colombian author Gabriel\nGarcia Marquez, as a foundational text of magical realism, the Latin American style of fiction\nin which antirealistic plot devices\u2014often borrowed from the spiritual and narrative traditions\nof Indigenous and colonial societies in the Americas\u2014are deployed in an otherwise realistic\nmode of representation typical of the modern novel. This style has exerted a decisive\ninfluence on authors in the United States, including Toni Morrison, whose 1987 novel\nBeloved resembles classic magical realist novels in its juxtaposition of literary realism with\nlong-established cultural traditions\u2014namely, those of the Black American community.",
         "options": [
           "\u201cMuch of the interest of Beloved derives from the productive tension between its\ncompeting influences\u2014namely, Black American cultural traditions and the magical realism of\nLatin America.\u201d",
           "\u201cThe cultural traditions of the Black American community, which figure so prominently in\nthe magical realist tradition of Latin America, permit realistic as well as antirealistic scenarios\n\u2014much as Beloved does.\"",
@@ -571,13 +535,12 @@
         ],
         "answer": 3,
         "difficulty": "Hard",
-        "id": "pt1-m2-q11",
-        "passage": "Scholars cite One Hundred Years of Solitude, the 1967 novel by Colombian author Gabriel\nGarcia Marquez, as a foundational text of magical realism, the Latin American style of fiction\nin which antirealistic plot devices\u2014often borrowed from the spiritual and narrative traditions\nof Indigenous and colonial societies in the Americas\u2014are deployed in an otherwise realistic\nmode of representation typical of the modern novel. This style has exerted a decisive\ninfluence on authors in the United States, including Toni Morrison, whose 1987 novel\nBeloved resembles classic magical realist novels in its juxtaposition of literary realism with\nlong-established cultural traditions\u2014namely, those of the Black American community."
+        "id": "pt1-m2-q11"
       },
       {
         "num": 12,
         "type": "Reading",
-        "question": "Which choice most logically completes the text?",
+        "question": "Which choice most logically completes the text?\n\nDuckweed is a small freshwater plant that is often exposed to zinc pollution. Sofia Vamos\nand colleagues collected samples of four duckweed ecotypes (genetically and\ngeographically distinct populations within a species), along with water from each ecotype\u2019s\nhabitat. Hypothesizing that each ecotype is adapted to its local conditions in ways that\nbolster its growth and resistance to pollutants, the researchers grew each ecotype in all four\nwater samples and with three levels of zinc (none, low, high). (The researchers did not\nreplicate local differences in light or temperature.) They found that the ecotypes grew\nequally well in all four water samples and that adding zinc consistently enhanced growth,\nregardless of concentration, suggesting that",
         "options": [
           "if each ecotype is indeed locally adapted as the researchers hypothesized, those\nadaptations are to other environmental conditions than the water each ecotype inhabits.",
           "while the ecotypes are genetically and geographically distinct, those differences do not\nrepresent adaptations to local environmental conditions.",
@@ -586,13 +549,12 @@
         ],
         "answer": 0,
         "difficulty": "Hard",
-        "id": "pt1-m2-q12",
-        "passage": "Duckweed is a small freshwater plant that is often exposed to zinc pollution. Sofia Vamos\nand colleagues collected samples of four duckweed ecotypes (genetically and\ngeographically distinct populations within a species), along with water from each ecotype\u2019s\nhabitat. Hypothesizing that each ecotype is adapted to its local conditions in ways that\nbolster its growth and resistance to pollutants, the researchers grew each ecotype in all four\nwater samples and with three levels of zinc (none, low, high). (The researchers did not\nreplicate local differences in light or temperature.) They found that the ecotypes grew\nequally well in all four water samples and that adding zinc consistently enhanced growth,\nregardless of concentration, suggesting that"
+        "id": "pt1-m2-q12"
       },
       {
         "num": 13,
         "type": "Reading",
-        "question": "Which choice most logically completes the text?",
+        "question": "Which choice most logically completes the text?\n\nAs juveniles, all white-necked jacobin hummingbirds display vibrantly blue head plumage;\nwhen they enter adulthood, males retain these blue feathers and most females molt to a\ndrab green hue. However, 28% of adult female jacobins remain identical in coloration to\njuveniles and adult males. Based on field observations in Panama, a team of researchers\nreports that while adult males show a clear preference in mate selection for adult females\nwith drab green feathers, they also engage in more antagonistic behavior toward those adult\nfemales than toward blue-feathered adult females when competing for resources. Therefore,\nthe team hypothesizes that",
         "options": [
           "the percentage of blue-feathered females will increase until fewer than half of adult\nfemale jacobins are green-feathered.",
           "the occurrence of blue head plumage in adult female jacobins is driven by one or more\nfactors not associated with mate attraction.",
@@ -601,13 +563,12 @@
         ],
         "answer": 1,
         "difficulty": "Hard",
-        "id": "pt1-m2-q13",
-        "passage": "As juveniles, all white-necked jacobin hummingbirds display vibrantly blue head plumage;\nwhen they enter adulthood, males retain these blue feathers and most females molt to a\ndrab green hue. However, 28% of adult female jacobins remain identical in coloration to\njuveniles and adult males. Based on field observations in Panama, a team of researchers\nreports that while adult males show a clear preference in mate selection for adult females\nwith drab green feathers, they also engage in more antagonistic behavior toward those adult\nfemales than toward blue-feathered adult females when competing for resources. Therefore,\nthe team hypothesizes that"
+        "id": "pt1-m2-q13"
       },
       {
         "num": 14,
         "type": "Reading",
-        "question": "Which choice completes the text so that it conforms to the conventions of Standard English?\nIn Puerto Rico, it\u2019s not unusual for a city or town to be known by a nickname that\ncorresponds to one of its notable features, like landscape, climate, famous residents, or\nchief export. For example, the Puerto Rican municipality of Manati is well known for its\nhistory as a cultural center in the early 20th this distinction has earned it the fitting",
+        "question": "Which choice completes the text so that it conforms to the conventions of Standard English?\nIn Puerto Rico, it\u2019s not unusual for a city or town to be known by a nickname that\ncorresponds to one of its notable features, like landscape, climate, famous residents, or\nchief export. For example, the Puerto Rican municipality of Manati is well known for its\nhistory as a cultural center in the early 20th this distinction has earned it the fitting\n\nnickname of \u201cthe Athens of Puerto Rico.\u201d",
         "options": [
           "century and",
           "century",
@@ -616,13 +577,12 @@
         ],
         "answer": 3,
         "difficulty": "Hard",
-        "id": "pt1-m2-q14",
-        "passage": "nickname of \u201cthe Athens of Puerto Rico.\u201d"
+        "id": "pt1-m2-q14"
       },
       {
         "num": 15,
         "type": "Reading",
-        "question": "Which choice completes the text so that it conforms to the conventions of Standard English?",
+        "question": "Which choice completes the text so that it conforms to the conventions of Standard English?\n\nWorking on an unimaginably small scale of billionths of a meter, nanoengineers have found\n\nways to leverage palladium to facilitate energy generation in fuel cells.",
         "options": [
           "nanoparticles properties",
           "nanoparticle\u2019s properties",
@@ -631,13 +591,12 @@
         ],
         "answer": 3,
         "difficulty": "Hard",
-        "id": "pt1-m2-q15",
-        "passage": "Working on an unimaginably small scale of billionths of a meter, nanoengineers have found\n\nways to leverage palladium to facilitate energy generation in fuel cells."
+        "id": "pt1-m2-q15"
       },
       {
         "num": 16,
         "type": "Reading",
-        "question": "Which choice completes the text so that it conforms to the conventions of Standard English?",
+        "question": "Which choice completes the text so that it conforms to the conventions of Standard English?\n\nBertie Marshall, a key figure in the history of steel band music in Trinidad and Tobago, made\nseveral innovations to the steel wheels so the instrument could be easily transported\n\nduring Carnival, a cover to protect the pans from the sun, and amplification so the sound of\nthe pans could be better heard over large crowds and other instrumentation.",
         "options": [
           "drum,",
           "drum:",
@@ -646,13 +605,12 @@
         ],
         "answer": 1,
         "difficulty": "Hard",
-        "id": "pt1-m2-q16",
-        "passage": "Bertie Marshall, a key figure in the history of steel band music in Trinidad and Tobago, made\nseveral innovations to the steel wheels so the instrument could be easily transported\n\nduring Carnival, a cover to protect the pans from the sun, and amplification so the sound of\nthe pans could be better heard over large crowds and other instrumentation."
+        "id": "pt1-m2-q16"
       },
       {
         "num": 17,
         "type": "Reading",
-        "question": "Which choice completes the text so that it conforms to the conventions of Standard English?",
+        "question": "Which choice completes the text so that it conforms to the conventions of Standard English?\n\nIn a chemical equation, the value known as molar mass is useful for converting between the\nmass of the reactants and the mass of the product. The liquid have molar masses of\n\n186.06 and 78.12 g/mol, respectively.",
         "options": [
           "compounds, hexafluorobenzene (CgFg) and benzene (CgHe),",
           "compounds hexafluorobenzene (CgFg) and benzene (CgHe),",
@@ -661,13 +619,12 @@
         ],
         "answer": 3,
         "difficulty": "Hard",
-        "id": "pt1-m2-q17",
-        "passage": "In a chemical equation, the value known as molar mass is useful for converting between the\nmass of the reactants and the mass of the product. The liquid have molar masses of\n\n186.06 and 78.12 g/mol, respectively."
+        "id": "pt1-m2-q17"
       },
       {
         "num": 18,
         "type": "Reading",
-        "question": "Which choice completes the text so that it conforms to the conventions of Standard English?",
+        "question": "Which choice completes the text so that it conforms to the conventions of Standard English?\n\nThe statement \u201call tarantulas are venomous\" is scientific because it could be proved false by\na single observation to the contrary, according to Karl Popper. Popper's theory that\n\nscientific hypotheses must be refutable, termed the criterion of falsifiability, rejects the\nconfirmationist position that uses verifiability as the standard for scientific hypotheses.",
         "options": [
           "was dictating",
           "dictated",
@@ -676,13 +633,12 @@
         ],
         "answer": 3,
         "difficulty": "Hard",
-        "id": "pt1-m2-q18",
-        "passage": "The statement \u201call tarantulas are venomous\" is scientific because it could be proved false by\na single observation to the contrary, according to Karl Popper. Popper's theory that\n\nscientific hypotheses must be refutable, termed the criterion of falsifiability, rejects the\nconfirmationist position that uses verifiability as the standard for scientific hypotheses."
+        "id": "pt1-m2-q18"
       },
       {
         "num": 19,
         "type": "Reading",
-        "question": "Which choice completes the text so that it conforms to the conventions of Standard English?",
+        "question": "Which choice completes the text so that it conforms to the conventions of Standard English?\n\nGeologist and scholar John Bostock joined with 55 other prominent British writers in 1837 to\npetition the US Congress for greater copyright protections. This cadre of renowned\n\nthat American publishers\u2019 appropriation of their work caused, in the words of the petition,\n\u201cdeep and extensive injuries...on their reputation and property,\u201d helped sow the seeds for the\nInternational Copyright Act of 1891.",
         "options": [
           "authors asserted",
           "authors were asserting",
@@ -691,13 +647,12 @@
         ],
         "answer": 3,
         "difficulty": "Hard",
-        "id": "pt1-m2-q19",
-        "passage": "Geologist and scholar John Bostock joined with 55 other prominent British writers in 1837 to\npetition the US Congress for greater copyright protections. This cadre of renowned\n\nthat American publishers\u2019 appropriation of their work caused, in the words of the petition,\n\u201cdeep and extensive injuries...on their reputation and property,\u201d helped sow the seeds for the\nInternational Copyright Act of 1891."
+        "id": "pt1-m2-q19"
       },
       {
         "num": 20,
         "type": "Reading",
-        "question": "Which choice completes the text with the most logical transition?",
+        "question": "Which choice completes the text with the most logical transition?\n\nIn 2003, some 393 years after Galileo Galilei and Simon Marius independently discovered\nJupiter's four largest moons (lo, Europa, Ganymede, and Callisto), scientists discovered the\n\nmoon Helike in orbit around Jupiter. researchers have discovered eighty moons\n\norbiting Jupiter.",
         "options": [
           "To date,",
           "For example,",
@@ -706,13 +661,12 @@
         ],
         "answer": 0,
         "difficulty": "Hard",
-        "id": "pt1-m2-q20",
-        "passage": "In 2003, some 393 years after Galileo Galilei and Simon Marius independently discovered\nJupiter's four largest moons (lo, Europa, Ganymede, and Callisto), scientists discovered the\n\nmoon Helike in orbit around Jupiter. researchers have discovered eighty moons\n\norbiting Jupiter."
+        "id": "pt1-m2-q20"
       },
       {
         "num": 21,
         "type": "Reading",
-        "question": "Which choice completes the text with the most logical transition?",
+        "question": "Which choice completes the text with the most logical transition?\n\nThe Hornbostel-Sachs system classifies musical instruments by how they produce sound.\nFor example, an instrument that is popular in Norway called the hardingfele produces sound\nprimarily through the vibration of its strings. under the Hornbostel-Sachs system, the\nhardingfele is a chordophone.",
         "options": [
           "Instead,",
           "Furthermore,",
@@ -721,13 +675,12 @@
         ],
         "answer": 2,
         "difficulty": "Hard",
-        "id": "pt1-m2-q21",
-        "passage": "The Hornbostel-Sachs system classifies musical instruments by how they produce sound.\nFor example, an instrument that is popular in Norway called the hardingfele produces sound\nprimarily through the vibration of its strings. under the Hornbostel-Sachs system, the\nhardingfele is a chordophone."
+        "id": "pt1-m2-q21"
       },
       {
         "num": 22,
         "type": "Reading",
-        "question": "Which choice completes the text with the most logical transition?",
+        "question": "Which choice completes the text with the most logical transition?\n\nBrain imaging research led by neuroscientist Dwaynica Greaves found that actors showed\nsuppressed responses in the left anterior prefrontal cortex (the portion of the brain\nassociated with self-awareness) when their names were called during performances;\n\nthe actors\u2019 responses were normal in nonacting contexts. These findings suggest that when\nembodying characters, performers may temporarily set aside their personal identities.",
         "options": [
           "conversely,",
           "specifically,",
@@ -736,13 +689,12 @@
         ],
         "answer": 0,
         "difficulty": "Hard",
-        "id": "pt1-m2-q22",
-        "passage": "Brain imaging research led by neuroscientist Dwaynica Greaves found that actors showed\nsuppressed responses in the left anterior prefrontal cortex (the portion of the brain\nassociated with self-awareness) when their names were called during performances;\n\nthe actors\u2019 responses were normal in nonacting contexts. These findings suggest that when\nembodying characters, performers may temporarily set aside their personal identities."
+        "id": "pt1-m2-q22"
       },
       {
         "num": 23,
         "type": "Reading",
-        "question": "Which choice most effectively uses information from the given sentences to explain the 50\nCompleters hiking challenge to a new audience?",
+        "question": "Which choice most effectively uses information from the given sentences to explain the 50\nCompleters hiking challenge to a new audience?\n\n- The Highpointers Club is a hiking club.\n\n- One of the main goals among club members is to reach the highest points in all fifty US\nstates.\n\n- Those who achieve this are called 50 Completers.\n\n- In Suk Han became a 50 Completer on November 15, 2013.\n\n- The highest point in West Virginia is Soruce Knob, at 4,863 ft.\n- The highest point in Colorado is Mount Elbert, at 14,440 ft.",
         "options": [
           "Hikers aiming to count themselves among the 50 Completers must reach not only West\nVirginia's Spruce Knob but also the even higher peak of Mount Elbert in Colorado.",
           "Not until after you have reached the highest points in all fifty US states\u2014including Spruce\nKnob in West Virginia and Mount Elbert in Colorado\u2014can you include yourself among the 50\nCompleters of the Highpointers Club.",
@@ -751,13 +703,12 @@
         ],
         "answer": 1,
         "difficulty": "Hard",
-        "id": "pt1-m2-q23",
-        "passage": "\u00a2 The Highpointers Club is a hiking club.\n\n\u00a2 One of the main goals among club members is to reach the highest points in all fifty US\nstates.\n\ne Those who achieve this are called 50 Completers.\n\n\u00a2 In Suk Han became a 50 Completer on November 15, 2013.\n\n\u00a2 The highest point in West Virginia is Soruce Knob, at 4,863 ft.\ne The highest point in Colorado is Mount Elbert, at 14,440 ft."
+        "id": "pt1-m2-q23"
       },
       {
         "num": 24,
         "type": "Reading",
-        "question": "Which choice most effectively uses information from the given sentences to introduce Marie\nHall to a new audience?",
+        "question": "Which choice most effectively uses information from the given sentences to introduce Marie\nHall to a new audience?\n\n- Antonio Stradivari (1644-1737) was an Italian instrument maker.\n\n- He made about 1,000 violins in his lifetime.\n\n- Musicians prize his Stradivarius violins for their famed sound quality.\n\n- The Marie Hall Stradivarius is named for former owner Marie Hall, a British violinist.",
         "options": [
           "Of the 1,000 or so violins Antonio Stradivari made, only about 500 exist today.",
           "Marie Hall was a British violinist who once owned a Stradivarius violin.",
@@ -766,23 +717,21 @@
         ],
         "answer": 1,
         "difficulty": "Hard",
-        "id": "pt1-m2-q24",
-        "passage": "e Antonio Stradivari (1644-1737) was an Italian instrument maker.\n\ne\u00a2 He made about 1,000 violins in his lifetime.\n\ne Musicians prize his Stradivarius violins for their famed sound quality.\n\ne The Marie Hall Stradivarius is named for former owner Marie Hall, a British violinist."
+        "id": "pt1-m2-q24"
       },
       {
         "num": 25,
         "type": "Reading",
-        "question": "The student wants to support Browner\u2019s claim about Louis Ballard's compositions. Which\nchoice most effectively uses relevant information from the notes to accomplish this goal?\nWhile researching a topic, a student has taken the following notes:",
+        "question": "The student wants to support Browner\u2019s claim about Louis Ballard's compositions. Which\nchoice most effectively uses relevant information from the notes to accomplish this goal?\n\n- Louis Ballard was a classical composer and citizen of the Quapaw Tribe.\n\n- Ballard's composition Desert Trilogy was nominated for the Pulitzer Prize in music in",
         "options": [],
         "answer": -1,
         "difficulty": "Hard",
-        "id": "pt1-m2-q25",
-        "passage": "e Louis Ballard was a classical composer and citizen of the Quapaw Tribe.\n\n\u00a2 Ballard's composition Desert Trilogy was nominated for the Pulitzer Prize in music in"
+        "id": "pt1-m2-q25"
       },
       {
         "num": 1971,
         "type": "Reading",
-        "question": "e His composition Washington Festival Suite incorporates a Pueblo log drum, a\ntraditional Native instrument.\n\ne Ethnomusicologist Tara Browner claims that Ballard\u2019s compositions rely on elements\noriginating within Native musical traditions.",
+        "question": "- His composition Washington Festival Suite incorporates a Pueblo log drum, a\ntraditional Native instrument.\n\n- Ethnomusicologist Tara Browner claims that Ballard\u2019s compositions rely on elements\noriginating within Native musical traditions.",
         "options": [
           "According to Browner, composer Louis Ballard, who wrote Desert Trilogy, relies on\nelements with origins in Native musical traditions.",
           "Browner posits that Louis Ballard's compositions rely on elements originating within\nNative musical traditions; Washington Festival Suite affirms this assertion, incorporating a\nPueblo log drum.",
@@ -796,7 +745,7 @@
       {
         "num": 26,
         "type": "Reading",
-        "question": "The student wants to present the study's research methods. Which choice most effectively\nuses relevant information from the notes to accomplish this goal?",
+        "question": "The student wants to present the study's research methods. Which choice most effectively\nuses relevant information from the notes to accomplish this goal?\n\n\n- Suzanne K. Birner led a study analyzing rocks on the seafloor to better understand the\nhistory of Earth's mantle.\n\n- Rock samples were collected from two seafloor ridges.\n\n- The researchers determined the samples\u2019 period of formation (the Archean eon) and\noxidation level (extremely low).\n\n- High temperatures in the Archean likely caused the rocks\u2019 low oxidation.\n\n- Birner\u2019s team suggests the oxidation of Earth's mantle has remained stable over time,\ncontrary to previous theories.\n\n- The findings help explain the unique conditions that allowed life to develop on Earth.",
         "options": [
           "To further analyze the origins of Earth\u2019s unique conditions, researchers focused on rocks\nfrom the Archean eon, when Earth's temperatures were extremely high.",
           "Birner\u2019s team analyzed the age and oxidation levels of rock samples collected from two\nseafloor ridges.",
@@ -805,8 +754,7 @@
         ],
         "answer": 1,
         "difficulty": "Hard",
-        "id": "pt1-m2-q26",
-        "passage": "While researching a topic, a student has taken the following notes:\n\ne Suzanne K. Birner led a study analyzing rocks on the seafloor to better understand the\nhistory of Earth's mantle.\n\ne Rock samples were collected from two seafloor ridges.\n\ne The researchers determined the samples\u2019 period of formation (the Archean eon) and\noxidation level (extremely low).\n\ne\u00a2 High temperatures in the Archean likely caused the rocks\u2019 low oxidation.\n\ne Birner\u2019s team suggests the oxidation of Earth's mantle has remained stable over time,\ncontrary to previous theories.\n\ne The findings help explain the unique conditions that allowed life to develop on Earth."
+        "id": "pt1-m2-q26"
       }
     ]
   }

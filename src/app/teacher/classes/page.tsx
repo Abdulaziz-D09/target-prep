@@ -94,7 +94,12 @@ export default function ClassesPage() {
                 </motion.section>
 
                 {/* List Container */}
-                <motion.section className="site-panel rounded-[34px] p-5 sm:p-6 mb-6" variants={sectionRevealVariants}>
+                <motion.section 
+                    className="site-panel rounded-[34px] p-5 sm:p-6 mb-6" 
+                    variants={sectionRevealVariants}
+                    initial="hidden"
+                    animate="visible"
+                >
                 {classrooms.length === 0 ? (
                     <motion.div variants={itemRevealVariants}>
                         <div className="site-panel rounded-[24px] p-16 flex flex-col items-center text-center border-2 border-slate-200 dark:border-slate-800">

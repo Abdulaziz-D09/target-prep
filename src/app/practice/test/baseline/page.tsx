@@ -7,8 +7,8 @@ import { resolvePracticeTest } from '@/lib/practiceCatalog';
 import { HighlightableText } from '@/components/HighlightableText';
 import DesmosCalculator from '@/components/DesmosCalculator';
 import { ReferenceSheet } from '@/components/ReferenceSheet';
-import { cleanOCR } from '@/components/PassageRenderer';
-import { MathText } from '@/components/MathText';
+import { cleanOCR, PassageRenderer } from '@/components/PassageRenderer';
+import { LatexRenderer } from '@/components/LatexRenderer';
 import Link from 'next/link';
 import { AnimatePresence, motion } from 'framer-motion';
 
@@ -833,7 +833,7 @@ export default function BaselineTestPage() {
                 {/* Center: Timer */}
                 <div className="flex flex-col items-center justify-center flex-1 absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 w-[180px]">
                     {!isTimerHidden ? (
-                        <div className="timer-digits font-bold text-[20px] tracking-wider text-slate-800 flex items-center justify-center gap-2 bg-slate-100/80 backdrop-blur-sm px-5 py-1.5 rounded-full border border-slate-200 shadow-inner">
+                        <div className="font-bold text-[18px] tracking-wide text-slate-800 flex items-center justify-center gap-2 px-4 py-1">
                             {formatBluebookTime(timeRemaining)}
                         </div>
                     ) : (
@@ -975,7 +975,7 @@ export default function BaselineTestPage() {
                             <div className="overflow-y-auto p-4 lg:p-10 pr-4 lg:pr-6 flex justify-center bg-white" style={{ width: `${leftPanelWidth}%` }}>
                                 <div className="w-full max-w-[800px] relative mt-2">
                                     {currentQuestion?.passage ? (
-                                        <HighlightableText
+                                        <PassageRenderer
                                             text={currentQuestion.passage}
                                             highlights={highlights[questionKey] || []}
                                             onAddHighlight={(h) => addHighlight(questionKey, { ...h, id: Math.random().toString(36).substring(2, 11) })}
@@ -1043,17 +1043,19 @@ export default function BaselineTestPage() {
                                     <div className="mb-5 flex items-center justify-center">
                                         <img
                                             src={currentQuestion.image}
-                                            alt="Question figure"
-                                            className="max-w-full max-h-[200px] object-contain cursor-pointer hover:opacity-90 transition-opacity"
+                                            alt="Question image"
+                                            className="max-w-full max-h-[400px] object-contain cursor-pointer hover:opacity-90 transition-opacity"
                                             onClick={() => setExpandedImage(currentQuestion.image || null)}
                                         />
                                     </div>
                                 )}
-                                <div className="text-[18px] text-[#111827] mb-6 leading-relaxed">
+                                <div className="text-[17px] text-[#111827] mb-6 leading-[1.9]">
                                     {currentQuestion?.type === 'Math' || currentQuestion?.type === 'Math (SPR)' ? (
-                                        <MathText
-                                            text={cleanOCR(currentQuestion?.question || '')}
-                                            style={{ fontSize: 18, lineHeight: 1.7, display: 'block' }}
+                                        <LatexRenderer
+                                            text={cleanOCR(
+                                                currentQuestion?.question || currentQuestion?.passage || ''
+                                            ).replace(/^\s*\d+[\.\)]\s*/, '')}
+                                            className="block text-[17px] leading-[1.9]"
                                         />
                                     ) : (
                                         <HighlightableText
@@ -1076,7 +1078,7 @@ export default function BaselineTestPage() {
                                                 id="spr-answer-input"
                                                 value={typeof userAnswers[questionKey] === 'string' ? userAnswers[questionKey] as string : typeof userAnswers[questionKey] === 'number' ? String(userAnswers[questionKey]) : ''}
                                                 onChange={(e) => selectAnswer(questionKey, e.target.value)}
-                                                className="w-[200px] h-[52px] border-2 border-[#D1D5DB] rounded-[8px] px-4 text-[18px] font-mono font-bold text-[#111827] text-left focus:outline-none focus:border-[#111827] transition-colors bg-white"
+                                                className="w-[280px] h-[52px] border-2 border-[#D1D5DB] rounded-[8px] px-4 text-[17px] font-mono font-bold text-[#111827] text-left focus:outline-none focus:border-[#111827] transition-colors bg-white"
                                                 autoComplete="off"
                                                 spellCheck={false}
                                             />
@@ -1120,8 +1122,8 @@ export default function BaselineTestPage() {
                                                     {/* Answer Text */}
                                                     <div className="flex-1 p-4 flex items-center">
                                                         <span className={`text-[17px] ${isEliminated ? 'text-slate-400' : 'text-[#111827]'}`}>
-                                                            {currentQuestion?.type === 'Math' || currentQuestion?.type === 'Math (SPR)' ? (
-                                                                <MathText text={cleanOCR(opt || '')} />
+                                                            {currentSection?.name === 'Math' ? (
+                                                                <LatexRenderer text={cleanOCR(opt || '')} />
                                                             ) : (
                                                                 cleanOCR(opt || '')
                                                             )}

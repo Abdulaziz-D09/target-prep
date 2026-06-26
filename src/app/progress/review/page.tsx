@@ -241,6 +241,10 @@ export default function ReviewPage() {
 
       {/* ── HEADER ── */}
       <div className="mx-auto max-w-[900px]">
+        <Link href="/progress" className="inline-flex items-center gap-2 text-slate-500 hover:text-slate-900 transition-colors mb-6 text-sm font-semibold">
+          <ArrowLeft className="w-4 h-4" />
+          Back to Progress
+        </Link>
         {/* ── SCORE CARD (College Board style) ── */}
         <div className="site-panel rounded-[32px] overflow-hidden mb-6 shadow-xl">
           {/* Top stripe */}

@@ -107,12 +107,6 @@ export function ReviewModal({ isOpen, onClose, questionKey, testData, userAnswer
                     <div className="flex items-center gap-6">
                         <div className="flex flex-col items-end">
                             <span className="text-[11px] font-bold uppercase tracking-wider text-black">Knowledge and Skills: {sectionName}</span>
-                            <div className="flex gap-0.5 mt-0.5">
-                                {[...Array(7)].map((_, i) => (
-                                    <div key={i} className={`h-1.5 w-6 rounded-sm ${i < (q.difficulty === 'Hard' ? 6 : q.difficulty === 'Medium' ? 4 : 2) ? 'bg-blue-600' : 'bg-slate-200'}`} />
-                                ))}
-                            </div>
-                            <span className="text-[10px] text-black mt-0.5">Difficulty level: <span className="text-blue-600 font-bold">{q.difficulty || 'Medium'}</span></span>
                         </div>
                         <button onClick={onClose} className="p-2 hover:bg-slate-100 rounded-full transition-colors text-slate-500">
                             <X className="w-5 h-5" />
@@ -133,7 +127,7 @@ export function ReviewModal({ isOpen, onClose, questionKey, testData, userAnswer
                         )}
                         {q.image && (
                             <div className="mb-4 rounded-xl overflow-hidden border border-slate-200 bg-slate-50 flex items-center justify-center">
-                                <img src={q.image} alt="Question figure" className="max-w-full max-h-[200px] object-contain p-2" />
+                                <img src={q.image} alt="Question figure" className="max-w-full max-h-[400px] object-contain p-2" />
                             </div>
                         )}
                         <h4 className="text-[15px] font-medium text-slate-900 mb-4">

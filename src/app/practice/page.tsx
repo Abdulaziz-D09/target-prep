@@ -111,9 +111,9 @@ export default function PracticePage() {
         <div className="absolute right-6 top-6 h-24 w-24 rounded-full bg-white/8 blur-3xl" />
 
         <div className="relative flex items-start gap-4">
-          <div className={`flex h-[86px] w-[86px] flex-shrink-0 flex-col items-center justify-center rounded-[24px] ${theme.statIcon} text-center shadow-sm`}>
-              <p className="text-[10px] font-bold uppercase tracking-[0.24em] opacity-70">Test</p>
-              <p className="mt-1 text-3xl font-black tracking-[-0.06em]">{card.id}</p>
+          <div className={`flex h-[86px] w-[86px] flex-shrink-0 flex-col items-center justify-center rounded-[24px] ${theme.statIcon} text-center shadow-sm pt-[2px]`}>
+              <p className="text-[10px] font-bold uppercase tracking-[0.24em] opacity-70 leading-none mb-1">Test</p>
+              <p className="text-4xl font-black tracking-[-0.06em] leading-none">{card.id}</p>
           </div>
 
           <div className="max-w-[30rem]">
@@ -190,7 +190,7 @@ export default function PracticePage() {
               <div className="site-panel-soft grid gap-4 rounded-[28px] p-4 sm:p-5 lg:grid-cols-2">
                 <motion.div className="site-subpanel rounded-[24px] p-4" initial={shouldReduceMotion ? undefined : { opacity: 0, y: 12 }} animate={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }} exit={shouldReduceMotion ? undefined : { opacity: 0, y: 12 }} transition={shouldReduceMotion ? undefined : { duration: 0.35, ease: siteEase }}>
                   <div className="flex items-center gap-3">
-                    <div className="practice-icon--sky flex h-11 w-11 items-center justify-center rounded-2xl">
+                    <div className="practice-icon--sky shrink-0 flex h-11 w-11 items-center justify-center rounded-[12px]">
                       <BookOpen className="h-5 w-5" />
                     </div>
                     <div>
@@ -226,7 +226,7 @@ export default function PracticePage() {
 
                 <motion.div className="site-subpanel rounded-[24px] p-4" initial={shouldReduceMotion ? undefined : { opacity: 0, y: 12 }} animate={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }} exit={shouldReduceMotion ? undefined : { opacity: 0, y: 12 }} transition={shouldReduceMotion ? undefined : { duration: 0.35, ease: siteEase, delay: 0.04 }}>
                   <div className="flex items-center gap-3">
-                    <div className="practice-icon--rose flex h-11 w-11 items-center justify-center rounded-2xl">
+                    <div className="practice-icon--rose shrink-0 flex h-11 w-11 items-center justify-center rounded-[12px]">
                       <Calculator className="h-5 w-5" />
                     </div>
                     <div>

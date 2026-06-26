@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import {
     Upload, FileText, Sparkles, ChevronLeft, ChevronRight, Check,
-    AlertCircle, ArrowLeft, GraduationCap, Loader2, X, Send,
+    AlertCircle, ArrowLeft, GraduationCap, Loader2, X, Send, Image as ImageIcon
 } from 'lucide-react';
 import Link from 'next/link';
 import { FloatingPageShapes, itemRevealVariants, pageRevealVariants } from '@/components/SiteMotion';
@@ -27,6 +27,8 @@ type ParsedQuestion = {
     stem: string;
     options: { A: string; B: string; C: string; D: string };
     answer: Option | null;
+    imageUrl?: string;
+    imagePosition?: 'before-stem' | 'after-stem';
 };
 
 type WizardStep = 1 | 2 | 3 | 4;
@@ -125,10 +127,13 @@ export default function CreateAssignmentPage() {
     const [isScanning, setIsScanning]     = useState(false);
     const [scanError, setScanError]       = useState('');
     const fileInputRef = useRef<HTMLInputElement>(null);
+    const abortControllerRef = useRef<AbortController | null>(null);
 
     // Step 2
     const [questions, setQuestions]   = useState<ParsedQuestion[]>([]);
     const [currentIdx, setCurrentIdx] = useState(0);
+    const [isUploadingImage, setIsUploadingImage] = useState(false);
+    const imageInputRef = useRef<HTMLInputElement>(null);
 
     // Step 4
     const [title, setTitle]                           = useState('');
@@ -136,6 +141,7 @@ export default function CreateAssignmentPage() {
     const [selectedClassroomIds, setSelectedClassroomIds] = useState<string[]>([]);
     const [timeLimitMinutes, setTimeLimitMinutes] = useState(60);
     const [allowExit, setAllowExit]                   = useState(false);
+    const [strictToleranceSeconds, setStrictToleranceSeconds] = useState(5);
     const [isSaving, setIsSaving]                     = useState(false);
 
     // ── Step 1: Scan ──────────────────────────────────────────────────────────
@@ -153,18 +159,22 @@ export default function CreateAssignmentPage() {
         }
 
         setIsScanning(true);
+        abortControllerRef.current = new AbortController();
+        const signal = abortControllerRef.current.signal;
+        
         try {
             let res: Response;
 
             if (inputTab === 'upload' && uploadedFile) {
                 const fd = new FormData();
                 fd.append('file', uploadedFile);
-                res = await fetch('/api/scan-pdf', { method: 'POST', body: fd });
+                res = await fetch('/api/scan-pdf', { method: 'POST', body: fd, signal });
             } else {
                 res = await fetch('/api/scan-pdf', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ text: pastedText }),
+                    signal
                 });
             }
 
@@ -196,7 +206,10 @@ export default function CreateAssignmentPage() {
             setCurrentIdx(0);
             setTimeLimitMinutes(Math.max(20, Math.ceil(parsed.length * 1.5)));
             setStep(2);
-        } catch {
+        } catch (error: any) {
+            if (error.name === 'AbortError') {
+                return;
+            }
             setScanError('Network error. Check your connection and try again.');
         } finally {
             setIsScanning(false);
@@ -209,6 +222,27 @@ export default function CreateAssignmentPage() {
         setQuestions((prev) =>
             prev.map((q, i) => (i === currentIdx ? { ...q, answer } : q))
         );
+    };
+
+    const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+        
+        setIsUploadingImage(true);
+        try {
+            const formData = new FormData();
+            formData.append('file', file);
+            const res = await fetch('/api/upload-image', { method: 'POST', body: formData });
+            const data = await res.json();
+            if (data.url) {
+                setQuestions(prev => prev.map((q, i) => i === currentIdx ? { ...q, imageUrl: data.url, imagePosition: q.imagePosition || 'after-stem' } : q));
+            }
+        } catch (err) {
+            console.error('Failed to upload image', err);
+        } finally {
+            setIsUploadingImage(false);
+            if (e.target) e.target.value = '';
+        }
     };
 
     const currentQ      = questions[currentIdx];
@@ -227,12 +261,15 @@ export default function CreateAssignmentPage() {
             classroomIds: selectedClassroomIds,
             timeLimitMinutes,
             allowExit,
+            strictToleranceSeconds,
             questions: questions.map((q) => ({
                 id: q.id,
                 passage: q.passage ?? undefined,
                 stem: q.stem,
                 options: q.options,
                 answer: q.answer ?? 'A',
+                imageUrl: q.imageUrl,
+                imagePosition: q.imagePosition,
             })),
         });
         router.push('/teacher/assignments');
@@ -279,6 +316,21 @@ export default function CreateAssignmentPage() {
                         Back to Assignments
                     </Link>
                 </motion.div>
+
+                {classrooms.length === 0 && (
+                    <motion.div className="mb-8 site-panel border-rose-200 bg-rose-50 dark:bg-rose-900/20 dark:border-rose-900/50 p-6 flex items-start gap-4" variants={itemRevealVariants}>
+                        <div className="p-3 bg-rose-100 dark:bg-rose-900/50 rounded-xl text-rose-600 dark:text-rose-400">
+                            <GraduationCap className="h-6 w-6" />
+                        </div>
+                        <div>
+                            <h3 className="text-lg font-black text-rose-900 dark:text-rose-100">No Classes Found</h3>
+                            <p className="mt-1 text-sm text-rose-700 dark:text-rose-300">You need to create at least one class before you can assign work to students.</p>
+                            <Link href="/teacher/classes" className="mt-3 inline-flex items-center gap-2 px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white text-sm font-bold rounded-xl transition shadow-sm">
+                                Create a Class Now
+                            </Link>
+                        </div>
+                    </motion.div>
+                )}
 
                 {/* Header */}
                 <motion.div className="mb-6" variants={itemRevealVariants}>
@@ -379,7 +431,14 @@ export default function CreateAssignmentPage() {
                                                 <p className="font-bold site-text-strong text-[15px]">{uploadedFile.name}</p>
                                                 <p className="text-[13px] site-text-muted mt-1">{(uploadedFile.size / 1024).toFixed(0)} KB</p>
                                                 <button
-                                                    onClick={(e) => { e.stopPropagation(); setUploadedFile(null); }}
+                                                    onClick={(e) => { 
+                                                        e.stopPropagation(); 
+                                                        setUploadedFile(null); 
+                                                        if (isScanning && abortControllerRef.current) {
+                                                            abortControllerRef.current.abort();
+                                                            setIsScanning(false);
+                                                        }
+                                                    }}
                                                     className="mt-3 flex items-center gap-1 text-[12px] text-rose-500 font-semibold hover:underline"
                                                 >
                                                     <X className="h-3.5 w-3.5" /> Remove
@@ -462,8 +521,53 @@ export default function CreateAssignmentPage() {
                                             />
                                         </div>
                                     )}
+                                    
+                                    {currentQ.imageUrl && currentQ.imagePosition === 'before-stem' && (
+                                        <div className="mb-4 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 max-h-64 flex justify-center bg-slate-50 dark:bg-slate-900/50">
+                                            <img src={currentQ.imageUrl} alt="Question image" className="object-contain max-h-64" />
+                                        </div>
+                                    )}
+
                                     <div className="text-[17px] leading-[1.7] site-text-strong font-[450] font-bluebook">
                                         <LatexRenderer text={currentQ.stem} />
+                                    </div>
+
+                                    {currentQ.imageUrl && currentQ.imagePosition === 'after-stem' && (
+                                        <div className="mt-4 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 max-h-64 flex justify-center bg-slate-50 dark:bg-slate-900/50">
+                                            <img src={currentQ.imageUrl} alt="Question image" className="object-contain max-h-64" />
+                                        </div>
+                                    )}
+
+                                    {/* Image controls */}
+                                    <div className="mt-6 flex flex-wrap items-center gap-3">
+                                        <input type="file" accept="image/*" className="hidden" ref={imageInputRef} onChange={handleImageUpload} />
+                                        <button 
+                                            onClick={() => imageInputRef.current?.click()}
+                                            disabled={isUploadingImage}
+                                            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border-2 border-slate-200 dark:border-slate-700 site-subpanel text-[12px] font-bold site-text hover:border-indigo-400 dark:hover:border-indigo-600 transition disabled:opacity-50"
+                                        >
+                                            {isUploadingImage ? <Loader2 className="h-4 w-4 animate-spin" /> : <ImageIcon className="h-4 w-4" />}
+                                            {currentQ.imageUrl ? 'Change Image' : 'Add Image'}
+                                        </button>
+
+                                        {currentQ.imageUrl && (
+                                            <>
+                                                <select 
+                                                    value={currentQ.imagePosition || 'after-stem'}
+                                                    onChange={(e) => setQuestions(prev => prev.map((q, i) => i === currentIdx ? { ...q, imagePosition: e.target.value as 'before-stem' | 'after-stem' } : q))}
+                                                    className="px-2 py-1.5 rounded-lg border-2 border-slate-200 dark:border-slate-700 site-subpanel text-[12px] font-bold site-text focus:outline-none focus:border-indigo-500"
+                                                >
+                                                    <option value="before-stem">Before Question</option>
+                                                    <option value="after-stem">After Question</option>
+                                                </select>
+                                                <button 
+                                                    onClick={() => setQuestions(prev => prev.map((q, i) => i === currentIdx ? { ...q, imageUrl: undefined } : q))}
+                                                    className="flex items-center gap-1 px-2 py-1.5 text-[12px] font-bold text-rose-500 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-900/20 rounded-lg transition"
+                                                >
+                                                    <X className="h-3.5 w-3.5" /> Remove
+                                                </button>
+                                            </>
+                                        )}
                                     </div>
                                 </div>
 
@@ -493,21 +597,25 @@ export default function CreateAssignmentPage() {
                                         <ChevronLeft className="h-4 w-4" /> Prev
                                     </button>
 
-                                    {/* Dot navigation */}
-                                    <div className="flex gap-1">
-                                        {questions.map((q, i) => (
-                                            <button
-                                                key={q.id}
-                                                onClick={() => setCurrentIdx(i)}
-                                                className={`rounded-full transition-all ${
-                                                    i === currentIdx
-                                                        ? 'h-2.5 w-2.5 bg-indigo-600 scale-125'
-                                                        : q.answer
-                                                            ? 'h-2.5 w-2.5 bg-indigo-300 dark:bg-indigo-700'
-                                                            : 'h-2.5 w-2.5 bg-slate-300 dark:bg-slate-600'
-                                                }`}
-                                            />
-                                        ))}
+                                    {/* Numbered navigation */}
+                                    <div className="flex-1 overflow-x-auto custom-scrollbar px-4 pb-1">
+                                        <div className="flex gap-1.5 justify-center min-w-max mx-auto">
+                                            {questions.map((q, i) => (
+                                                <button
+                                                    key={q.id}
+                                                    onClick={() => setCurrentIdx(i)}
+                                                    className={`flex-shrink-0 flex items-center justify-center h-8 w-8 rounded-md text-[13px] font-bold transition-all ${
+                                                        i === currentIdx
+                                                            ? 'bg-indigo-600 text-white shadow-sm ring-1 ring-indigo-600 ring-offset-1 dark:ring-offset-slate-900'
+                                                            : q.answer
+                                                                ? 'bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800/50 hover:bg-indigo-100 dark:hover:bg-indigo-900/50'
+                                                                : 'site-subpanel text-slate-500 dark:text-slate-400 border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800'
+                                                    }`}
+                                                >
+                                                    {i + 1}
+                                                </button>
+                                            ))}
+                                        </div>
                                     </div>
 
                                     {currentIdx < questions.length - 1 ? (
@@ -679,14 +787,16 @@ export default function CreateAssignmentPage() {
                                         <label className="block text-[11px] font-bold uppercase tracking-widest site-text-muted mb-2">Time Limit (minutes)</label>
                                         <input
                                             type="number"
-                                            min={5}
-                                            max={240}
-                                            step={5}
-                                            value={timeLimitMinutes}
+                                            min={1}
+                                            value={timeLimitMinutes || ''}
                                             onChange={(e) => {
+                                                if (e.target.value === '') {
+                                                    setTimeLimitMinutes(0);
+                                                    return;
+                                                }
                                                 const raw = Number(e.target.value);
                                                 if (!Number.isFinite(raw)) return;
-                                                setTimeLimitMinutes(Math.min(240, Math.max(5, Math.round(raw))));
+                                                setTimeLimitMinutes(Math.max(1, Math.round(raw)));
                                             }}
                                             className="w-full px-4 py-3 rounded-xl site-subpanel bg-transparent outline-none border-2 border-transparent focus:border-indigo-500 transition text-[15px] font-semibold site-text-strong"
                                         />
@@ -713,6 +823,22 @@ export default function CreateAssignmentPage() {
                                             </div>
                                         </button>
                                         <p className="mt-1.5 text-[12px] site-text-muted">Prevents cheating by locking the student in full screen.</p>
+                                        {!allowExit && (
+                                            <div className="mt-4">
+                                                <label className="block text-[11px] font-bold uppercase tracking-widest site-text-muted mb-2">Tolerance Timer (seconds)</label>
+                                                <input
+                                                    type="number"
+                                                    min={1}
+                                                    value={strictToleranceSeconds || ''}
+                                                    onChange={(e) => {
+                                                        const raw = Number(e.target.value);
+                                                        setStrictToleranceSeconds(Math.max(1, Math.round(raw)));
+                                                    }}
+                                                    className="w-full px-4 py-3 rounded-xl site-subpanel bg-transparent outline-none border-2 border-transparent focus:border-indigo-500 transition text-[15px] font-semibold site-text-strong"
+                                                />
+                                                <p className="mt-1 text-[12px] site-text-muted">Seconds given to return to fullscreen before auto-submitting.</p>
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                             </div>

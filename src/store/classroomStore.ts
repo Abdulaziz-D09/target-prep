@@ -37,6 +37,8 @@ export type Question = {
   options: QuestionOption;
   answer: 'A' | 'B' | 'C' | 'D';
   passage?: string;
+  imageUrl?: string;
+  imagePosition?: 'before-stem' | 'after-stem';
 };
 
 export type Assignment = {
@@ -47,6 +49,7 @@ export type Assignment = {
   questions: Question[];
   timeLimitMinutes: number;
   allowExit?: boolean;
+  strictToleranceSeconds?: number;
   createdAt: string;
 };
 
@@ -59,7 +62,9 @@ export type MockSession = {
   timeLimitMinutes: number;
   maxStudents: number;
   attachedTestIds: string[];
+  customQuestions?: Record<string, any>;
   joinCode: string;
+  strictToleranceSeconds?: number;
   createdAt: string;
   status: 'upcoming' | 'active' | 'completed';
   strictMode?: boolean;
@@ -196,6 +201,8 @@ type Actions = {
   deleteClassroom: (id: string) => void;
   addAssignment: (data: Omit<Assignment, 'id' | 'createdAt'>) => void;
   deleteAssignment: (id: string) => void;
+  updateAssignmentQuestion: (assignmentId: string, questionId: string, newQuestion: any) => void;
+  updateMockQuestion: (mockId: string, testId: string, questionId: string, newQuestion: any) => void;
   joinClassroom: (code: string) => boolean;
   leaveClassroom: (id: string) => void;
   
@@ -252,14 +259,19 @@ export const useClassroomStore = create<State & Actions>()(
           return;
         }
 
-        set({
-          classrooms: [],
-          students: [],
-          assignments: [],
-          progress: [],
-          questionHistory: [],
-          seeded: true,
-        });
+        // Only clear if we actually have no classes (protect against accidental wiping when seeded is false due to version mismatch)
+        if (current.classrooms.length === 0) {
+            set({
+              classrooms: [],
+              students: [],
+              assignments: [],
+              progress: [],
+              questionHistory: [],
+              seeded: true,
+            });
+        } else {
+            set({ seeded: true });
+        }
       },
 
       addClassroom: (name, grade) => {
@@ -329,6 +341,52 @@ export const useClassroomStore = create<State & Actions>()(
         });
       },
 
+      updateAssignmentQuestion: async (assignmentId, questionId, newQuestion) => {
+        const { assignments } = get();
+        const asgnIndex = assignments.findIndex(a => a.id === assignmentId);
+        if (asgnIndex === -1) return;
+        const newAsgns = [...assignments];
+        const asgn = { ...newAsgns[asgnIndex] };
+        const qIndex = asgn.questions.findIndex((q: any) => q.id === questionId);
+        if (qIndex !== -1) {
+          asgn.questions = [...asgn.questions];
+          asgn.questions[qIndex] = newQuestion;
+        } else {
+          asgn.questions = [...asgn.questions, newQuestion];
+        }
+        newAsgns[asgnIndex] = asgn;
+        set({ assignments: newAsgns });
+        // Sync to supabase
+        if (typeof window !== 'undefined') {
+          const { supabase } = await import('@/lib/supabase/client');
+          const { data: dbClassrooms } = await supabase.from('classrooms').select('id, assignments');
+          if (dbClassrooms) {
+            for (const c of dbClassrooms) {
+              if (c.assignments) {
+                const classAsgns = (c.assignments as any[]).map((a: any) => a.id === assignmentId ? asgn : a);
+                await supabase.from('classrooms').update({ assignments: classAsgns }).eq('id', c.id);
+              }
+            }
+          }
+        }
+      },
+      updateMockQuestion: async (mockId, testId, questionId, newQuestion) => {
+        const { mocks } = get();
+        const mockIndex = mocks.findIndex(m => m.id === mockId);
+        if (mockIndex === -1) return;
+        const newMocks = [...mocks];
+        const mock = { ...newMocks[mockIndex] };
+        mock.customQuestions = { ...(mock.customQuestions || {}) };
+        mock.customQuestions[questionId] = newQuestion;
+        newMocks[mockIndex] = mock;
+        set({ mocks: newMocks });
+        // Sync to supabase
+        if (typeof window !== 'undefined') {
+          const { supabase } = await import('@/lib/supabase/client');
+          await supabase.from('mocks').update({ custom_questions: mock.customQuestions }).eq('id', mockId);
+        }
+      },
+
       joinClassroom: (code) => {
         const s = get();
         const cls = s.classrooms.find(c => c.joinCode === code.trim().toUpperCase());
@@ -336,7 +394,7 @@ export const useClassroomStore = create<State & Actions>()(
         if (s.joinedClassroomIds.includes(cls.id)) return true; // Already joined
         const newStudent: Student = {
             id: `stu-${Date.now()}`,
-            name: "You (Student)",
+            name: "New Student",
             classroomId: cls.id,
             joinedAt: new Date().toISOString(),
             avatar: "blue",
@@ -348,14 +406,22 @@ export const useClassroomStore = create<State & Actions>()(
 
         createClient().auth.getSession().then(({ data: { session } }) => {
           const userId = session?.user?.id;
+          const metadata = session?.user?.user_metadata;
+          const fullName = metadata?.first_name ? `${metadata.first_name} ${metadata.last_name || ''}`.trim() : "Unknown Student";
+          
           if (userId) {
             set((s) => ({
-              students: s.students.map(stu => stu.id === newStudent.id ? { ...stu, user_id: userId } : stu)
+              students: s.students.map(stu => stu.id === newStudent.id ? { ...stu, user_id: userId, name: fullName } : stu)
+            }));
+          } else {
+            set((s) => ({
+              students: s.students.map(stu => stu.id === newStudent.id ? { ...stu, name: fullName } : stu)
             }));
           }
+          
           createClient().from('students').insert({
             id: newStudent.id,
-            name: newStudent.name,
+            name: fullName,
             classroom_id: newStudent.classroomId,
             joined_at: newStudent.joinedAt,
             avatar: newStudent.avatar,

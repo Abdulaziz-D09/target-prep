@@ -39,7 +39,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <SiteAtmosphereWrapper />
         <SupabaseSyncProvider />
         <SidebarWrapper />
-        <main className="relative flex-1 overflow-y-auto">
+        <main className="relative flex-1 flex flex-col overflow-y-auto">
           <RouteTransition>{children}</RouteTransition>
         </main>
       </body>

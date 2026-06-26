@@ -1180,7 +1180,7 @@ C (5n+4=1005n+4=100
 n 9-inch parts themselves.
 
 
-Question 22 — Answer: D (N = 200(2.20)^(t/4))
+Question 22 — Answer: D (N = 200(2.20)^{\dfrac{t}{4}})
 Core Mathematical Concept: Exponential models (Advanced Math)
 Step-by-Step Proof:
 Choice D is correct.
@@ -1191,15 +1191,15 @@ At t=0t = 0
 t=0: N=200N = 200
 N=200 ✓
 At t=4t = 4
-t=4 (one 4-year period): N=200×2.204/4=200×2.20=440N = 200 \times 2.20^{4/4} = 200 \times 2.20 = 440
+t=4 (one 4-year period): N=200×2.204/4=200×2.20=440N = 200 \times 2.20^{\dfrac{4}{4}} = 200 \times 2.20 = 440
 N=200×2.204/4=200×2.20=440 ✓ (120% more than 200 = 440)
 At t=8t = 8
-t=8: N=200×2.208/4=200×2.202=968N = 200 \times 2.20^{8/4} = 200 \times 2.20^2 = 968
+t=8: N=200×2.208/4=200×2.202=968N = 200 \times 2.20^{\dfrac{8}{4}} = 200 \times 2.20^2 = 968
 N=200×2.208/4=200×2.202=968 ✓
 
 The exponent is t4\dfrac{t}{4}
 4t​ because one period passes every 4 years.
-N=200(2.20)t/4\boxed{N = 200(2.20)^{t/4}}N=200(2.20)t/4​
+N=200(2.20)t/4\boxed{N = 200(2.20)^{\dfrac{t}{4}}}N=200(2.20)t/4​
 Why the Incorrect Answers are Wrong:
 
 A (200(2.20)4t200(2.20)^{4t}
@@ -1208,7 +1208,7 @@ t=1 year the population would be ~4,686.
 B (200(1.20)4t200(1.20)^{4t}
 200(1.20)4t): Uses 1.20 (which would be "20% more"), and the 4t4t
 4t exponent grows too fast.
-C (200(1.20)t/4200(1.20)^{t/4}
+C (200(1.20)t/4200(1.20)^{\dfrac{t}{4}}
 200(1.20)t/4): Uses 1.20 which represents only a 20% increase, not 120%.
 
 

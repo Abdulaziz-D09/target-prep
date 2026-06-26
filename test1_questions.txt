@@ -743,7 +743,7 @@ Answer: D
 
 2. 
 ![Q2 Graph](/pt1/m1-q2.png)
-Note: Figure not drawn to scale. In the figure, line $p$ is parallel to line $r$, and line $t$ intersects both lines. What is the value of $x$?
+In the figure, line $p$ is parallel to line $r$, and line $t$ intersects both lines. What is the value of $x$?
 A. $36$
 B. $72$
 C. $180$
@@ -920,7 +920,7 @@ Answer: D
 2. 
 ![Q2 Graph](/pt1/m2-q2.png)
 
-Note: Figure not drawn to scale. In the figure shown, line $k$ intersects lines $r$ and $s$. If $w=147$, which additional piece of information is sufficient to prove that lines $r$ and $s$ are parallel?
+In the figure shown, line $k$ intersects lines $r$ and $s$. If $w=147$, which additional piece of information is sufficient to prove that lines $r$ and $s$ are parallel?
 
 A. $x=33$
 B. $y=147$

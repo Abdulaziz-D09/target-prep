@@ -927,7 +927,7 @@ const pt1_mathModule1: Question[] = [
         "id": "pt1-math-m1-q2",
         "num": 2,
         "type": "Math",
-        "question": "![Q2 Graph](/pt1/m1-q2.png)\nNote: Figure not drawn to scale. In the figure, line $p$ is parallel to line $r$, and line $t$ intersects both lines. What is the value of $x$?",
+        "question": "![Q2 Graph](/pt1/m1-q2.png)\nIn the figure, line $p$ is parallel to line $r$, and line $t$ intersects both lines. What is the value of $x$?",
         "options": [
             "$36$",
             "$72$",
@@ -1231,7 +1231,7 @@ const pt1_mathModule2: Question[] = [
         "id": "pt1-math-m2-q2",
         "num": 2,
         "type": "Math",
-        "question": "![Q2 Graph](/pt1/m2-q2.png)\n\nNote: Figure not drawn to scale. In the figure shown, line $k$ intersects lines $r$ and $s$. If $w=147$, which additional piece of information is sufficient to prove that lines $r$ and $s$ are parallel?",
+        "question": "![Q2 Graph](/pt1/m2-q2.png)\n\nIn the figure shown, line $k$ intersects lines $r$ and $s$. If $w=147$, which additional piece of information is sufficient to prove that lines $r$ and $s$ are parallel?",
         "options": [
             "$x=33$",
             "$y=147$",
@@ -2509,7 +2509,7 @@ const pt2_mathModule1: Question[] = [
         "id": "pt2-math-m1-q10",
         "num": 10,
         "type": "Math",
-        "question": "![Graph](/pt2/m1-q10.png)\nNote: Figure not drawn to scale. In the figure shown, lines $\\ell$ and $k$ are parallel and line $j$ intersects both lines. If $z > 116$,\nwhich of the following must be true?",
+        "question": "![Graph](/pt2/m1-q10.png)\n In the figure shown, lines $\\ell$ and $k$ are parallel and line $j$ intersects both lines. If $z > 116$,\nwhich of the following must be true?",
         "options": [
             "$y < 64$",
             "$y > 64$",
@@ -2564,7 +2564,7 @@ const pt2_mathModule1: Question[] = [
         "id": "pt2-math-m1-q14",
         "num": 14,
         "type": "Math",
-        "question": "![Graph](/pt2/m1-q14.png)\n\nNote: Figure not drawn to scale.\n\nThe area of triangle $ABC$ is 150 square centimeters. What is the height $h$, in centimeters, of\nthis triangle?",
+        "question": "![Graph](/pt2/m1-q14.png)\n\n\n\nThe area of triangle $ABC$ is 150 square centimeters. What is the height $h$, in centimeters, of\nthis triangle?",
         "options": [
             "10",
             "15",
@@ -2683,12 +2683,12 @@ const pt2_mathModule1: Question[] = [
         "options": [
             "$N = 200(2.20)^{4t}$",
             "$N = 200(1.20)^{4t}$",
-            "$N = 200(1.20)^{t/4}$",
-            "$N = 200(2.20)^{t/4}$"
+            "$N = 200(1.20)^{\\dfrac{t}{4}}$",
+            "$N = 200(2.20)^{\\dfrac{t}{4}}$"
         ],
         "answer": 3,
         "difficulty": "Medium",
-        "explanation": "Answer: D (N = 200(2.20)^(t/4))\nCore Mathematical Concept: Exponential models (Advanced Math)\nStep-by-Step Proof:\nChoice D is correct.\n\"120% more\" means each 4-year period multiplies the population by 1+1.20=2.201 + 1.20 = 2.20\n1+1.20=2.20.\n\nAt t=0t = 0\nt=0: N=200N = 200\nN=200 ✓\nAt t=4t = 4\nt=4 (one 4-year period): N=200×2.204/4=200×2.20=440N = 200 \\times 2.20^{4/4} = 200 \\times 2.20 = 440\nN=200×2.204/4=200×2.20=440 ✓ (120% more than 200 = 440)\nAt t=8t = 8\nt=8: N=200×2.208/4=200×2.202=968N = 200 \\times 2.20^{8/4} = 200 \\times 2.20^2 = 968\nN=200×2.208/4=200×2.202=968 ✓\n\nThe exponent is t4\\dfrac{t}{4}\n4t​ because one period passes every 4 years.\nN=200(2.20)t/4\\boxed{N = 200(2.20)^{t/4}}N=200(2.20)t/4​\nWhy the Incorrect Answers are Wrong:\n\nA (200(2.20)4t200(2.20)^{4t}\n200(2.20)4t): Exponent grows 16× too fast — after just t=1t=1\nt=1 year the population would be ~4,686.\nB (200(1.20)4t200(1.20)^{4t}\n200(1.20)4t): Uses 1.20 (which would be \"20% more\"), and the 4t4t\n4t exponent grows too fast.\nC (200(1.20)t/4200(1.20)^{t/4}\n200(1.20)t/4): Uses 1.20 which represents only a 20% increase, not 120%."
+        "explanation": "Answer: D (N = 200(2.20)^{\\dfrac{t}{4}})\nCore Mathematical Concept: Exponential models (Advanced Math)\nStep-by-Step Proof:\nChoice D is correct.\n\"120% more\" means each 4-year period multiplies the population by 1+1.20=2.201 + 1.20 = 2.20\n1+1.20=2.20.\n\nAt t=0t = 0\nt=0: N=200N = 200\nN=200 ✓\nAt t=4t = 4\nt=4 (one 4-year period): N=200×2.204/4=200×2.20=440N = 200 \\times 2.20^{\\dfrac{4}{4}} = 200 \\times 2.20 = 440\nN=200×2.204/4=200×2.20=440 ✓ (120% more than 200 = 440)\nAt t=8t = 8\nt=8: N=200×2.208/4=200×2.202=968N = 200 \\times 2.20^{\\dfrac{8}{4}} = 200 \\times 2.20^2 = 968\nN=200×2.208/4=200×2.202=968 ✓\n\nThe exponent is t4\\dfrac{t}{4}\n4t​ because one period passes every 4 years.\nN=200(2.20)t/4\\boxed{N = 200(2.20)^{\\dfrac{t}{4}}}N=200(2.20)t/4​\nWhy the Incorrect Answers are Wrong:\n\nA (200(2.20)4t200(2.20)^{4t}\n200(2.20)4t): Exponent grows 16× too fast — after just t=1t=1\nt=1 year the population would be ~4,686.\nB (200(1.20)4t200(1.20)^{4t}\n200(1.20)4t): Uses 1.20 (which would be \"20% more\"), and the 4t4t\n4t exponent grows too fast.\nC (200(1.20)t/4200(1.20)^{\\dfrac{t}{4}}\n200(1.20)t/4): Uses 1.20 which represents only a 20% increase, not 120%."
     }
 ];
 
@@ -2697,7 +2697,7 @@ const pt2_mathModule2: Question[] = [
         "id": "pt2-math-m2-q1",
         "num": 1,
         "type": "Math",
-        "question": "Note: Figure not drawn to scale.\n\n![Graph](/pt2/m2-q1.png)\n\nIn the figure shown, line $k$ intersects lines $r$ and $s$. If $w = 141$, which additional piece of information is sufficient to prove that lines $r$ and $s$ are parallel?",
+        "question": "![Graph](/pt2/m2-q1.png)\n\nIn the figure shown, line $k$ intersects lines $r$ and $s$. If $w = 141$, which additional piece of information is sufficient to prove that lines $r$ and $s$ are parallel?",
         "options": [
             "$x = 39$",
             "$y = 141$",
@@ -2832,7 +2832,7 @@ const pt2_mathModule2: Question[] = [
         "id": "pt2-math-m2-q11",
         "num": 11,
         "type": "Math",
-        "question": "![Graph](/pt2/m2-q11.png)\n\nNote: Figure not drawn to scale.\nIn triangle $QRS$ shown, $QR < RS$. Which expression represents the length of $QS$?",
+        "question": "![Graph](/pt2/m2-q11.png)\n\n\nIn triangle $QRS$ shown, $QR < RS$. Which expression represents the length of $\\overline{QS}$?",
         "options": [
             "$23 \\cos Q$",
             "$23 \\sin Q$",

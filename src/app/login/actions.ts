@@ -16,7 +16,7 @@ export async function login(formData: FormData) {
   })
 
   if (error) {
-    if (error.message.includes('Invalid login credentials')) {
+    if (error?.message?.includes('Invalid login credentials')) {
       redirect('/login?message=Invalid login credentials. Please check your email and password.')
     }
     redirect('/login?message=Could not authenticate user')
@@ -58,7 +58,7 @@ export async function signup(formData: FormData) {
   })
 
   if (error) {
-    if (error.message.toLowerCase().includes('already registered')) {
+    if (error?.message?.toLowerCase().includes('already registered')) {
       return { redirect: '/login?message=Account already created. Please log in.' }
     }
     return { error: error.message }

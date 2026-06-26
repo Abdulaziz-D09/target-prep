@@ -1340,7 +1340,7 @@ percent.)
 Answer: 0.18
 10.
 ![Graph](/pt2/m1-q10.png)
-Note: Figure not drawn to scale. In the figure shown, lines $\ell$ and $k$ are parallel and line $j$ intersects both lines. If $z > 116$,
+ In the figure shown, lines $\ell$ and $k$ are parallel and line $j$ intersects both lines. If $z > 116$,
 which of the following must be true?
 
 A. $y < 64$
@@ -1387,7 +1387,7 @@ Answer: B
 
 ![Graph](/pt2/m1-q14.png)
 
-Note: Figure not drawn to scale.
+
 
 The area of triangle $ABC$ is 150 square centimeters. What is the height $h$, in centimeters, of
 this triangle?
@@ -1496,16 +1496,16 @@ A. $N = 200(2.20)^{4t}$
 
 B. $N = 200(1.20)^{4t}$
 
-C. $N = 200(1.20)^{t/4}$
+C. $N = 200(1.20)^{\dfrac{t}{4}}$
 
-D. $N = 200(2.20)^{t/4}$
+D. $N = 200(2.20)^{\dfrac{t}{4}}$
 
 Answer: D
 
 Section: Section 2, Module 2: Math, Difficulty: hard (22
 questions)
 
-Note: Figure not drawn to scale.
+
 
 ![Graph](/pt2/m2-q1.png)
 
@@ -1646,8 +1646,8 @@ Answer: 312
 
 ![Graph](/pt2/m2-q11.png)
 
-Note: Figure not drawn to scale.
-In triangle $QRS$ shown, $QR < RS$. Which expression represents the length of $QS$?
+
+In triangle $QRS$ shown, $QR < RS$. Which expression represents the length of $\overline{QS}$?
 A. $23 \cos Q$
 B. $23 \sin Q$
 C. $\frac{23}{\cos Q}$

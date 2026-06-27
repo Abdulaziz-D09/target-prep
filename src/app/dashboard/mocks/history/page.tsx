@@ -15,7 +15,8 @@ import { useRouter } from 'next/navigation';
 
 export default function StudentMocksHistoryPage() {
     const [isClient, setIsClient] = useState(false);
-    const { mockResults, mockSessions } = useClassroomStore();
+    const mockResults = useClassroomStore(state => state.mockResults);
+    const mockSessions = useClassroomStore(state => state.mockSessions);
     const router = useRouter();
 
     useEffect(() => {

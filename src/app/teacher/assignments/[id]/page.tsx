@@ -5,7 +5,7 @@ import { useParams } from 'next/navigation';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ArrowLeft, ClipboardList, GraduationCap, Users, CheckCircle2, Clock } from 'lucide-react';
 import { FloatingPageShapes } from '@/components/SiteMotion';
-import { QuestionEditor } from '@/components/QuestionEditor';
+import { MockTestFilesEditor } from '@/components/MockTestFilesEditor';
 import { useClassroomStore, seedOnce } from '@/store/classroomStore';
 
 seedOnce();
@@ -46,7 +46,10 @@ function getMistakes(studentId: string, assignmentId: string, total: number, cor
 
 export default function AssignmentDetailPage() {
     const params = useParams<{ id: string }>();
-    const { assignments, classrooms, students, progress } = useClassroomStore();
+    const assignments = useClassroomStore(state => state.assignments);
+    const classrooms = useClassroomStore(state => state.classrooms);
+    const students = useClassroomStore(state => state.students);
+    const progress = useClassroomStore(state => state.progress);
     const [selectedClassId, setSelectedClassId] = useState<string | null>(null);
     const [activeTab, setActiveTab] = useState<'progress' | 'questions'>('progress');
 
@@ -120,7 +123,9 @@ export default function AssignmentDetailPage() {
                             </div>
                             <div className="text-center">
                                 <p className="text-[10px] uppercase tracking-widest font-bold site-text-muted mb-0.5">Questions</p>
-                                <p className="font-black text-[15px] site-text-strong">{asgn.questions.length}</p>
+                                <p className="font-black text-[15px] site-text-strong">
+                                    {asgn.customTests ? asgn.customTests.reduce((acc, t) => acc + t.questions.length, 0) : (asgn.questions?.length || 0)}
+                                </p>
                             </div>
                             <div className="text-center">
                                 <p className="text-[10px] uppercase tracking-widest font-bold site-text-muted mb-0.5">Completion</p>
@@ -136,6 +141,12 @@ export default function AssignmentDetailPage() {
                                 <div className="text-center">
                                     <p className="text-[10px] uppercase tracking-widest font-bold site-text-muted mb-0.5">Time Limit</p>
                                     <p className="font-black text-[15px] site-text-strong">{asgn.timeLimitMinutes} min</p>
+                                </div>
+                            )}
+                            {asgn.dueDate && (
+                                <div className="text-center">
+                                    <p className="text-[10px] uppercase tracking-widest font-bold site-text-muted mb-0.5">Due Date</p>
+                                    <p className="font-black text-[15px] site-text-strong">{new Date(asgn.dueDate).toLocaleDateString()}</p>
                                 </div>
                             )}
                         </div>
@@ -217,10 +228,17 @@ export default function AssignmentDetailPage() {
                                                 )}
                                             </div>
                                         </div>
-                                        {pct !== null
-                                            ? <div className={`px-2.5 py-1 rounded-lg text-[12px] font-black ${scoreBg(pct)}`}>{pct}%</div>
-                                            : <div className="px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-slate-100 dark:bg-slate-800 text-slate-500">Not Started</div>
-                                        }
+                                        <div className="flex items-center gap-2">
+                                            {!stuProgress?.completed && asgn.dueDate && new Date() > new Date(asgn.dueDate) && (
+                                                <div className="px-2.5 py-1 rounded-lg text-[11px] font-black bg-rose-100 dark:bg-rose-900/40 text-rose-700 dark:text-rose-400">
+                                                    Not in time
+                                                </div>
+                                            )}
+                                            {pct !== null
+                                                ? <div className={`px-2.5 py-1 rounded-lg text-[12px] font-black ${scoreBg(pct)}`}>{pct}%</div>
+                                                : <div className="px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-slate-100 dark:bg-slate-800 text-slate-500">Not Started</div>
+                                            }
+                                        </div>
                                     </div>
 
                                     {/* Progress */}
@@ -243,19 +261,40 @@ export default function AssignmentDetailPage() {
                                                 />
                                             </div>
 
-                                            {mistakes.length > 0 ? (
+                                            {asgn.customTests && asgn.customTests.length > 0 ? (
+                                                <div className="mt-3">
+                                                    <p className="text-[10px] uppercase tracking-widest font-bold site-text-muted mb-2">Results</p>
+                                                    <div className="space-y-2">
+                                                        {asgn.customTests.map((test, i) => {
+                                                            const testProg = stuProgress.testProgress?.[test.id];
+                                                            const tTotal = test.questions.length;
+                                                            const tCorrect = testProg?.correct || 0;
+                                                            const tPct = tTotal > 0 ? Math.round((tCorrect / tTotal) * 100) : 0;
+                                                            return (
+                                                                <div key={test.id} className="flex items-center justify-between bg-slate-50 dark:bg-slate-800/50 rounded-lg px-3 py-2 border border-slate-100 dark:border-slate-800">
+                                                                    <span className="text-[12px] font-semibold site-text-strong truncate max-w-[120px]">{test.name || `File ${i + 1}`}</span>
+                                                                    <div className="flex items-center gap-2">
+                                                                        <span className="text-[11px] site-text-muted font-medium">{tCorrect}/{tTotal}</span>
+                                                                        <span className={`text-[11px] font-black ${scoreColor(tPct)}`}>{tPct}%</span>
+                                                                    </div>
+                                                                </div>
+                                                            );
+                                                        })}
+                                                    </div>
+                                                </div>
+                                            ) : mistakes.length > 0 ? (
                                                 <div>
-                                                    <p className="text-[10px] uppercase tracking-widest font-bold site-text-muted mb-2">Mistakes</p>
+                                                    <p className="text-[10px] uppercase tracking-widest font-bold site-text-muted mb-2">Results (Legacy)</p>
                                                     <div className="flex flex-wrap gap-1.5">
                                                         {mistakes.map(m => (
                                                             <span key={m} className="inline-flex items-center justify-center h-6 min-w-[24px] px-1.5 rounded-md bg-rose-50 dark:bg-rose-900/20 border border-rose-100 dark:border-rose-800 text-rose-600 dark:text-rose-400 text-[11px] font-black">
-                                                                Q{m}
+                                                                Q{m} Missed
                                                             </span>
                                                         ))}
                                                     </div>
                                                 </div>
                                             ) : (
-                                                <div className="flex items-center justify-center py-2">
+                                                <div className="flex items-center justify-center py-2 mt-2">
                                                     <p className="text-[12px] font-bold text-emerald-500 flex items-center gap-1.5">
                                                         <CheckCircle2 className="w-4 h-4" /> Perfect Score
                                                     </p>
@@ -274,7 +313,12 @@ export default function AssignmentDetailPage() {
                 )}
                             </>
                 ) : (
-                    <QuestionEditor questions={asgn.questions} onSave={(qId, newQ) => useClassroomStore.getState().updateAssignmentQuestion(asgn.id, qId, newQ)} />
+                    <div className="mt-8">
+                        <MockTestFilesEditor 
+                            initialTests={asgn.customTests || [{ id: asgn.id, name: "Assignment Questions", questions: asgn.questions || [] }]} 
+                            onSave={(tests) => useClassroomStore.getState().updateAssignment(asgn.id, { customTests: tests as any })} 
+                        />
+                    </div>
                 )}
             </div>
         </div>

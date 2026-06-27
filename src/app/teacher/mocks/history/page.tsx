@@ -13,7 +13,9 @@ import {
 } from '@/components/SiteMotion';
 
 export default function TeacherMocksHistoryPage() {
-    const { mockSessions, mockResults, seed } = useClassroomStore();
+    const mockSessions = useClassroomStore(state => state.mockSessions);
+    const mockResults = useClassroomStore(state => state.mockResults);
+    const seed = useClassroomStore(state => state.seed);
     const [isClient, setIsClient] = useState(false);
     
     useEffect(() => { 
@@ -28,10 +30,10 @@ export default function TeacherMocksHistoryPage() {
     });
 
     return (
-        <div className="relative min-h-screen pt-4 pb-12 px-4 sm:px-6 lg:px-8 max-w-[1320px] mx-auto">
+        <div className="relative min-h-screen w-full pt-4 pb-12 px-4 sm:px-6 lg:px-8">
             <FloatingPageShapes theme="home" />
             <motion.div
-                className="relative z-10"
+                className="relative z-10 w-full mx-auto max-w-[1320px]"
                 initial="hidden"
                 animate="visible"
                 variants={pageRevealVariants}
@@ -94,6 +96,13 @@ export default function TeacherMocksHistoryPage() {
                                     </div>
                                     <div className="flex items-center gap-3 site-text-muted text-[14px]">
                                         <Users className="w-4 h-4 opacity-70" /> {resultsCount} {resultsCount === 1 ? 'Submission' : 'Submissions'}
+                                    </div>
+                                </div>
+                                
+                                <div className="grid grid-cols-2 gap-3 mt-4">
+                                    <div className="bg-slate-50 dark:bg-slate-800/50 p-3 rounded-xl border border-slate-100 dark:border-slate-700/50 col-span-2">
+                                        <p className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-1">Avg Score</p>
+                                        <p className="text-lg font-black text-slate-800 dark:text-white">{resultsCount > 0 ? Math.round(mockResults.filter(r => r.mockId === mock.id).reduce((a, r) => a + r.score, 0) / resultsCount) : '--'}</p>
                                     </div>
                                 </div>
                             </div>

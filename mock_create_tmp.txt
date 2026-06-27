@@ -1,0 +1,420 @@
+'use client';
+import { useState, useEffect, useRef } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Sparkles, CheckCircle, Upload, FileText, X, Loader2, BookOpen, Calculator, Image as ImageIcon } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { useClassroomStore } from '@/store/classroomStore';
+import { createClient } from '@/lib/supabase/client';
+
+import {
+    FloatingPageShapes,
+    staggerContainerVariants,
+    itemRevealVariants,
+    sectionRevealVariants,
+    pageRevealVariants
+} from '@/components/SiteMotion';
+import Link from 'next/link';
+import { MockTestFilesEditor } from '@/components/MockTestFilesEditor';
+
+export default function TeacherMocksCreatePage() {
+    const router = useRouter();
+    const createMockSession = useClassroomStore(state => state.createMockSession);
+    const seed = useClassroomStore(state => state.seed);
+
+    // Form state
+    const [title, setTitle] = useState('');
+    const [date, setDate] = useState('');
+    const [place, setPlace] = useState('');
+    const [maxStudents, setMaxStudents] = useState('20');
+    const [timeLimit, setTimeLimit] = useState('120');
+    const [subject, setSubject] = useState<'Full' | 'English' | 'Math'>('Full');
+    const [strictMode, setStrictMode] = useState(false);
+    const [host, setHost] = useState('');
+    const [customTests, setCustomTests] = useState<{ file?: File; id: string; name: string; questions: any[] }[]>([]);
+    const [distributionMode, setDistributionMode] = useState<'random' | 'manual'>('random');
+    
+    // Document Scanning & Parsing State
+    const [isDragging, setIsDragging] = useState(false);
+    const [isScanning, setIsScanning] = useState(false);
+    const [isSaving, setIsSaving] = useState(false);
+    const [scanError, setScanError] = useState('');
+    const fileInputRef = useRef<HTMLInputElement>(null);
+    const imageInputRef = useRef<HTMLInputElement>(null);
+    const [uploadingImageIdx, setUploadingImageIdx] = useState<number | null>(null);
+
+    useEffect(() => {
+        seed();
+        const supabase = createClient();
+        supabase.auth.getUser().then(({ data }) => {
+            if (data?.user) {
+                const meta = data.user.user_metadata;
+                const firstName = meta?.first_name || '';
+                const lastName = meta?.last_name || meta?.surname || '';
+                const fullNameFallback = `${firstName} ${lastName}`.trim();
+                const displayName = meta?.full_name || meta?.name || fullNameFallback || data.user.email?.split('@')[0] || 'Teacher';
+                setHost(displayName);
+            }
+        });
+    }, [seed]);
+
+    const handleDrop = (e: React.DragEvent) => {
+        e.preventDefault();
+        setIsDragging(false);
+        const file = e.dataTransfer.files?.[0];
+        if (file && (file.type.startsWith('image/') || file.type === 'application/pdf')) {
+            scanFile(file);
+        }
+    };
+
+    const scanFile = async (file: File) => {
+        if (file.size > 20 * 1024 * 1024) {
+            setScanError(`File "${file.name}" is too large. Maximum allowed size is 20MB.`);
+            return;
+        }
+
+        setIsScanning(true);
+        setScanError('');
+        try {
+            const fd = new FormData();
+            fd.append('file', file);
+            const res = await fetch('/api/scan-pdf', { method: 'POST', body: fd });
+            const data = await res.json();
+            if (!res.ok) {
+                setScanError(data.error || 'Scan failed');
+                return;
+            }
+            if (data.questions) {
+                const qs = data.questions.map((q: any, i: number) => {
+                    const optionsArray = [
+                        q.options?.A || '',
+                        q.options?.B || '',
+                        q.options?.C || '',
+                        q.options?.D || ''
+                    ];
+                    return {
+                        id: `mock-q-${Date.now()}-${i}`,
+                        passage: q.passage || null,
+                        question: q.stem || q.question || '',
+                        options: optionsArray,
+                        answer: null
+                    };
+                });
+                setCustomTests(prev => [...prev, { file, id: `mock-test-${Date.now()}`, name: file.name, questions: qs }]);
+            } else {
+                setScanError('No questions found in document.');
+            }
+        } catch (err) {
+            setScanError('Failed to scan document.');
+        } finally {
+            setIsScanning(false);
+        }
+    };
+
+    
+    const handleCreate = async (e: React.FormEvent) => {
+        e.preventDefault();
+
+        if (customTests.length === 0) {
+            setScanError('Please attach at least one test file before creating a session.');
+            return;
+        }
+
+        if (isScanning || isSaving) return;
+        
+        const existingMock = useClassroomStore.getState().mockSessions.find(m => m.title.trim().toLowerCase() === title.trim().toLowerCase() && m.status !== 'completed');
+        if (existingMock) {
+            setScanError('This mock name is already in use by an active session. Please choose another name or end the existing mock first.');
+            return;
+        }
+        
+        setIsSaving(true);
+        setScanError('');
+
+        let formattedDate = date;
+        if (date) {
+            const d = new Date(date);
+            formattedDate = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' });
+        }
+
+        createMockSession({
+            title,
+            date: formattedDate,
+            place,
+            maxStudents: parseInt(maxStudents) || 20,
+            timeLimitMinutes: parseInt(timeLimit) || 120,
+            attachedTestIds: ['1'],
+            subject,
+            strictMode,
+            host,
+            customTests: customTests.length > 0 ? customTests.map(t => ({ id: t.id, name: t.name, questions: t.questions })) : undefined,
+            distributionMode: customTests.length > 1 ? distributionMode : 'random'
+        });
+
+        await new Promise(r => setTimeout(r, 400));
+        router.push('/teacher/mocks');
+    };
+
+    return (
+        <div className="relative min-h-screen w-full pt-4 pb-12 px-4 sm:px-6 lg:px-8">
+            <FloatingPageShapes theme="home" />
+            <motion.div
+                className="relative z-10 w-full mx-auto max-w-[1320px]"
+                initial="hidden"
+                animate="visible"
+                variants={pageRevealVariants}
+            >
+
+                {/* Hero */}
+                <motion.section
+                    className="site-hero-shell site-hero--home relative mb-7 overflow-hidden rounded-[36px] px-6 py-8 sm:px-8 lg:px-10"
+                    variants={sectionRevealVariants}
+                    initial="hidden"
+                    animate="visible"
+                >
+                    <div className="absolute -left-16 top-10 h-56 w-56 rounded-full bg-blue-300/10 blur-3xl" />
+                    <div className="absolute bottom-0 right-0 h-48 w-64 translate-x-10 translate-y-10 rounded-full bg-indigo-300/10 blur-3xl" />
+
+                    <motion.div className="relative grid gap-8 xl:grid-cols-[1.15fr_0.85fr] xl:items-center" variants={staggerContainerVariants}>
+                        <motion.div variants={itemRevealVariants}>
+                            <div className="site-hero-chip inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.24em]">
+                                <Sparkles className="h-3.5 w-3.5" />
+                                Teacher Portal
+                            </div>
+
+                            <h1 className="site-hero-title mt-4 text-4xl font-black leading-[1.04] tracking-[-0.04em] sm:text-5xl">
+                                Create Mock Session
+                            </h1>
+                            <p className="site-hero-body mt-4 max-w-2xl text-[15px] leading-7 sm:text-[17px]">
+                                Set up a new in-person mock exam for your students.
+                            </p>
+                        </motion.div>
+                    </motion.div>
+                </motion.section>
+
+                <motion.div variants={sectionRevealVariants} className="site-panel rounded-[32px] overflow-hidden">
+                    <div className="p-6">
+                        <form id="create-mock-form" onSubmit={handleCreate} className="space-y-5">
+                            <div className="grid grid-cols-2 gap-5">
+                                <div>
+                                    <label className="block text-sm font-bold site-text-strong mb-2">Session Title</label>
+                                    <input required type="text" value={title} onChange={e => setTitle(e.target.value)} className="w-full bg-transparent border-2 border-slate-200 dark:border-slate-800 rounded-xl px-4 py-3 focus:outline-none focus:border-blue-500 font-medium transition site-text-strong" placeholder="e.g. Saturday Grand Mock" />
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-bold site-text-strong mb-2">Host / Teacher Name</label>
+                                    <input type="text" value={host} readOnly className="w-full bg-transparent border-2 border-slate-200 dark:border-slate-800 rounded-xl px-4 py-3 focus:outline-none font-medium transition site-text-strong opacity-70 cursor-not-allowed" placeholder="e.g. Mr. Smith" />
+                                </div>
+                            </div>
+                            <div className="grid grid-cols-2 gap-5">
+                                <div>
+                                    <label className="block text-sm font-bold site-text-strong mb-2">Date & Time</label>
+                                    <input required type="datetime-local" value={date} onChange={e => setDate(e.target.value)} className="w-full bg-transparent border-2 border-slate-200 dark:border-slate-800 rounded-xl px-4 py-3 focus:outline-none focus:border-blue-500 font-medium transition site-text-strong" />
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-bold site-text-strong mb-2">Location</label>
+                                    <input required type="text" value={place} onChange={e => setPlace(e.target.value)} className="w-full bg-transparent border-2 border-slate-200 dark:border-slate-800 rounded-xl px-4 py-3 focus:outline-none focus:border-blue-500 font-medium transition site-text-strong" placeholder="e.g. Room 302" />
+                                </div>
+                            </div>
+                            <div className="grid grid-cols-2 gap-5">
+                                <div>
+                                    <label className="block text-sm font-bold site-text-strong mb-2">Max Students</label>
+                                    <input type="number" value={maxStudents} onChange={e => setMaxStudents(e.target.value)} className="w-full bg-transparent border-2 border-slate-200 dark:border-slate-800 rounded-xl px-4 py-3 focus:outline-none focus:border-blue-500 font-medium transition site-text-strong" />
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-bold site-text-strong mb-2">Time Limit (mins)</label>
+                                    <input type="number" value={timeLimit} onChange={e => setTimeLimit(e.target.value)} className="w-full bg-transparent border-2 border-slate-200 dark:border-slate-800 rounded-xl px-4 py-3 focus:outline-none focus:border-blue-500 font-medium transition site-text-strong" />
+                                </div>
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-bold site-text-strong mb-3">Mock Subject Type</label>
+                                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                                    {[
+                                        { id: 'Full', label: 'Full Mock', desc: 'Both EBRW & Math', icon: <Sparkles className="w-5 h-5" /> },
+                                        { id: 'English', label: 'English Only', desc: 'Reading & Writing only', icon: <BookOpen className="w-5 h-5" /> },
+                                        { id: 'Math', label: 'Math Only', desc: 'Math section only', icon: <Calculator className="w-5 h-5" /> },
+                                    ].map((opt) => {
+                                        const isSelected = subject === opt.id;
+                                        return (
+                                            <button
+                                                key={opt.id}
+                                                type="button"
+                                                onClick={() => setSubject(opt.id as any)}
+                                                className={`flex items-start gap-3 p-4 rounded-xl border-2 text-left transition-all cursor-pointer ${isSelected
+                                                        ? 'border-blue-500 bg-blue-500/5 dark:bg-blue-500/10 shadow-sm'
+                                                        : 'border-slate-200 dark:border-slate-800 site-subpanel hover:border-slate-300 dark:hover:border-slate-700'
+                                                    }`}
+                                            >
+                                                <div className={`p-2 rounded-lg ${isSelected ? 'bg-blue-500/20 text-blue-500' : 'bg-slate-100 dark:bg-slate-800'}`}>
+                                                    {opt.icon}
+                                                </div>
+                                                <div>
+                                                    <p className={`font-bold text-[14px] ${isSelected ? 'text-blue-600 dark:text-blue-400' : 'site-text-strong'}`}>{opt.label}</p>
+                                                    <p className="text-[11px] site-text-muted mt-0.5 leading-relaxed">{opt.desc}</p>
+                                                </div>
+                                            </button>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-bold site-text-strong mb-3">Strict Mode</label>
+                                <button
+                                    type="button"
+                                    onClick={() => setStrictMode(!strictMode)}
+                                    className={`w-full flex items-center justify-between px-4 py-3 rounded-xl border-2 transition-all ${strictMode
+                                            ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300'
+                                            : 'border-slate-200 dark:border-slate-700 site-subpanel site-text hover:border-slate-300'
+                                        }`}
+                                >
+                                    <div className="flex flex-col items-start text-left">
+                                        <span className="font-bold text-[14px]">Require Full Screen</span>
+                                        <span className={`text-[12px] mt-0.5 ${strictMode ? 'text-blue-600/80 dark:text-blue-400/80' : 'site-text-muted'}`}>Lock the student's screen and hide exit controls</span>
+                                    </div>
+                                    <div className={`w-11 h-6 rounded-full flex items-center px-1 transition-colors ${strictMode ? 'bg-blue-600' : 'bg-slate-300 dark:bg-slate-600'}`}>
+                                        <div className={`w-4 h-4 rounded-full bg-white shadow-sm transition-transform ${strictMode ? 'translate-x-5' : 'translate-x-0'}`} />
+                                    </div>
+                                </button>
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-bold site-text-strong mb-3">Add Questions</label>
+                                
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    {/* Upload Area */}
+                                    <div
+                                        onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
+                                        onDragLeave={() => setIsDragging(false)}
+                                        onDrop={handleDrop}
+                                        onClick={() => fileInputRef.current?.click()}
+                                        className={`relative flex flex-col items-center justify-center rounded-2xl border-2 border-dashed p-12 cursor-pointer transition-all ${isDragging
+                                                ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
+                                                : 'border-slate-300 dark:border-slate-700 hover:border-blue-400'
+                                            }`}
+                                    >
+                                        <input
+                                            ref={fileInputRef}
+                                            type="file"
+                                            accept="image/*,.pdf"
+                                            className="hidden"
+                                            onChange={(e) => {
+                                                const f = e.target.files?.[0];
+                                                if (f) { scanFile(f); }
+                                            }}
+                                        />
+                                        {isScanning ? (
+                                            <>
+                                                <div className="h-14 w-14 rounded-2xl bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center mb-3">
+                                                    <Loader2 className="h-7 w-7 text-blue-500 animate-spin" />
+                                                </div>
+                                                <p className="font-bold site-text-strong text-[15px]">Scanning document...</p>
+                                                <p className="text-[13px] site-text-muted mt-1">Extracting mock test questions</p>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <div className="h-14 w-14 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center mb-3">
+                                                    <Upload className="h-7 w-7 site-text-muted" />
+                                                </div>
+                                                <p className="font-bold site-text-strong text-[15px]">Upload or drop your test files here</p>
+                                                <p className="text-[13px] site-text-muted mt-1 mb-2 text-center">Upload picture of a test or PDF to extract questions (Max 20MB per file)</p>
+                                            </>
+                                        )}
+                                    </div>
+
+                                    {/* Create Manually Area */}
+                                    <div 
+                                        onClick={() => {
+                                            const newTest = {
+                                                id: `manual-test-${Date.now()}`,
+                                                name: `Manual Test ${customTests.length + 1}`,
+                                                questions: [{
+                                                    id: `mock-q-${Date.now()}-0`,
+                                                    passage: '',
+                                                    question: '',
+                                                    options: ['', '', '', ''],
+                                                    answer: null
+                                                }]
+                                            };
+                                            setCustomTests(prev => [...prev, newTest]);
+                                        }}
+                                        className="relative flex flex-col items-center justify-center rounded-2xl border-2 border-dashed p-12 cursor-pointer transition-all border-slate-300 dark:border-slate-700 hover:border-blue-400"
+                                    >
+                                        <div className="h-14 w-14 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center mb-3">
+                                            <FileText className="h-7 w-7 site-text-muted" />
+                                        </div>
+                                        <p className="font-bold site-text-strong text-[15px]">Create Manually</p>
+                                        <p className="text-[13px] site-text-muted mt-1 mb-2 text-center">Write questions without uploading</p>
+                                    </div>
+                                </div>
+
+                                {customTests.length > 0 && (
+                                    <div className="mt-6">
+                                        <MockTestFilesEditor 
+                                            initialTests={customTests}
+                                            onSave={() => {}}
+                                            onChange={(updatedTests) => setCustomTests(updatedTests)}
+                                            hideSaveButton={true}
+                                        />
+                                    </div>
+                                )}
+                                
+
+                                {customTests.length > 1 && (
+                                    <div className="mt-6 p-5 rounded-2xl border-2 border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/30">
+                                        <label className="block text-sm font-bold site-text-strong mb-3">Test Distribution Mode</label>
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                            <button
+                                                type="button"
+                                                onClick={() => setDistributionMode('random')}
+                                                className={`flex items-start gap-3 p-4 rounded-xl border-2 text-left transition-all cursor-pointer ${distributionMode === 'random'
+                                                        ? 'border-blue-500 bg-blue-500/5 dark:bg-blue-500/10 shadow-sm'
+                                                        : 'border-slate-200 dark:border-slate-800 site-subpanel hover:border-slate-300'
+                                                    }`}
+                                            >
+                                                <div className={`p-2 rounded-lg ${distributionMode === 'random' ? 'bg-blue-500/20 text-blue-500' : 'bg-slate-100 dark:bg-slate-800'}`}>
+                                                    <Sparkles className="w-5 h-5" />
+                                                </div>
+                                                <div>
+                                                    <p className={`font-bold text-[14px] ${distributionMode === 'random' ? 'text-blue-600 dark:text-blue-400' : 'site-text-strong'}`}>Randomize</p>
+                                                    <p className="text-[11px] site-text-muted mt-0.5 leading-relaxed">Students get a random test when joining.</p>
+                                                </div>
+                                            </button>
+                                            <button
+                                                type="button"
+                                                onClick={() => setDistributionMode('manual')}
+                                                className={`flex items-start gap-3 p-4 rounded-xl border-2 text-left transition-all cursor-pointer ${distributionMode === 'manual'
+                                                        ? 'border-blue-500 bg-blue-500/5 dark:bg-blue-500/10 shadow-sm'
+                                                        : 'border-slate-200 dark:border-slate-800 site-subpanel hover:border-slate-300'
+                                                    }`}
+                                            >
+                                                <div className={`p-2 rounded-lg ${distributionMode === 'manual' ? 'bg-blue-500/20 text-blue-500' : 'bg-slate-100 dark:bg-slate-800'}`}>
+                                                    <CheckCircle className="w-5 h-5" />
+                                                </div>
+                                                <div>
+                                                    <p className={`font-bold text-[14px] ${distributionMode === 'manual' ? 'text-blue-600 dark:text-blue-400' : 'site-text-strong'}`}>Manual Assignment</p>
+                                                    <p className="text-[11px] site-text-muted mt-0.5 leading-relaxed">Choose which student gets which test.</p>
+                                                </div>
+                                            </button>
+                                        </div>
+                                    </div>
+                                )}
+
+                                {scanError && (
+                                    <p className="text-red-500 text-sm mt-2 font-bold">{scanError}</p>
+                                )}
+                            </div>
+                        </form>
+                    </div>
+
+                    <div className="p-6 border-t border-slate-100 dark:border-slate-800/60 bg-slate-50 dark:bg-slate-900/50 flex justify-end gap-3">
+                        <Link href="/teacher/mocks" className="px-5 py-3 font-bold site-text-muted hover:site-text-strong transition">Cancel</Link>
+                        <button disabled={isScanning || isSaving} form="create-mock-form" type="submit" className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-full font-bold shadow-md transition disabled:opacity-50 disabled:cursor-not-allowed">
+                            {isSaving ? 'Creating...' : isScanning ? 'Wait for Scan...' : 'Create Session'}
+                        </button>
+                    </div>
+                </motion.div>
+            </motion.div>
+
+        </div>
+    );
+}

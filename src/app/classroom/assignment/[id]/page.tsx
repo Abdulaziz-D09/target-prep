@@ -1,11 +1,12 @@
 'use client';
 
 import { AlertTriangle, useEffect, useState, useRef } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import {
     X, Clock, ArrowRight, Check, CheckCircle,
     Bookmark, Calculator, BookOpen, ChevronDown, ChevronUp,
-    LayoutGrid, Home, Maximize2, FileText, AlertCircle, Highlighter
+    LayoutGrid, Home, Maximize2, FileText, AlertCircle, Highlighter,
+    CheckCircle2, XCircle, Minus, Trophy, BarChart2, ArrowLeft
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -30,8 +31,13 @@ const OPTION_LABELS: StudentAssignmentOption[] = ['A', 'B', 'C', 'D'];
 export default function ClassroomAssignmentDetailPage() {
     const { id } = useParams<{ id: string }>();
     const router = useRouter();
+    const searchParams = useSearchParams();
+    const testId = searchParams.get('testId');
 
-    const { assignments, students, submitAssignmentProgress, seed } = useClassroomStore();
+    const assignments = useClassroomStore(state => state.assignments);
+    const students = useClassroomStore(state => state.students);
+    const submitAssignmentProgress = useClassroomStore(state => state.submitAssignmentProgress);
+    const seed = useClassroomStore(state => state.seed);
     useEffect(() => { seed(); }, [seed]);
 
     const [userId, setUserId] = useState<string | null>(null);
@@ -72,8 +78,29 @@ export default function ClassroomAssignmentDetailPage() {
     const [isExitModalOpen, setIsExitModalOpen] = useState(false);
     const [isEliminationMode, setIsEliminationMode] = useState(false);
     const [calcMode, setCalcMode] = useState<'graphing' | 'scientific'>('graphing');
+    const [highlights, setHighlights] = useState<Record<string, any[]>>({});
+    const [defaultHighlightColor, setDefaultHighlightColor] = useState<string>('yellow');
 
-    const totalQuestions = assignment?.questions.length ?? 0;
+    const addHighlight = (qId: string, h: any) => {
+        setHighlights(prev => ({ ...prev, [qId]: [...(prev[qId] || []), h] }));
+    };
+    const updateHighlight = (qId: string, hId: string, updates: any) => {
+        setHighlights(prev => ({
+            ...prev,
+            [qId]: (prev[qId] || []).map(h => h.id === hId ? { ...h, ...updates } : h)
+        }));
+    };
+    const removeHighlight = (qId: string, hId: string) => {
+        setHighlights(prev => ({
+            ...prev,
+            [qId]: (prev[qId] || []).filter(h => h.id !== hId)
+        }));
+    };
+
+    const test = assignment?.customTests?.find((t) => t.id === testId);
+    const questions = test?.questions || assignment?.questions || [];
+    
+    const totalQuestions = questions.length;
     const totalTimeSeconds = Math.max(5, assignment?.timeLimitMinutes ?? 60) * 60;
 
     // ── Hydration ─────────────────────────────────────────────────────────────
@@ -82,7 +109,8 @@ export default function ClassroomAssignmentDetailPage() {
         if (!assignment) return;
 
         const progressMap = readStudentAssignmentProgress();
-        const saved = progressMap[assignment.id];
+        const progressId = testId ? `${assignment.id}_${testId}` : assignment.id;
+        const saved = progressMap[progressId];
 
         if (saved) {
             const safeIndex = Math.max(0, Math.min(saved.currentIndex ?? 0, Math.max(assignment.questions.length - 1, 0)));
@@ -90,12 +118,14 @@ export default function ClassroomAssignmentDetailPage() {
             setAnswers(saved.answers ?? {});
             setCurrentIdx(safeIndex);
             setTimeRemaining(safeTime);
-            setMode(saved.completed ? 'complete' : (saved.hasStarted ? 'test' : 'intro'));
+            setMode(saved.completed ? 'review' : (saved.hasStarted ? 'test' : 'intro'));
+            setHighlights(saved.highlights ?? {});
         } else {
             setAnswers({});
             setCurrentIdx(0);
             setTimeRemaining(totalTimeSeconds);
             setMode('intro');
+            setHighlights({});
         }
 
         setHasHydrated(true);
@@ -121,13 +151,16 @@ export default function ClassroomAssignmentDetailPage() {
     useEffect(() => {
         if (!assignment || !hasHydrated || totalQuestions === 0) return;
 
-        upsertStudentAssignmentSnapshot(assignment.id, {
+        const progressId = testId ? `${assignment.id}_${testId}` : assignment.id;
+
+        upsertStudentAssignmentSnapshot(progressId, {
             answers,
             currentIndex: currentIdx,
-            completed: mode === 'complete',
+            completed: mode === 'complete' || mode === 'review',
             timeRemaining,
-            hasStarted: mode !== 'intro',
+            hasStarted: mode === 'test' || mode === 'complete' || mode === 'review',
             updatedAt: new Date().toISOString(),
+            highlights
         });
 
         // Trigger store & Supabase progress sync
@@ -137,7 +170,7 @@ export default function ClassroomAssignmentDetailPage() {
         );
         const resolvedStudentId = currentStudent?.id || 'guest-student';
         const answeredCount = Object.keys(answers).length;
-        const correctCount = assignment.questions.filter((q, idx) => answers[String(idx)] === q.answer).length;
+        const correctCount = questions.filter((q, idx) => answers[String(idx)] === q.answer).length;
         const isCompleted = mode === 'complete' || mode === 'review';
 
         if (resolvedStudentId !== 'guest-student') {
@@ -146,11 +179,18 @@ export default function ClassroomAssignmentDetailPage() {
                 assignment.id,
                 answeredCount,
                 correctCount,
-                assignment.questions.length,
-                isCompleted
+                questions.length,
+                isCompleted,
+                testId ? {
+                    [testId]: {
+                        answered: answeredCount,
+                        correct: correctCount,
+                        completed: isCompleted
+                    }
+                } : undefined
             );
         }
-    }, [assignment, hasHydrated, totalQuestions, answers, currentIdx, mode, timeRemaining, userId, students, submitAssignmentProgress]);
+    }, [assignment, hasHydrated, totalQuestions, answers, currentIdx, mode, timeRemaining, userId, students, submitAssignmentProgress, testId, questions]);
 
     // ── Drag divider ─────────────────────────────────────────────────────────
 
@@ -260,7 +300,7 @@ export default function ClassroomAssignmentDetailPage() {
         }
     };
 
-    const handleSelectAnswer = (letter: StudentAssignmentOption) => {
+    const handleSelectAnswer = (letter: string) => {
         if (mode === 'review') return;
         setAnswers(prev => ({ ...prev, [String(currentIdx)]: letter }));
     };
@@ -309,16 +349,13 @@ export default function ClassroomAssignmentDetailPage() {
         }
     }
 
-    if (!assignment) {
+    if (!assignment || questions.length === 0) {
         return (
-            <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-white gap-4">
-                <p className="text-slate-600 font-medium">Assignment not found.</p>
-                <button
-                    onClick={() => router.push('/classroom')}
-                    className="bg-indigo-600 text-white px-6 py-2.5 rounded-full font-bold hover:bg-indigo-700 transition"
-                >
-                    Back to Classroom
-                </button>
+            <div className="flex h-screen w-full items-center justify-center bg-slate-50 dark:bg-slate-950 font-sans text-slate-800 dark:text-slate-200">
+                <div className="text-center max-w-md mx-auto">
+                    <h2 className="text-xl font-bold mb-3">Assignment Not Found</h2>
+                    <p className="text-slate-500">This assignment or test could not be loaded.</p>
+                </div>
             </div>
         );
     }
@@ -333,7 +370,7 @@ export default function ClassroomAssignmentDetailPage() {
                 <div className="max-w-3xl w-full">
                     <h1 className="text-[2.15rem] font-bold text-slate-900 mb-8 pb-4 border-b border-slate-200">
                         {sectionLabel}
-                        <span className="block text-[1.1rem] font-medium text-slate-500 mt-1">{assignment.title}</span>
+                        <span className="block text-[1.1rem] font-medium text-slate-500 mt-1">{test ? test.name : assignment.title}</span>
                     </h1>
 
                     <div className="space-y-8 mb-12">
@@ -342,7 +379,7 @@ export default function ClassroomAssignmentDetailPage() {
                             <div>
                                 <h3 className="font-bold text-xl text-slate-900 mb-1">Timing</h3>
                                 <p className="text-slate-600 leading-relaxed text-[17px]">
-                                    You have {assignment.timeLimitMinutes} minutes to complete {totalQuestions} question{totalQuestions !== 1 ? 's' : ''}.
+                                    You have {assignment.timeLimitMinutes} minutes to complete {questions.length} question{questions.length !== 1 ? 's' : ''}.
                                 </p>
                             </div>
                         </div>
@@ -421,16 +458,177 @@ export default function ClassroomAssignmentDetailPage() {
         );
     }
 
-    // ── Test / Review interface ───────────────────────────────────────────────
+    // ── Review Interface ───────────────────────────────────────────────────────
+    if (mode === 'review') {
+        const totalQ = questions.length;
+        const totalCorrect = questions.filter((q, idx) => answers[String(idx)] === q.answer).length;
+        const totalWrong = totalQ - totalCorrect;
+        const accuracyPct = totalQ > 0 ? Math.round((totalCorrect / totalQ) * 100) : 0;
+        
+        const dateString = new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
 
-    const currentQuestion = assignment.questions[currentIdx];
-    const isLastQuestion = currentIdx === totalQuestions - 1;
+        return (
+            <div className="relative min-h-screen pt-4 pb-16 px-4 sm:px-6 lg:px-8 bg-slate-50 font-[system-ui,-apple-system,BlinkMacSystemFont,'Segoe_UI',Roboto,sans-serif] overflow-y-auto absolute inset-0 z-50">
+                <div className="mx-auto max-w-[1320px]">
+                    <button onClick={() => router.push('/classroom')} className="inline-flex items-center gap-2 text-slate-500 hover:text-slate-900 transition-colors mb-6 text-sm font-semibold">
+                        <ArrowLeft className="w-4 h-4" />
+                        Back to Classroom
+                    </button>
+
+                    {/* Score Card */}
+                    <div className="site-panel rounded-[32px] overflow-hidden mb-6 shadow-xl">
+                        <div className="bg-[#111827] text-white p-8 sm:p-10 relative overflow-hidden">
+                            <div className="absolute top-0 right-0 p-12 opacity-10 pointer-events-none">
+                                <Trophy className="w-64 h-64 rotate-12" />
+                            </div>
+                            <div className="relative z-10 flex flex-col sm:flex-row gap-8 items-center justify-between">
+                                <div>
+                                    <h1 className="text-3xl sm:text-4xl font-black tracking-tight mb-2">Assignment Review</h1>
+                                    <p className="text-slate-400 font-medium text-lg">{test ? test.name : assignment.title} • {dateString}</p>
+                                </div>
+                                <div className="text-center bg-white/10 backdrop-blur-md rounded-3xl p-6 min-w-[200px] border border-white/10">
+                                    <p className="text-slate-300 font-bold uppercase tracking-widest text-xs mb-2">Final Score</p>
+                                    <div className="text-6xl font-black text-emerald-400 tracking-tighter">
+                                        {accuracyPct}%
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Performance Summary */}
+                    <div className="grid sm:grid-cols-3 gap-4 mb-6">
+                        {[
+                            { icon: <CheckCircle2 className="w-5 h-5 text-emerald-500" />, label: 'Correct', value: totalCorrect, color: '#10b981', bg: 'bg-emerald-500/10' },
+                            { icon: <XCircle className="w-5 h-5 text-red-500" />, label: 'Incorrect', value: totalWrong, color: '#ef4444', bg: 'bg-red-500/10' },
+                            { icon: <Trophy className="w-5 h-5 text-amber-500" />, label: 'Accuracy', value: `${accuracyPct}%`, color: '#f59e0b', bg: 'bg-amber-500/10' },
+                        ].map(({ icon, label, value, bg }) => (
+                            <div key={label} className="site-panel rounded-[22px] p-5 flex items-center gap-4">
+                                <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${bg}`}>{icon}</div>
+                                <div>
+                                    <p className="text-[11px] font-bold uppercase tracking-widest site-text-muted">{label}</p>
+                                    <p className="text-2xl font-black site-text-strong mt-0.5">{value}</p>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+
+                    {/* Question Review Details */}
+                    <div className="site-panel rounded-[28px] p-6">
+                        <h2 className="text-xl font-black site-text-strong mb-2">Question Breakdown</h2>
+                        <p className="text-sm site-text-muted mb-6">Review your answers and the question details below.</p>
+                        
+                        <div className="space-y-8">
+                            {questions.map((q, qIdx) => {
+                                const ans = answers[String(qIdx)];
+                                const isSPR = q.type === 'Math (SPR)';
+                                const isCorrect = isSPR ? String(ans || '').trim() === String(q.answer || '').trim() : ans === q.answer;
+                                
+                                return (
+                                    <div key={qIdx} className={`p-6 rounded-2xl border-2 ${isCorrect ? 'border-emerald-100 bg-emerald-50/30' : 'border-rose-100 bg-rose-50/30'}`}>
+                                        <div className="flex items-center gap-3 mb-4">
+                                            <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${isCorrect ? 'bg-emerald-500 text-white' : 'bg-rose-500 text-white'}`}>
+                                                {qIdx + 1}
+                                            </div>
+                                            <span className={`font-black uppercase tracking-widest text-xs ${isCorrect ? 'text-emerald-600' : 'text-rose-600'}`}>
+                                                {isCorrect ? 'Correct' : 'Incorrect'}
+                                            </span>
+                                        </div>
+                                        
+                                        <div className="grid lg:grid-cols-2 gap-8">
+                                            {/* Question Prompt */}
+                                            <div className="bg-white rounded-xl p-5 border border-slate-200/60 shadow-sm">
+                                                <div className="text-[13px] text-slate-400 font-bold uppercase tracking-widest mt-1">
+                                    Question {qIdx + 1} of {questions.length}
+                                </div>
+                                                {q.passage && (
+                                                    <div className="mb-4 text-[15px] leading-relaxed text-slate-800">
+                                                        <PassageRenderer text={q.passage} />
+                                                    </div>
+                                                )}
+                                                <div className="text-[15px] font-medium leading-relaxed text-slate-900">
+                                                    <LatexRenderer latex={q.prompt} />
+                                                </div>
+                                            </div>
+                                            
+                                            {/* Options or SPR Answer */}
+                                            <div className="space-y-3">
+                                                <h3 className="font-bold text-slate-400 text-xs uppercase tracking-wider mb-2 lg:mb-4">
+                                                    {isSPR ? 'Your Answer' : 'Options'}
+                                                </h3>
+                                                {isSPR ? (
+                                                    <div className={`p-4 rounded-xl border-2 flex flex-col gap-2 text-[15px] transition-all bg-white ${isCorrect ? 'border-emerald-500 bg-emerald-50/50' : 'border-rose-400 bg-rose-50/50'}`}>
+                                                        <div className="flex items-center gap-2">
+                                                            <span className="font-semibold text-slate-500">You answered:</span>
+                                                            <span className={`font-mono font-bold ${isCorrect ? 'text-emerald-700' : 'text-rose-700'}`}>{ans || '(blank)'}</span>
+                                                        </div>
+                                                        {!isCorrect && (
+                                                            <div className="flex items-center gap-2 mt-2 pt-2 border-t border-slate-200">
+                                                                <span className="font-semibold text-slate-500">Correct answer:</span>
+                                                                <span className="font-mono font-bold text-emerald-700">{q.answer}</span>
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                ) : (
+                                                    OPTION_LABELS.map((letter) => {
+                                                        const optionContent = q.options[letter as keyof typeof q.options];
+                                                        if (!optionContent) return null;
+                                                        
+                                                        const isThisOptionCorrect = letter === q.answer;
+                                                        const isThisOptionSelected = letter === ans;
+                                                        
+                                                        let optionClass = "p-4 rounded-xl border-2 flex gap-4 text-[15px] transition-all bg-white ";
+                                                        
+                                                        if (isThisOptionCorrect) {
+                                                            optionClass += "border-emerald-500 ring-1 ring-emerald-500 bg-emerald-50/50";
+                                                        } else if (isThisOptionSelected && !isThisOptionCorrect) {
+                                                            optionClass += "border-rose-400 bg-rose-50/50";
+                                                        } else {
+                                                            optionClass += "border-slate-200 opacity-60";
+                                                        }
+
+                                                        return (
+                                                            <div key={letter} className={optionClass}>
+                                                                <div className={`w-6 h-6 shrink-0 rounded-full flex items-center justify-center font-bold text-xs border-2 ${
+                                                                    isThisOptionCorrect ? 'bg-emerald-500 border-emerald-500 text-white' :
+                                                                    isThisOptionSelected ? 'bg-rose-500 border-rose-500 text-white' :
+                                                                    'border-slate-300 text-slate-500'
+                                                                }`}>
+                                                                    {letter}
+                                                                </div>
+                                                                <div className={`leading-relaxed ${
+                                                                    isThisOptionCorrect ? 'font-semibold text-emerald-900' :
+                                                                    isThisOptionSelected ? 'font-semibold text-rose-900' :
+                                                                    'text-slate-600'
+                                                                }`}>
+                                                                    <LatexRenderer latex={optionContent} />
+                                                                </div>
+                                                            </div>
+                                                        );
+                                                    })
+                                                )}
+                                            </div>
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    // ── Test interface ───────────────────────────────────────────────
+
+    const currentQuestion = questions[currentIdx];
+    const isLastQuestion = currentIdx === questions.length - 1;
     const currentEliminations = eliminatedAnswers[currentIdx] || [];
     const hasPassage = !isMath && !!currentQuestion?.passage;
     const showLeftPane = hasPassage || (isMath && isDesmosOpen);
 
     return (
-        <div className="h-[100dvh] flex flex-col bg-slate-50 font-[system-ui,-apple-system,BlinkMacSystemFont,'Segoe_UI',Roboto,sans-serif] overflow-hidden fixed inset-0 z-50">
+        <div className="h-[100dvh] flex flex-col bg-slate-50 font-['Verdana',_sans-serif] overflow-hidden fixed inset-0 z-50">
             {/* Strict Mode Fullscreen Warning */}
             {fsWarningCountdown !== null && mode === 'test' && (
                 <div className="fixed inset-0 z-[100] flex items-center justify-center bg-red-900/90 backdrop-blur-md">
@@ -553,8 +751,23 @@ export default function ClassroomAssignmentDetailPage() {
                         </button>
                     )}
                     {assignment.allowExit !== false && (
-                        <button onClick={toggleFullscreen} className="p-2 rounded-md hover:bg-black/5 text-slate-500 transition-colors ml-2" title="Toggle Fullscreen">
-                            <Maximize2 className="w-5 h-5" />
+                        <button
+                            onClick={toggleFullscreen}
+                            className="flex flex-col items-center justify-center gap-1.5 w-[80px] h-[64px] rounded-lg hover:bg-black/5 text-slate-700 transition-colors"
+                        >
+                            <Maximize2 className="w-[24px] h-[24px]" />
+                            <span className="font-bold text-[12px] leading-none">Fullscreen</span>
+                        </button>
+                    )}
+                    {assignment.allowExit !== false && (
+                        <button
+                            onClick={() => router.push('/classroom')}
+                            className="flex flex-col items-center justify-center gap-1.5 w-[80px] h-[64px] rounded-lg hover:bg-black/5 text-slate-700 transition-colors"
+                        >
+                            <div className="flex items-center justify-center w-6 h-6 bg-slate-800 rounded text-white">
+                                <X className="w-3.5 h-3.5" />
+                            </div>
+                            <span className="font-bold text-[12px] leading-none">Save & Exit</span>
                         </button>
                     )}
 
@@ -603,11 +816,13 @@ export default function ClassroomAssignmentDetailPage() {
                             {currentQuestion?.passage ? (
                                 <PassageRenderer
                                     text={currentQuestion.passage}
-                                    highlights={[]}
-                                    onAddHighlight={() => {}}
-                                    onRemoveHighlight={() => {}}
-                                    onUpdateHighlight={() => {}}
+                                    highlights={highlights[`passage-${currentIdx}`] || []}
+                                    onAddHighlight={(h) => addHighlight(`passage-${currentIdx}`, h)}
+                                    onRemoveHighlight={(id) => removeHighlight(`passage-${currentIdx}`, id)}
+                                    onUpdateHighlight={(id, updates) => updateHighlight(`passage-${currentIdx}`, id, updates)}
                                     isHighlightModeActive={isHighlightActive}
+                                    defaultHighlightColor={defaultHighlightColor}
+                                    onChangeDefaultColor={setDefaultHighlightColor}
                                 />
                             ) : (
                                 <div className="text-[17px] text-[#6B7280] leading-[1.8] font-serif italic text-center mt-20">
@@ -675,33 +890,64 @@ export default function ClassroomAssignmentDetailPage() {
 
                         {/* Question Content */}
                         <div className="text-[18px] text-[#111827] mb-6 leading-relaxed">
-                            {currentQuestion?.imageUrl && isMath && (currentQuestion?.imagePosition === 'before-stem' || !currentQuestion?.imagePosition) && (
-                                <div className="mb-4 flex items-center justify-center overflow-hidden">
-                                    <img src={currentQuestion.imageUrl} alt="Question image" className="max-w-[70%] object-contain object-top cursor-pointer hover:opacity-90 transition-opacity" style={{maxHeight: '280px'}} />
-                                </div>
-                            )}
-                            <div className="font-bluebook break-words whitespace-pre-wrap [text-wrap:pretty]">
-                                {currentQuestion?.stem ? <HighlightableText
-                                        text={currentQuestion.stem}
-                                        className=""
-                                        highlights={[]}
-                                        onAddHighlight={() => {}}
-                                        onRemoveHighlight={() => {}}
-                                        onUpdateHighlight={() => {}}
+                            <div className="space-y-8">
+                                {/* Image before stem */}
+                                {questions[currentIdx]?.imageUrl && questions[currentIdx]?.imagePosition !== 'after-stem' && (
+                                    <div className="w-full flex justify-center mb-6">
+                                        <img src={questions[currentIdx].imageUrl} alt="Question figure" className="max-w-full h-auto rounded-lg shadow-sm border border-slate-200" />
+                                    </div>
+                                )}
+
+                                <div className="text-[1.1rem] leading-relaxed text-slate-800 font-medium whitespace-pre-wrap">
+                                    <HighlightableText
+                                        text={questions[currentIdx]?.stem || ''}
+                                        highlights={highlights[`stem-${currentIdx}`] || []}
+                                        onAddHighlight={(h) => addHighlight(`stem-${currentIdx}`, h)}
+                                        onRemoveHighlight={(id) => removeHighlight(`stem-${currentIdx}`, id)}
+                                        onUpdateHighlight={(id, updates) => updateHighlight(`stem-${currentIdx}`, id, updates)}
                                         isHighlightModeActive={isHighlightActive}
-                                    /> : null}
-                            </div>
-                            {currentQuestion?.imageUrl && isMath && currentQuestion?.imagePosition === 'after-stem' && (
-                                <div className="mt-4 mb-4 flex items-center justify-center overflow-hidden">
-                                    <img src={currentQuestion.imageUrl} alt="Question image" className="max-w-[70%] object-contain object-top cursor-pointer hover:opacity-90 transition-opacity" style={{maxHeight: '280px'}} />
+                                        defaultHighlightColor={defaultHighlightColor}
+                                        onChangeDefaultColor={setDefaultHighlightColor}
+                                    />
                                 </div>
-                            )}
+
+                                {/* Image after stem */}
+                                {questions[currentIdx]?.imageUrl && questions[currentIdx]?.imagePosition === 'after-stem' && (
+                                    <div className="w-full flex justify-center mt-6 mb-6">
+                                        <img src={questions[currentIdx].imageUrl} alt="Question figure" className="max-w-full h-auto rounded-lg shadow-sm border border-slate-200" />
+                                    </div>
+                                )}
+                            </div>
                         </div>
 
                         {/* Answer Options */}
+                        {/* Answer Options or SPR Input */}
                         <div className="space-y-2 w-full relative pl-[2px] pt-[2px]">
-                            {OPTION_LABELS.map((letter) => {
-                                const optText = currentQuestion?.options[letter];
+                            {questions[currentIdx]?.type === 'Math (SPR)' ? (
+                                <div className="flex flex-col gap-2">
+                                    <input
+                                        type="text"
+                                        id="spr-answer-input"
+                                        value={typeof answers[String(currentIdx)] === 'string' ? answers[String(currentIdx)] as string : typeof answers[String(currentIdx)] === 'number' ? String(answers[String(currentIdx)]) : ''}
+                                        onChange={(e) => handleSelectAnswer(e.target.value)}
+                                        className="w-[280px] h-[52px] border-2 border-[#D1D5DB] rounded-[8px] px-4 text-[17px] font-mono font-bold text-[#111827] text-left focus:outline-none focus:border-[#111827] transition-colors bg-white"
+                                        autoComplete="off"
+                                        spellCheck={false}
+                                        disabled={mode === 'review'}
+                                        placeholder="Enter your answer"
+                                    />
+                                    {mode === 'review' && (
+                                        <div className="mt-2 text-[15px] font-medium">
+                                            {String(answers[String(currentIdx)] || '').trim() === String(questions[currentIdx]?.answer || '').trim() ? (
+                                                <span className="text-emerald-600">Correct!</span>
+                                            ) : (
+                                                <span className="text-red-500">Incorrect. The correct answer is: {questions[currentIdx]?.answer}</span>
+                                            )}
+                                        </div>
+                                    )}
+                                </div>
+                            ) : OPTION_LABELS.map((letter) => {
+                                const optText = (questions[currentIdx]?.options as any)?.[letter];
                                 if (!optText) return null;
 
                                 const isSelected = answers[String(currentIdx)] === letter;
@@ -724,7 +970,7 @@ export default function ClassroomAssignmentDetailPage() {
                                                 }
                                             }}
                                             htmlFor={`opt-${letter}`}
-                                             className={`relative flex-1 p-3 px-4 border min-h-[58px] rounded-[10px] flex items-center cursor-pointer transition-all duration-200 overflow-hidden ${isSelected ? 'border-indigo-600 shadow-[inset_0_0_0_1px_#4f46e5,0_2px_8px_rgba(79,70,229,0.15)] bg-indigo-50/30' : 'border-slate-300 hover:border-slate-400 bg-white hover:bg-slate-50 hover:shadow-sm'} ${overrideBox}`}
+                                            className={`relative w-full border h-auto min-h-[56px] rounded-[10px] flex items-stretch cursor-pointer transition-all duration-200 overflow-hidden ${isSelected ? 'border-[#111827] shadow-[inset_0_0_0_1px_#111827] z-10' : 'border-[#E5E7EB] hover:border-slate-400 shadow-sm'} ${overrideBox}`}
                                         >
                                             <input
                                                 type="radio"
@@ -737,21 +983,27 @@ export default function ClassroomAssignmentDetailPage() {
                                                 }}
                                             />
 
-                                            <div className={`w-[28px] h-[28px] rounded-full border-[1.5px] flex-shrink-0 flex items-center justify-center font-bold text-[13px] mr-4 transition-colors ${isSelected ? 'border-indigo-600 text-white bg-indigo-600 shadow-sm' : 'border-slate-400 text-slate-700'}`}>
-                                                {letter}
+                                            {/* Letter Box (Circular) */}
+                                            <div className="w-[52px] flex-shrink-0 flex items-center justify-center bg-transparent">
+                                                <div className={`w-[30px] h-[30px] rounded-full flex items-center justify-center font-bold text-[14px] border-[1.5px] transition-all ${isSelected ? 'border-[#111827] bg-[#111827] text-white shadow-md' : 'border-[#D1D5DB] text-[#4B5563] bg-white group-hover:border-[#9CA3AF] group-hover:text-[#111827]'}`}>
+                                                    {letter}
+                                                </div>
                                             </div>
 
-                                            <span className={`text-[17px] font-sans flex-1 ${isEliminated ? 'text-slate-400' : 'text-[#111827]'}`}>
-                                                <HighlightableText
-                                                    text={optText}
-                                                    className=""
-                                                    highlights={[]}
-                                                    onAddHighlight={() => {}}
-                                                    onRemoveHighlight={() => {}}
-                                                    onUpdateHighlight={() => {}}
-                                                    isHighlightModeActive={isHighlightActive}
-                                                />
-                                            </span>
+                                            {/* Answer Text */}
+                                            <div className="flex-1 px-3 py-3 flex items-center bg-transparent">
+                                                <span className={`text-[16px] ${isEliminated ? 'text-slate-400' : 'text-[#111827]'}`}>
+                                                    <HighlightableText
+                                                        text={optText}
+                                                        className=""
+                                                        highlights={highlights[`opt-${currentIdx}-${letter}`] || []}
+                                                        onAddHighlight={(h) => addHighlight(`opt-${currentIdx}-${letter}`, h)}
+                                                        onRemoveHighlight={(id) => removeHighlight(`opt-${currentIdx}-${letter}`, id)}
+                                                        onUpdateHighlight={(id, updates) => updateHighlight(`opt-${currentIdx}-${letter}`, id, updates)}
+                                                        isHighlightModeActive={isHighlightActive}
+                                                    />
+                                                </span>
+                                            </div>
 
                                             {isEliminated && (
                                                 <div className="absolute top-1/2 left-0 w-full h-[1.5px] bg-slate-500 pointer-events-none -translate-y-[50%]"></div>
@@ -783,6 +1035,7 @@ export default function ClassroomAssignmentDetailPage() {
                                     </div>
                                 );
                             })}
+
                             
                             {/* Spacer to prevent Option D from touching footer due to flex overflow bugs */}
                             <div className="h-24 shrink-0 w-full"></div>
@@ -820,9 +1073,15 @@ export default function ClassroomAssignmentDetailPage() {
                                             <span className="text-[13px] font-bold text-[#4B5563]">For Review</span>
                                         </div>
                                     </div>
+                                    <div className="w-full bg-slate-100 rounded-full h-2 mb-2">
+                                        <div className="bg-indigo-500 h-2 rounded-full transition-all duration-500" style={{ width: `${(Object.keys(answers).length / questions.length) * 100}%` }} />
+                                    </div>
+                                    <p className="text-sm font-bold text-slate-600 text-center">
+                                        {Object.keys(answers).length} of {questions.length} Questions Answered
+                                    </p>
                                 </div>
                                 <div className="grid grid-cols-6 sm:grid-cols-8 md:grid-cols-11 gap-4 gap-y-6 justify-items-center">
-                                    {Array.from({ length: totalQuestions }).map((_, idx) => {
+                                    {questions.map((_, idx) => {
                                         const isAnswered = answers[String(idx)] !== undefined;
                                         const isFlagged = flaggedQuestions[idx];
                                         const isActive = idx === currentIdx;
@@ -874,7 +1133,7 @@ export default function ClassroomAssignmentDetailPage() {
                         onClick={() => setIsNavPanelOpen(true)}
                         className="flex items-center justify-center gap-2 px-6 h-[44px] rounded-[6px] font-bold text-white bg-[#222222] hover:bg-[#333333] transition-colors shadow-sm"
                     >
-                        <span className="text-[15px] tracking-wide">Question {currentIdx + 1} of {totalQuestions}</span>
+                        <span className="text-[15px] tracking-wide">Question {currentIdx + 1} of {questions.length}</span>
                         <ChevronUp className="w-[18px] h-[18px]" />
                     </button>
                 </div>
@@ -896,7 +1155,7 @@ export default function ClassroomAssignmentDetailPage() {
                         </button>
                     ) : (
                         <button
-                            onClick={() => setCurrentIdx(p => Math.min(totalQuestions - 1, p + 1))}
+                            onClick={() => setCurrentIdx(p => Math.min(questions.length - 1, p + 1))}
                             className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-9 py-2.5 rounded-full font-bold text-[15px] transition-all shadow-md shadow-blue-500/20 hover:shadow-lg hover:shadow-blue-500/30 hover:scale-[1.02]"
                         >
                             Next

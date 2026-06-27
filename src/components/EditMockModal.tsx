@@ -18,8 +18,6 @@ export default function EditMockModal({ session, isOpen, onClose, onSave }: Edit
     const [maxStudents, setMaxStudents] = useState(session.maxStudents);
     const [customTests, setCustomTests] = useState(session.customTests || []);
     const [joinDeadlineMinutes, setJoinDeadlineMinutes] = useState<string>('');
-    
-    const [expandedTestId, setExpandedTestId] = useState<string | null>(null);
 
     useEffect(() => {
         if (isOpen) {
@@ -29,7 +27,6 @@ export default function EditMockModal({ session, isOpen, onClose, onSave }: Edit
             setTimeLimit(session.timeLimitMinutes);
             setMaxStudents(session.maxStudents);
             setCustomTests(session.customTests || []);
-            setExpandedTestId(null);
             
             if (session.joinDeadline) {
                 const diffMs = new Date(session.joinDeadline).getTime() - Date.now();
@@ -42,7 +39,7 @@ export default function EditMockModal({ session, isOpen, onClose, onSave }: Edit
                 setJoinDeadlineMinutes('');
             }
         }
-    }, [isOpen, session]);
+    }, [isOpen]);
 
     if (!isOpen) return null;
 
@@ -67,18 +64,6 @@ export default function EditMockModal({ session, isOpen, onClose, onSave }: Edit
             joinDeadline: newJoinDeadline
         });
         onClose();
-    };
-
-    const updateQuestionAnswer = (testId: string, questionId: string, newAnswerIdx: number) => {
-        setCustomTests(prev => prev.map(test => {
-            if (test.id !== testId) return test;
-            return {
-                ...test,
-                questions: test.questions.map(q => 
-                    q.id === questionId ? { ...q, answer: newAnswerIdx } : q
-                )
-            };
-        }));
     };
 
     return (
@@ -129,61 +114,6 @@ export default function EditMockModal({ session, isOpen, onClose, onSave }: Edit
                             </div>
                         </div>
 
-                        {/* Test Files & Answers */}
-                        {customTests.length > 0 && (
-                            <div>
-                                <h3 className="text-xl font-black site-text-strong mb-4 pt-4 border-t border-slate-200 dark:border-slate-800">Review & Edit Test Files</h3>
-                                <p className="text-sm site-text-muted mb-4">Click on a test to edit the correct answers for its questions.</p>
-                                
-                                <div className="space-y-4">
-                                    {customTests.map((test) => (
-                                        <div key={test.id} className="border-2 border-slate-200 dark:border-slate-700 rounded-xl overflow-hidden">
-                                            <button 
-                                                onClick={() => setExpandedTestId(expandedTestId === test.id ? null : test.id)}
-                                                className="w-full px-6 py-4 flex items-center justify-between bg-slate-50 dark:bg-slate-800/50 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
-                                            >
-                                                <span className="font-bold site-text-strong">{test.name} <span className="text-sm font-normal site-text-muted ml-2">({test.questions.length} questions)</span></span>
-                                                {expandedTestId === test.id ? <ChevronUp className="w-5 h-5 site-text-muted" /> : <ChevronDown className="w-5 h-5 site-text-muted" />}
-                                            </button>
-                                            
-                                            <AnimatePresence>
-                                                {expandedTestId === test.id && (
-                                                    <motion.div 
-                                                        initial={{ height: 0 }}
-                                                        animate={{ height: 'auto' }}
-                                                        exit={{ height: 0 }}
-                                                        className="overflow-hidden bg-white dark:bg-slate-900"
-                                                    >
-                                                        <div className="p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 border-t border-slate-200 dark:border-slate-700">
-                                                            {test.questions.map((q, idx) => (
-                                                                <div key={q.id} className="flex items-center justify-between bg-slate-50 dark:bg-slate-800 px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-700">
-                                                                    <span className="font-bold text-sm site-text-muted">Q{idx + 1}</span>
-                                                                    <div className="flex gap-1">
-                                                                        {['A', 'B', 'C', 'D'].map((opt, optIdx) => (
-                                                                            <button
-                                                                                key={opt}
-                                                                                onClick={() => updateQuestionAnswer(test.id, q.id, optIdx)}
-                                                                                className={`w-8 h-8 rounded text-sm font-bold flex items-center justify-center transition-colors ${
-                                                                                    q.answer === optIdx 
-                                                                                        ? 'bg-blue-600 text-white' 
-                                                                                        : 'bg-white dark:bg-slate-700 text-slate-500 hover:bg-slate-200 dark:hover:bg-slate-600'
-                                                                                }`}
-                                                                            >
-                                                                                {opt}
-                                                                            </button>
-                                                                        ))}
-                                                                    </div>
-                                                                </div>
-                                                            ))}
-                                                        </div>
-                                                    </motion.div>
-                                                )}
-                                            </AnimatePresence>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                        )}
                     </div>
 
                     <div className="p-6 border-t border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50 flex justify-end gap-3 sticky bottom-0">

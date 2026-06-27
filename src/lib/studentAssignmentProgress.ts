@@ -9,6 +9,7 @@ export type StudentAssignmentSnapshot = {
     timeRemaining: number;
     hasStarted: boolean;
     updatedAt: string;
+    highlights?: Record<string, any[]>;
 };
 
 export type StudentAssignmentProgressMap = Record<string, StudentAssignmentSnapshot>;

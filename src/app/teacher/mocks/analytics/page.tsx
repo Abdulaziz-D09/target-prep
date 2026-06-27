@@ -14,7 +14,9 @@ import { useMemo, useState, useEffect } from 'react';
 
 export default function TeacherMocksAnalyticsPage() {
     const shouldReduceMotion = useReducedMotion();
-    const { mockSessions, mockResults, students } = useClassroomStore();
+    const mockSessions = useClassroomStore(state => state.mockSessions);
+    const mockResults = useClassroomStore(state => state.mockResults);
+    const students = useClassroomStore(state => state.students);
     const [isClient, setIsClient] = useState(false);
     
     // Sort mock sessions descending by date
@@ -70,10 +72,10 @@ export default function TeacherMocksAnalyticsPage() {
     if (!isClient) return null;
 
     return (
-        <div className="relative min-h-screen pt-4 pb-12 px-4 sm:px-6 lg:px-8 max-w-[1320px] mx-auto">
+        <div className="relative min-h-screen w-full pt-4 pb-12 px-4 sm:px-6 lg:px-8">
             <FloatingPageShapes theme="home" />
             <motion.div
-                className="relative z-10"
+                className="relative z-10 w-full mx-auto max-w-[1320px]"
                 initial="hidden"
                 animate="visible"
                 variants={pageRevealVariants}

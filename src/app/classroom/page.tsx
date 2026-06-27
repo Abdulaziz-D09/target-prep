@@ -1,5 +1,6 @@
 'use client';
 import { useEffect, useMemo, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import {
@@ -14,6 +15,8 @@ import {
     ListChecks,
     Play,
     Users,
+    FileText,
+    Check,
 } from 'lucide-react';
 import {
     FloatingPageShapes,
@@ -59,9 +62,16 @@ export default function ClassroomPage() {
     const [viewMembersClassroomId, setViewMembersClassroomId] = useState<string | null>(null);
     const [joinCode, setJoinCode] = useState('');
     const [activeTab, setActiveTab] = useState<'pending' | 'completed'>('pending');
+    const [selectedAssignment, setSelectedAssignment] = useState<any>(null);
     const [studentProgressMap, setStudentProgressMap] = useState<StudentAssignmentProgressMap>({});
 
-    const { classrooms, assignments, progress, students, joinedClassroomIds, joinClassroom, leaveClassroom } = useClassroomStore();
+    const classrooms = useClassroomStore(state => state.classrooms);
+    const assignments = useClassroomStore(state => state.assignments);
+    const progress = useClassroomStore(state => state.progress);
+    const students = useClassroomStore(state => state.students);
+    const joinedClassroomIds = useClassroomStore(state => state.joinedClassroomIds);
+    const joinClassroom = useClassroomStore(state => state.joinClassroom);
+    const leaveClassroom = useClassroomStore(state => state.leaveClassroom);
     
     useEffect(() => {
         setStudentProgressMap(readStudentAssignmentProgress());
@@ -73,9 +83,9 @@ export default function ClassroomPage() {
             .map((assignment) => {
                 const progressRow = progress.find((row) => row.assignmentId === assignment.id);
 
-                const total = assignment.questions.length > 0
-                    ? assignment.questions.length
-                    : progressRow?.total ?? 0;
+                const total = assignment.customTests?.length > 0
+                    ? assignment.customTests.reduce((acc, t) => acc + t.questions.length, 0)
+                    : (assignment.questions?.length || progressRow?.total || 0);
                 const localProgress = studentProgressMap[assignment.id];
                 const localAnswered = localProgress ? Object.keys(localProgress.answers ?? {}).length : null;
                 const localCompleted = localProgress?.completed ?? false;
@@ -308,7 +318,18 @@ export default function ClassroomPage() {
                                     : 'bg-blue-500/15 text-blue-600 dark:text-blue-400';
 
                                 return (
-                                    <Link key={assignment.id} href={`/classroom/assignment/${assignment.id}`} className="block">
+                                    <div key={assignment.id} onClick={() => {
+                                        // If only 1 test file, launch directly; if 2+ show the picker popup
+                                        if (assignment.customTests && assignment.customTests.length === 1) {
+                                            // Navigate directly to the single test
+                                            window.location.href = `/classroom/assignment/${assignment.id}?testId=${assignment.customTests[0].id}`;
+                                        } else if (!assignment.customTests || assignment.customTests.length === 0) {
+                                            // Legacy - go directly
+                                            window.location.href = `/classroom/assignment/${assignment.id}`;
+                                        } else {
+                                            setSelectedAssignment(assignment);
+                                        }
+                                    }} className="block cursor-pointer">
                                         <article className="site-panel-soft rounded-[26px] p-5 sm:p-6 transition hover:scale-[1.01] hover:shadow-[0_18px_45px_rgba(15,23,42,0.18)]">
                                             <div className="flex flex-col sm:flex-row sm:items-center gap-5 justify-between">
                                                 <div className="flex items-start gap-4">
@@ -321,19 +342,28 @@ export default function ClassroomPage() {
                                                             <span className={`text-[11px] font-bold px-2.5 py-0.5 rounded-full ${subjectChipClass}`}>
                                                                 {assignment.subject}
                                                             </span>
+                                                            {assignment.dueDate && new Date() > new Date(assignment.dueDate) && (
+                                                                <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-rose-500/15 text-rose-500">
+                                                                    Past Due
+                                                                </span>
+                                                            )}
                                                         </div>
                                                         <p className="text-[13px] site-text-muted mt-1">{classroomLabel}</p>
 
                                                         <div className="mt-3 flex flex-wrap items-center gap-2.5">
                                                             <span className="site-chip rounded-full px-2.5 py-1 text-[11px] font-bold uppercase tracking-[0.2em] site-text-strong">
                                                                 <ListChecks className="h-3.5 w-3.5 inline mr-1" />
-                                                                {total > 0 ? `${total} Questions` : 'Assignment'}
+                                                                {assignment.customTests?.length || 0} File{(assignment.customTests?.length || 0) !== 1 ? 's' : ''} ({total} Qs)
                                                             </span>
                                                             <span className="site-chip rounded-full px-2.5 py-1 text-[11px] font-bold uppercase tracking-[0.2em] site-text-strong">
                                                                 <Clock className="h-3.5 w-3.5 inline mr-1" />
                                                                 {assignment.timeLimitMinutes} Min
                                                             </span>
-                                                            <span className="text-[12px] site-text-muted">{dueLabel(assignment.createdAt)}</span>
+                                                            {assignment.dueDate && (
+                                                                <span className="text-[12px] site-text-muted font-medium">
+                                                                    Due: {new Date(assignment.dueDate).toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                                                                </span>
+                                                            )}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -354,7 +384,7 @@ export default function ClassroomPage() {
                                                 </div>
                                             </div>
                                         </article>
-                                    </Link>
+                                    </div>
                                 );
                             })
                         )}
@@ -495,6 +525,113 @@ export default function ClassroomPage() {
                                 >
                                     Leave Class
                                 </button>
+                            </div>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
+
+            <AnimatePresence>
+                {selectedAssignment && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            className="absolute inset-0 bg-slate-900/45 backdrop-blur-sm"
+                            onClick={() => setSelectedAssignment(null)}
+                        />
+                        <motion.div
+                            initial={shouldReduceMotion ? undefined : { opacity: 0, scale: 0.95, y: 10 }}
+                            animate={shouldReduceMotion ? undefined : { opacity: 1, scale: 1, y: 0 }}
+                            exit={shouldReduceMotion ? undefined : { opacity: 0, scale: 0.95, y: 10 }}
+                            transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+                            className="relative w-full max-w-2xl overflow-hidden rounded-[24px] site-panel shadow-2xl p-7 border flex flex-col max-h-[85vh]"
+                        >
+                            <button
+                                onClick={() => setSelectedAssignment(null)}
+                                className="absolute right-5 top-5 p-2 rounded-full site-subpanel hover:scale-[1.05] transition"
+                            >
+                                <X className="w-5 h-5 site-text" />
+                            </button>
+
+                            <div className="mb-6 pr-8">
+                                <h2 className="text-2xl font-black tracking-[-0.03em] site-text-strong mb-2">{selectedAssignment.title}</h2>
+                                <p className="text-[15px] site-text-muted">
+                                    {selectedAssignment.customTests?.length || 0} file{(selectedAssignment.customTests?.length || 0) !== 1 ? 's' : ''} • {selectedAssignment.timeLimitMinutes} minutes total
+                                </p>
+                            </div>
+
+                            <div className="flex-1 overflow-y-auto pr-2 space-y-3">
+                                {(() => {
+                                    const progressRow = progress.find((row) => row.assignmentId === selectedAssignment.id);
+                                    return (
+                                        <>
+                                            {selectedAssignment.customTests?.map((test: any, index: number) => {
+                                                // Support both old structure and new testProgress record
+                                    const isTestCompleted = progressRow?.testProgress?.[test.id]?.completed || false;
+                                    const testAnswered = progressRow?.testProgress?.[test.id]?.answered || 0;
+                                    const isTimeOver = selectedAssignment.dueDate && new Date() > new Date(selectedAssignment.dueDate);
+                                    
+                                    let buttonText = isTestCompleted ? 'Review' : testAnswered > 0 ? 'Continue' : 'Start';
+                                    let isLocked = false;
+                                    if (!isTestCompleted && isTimeOver) {
+                                        buttonText = 'Time Over';
+                                        isLocked = true;
+                                    }
+
+                                    return (
+                                        <div key={test.id} className="site-subpanel p-5 rounded-2xl flex items-center justify-between border border-slate-200/50 dark:border-slate-700/50">
+                                            <div className="flex items-center gap-4">
+                                                <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${isTestCompleted ? 'bg-emerald-500/10 text-emerald-500' : 'bg-indigo-500/10 text-indigo-500'}`}>
+                                                    {isTestCompleted ? <Check className="w-5 h-5" /> : <FileText className="w-5 h-5" />}
+                                                </div>
+                                                <div>
+                                                    <h4 className="font-bold site-text-strong text-[15px]">{test.name || `File ${index + 1}`}</h4>
+                                                    <p className="text-[13px] site-text-muted">{test.questions.length} questions</p>
+                                                </div>
+                                            </div>
+                                            {isLocked ? (
+                                                <button disabled className="px-5 py-2 rounded-full font-bold text-sm bg-rose-100 dark:bg-rose-900/30 text-rose-500 cursor-not-allowed">
+                                                    {buttonText}
+                                                </button>
+                                            ) : (
+                                                <Link href={`/classroom/assignment/${selectedAssignment.id}?testId=${test.id}`}>
+                                                    <button className={`px-5 py-2 rounded-full font-bold text-sm transition ${isTestCompleted ? 'bg-slate-200 dark:bg-slate-700 site-text hover:bg-slate-300 dark:hover:bg-slate-600' : 'bg-indigo-600 text-white hover:bg-indigo-700 shadow-md'}`}>
+                                                        {buttonText}
+                                                    </button>
+                                                </Link>
+                                            )}
+                                        </div>
+                                    );
+                                })}
+                                            {(!selectedAssignment.customTests || selectedAssignment.customTests.length === 0) && (
+                                                <div className="site-subpanel p-5 rounded-2xl flex items-center justify-between">
+                                                    <div className="flex items-center gap-4">
+                                                        <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-indigo-500/10 text-indigo-500">
+                                                            <FileText className="w-5 h-5" />
+                                                        </div>
+                                                        <div>
+                                                            <h4 className="font-bold site-text-strong text-[15px]">Legacy Assignment</h4>
+                                                            <p className="text-[13px] site-text-muted">{selectedAssignment.questions?.length || 0} questions</p>
+                                                        </div>
+                                                    </div>
+                                                    {selectedAssignment.dueDate && new Date() > new Date(selectedAssignment.dueDate) && !progressRow?.completed ? (
+                                                        <button disabled className="px-5 py-2 rounded-full font-bold text-sm bg-rose-100 dark:bg-rose-900/30 text-rose-500 cursor-not-allowed">
+                                                            Time Over
+                                                        </button>
+                                                    ) : (
+                                                        <Link href={`/classroom/assignment/${selectedAssignment.id}`}>
+                                                            <button className={`px-5 py-2 rounded-full font-bold text-sm transition ${progressRow?.completed ? 'bg-slate-200 dark:bg-slate-700 site-text hover:bg-slate-300 dark:hover:bg-slate-600' : 'bg-indigo-600 text-white hover:bg-indigo-700 shadow-md'}`}>
+                                                                {progressRow?.completed ? 'Review' : 'Launch'}
+                                                            </button>
+                                                        </Link>
+                                                    )}
+                                                </div>
+                                            )}
+                                        </>
+                                    );
+                                })()}
                             </div>
                         </motion.div>
                     </div>

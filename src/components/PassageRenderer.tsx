@@ -18,6 +18,8 @@ interface Props {
   onRemoveHighlight:(id:string)=>void;
   onUpdateHighlight:(id:string,u:Partial<Highlight>)=>void;
   isHighlightModeActive:boolean; className?:string;
+  defaultHighlightColor?:string;
+  onChangeDefaultColor?:(color:string)=>void;
 }
 interface S { name:string; values:(number|null)[]; color:string }
 type Seg =
@@ -477,11 +479,11 @@ function PremiumTable({seg}:{seg:Extract<Seg,{kind:'table'}>}){
       {title&&(
         <div className="mb-2 text-[13px] font-semibold text-slate-700">{title}</div>
       )}
-      <table style={{fontSize: '15px', borderCollapse: 'collapse', border: '2px solid #888'}}>
+      <table className="border-collapse border border-black dark:border-white text-[15px]">
         <thead>
           <tr>
             {header.map((c,i)=>(
-              <th key={i} style={{border: '1px solid #888', padding: '8px 24px', textAlign: 'center', fontWeight: 600, background: '#fff', fontStyle: 'italic'}}>
+              <th key={i} className="border border-black dark:border-white px-6 py-2 text-center font-semibold italic">
                 {c}
               </th>
             ))}
@@ -491,7 +493,7 @@ function PremiumTable({seg}:{seg:Extract<Seg,{kind:'table'}>}){
           {rows.map((row,ri)=>(
             <tr key={ri}>
               {row.map((cell,ci)=>(
-                <td key={ci} style={{border: '1px solid #888', padding: '8px 24px', textAlign: 'center', background: '#fff', color: '#111'}}>
+                <td key={ci} className="border border-black dark:border-white px-6 py-2 text-center">
                   {cell}
                 </td>
               ))}
@@ -512,7 +514,7 @@ function PremiumTable({seg}:{seg:Extract<Seg,{kind:'table'}>}){
 /** Renders a text segment split on paragraph breaks (\n\n or \n), giving
  *  "Text 1" / "Text 2" introductions a styled pill label + divider. */
 function TextBlock({
-  seg, highlights, onAddHighlight, onRemoveHighlight, onUpdateHighlight, isHighlightModeActive
+  seg, highlights, onAddHighlight, onRemoveHighlight, onUpdateHighlight, isHighlightModeActive, defaultHighlightColor, onChangeDefaultColor
 }: {
   seg: Extract<Seg,{kind:'text'}>,
   highlights: Highlight[],
@@ -520,8 +522,11 @@ function TextBlock({
   onRemoveHighlight:(id:string)=>void,
   onUpdateHighlight:(id:string,u:Partial<Highlight>)=>void,
   isHighlightModeActive: boolean,
+  defaultHighlightColor?: string,
+  onChangeDefaultColor?: (color: string) => void
 }) {
   const { content, offset } = seg;
+  const safeHighlights = Array.isArray(highlights) ? highlights : [];
   
   // Split into paragraphs on two-or-more consecutive newlines.
   // We use content.split to preserve exact offset positioning.
@@ -553,7 +558,7 @@ function TextBlock({
           const label = labelMatch[1];
           const body = para.slice(labelMatch[0].length).trim();
           const bodyOff = paraOff + labelMatch[0].length;
-          const hl = highlights
+          const hl = safeHighlights
             .filter(h => h.start >= bodyOff && h.start < bodyOff + body.length)
             .map(h => ({...h, start: h.start - bodyOff, end: h.end - bodyOff}));
           return (
@@ -572,6 +577,8 @@ function TextBlock({
                 onRemoveHighlight={onRemoveHighlight}
                 onUpdateHighlight={onUpdateHighlight}
                 isHighlightModeActive={isHighlightModeActive}
+                defaultHighlightColor={defaultHighlightColor}
+                  onChangeDefaultColor={onChangeDefaultColor}
               />
             </div>
           );
@@ -594,7 +601,7 @@ function TextBlock({
             const lineStart = para.indexOf(line, lineOffset);
             const absoluteLineOff = paraOff + lineStart;
             
-            const hl = highlights
+            const hl = safeHighlights
               .filter(h => h.start >= absoluteLineOff && h.start < absoluteLineOff + line.length)
               .map(h => ({...h, start: h.start - absoluteLineOff, end: h.end - absoluteLineOff}));
               
@@ -608,6 +615,8 @@ function TextBlock({
                   onRemoveHighlight={onRemoveHighlight}
                   onUpdateHighlight={onUpdateHighlight}
                   isHighlightModeActive={isHighlightModeActive}
+                  defaultHighlightColor={defaultHighlightColor}
+                  onChangeDefaultColor={onChangeDefaultColor}
                 />
               </div>
             );
@@ -627,7 +636,7 @@ function TextBlock({
             const bulletText = line.slice(prefixLength);
             const textAbsoluteOff = absoluteLineOff + prefixLength;
             
-            const hl = highlights
+            const hl = safeHighlights
               .filter(h => h.start >= textAbsoluteOff && h.start < textAbsoluteOff + bulletText.length)
               .map(h => ({...h, start: h.start - textAbsoluteOff, end: h.end - textAbsoluteOff}));
               
@@ -642,6 +651,8 @@ function TextBlock({
                   onRemoveHighlight={onRemoveHighlight}
                   onUpdateHighlight={onUpdateHighlight}
                   isHighlightModeActive={isHighlightModeActive}
+                  defaultHighlightColor={defaultHighlightColor}
+                  onChangeDefaultColor={onChangeDefaultColor}
                 />
               </li>
             );
@@ -671,7 +682,7 @@ function TextBlock({
           if (intro) {
             const introStart = para.indexOf(intro, currentPos);
             const absoluteIntroOff = paraOff + introStart;
-            const hl = highlights
+            const hl = safeHighlights
               .filter(h => h.start >= absoluteIntroOff && h.start < absoluteIntroOff + intro.length)
               .map(h => ({...h, start: h.start - absoluteIntroOff, end: h.end - absoluteIntroOff}));
               
@@ -685,6 +696,8 @@ function TextBlock({
                   onRemoveHighlight={onRemoveHighlight}
                   onUpdateHighlight={onUpdateHighlight}
                   isHighlightModeActive={isHighlightModeActive}
+                  defaultHighlightColor={defaultHighlightColor}
+                  onChangeDefaultColor={onChangeDefaultColor}
                 />
               </div>
             );
@@ -701,7 +714,7 @@ function TextBlock({
             const trimmedStart = bulletStart + bulletRaw.indexOf(bulletTrimmed);
             const absoluteBulletOff = paraOff + trimmedStart;
             
-            const hl = highlights
+            const hl = safeHighlights
               .filter(h => h.start >= absoluteBulletOff && h.start < absoluteBulletOff + bulletTrimmed.length)
               .map(h => ({...h, start: h.start - absoluteBulletOff, end: h.end - absoluteBulletOff}));
               
@@ -716,6 +729,8 @@ function TextBlock({
                   onRemoveHighlight={onRemoveHighlight}
                   onUpdateHighlight={onUpdateHighlight}
                   isHighlightModeActive={isHighlightModeActive}
+                  defaultHighlightColor={defaultHighlightColor}
+                  onChangeDefaultColor={onChangeDefaultColor}
                 />
               </li>
             );
@@ -732,7 +747,7 @@ function TextBlock({
           );
         }
 
-        const hl = highlights
+        const hl = safeHighlights
           .filter(h => h.start >= paraOff && h.start < paraOff + para.length)
           .map(h => ({...h, start: h.start - paraOff, end: h.end - paraOff}));
 
@@ -746,6 +761,8 @@ function TextBlock({
             onRemoveHighlight={onRemoveHighlight}
             onUpdateHighlight={onUpdateHighlight}
             isHighlightModeActive={isHighlightModeActive}
+            defaultHighlightColor={defaultHighlightColor}
+                  onChangeDefaultColor={onChangeDefaultColor}
           />
         );
       })}
@@ -754,7 +771,7 @@ function TextBlock({
 }
 
 /* ── MAIN EXPORT ────────────────────────────────────────── */
-export function PassageRenderer({text,highlights,onAddHighlight,onRemoveHighlight,onUpdateHighlight,isHighlightModeActive,className}:Props){
+export function PassageRenderer({text,highlights,onAddHighlight,onRemoveHighlight,onUpdateHighlight,isHighlightModeActive,className,defaultHighlightColor,onChangeDefaultColor}:Props){
   const segs=useMemo(()=>parsePassage(text),[text]);
   return(
     <div className={className}>
@@ -771,6 +788,8 @@ export function PassageRenderer({text,highlights,onAddHighlight,onRemoveHighligh
             onRemoveHighlight={onRemoveHighlight}
             onUpdateHighlight={onUpdateHighlight}
             isHighlightModeActive={isHighlightModeActive}
+            defaultHighlightColor={defaultHighlightColor}
+            onChangeDefaultColor={onChangeDefaultColor}
           />
         );
       })}

@@ -14,15 +14,17 @@ import {
 } from '@/components/SiteMotion';
 
 export default function TeacherMocksPage() {
-    const { mockSessions, seed } = useClassroomStore();
+    const mockSessions = useClassroomStore(state => state.mockSessions);
+    const seed = useClassroomStore(state => state.seed);
+    const [searchQuery, setSearchQuery] = useState('');
     
     useEffect(() => { seed(); }, [seed]);
 
     return (
-        <div className="relative min-h-screen pt-4 pb-12 px-4 sm:px-6 lg:px-8 max-w-[1320px] mx-auto">
+        <div className="relative min-h-screen w-full pt-4 pb-12 px-4 sm:px-6 lg:px-8">
             <FloatingPageShapes theme="home" />
             <motion.div
-                className="relative z-10"
+                className="relative z-10 w-full mx-auto max-w-[1320px]"
                 initial="hidden"
                 animate="visible"
                 variants={pageRevealVariants}
@@ -56,8 +58,17 @@ export default function TeacherMocksPage() {
                 </motion.section>
 
                 <div className="site-panel rounded-[32px] p-6 sm:p-8">
+                    <div className="mb-6 max-w-md">
+                        <input
+                            type="text"
+                            placeholder="Search mock sessions..."
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            className="w-full px-4 py-3 rounded-2xl bg-white dark:bg-slate-800/80 border-2 border-slate-200 dark:border-slate-700 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/20 outline-none text-slate-800 dark:text-white transition-all font-medium"
+                        />
+                    </div>
                     <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                        {mockSessions.filter(m => m.status !== 'completed').length === 0 ? (
+                        {mockSessions.filter(m => m.status !== 'completed' && m.title.toLowerCase().includes(searchQuery.toLowerCase())).length === 0 ? (
                         <div className="col-span-full site-panel rounded-[24px] p-16 flex flex-col items-center text-center border-2 border-slate-200 dark:border-slate-800">
                             <Users className="h-12 w-12 site-text-muted mb-4 opacity-30" />
                             <p className="font-bold site-text-strong text-lg">No mock sessions yet</p>
@@ -66,7 +77,7 @@ export default function TeacherMocksPage() {
                                 <Plus className="h-4 w-4" /> Create Mock
                             </Link>
                         </div>
-                    ) : mockSessions.filter(m => m.status !== 'completed').map(mock => (
+                    ) : mockSessions.filter(m => m.status !== 'completed' && m.title.toLowerCase().includes(searchQuery.toLowerCase())).map(mock => (
                         <Link key={mock.id} href={`/teacher/mocks/${mock.id}`}>
                             <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-6 rounded-3xl shadow-sm hover:shadow-md transition cursor-pointer relative overflow-hidden group">
                                 <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 to-indigo-500" />
@@ -93,7 +104,7 @@ export default function TeacherMocksPage() {
                                 <div className="grid grid-cols-2 gap-3 mt-4">
                                     <div className="bg-slate-50 dark:bg-slate-800/50 p-3 rounded-xl border border-slate-100 dark:border-slate-700/50 col-span-2">
                                         <p className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-1">Join Code</p>
-                                        <p className="text-lg font-mono font-bold text-slate-800 dark:text-white tracking-[0.1em]">{mock.joinCode}</p>
+                                        <p className="text-lg font-mono font-bold text-slate-800 dark:text-white tracking-[0.1em]">{mock.status === 'active' ? mock.joinCode : '••••••'}</p>
                                     </div>
                                 </div>
                             </div>

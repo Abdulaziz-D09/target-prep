@@ -14,7 +14,8 @@ import Link from 'next/link';
 
 export default function StudentMocksAnalyticsPage() {
     const shouldReduceMotion = useReducedMotion();
-    const { mockResults, mockSessions } = useClassroomStore();
+    const mockResults = useClassroomStore(state => state.mockResults);
+    const mockSessions = useClassroomStore(state => state.mockSessions);
     const [isClient, setIsClient] = useState(false);
 
     useEffect(() => {

@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect, useRef, KeyboardEvent, ClipboardEvent } from 'react';
-import { motion } from 'framer-motion';
-import { CheckCircle, AlertCircle } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { CheckCircle, AlertCircle, Clock, X } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useClassroomStore } from '@/store/classroomStore';
 import { FloatingPageShapes, pageRevealVariants } from '@/components/SiteMotion';
@@ -19,9 +19,12 @@ export default function StudentMockLobbyPage() {
         useRef<HTMLInputElement>(null), useRef<HTMLInputElement>(null)
     ];
     const [error, setError] = useState('');
+    const [isStudentModalOpen, setIsStudentModalOpen] = useState(false);
 
     const mockSessions = useClassroomStore((state) => state.mockSessions);
     const session = mockSessions.find((s) => s.id === mockId);
+    const students = useClassroomStore((state) => state.students);
+    const registeredStudents = students.filter(st => st.mockSessionId === mockId);
 
     useEffect(() => {
         if (!mockId || !studentId) {
@@ -91,6 +94,9 @@ export default function StudentMockLobbyPage() {
         const res = useClassroomStore.getState().joinMock(joinCode, studentId);
 
         if (res.success && res.session) {
+            // Record that the student successfully entered the lobby code and started the exam
+            useClassroomStore.getState().submitAssignmentProgress(studentId, res.session.id, 0, 0, 0, false);
+            
             if (res.assignedTestId) {
                 if (res.session.strictMode) {
                     document.documentElement.requestFullscreen().catch((err) => console.log('Fullscreen failed:', err));
@@ -132,24 +138,39 @@ export default function StudentMockLobbyPage() {
                 </motion.div>
 
                 {/* Text Context */}
-                <div className="text-center mb-12 space-y-4">
+                <div className="text-center mb-10 space-y-4">
                     <h1 className="text-4xl sm:text-5xl font-black text-slate-900 dark:text-white tracking-tight">
                         Registration Successful
                     </h1>
                     <p className="text-lg text-slate-500 dark:text-slate-400 font-medium max-w-xl mx-auto leading-relaxed">
-                        You are locked in! Wait for your instructor to launch the exam, then enter the <strong className="text-slate-700 dark:text-slate-200">6-character session code</strong> below to begin.
+                        You are locked in! Wait for your instructor to launch the exam{session?.status === 'active' ? ', then enter the 6-character session code below to begin.' : '.'}
                     </p>
+                    
+                    {registeredStudents.length > 0 && (
+                        <motion.div 
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            className="flex items-center justify-center gap-3 pt-2 cursor-pointer hover:scale-105 transition-transform"
+                            onClick={() => setIsStudentModalOpen(true)}
+                        >
+                            <div className="flex -space-x-2.5">
+                                {registeredStudents.slice(0, 5).map(student => (
+                                    <div key={student.id} className="w-8 h-8 rounded-full bg-indigo-500 text-white flex items-center justify-center text-[10px] font-bold border-2 border-slate-50 dark:border-[#0B1120] shadow-sm relative z-10" title={student.name}>
+                                        {student.name.charAt(0).toUpperCase()}
+                                    </div>
+                                ))}
+                                {registeredStudents.length > 5 && (
+                                    <div className="w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 flex items-center justify-center text-[10px] font-bold border-2 border-slate-50 dark:border-[#0B1120] shadow-sm relative z-0">
+                                        +{registeredStudents.length - 5}
+                                    </div>
+                                )}
+                            </div>
+                            <span className="text-[13px] font-bold text-slate-500 dark:text-slate-400">
+                                {registeredStudents.length} in Lobby
+                            </span>
+                        </motion.div>
+                    )}
                 </div>
-
-                {error && (
-                    <motion.div 
-                        initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}
-                        className="mb-8 p-4 bg-red-50 dark:bg-red-500/10 border border-red-200 dark:border-red-500/20 rounded-2xl flex items-start gap-3 text-red-600 dark:text-red-400 max-w-md w-full mx-auto"
-                    >
-                        <AlertCircle className="w-5 h-5 shrink-0 mt-0.5" />
-                        <p className="font-bold text-sm">{error}</p>
-                    </motion.div>
-                )}
 
                 {session?.joinLocked ? (
                     <div className="w-full flex flex-col items-center">
@@ -170,8 +191,71 @@ export default function StudentMockLobbyPage() {
                             Return to Dashboard
                         </button>
                     </div>
+                ) : session?.status === 'upcoming' ? (
+                    <motion.div 
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ duration: 0.5, ease: "easeOut" }}
+                        className="w-full flex flex-col items-center"
+                    >
+                        <div className="relative mb-12 p-10 bg-slate-50/50 dark:bg-slate-800/20 border border-slate-200/50 dark:border-slate-700/50 rounded-[32px] flex flex-col items-center text-center gap-4 max-w-lg w-full mx-auto shadow-2xl shadow-blue-500/5 backdrop-blur-sm overflow-hidden">
+                            {/* Decorative background pulses */}
+                            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[200%] h-32 bg-gradient-to-b from-blue-500/10 to-transparent blur-3xl opacity-50" />
+                            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full h-full bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-400/5 via-transparent to-transparent opacity-70 animate-pulse" />
+                            
+                            <div className="relative mb-4 flex items-center justify-center">
+                                <motion.div 
+                                    animate={{ rotate: 360 }}
+                                    transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+                                    className="absolute inset-0 rounded-full border-[3px] border-dashed border-blue-200 dark:border-blue-900/50"
+                                />
+                                <motion.div 
+                                    animate={{ scale: [1, 1.1, 1] }}
+                                    transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                                    className="w-20 h-20 bg-gradient-to-tr from-blue-500 to-indigo-500 rounded-full flex items-center justify-center shadow-lg shadow-blue-500/30 z-10"
+                                >
+                                    <Clock className="w-10 h-10 text-white drop-shadow-md" />
+                                </motion.div>
+                            </div>
+                            
+                            <div className="relative z-10">
+                                <h2 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white mb-3 tracking-tight">
+                                    Mock Starts Soon
+                                </h2>
+                                <p className="text-slate-500 dark:text-slate-400 text-[15px] leading-relaxed max-w-sm mx-auto">
+                                    Your teacher is preparing the session. 
+                                    Hang tight, the 6-digit access code will be revealed shortly!
+                                </p>
+                            </div>
+                            
+                            <div className="mt-4 flex items-center gap-2 px-4 py-2 bg-slate-100 dark:bg-slate-800 rounded-full border border-slate-200 dark:border-slate-700">
+                                <span className="relative flex h-2 w-2">
+                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                                    <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
+                                </span>
+                                <span className="text-xs font-bold text-slate-600 dark:text-slate-300 uppercase tracking-widest">Waiting for Host</span>
+                            </div>
+                        </div>
+                        
+                        <button 
+                            type="button" 
+                            onClick={() => router.push('/dashboard/mocks')} 
+                            className="px-8 py-3 rounded-full font-bold text-slate-500 bg-slate-100 hover:bg-slate-200 hover:text-slate-800 dark:bg-slate-800 dark:text-slate-400 dark:hover:text-white dark:hover:bg-slate-700 transition-all w-full sm:w-auto"
+                        >
+                            Return to Dashboard
+                        </button>
+                    </motion.div>
                 ) : (
                     <form id="code-form" onSubmit={handleJoinCodeSubmit} className="w-full flex flex-col items-center">
+                        {error && (
+                            <motion.div 
+                                initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}
+                                className="mb-8 p-4 bg-red-50 dark:bg-red-500/10 border border-red-200 dark:border-red-500/20 rounded-2xl flex items-start gap-3 text-red-600 dark:text-red-400 max-w-md w-full mx-auto"
+                            >
+                                <AlertCircle className="w-5 h-5 shrink-0 mt-0.5" />
+                                <p className="font-bold text-sm">{error}</p>
+                            </motion.div>
+                        )}
                         <div className="flex gap-3 sm:gap-5 justify-center w-full mb-12">
                             {code.map((digit, index) => (
                                 <motion.input
@@ -211,6 +295,53 @@ export default function StudentMockLobbyPage() {
                     </form>
                 )}
             </motion.div>
+
+            {/* Registered Students Modal */}
+            <AnimatePresence>
+                {isStudentModalOpen && (
+                    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
+                        <motion.div 
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            className="absolute inset-0 bg-slate-900/60 backdrop-blur-md"
+                            onClick={() => setIsStudentModalOpen(false)}
+                        />
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                            className="relative w-full max-w-md bg-white dark:bg-[#0B1120] border-2 border-slate-200 dark:border-slate-800 rounded-[32px] overflow-hidden shadow-2xl flex flex-col max-h-[80vh]"
+                        >
+                            <div className="flex items-center justify-between p-6 border-b border-slate-100 dark:border-slate-800">
+                                <div>
+                                    <h2 className="text-xl font-black text-slate-900 dark:text-white">In Lobby</h2>
+                                    <p className="text-sm font-bold text-slate-500 dark:text-slate-400 mt-1">{registeredStudents.length} {registeredStudents.length === 1 ? 'Student' : 'Students'}</p>
+                                </div>
+                                <button 
+                                    onClick={() => setIsStudentModalOpen(false)}
+                                    className="p-2 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-500 hover:text-slate-800 dark:hover:text-white transition"
+                                >
+                                    <X className="w-5 h-5" />
+                                </button>
+                            </div>
+                            <div className="overflow-y-auto p-4 custom-scrollbar space-y-3">
+                                {registeredStudents.map(student => (
+                                    <div key={student.id} className="flex items-center gap-4 p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/50 border border-slate-100 dark:border-slate-800/60">
+                                        <div className="w-12 h-12 shrink-0 rounded-full bg-indigo-500 text-white flex items-center justify-center text-lg font-black shadow-sm">
+                                            {student.name.charAt(0).toUpperCase()}
+                                        </div>
+                                        <div>
+                                            <p className="font-bold text-[15px] text-slate-800 dark:text-white">{student.name}</p>
+                                            <p className="text-[12px] font-bold text-slate-400 dark:text-slate-500 mt-0.5">{student.school || 'Unknown School'} • {student.gradeLevel || 'Unknown Grade'}</p>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
         </div>
     );
 }

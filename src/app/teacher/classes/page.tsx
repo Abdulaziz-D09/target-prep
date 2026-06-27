@@ -18,7 +18,12 @@ const GRADES = ['9th Grade', '10th Grade', '11th Grade', '12th Grade', 'Mixed'];
 export default function ClassesPage() {
     const shouldReduceMotion = useReducedMotion();
     const router = useRouter();
-    const { classrooms, students, assignments, seed, addClassroom, deleteClassroom } = useClassroomStore();
+    const classrooms = useClassroomStore(state => state.classrooms);
+    const students = useClassroomStore(state => state.students);
+    const assignments = useClassroomStore(state => state.assignments);
+    const seed = useClassroomStore(state => state.seed);
+    const addClassroom = useClassroomStore(state => state.addClassroom);
+    const deleteClassroom = useClassroomStore(state => state.deleteClassroom);
 
     const [isCreateOpen, setIsCreateOpen] = useState(false);
     const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);

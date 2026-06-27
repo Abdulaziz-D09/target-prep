@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { createClient } from '@/lib/supabase/client';
-
+import { createSupabaseStorage } from '@/lib/supabaseStorage';
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 export type Classroom = {
@@ -46,8 +46,9 @@ export type Assignment = {
   title: string;
   subject: 'English' | 'Math' | 'Both';
   classroomIds: string[];
-  questions: Question[];
+  customTests: { id: string; name: string; questions: Question[] }[];
   timeLimitMinutes: number;
+  dueDate?: string;
   allowExit?: boolean;
   strictToleranceSeconds?: number;
   createdAt: string;
@@ -100,6 +101,7 @@ export type StudentProgress = {
   correct: number;
   total: number;
   completed: boolean;
+  testProgress?: Record<string, { answered: number; correct: number; completed: boolean }>;
 };
 
 export type QuestionHistoryEntry = {
@@ -148,7 +150,7 @@ const MOCK_ASSIGNMENTS: Assignment[] = [
     title: 'Classwork Feb 18',
     subject: 'English',
     classroomIds: ['cls-1'],
-    questions: [],
+    customTests: [],
     timeLimitMinutes: 45,
     createdAt: '2026-02-18T00:00:00Z',
   },
@@ -157,7 +159,7 @@ const MOCK_ASSIGNMENTS: Assignment[] = [
     title: 'Algebra Fundamentals',
     subject: 'Math',
     classroomIds: ['cls-2'],
-    questions: [],
+    customTests: [],
     timeLimitMinutes: 35,
     createdAt: '2026-02-20T00:00:00Z',
   },
@@ -193,6 +195,7 @@ type State = {
   mockResults: MockResult[];
   joinedClassroomIds: string[];
   seeded: boolean;
+  lastSyncedAt: number;
 };
 
 type Actions = {
@@ -200,6 +203,7 @@ type Actions = {
   addClassroom: (name: string, grade: string) => Classroom;
   deleteClassroom: (id: string) => void;
   addAssignment: (data: Omit<Assignment, 'id' | 'createdAt'>) => void;
+  updateAssignment: (id: string, updates: Partial<Assignment>) => void;
   deleteAssignment: (id: string) => void;
   updateAssignmentQuestion: (assignmentId: string, questionId: string, newQuestion: any) => void;
   updateMockQuestion: (mockId: string, testId: string, questionId: string, newQuestion: any) => void;
@@ -217,12 +221,13 @@ type Actions = {
   submitMockResult: (result: Omit<MockResult, 'id' | 'completedAt'>) => void;
   deleteMockResult: (id: string) => void;
   syncWithSupabase: () => Promise<void>;
-  submitAssignmentProgress: (studentId: string, assignmentId: string, answered: number, correct: number, total: number, completed: boolean) => void;
+  submitAssignmentProgress: (studentId: string, assignmentId: string, answered: number, correct: number, total: number, completed: boolean, testProgress?: Record<string, { answered: number; correct: number; completed: boolean }>) => void;
   logQuestionAnswer: (studentId: string, assignmentId: string, questionId: string, chosenOption: string, isCorrect: boolean) => void;
 };
 
 function normalizeAssignmentTimeLimit(assignment: Assignment): Assignment {
-  const fallback = assignment.questions.length > 0 ? Math.max(20, Math.ceil(assignment.questions.length * 1.5)) : 45;
+  const totalQuestions = assignment.customTests?.reduce((acc, test) => acc + (test.questions?.length || 0), 0) || 0;
+  const fallback = totalQuestions > 0 ? Math.max(20, Math.ceil(totalQuestions * 1.5)) : 45;
   return {
     ...assignment,
     timeLimitMinutes: Math.max(5, Number(assignment.timeLimitMinutes) || fallback),
@@ -242,6 +247,7 @@ export const useClassroomStore = create<State & Actions>()(
       mockResults: [],
       joinedClassroomIds: [],
       seeded: false,
+      lastSyncedAt: 0,
 
       seed: () => {
         const current = get();
@@ -325,12 +331,34 @@ export const useClassroomStore = create<State & Actions>()(
           title: asgn.title,
           subject: asgn.subject,
           classroom_ids: asgn.classroomIds,
-          questions: asgn.questions,
+          questions: asgn.customTests as any, // Store customTests in the existing questions jsonb column
           time_limit_minutes: asgn.timeLimitMinutes,
           allow_exit: asgn.allowExit
         }).then(({ error }) => {
           if (error) console.error('Error syncing addAssignment:', error);
         });
+      },
+
+      updateAssignment: (id, updates) => {
+        set(state => ({
+          assignments: state.assignments.map(a => a.id === id ? { ...a, ...updates } : a)
+        }));
+
+        const dbUpdates: any = {};
+        if (updates.title !== undefined) dbUpdates.title = updates.title;
+        if (updates.subject !== undefined) dbUpdates.subject = updates.subject;
+        // Since we are using questions column to store customTests
+        if (updates.customTests !== undefined) dbUpdates.questions = updates.customTests;
+        else if (updates.questions !== undefined) dbUpdates.questions = updates.questions;
+        
+        if (updates.timeLimitMinutes !== undefined) dbUpdates.time_limit_minutes = updates.timeLimitMinutes;
+        if (updates.allowExit !== undefined) dbUpdates.allow_exit = updates.allowExit;
+        
+        if (Object.keys(dbUpdates).length > 0) {
+          createClient().from('assignments').update(dbUpdates).eq('id', id).then(({ error }) => {
+            if (error) console.error('Error syncing updateAssignment:', error);
+          });
+        }
       },
 
       deleteAssignment: (id) => {
@@ -543,10 +571,14 @@ export const useClassroomStore = create<State & Actions>()(
             if (session.status === 'completed') { result = { success: false, error: 'Session has already ended' }; return state; }
             if (session.joinLocked) { result = { success: false, error: 'Registration for this session is locked by the instructor.' }; return state; }
             
-            let student = state.students.find(s => s.name === studentInfo.name && s.school === studentInfo.school);
+            // Try to find a student record that belongs to this mock
+            let student = state.students.find(s => s.name === studentInfo.name && s.school === studentInfo.school && s.mockSessionId === session.id);
+            let isNew = false;
+
             if (!student) {
+                // If not found, let's create a NEW record specifically for this mock session to bypass UPDATE RLS restrictions on existing students
                 student = {
-                    id: 'stu-' + Date.now(),
+                    id: crypto.randomUUID(),
                     name: studentInfo.name,
                     school: studentInfo.school,
                     gradeLevel: studentInfo.grade,
@@ -555,16 +587,13 @@ export const useClassroomStore = create<State & Actions>()(
                     avatar: 'blue',
                     mockSessionId: session.id
                 };
-                result = { success: true, session, student };
+                isNew = true;
+                result = { success: true, session, student, isNew };
                 return { students: [...state.students, student] };
             }
-            const updatedStudents = state.students.map(s => 
-                s.id === student.id ? { ...s, mockSessionId: session.id } : s
-            );
-            const returnedStudent = { ...student, mockSessionId: session.id };
-            result = { success: true, session, student: returnedStudent };
-
-            return { students: updatedStudents };
+            
+            result = { success: true, session, student, isNew: false };
+            return state;
         });
 
         if (result.success && result.student) {
@@ -575,7 +604,8 @@ export const useClassroomStore = create<State & Actions>()(
                 students: s.students.map(stu => stu.id === result.student.id ? { ...stu, user_id: userId } : stu)
               }));
             }
-            createClient().from('students').upsert({
+            
+            const studentData = {
               id: result.student.id,
               name: result.student.name,
               school: result.student.school,
@@ -585,9 +615,17 @@ export const useClassroomStore = create<State & Actions>()(
               avatar: result.student.avatar,
               mock_session_id: result.student.mockSessionId,
               user_id: userId
-            }).then(({ error }) => {
-              if (error) console.error('Error syncing registerForMock:', error);
-            });
+            };
+
+            if (result.isNew) {
+                createClient().from('students').insert(studentData).then(({ error }) => {
+                  if (error) console.error('Error inserting registerForMock:', error.message || JSON.stringify(error));
+                });
+            } else {
+                createClient().from('students').update(studentData).eq('id', result.student.id).then(({ error }) => {
+                  if (error) console.error('Error updating registerForMock:', error.message || JSON.stringify(error));
+                });
+            }
           });
         }
 
@@ -711,6 +749,11 @@ export const useClassroomStore = create<State & Actions>()(
 
       syncWithSupabase: async () => {
         try {
+          // Throttle: skip if synced less than 30 seconds ago
+          const now = Date.now();
+          if (now - get().lastSyncedAt < 30_000) return;
+          set({ lastSyncedAt: now });
+
           const supabase = createClient();
           const { data: { session } } = await supabase.auth.getSession();
           if (!session?.user) return;
@@ -771,7 +814,8 @@ export const useClassroomStore = create<State & Actions>()(
               title: a.title,
               subject: a.subject,
               classroomIds: a.classroom_ids || [],
-              questions: a.questions || [],
+              questions: Array.isArray(a.questions) && !a.questions[0]?.questions ? a.questions : [], // fallback for old format
+              customTests: (Array.isArray(a.questions) && a.questions[0]?.questions) ? a.questions : (a.custom_tests || []), // Extract customTests from questions if stored there
               timeLimitMinutes: a.time_limit_minutes,
               allowExit: a.allow_exit,
               createdAt: a.created_at,
@@ -847,18 +891,28 @@ export const useClassroomStore = create<State & Actions>()(
           console.warn('Failed to sync classrooms data with Supabase:', err);
         }
       },
-      submitAssignmentProgress: (studentId, assignmentId, answered, correct, total, completed) => {
-        const progressItem: StudentProgress = {
-          studentId,
-          assignmentId,
-          answered,
-          correct,
-          total,
-          completed
-        };
+      submitAssignmentProgress: (studentId, assignmentId, answered, correct, total, completed, testProgress) => {
         set((state) => {
           const index = state.progress.findIndex(p => p.studentId === studentId && p.assignmentId === assignmentId);
           const newProgress = [...state.progress];
+          
+          let updatedTestProgress = testProgress;
+          if (index !== -1 && !testProgress && newProgress[index].testProgress) {
+             updatedTestProgress = newProgress[index].testProgress;
+          } else if (index !== -1 && testProgress) {
+             updatedTestProgress = { ...newProgress[index].testProgress, ...testProgress };
+          }
+
+          const progressItem: StudentProgress = {
+            studentId,
+            assignmentId,
+            answered,
+            correct,
+            total,
+            completed,
+            testProgress: updatedTestProgress
+          };
+
           if (index !== -1) {
             newProgress[index] = progressItem;
           } else {
@@ -867,6 +921,8 @@ export const useClassroomStore = create<State & Actions>()(
           return { progress: newProgress };
         });
 
+        // For simplicity we aren't saving testProgress to supabase yet
+        // since it requires schema changes, but it's kept in localStorage.
         createClient().from('student_progress').upsert({
           student_id: studentId,
           assignment_id: assignmentId,
@@ -905,16 +961,7 @@ export const useClassroomStore = create<State & Actions>()(
     }),
     {
       name: 'targetprep-classrooms',
-      storage: createJSONStorage(() => {
-        if (typeof window !== 'undefined') {
-          return window.localStorage;
-        }
-        return {
-          getItem: () => null,
-          setItem: () => {},
-          removeItem: () => {},
-        } as unknown as Storage;
-      }),
+      storage: createJSONStorage(() => createSupabaseStorage('classroom_state')),
     }
   )
 );

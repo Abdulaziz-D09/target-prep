@@ -846,6 +846,7 @@ function QuizView({
     const [eliminatedAnswers, setEliminatedAnswers] = useState<Record<number, number[]>>({});
     const [isHighlightActive, setIsHighlightActive] = useState(false);
     const [highlights, setHighlights] = useState<Record<string, Highlight[]>>({});
+    const [defaultHighlightColor, setDefaultHighlightColor] = useState<string>('yellow');
     const [questionTimes, setQuestionTimes] = useState<Record<number, number>>({});
     const [isTimerHidden, setIsTimerHidden] = useState(false);
     const [isPaused, setIsPaused] = useState(false);
@@ -1397,10 +1398,12 @@ function QuizView({
                                                 text={q.question || ''}
                                                 className="text-[16px] leading-[1.7] text-[#111827]"
                                                 highlights={highlights[`q-${idx}`] || []}
-                                                onAddHighlight={(h) => setHighlights(p => ({ ...p, [`q-${idx}`]: [...(p[`q-${idx}`] || []), { ...h, id: Math.random().toString(36).substr(2, 9) }] }))}
+                                                onAddHighlight={(h) => setHighlights(p => ({ ...p, [`q-${idx}`]: [...(p[`q-${idx}`] || []), h] }))}
                                                 onRemoveHighlight={(id) => setHighlights(p => ({ ...p, [`q-${idx}`]: (p[`q-${idx}`] || []).filter(x => x.id !== id) }))}
                                                 onUpdateHighlight={(id, updates) => setHighlights(p => ({ ...p, [`q-${idx}`]: (p[`q-${idx}`] || []).map(x => x.id === id ? { ...x, ...updates } : x) }))}
                                                 isHighlightModeActive={isHighlightActive}
+                                                defaultHighlightColor={defaultHighlightColor}
+                                                onChangeDefaultColor={setDefaultHighlightColor}
                                             />
                                         </div>
                                     </div>
@@ -1461,10 +1464,12 @@ function QuizView({
                                                             text={optionText || `Option ${letter}`}
                                                             className="text-[15px] leading-[1.6] text-inherit"
                                                             highlights={highlights[`opt-${idx}-${i}`] || []}
-                                                            onAddHighlight={(h) => setHighlights(p => ({ ...p, [`opt-${idx}-${i}`]: [...(p[`opt-${idx}-${i}`] || []), { ...h, id: Math.random().toString(36).substr(2, 9) }] }))}
+                                                            onAddHighlight={(h) => setHighlights(p => ({ ...p, [`opt-${idx}-${i}`]: [...(p[`opt-${idx}-${i}`] || []), h] }))}
                                                             onRemoveHighlight={(id) => setHighlights(p => ({ ...p, [`opt-${idx}-${i}`]: (p[`opt-${idx}-${i}`] || []).filter(x => x.id !== id) }))}
                                                             onUpdateHighlight={(id, updates) => setHighlights(p => ({ ...p, [`opt-${idx}-${i}`]: (p[`opt-${idx}-${i}`] || []).map(x => x.id === id ? { ...x, ...updates } : x) }))}
                                                             isHighlightModeActive={isHighlightActive}
+                                                            defaultHighlightColor={defaultHighlightColor}
+                                                            onChangeDefaultColor={setDefaultHighlightColor}
                                                         />
                                                     </div>
                                                     {isEliminated && !isChecked && !isTriedWrong && (
@@ -1536,10 +1541,12 @@ function QuizView({
                                         <PassageRenderer
                                             text={q.passage}
                                             highlights={highlights[`p-${idx}`] || []}
-                                            onAddHighlight={(h) => setHighlights(p => ({ ...p, [`p-${idx}`]: [...(p[`p-${idx}`] || []), { ...h, id: Math.random().toString(36).substr(2, 9) }] }))}
+                                            onAddHighlight={(h) => setHighlights(p => ({ ...p, [`p-${idx}`]: [...(p[`p-${idx}`] || []), h] }))}
                                             onRemoveHighlight={(id) => setHighlights(p => ({ ...p, [`p-${idx}`]: (p[`p-${idx}`] || []).filter(x => x.id !== id) }))}
                                             onUpdateHighlight={(id, updates) => setHighlights(p => ({ ...p, [`p-${idx}`]: (p[`p-${idx}`] || []).map(x => x.id === id ? { ...x, ...updates } : x) }))}
                                             isHighlightModeActive={isHighlightActive}
+                                            defaultHighlightColor={defaultHighlightColor}
+                                            onChangeDefaultColor={setDefaultHighlightColor}
                                         />
                                     </div>
                                 ) : showImageOnLeft && q.image ? (
@@ -1627,10 +1634,12 @@ function QuizView({
                                             <HighlightableText
                                                 text={q.question || ''}
                                                 highlights={highlights[`q-${idx}`] || []}
-                                                onAddHighlight={(h) => setHighlights(p => ({ ...p, [`q-${idx}`]: [...(p[`q-${idx}`] || []), { ...h, id: Math.random().toString(36).substr(2, 9) }] }))}
+                                                onAddHighlight={(h) => setHighlights(p => ({ ...p, [`q-${idx}`]: [...(p[`q-${idx}`] || []), h] }))}
                                                 onRemoveHighlight={(id) => setHighlights(p => ({ ...p, [`q-${idx}`]: (p[`q-${idx}`] || []).filter(x => x.id !== id) }))}
                                                 onUpdateHighlight={(id, updates) => setHighlights(p => ({ ...p, [`q-${idx}`]: (p[`q-${idx}`] || []).map(x => x.id === id ? { ...x, ...updates } : x) }))}
                                                 isHighlightModeActive={isHighlightActive}
+                                                defaultHighlightColor={defaultHighlightColor}
+                                                onChangeDefaultColor={setDefaultHighlightColor}
                                             />
                                         </div>
                                     </div>
@@ -1690,10 +1699,12 @@ function QuizView({
                                                             text={optionText || `Option ${letter}`}
                                                             className="text-[15px] leading-[1.6] text-inherit"
                                                             highlights={highlights[`opt-${idx}-${i}`] || []}
-                                                            onAddHighlight={(h) => setHighlights(p => ({ ...p, [`opt-${idx}-${i}`]: [...(p[`opt-${idx}-${i}`] || []), { ...h, id: Math.random().toString(36).substr(2, 9) }] }))}
+                                                            onAddHighlight={(h) => setHighlights(p => ({ ...p, [`opt-${idx}-${i}`]: [...(p[`opt-${idx}-${i}`] || []), h] }))}
                                                             onRemoveHighlight={(id) => setHighlights(p => ({ ...p, [`opt-${idx}-${i}`]: (p[`opt-${idx}-${i}`] || []).filter(x => x.id !== id) }))}
                                                             onUpdateHighlight={(id, updates) => setHighlights(p => ({ ...p, [`opt-${idx}-${i}`]: (p[`opt-${idx}-${i}`] || []).map(x => x.id === id ? { ...x, ...updates } : x) }))}
                                                             isHighlightModeActive={isHighlightActive}
+                                                            defaultHighlightColor={defaultHighlightColor}
+                                                            onChangeDefaultColor={setDefaultHighlightColor}
                                                         />
                                                     </div>
                                                     {isEliminated && !isChecked && !isTriedWrong && (

@@ -1338,9 +1338,10 @@ who chose a vegetarian entree? (Express your answer as a decimal or fraction, no
 percent.)
 
 Answer: 0.18
+
 10.
 ![Graph](/pt2/m1-q10.png)
- In the figure shown, lines $\ell$ and $k$ are parallel and line $j$ intersects both lines. If $z > 116$,
+In the figure shown, lines $\ell$ and $k$ are parallel and line $j$ intersects both lines. If $z > 116$,
 which of the following must be true?
 
 A. $y < 64$
@@ -1496,9 +1497,9 @@ A. $N = 200(2.20)^{4t}$
 
 B. $N = 200(1.20)^{4t}$
 
-C. $N = 200(1.20)^{\dfrac{t}{4}}$
+C. $N = 200(1.20)^{\frac{t}{4}}$
 
-D. $N = 200(2.20)^{\dfrac{t}{4}}$
+D. $N = 200(2.20)^{\frac{t}{4}}$
 
 Answer: D
 

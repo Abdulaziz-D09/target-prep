@@ -68,7 +68,12 @@ export default function ClassDetailPage() {
     const [confirmRemoveStudentId, setConfirmRemoveStudentId] = useState<string | null>(null);
     const [confirmDeleteAssignmentId, setConfirmDeleteAssignmentId] = useState<string | null>(null);
 
-    const { classrooms, students, assignments, progress, removeStudent, deleteAssignment } = useClassroomStore();
+    const classrooms = useClassroomStore(state => state.classrooms);
+    const students = useClassroomStore(state => state.students);
+    const assignments = useClassroomStore(state => state.assignments);
+    const progress = useClassroomStore(state => state.progress);
+    const removeStudent = useClassroomStore(state => state.removeStudent);
+    const deleteAssignment = useClassroomStore(state => state.deleteAssignment);
 
     const cls = classrooms.find((c) => c.id === params.id);
 
@@ -434,11 +439,37 @@ export default function ClassDetailPage() {
                                                                                             <div className="flex-1 flex flex-col justify-end">
                                                                                                 <div className="flex justify-between items-end mb-2">
                                                                                                     <span className="text-[12px] font-medium site-text-muted">Score: <strong className="site-text-strong text-[13px] ml-1">{stuProgress.correct}/{stuProgress.total}</strong></span>
-                                                                                                    <span className="text-[11px] site-text-muted font-semibold">{stuProgress.completed ? 'Completed' : 'In Progress'}</span>
+                                                                                                    <div className="flex items-center gap-2">
+                                                                                                        {!stuProgress.completed && asgn.dueDate && new Date() > new Date(asgn.dueDate) && (
+                                                                                                            <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-rose-100 text-rose-700">Not in time</span>
+                                                                                                        )}
+                                                                                                        <span className="text-[11px] site-text-muted font-semibold">{stuProgress.completed ? 'Completed' : 'In Progress'}</span>
+                                                                                                    </div>
                                                                                                 </div>
-                                                                                                {mistakes.length > 0 ? (
+                                                                                                {asgn.customTests && asgn.customTests.length > 0 ? (
                                                                                                     <div className="mt-2 pt-3 border-t border-slate-100 dark:border-slate-800">
-                                                                                                        <p className="text-[10px] uppercase tracking-wider font-bold site-text-muted mb-2">Mistakes</p>
+                                                                                                        <p className="text-[10px] uppercase tracking-wider font-bold site-text-muted mb-2">Results</p>
+                                                                                                        <div className="space-y-1.5">
+                                                                                                            {asgn.customTests.map((test, i) => {
+                                                                                                                const testProg = stuProgress.testProgress?.[test.id];
+                                                                                                                const tTotal = test.questions.length;
+                                                                                                                const tCorrect = testProg?.correct || 0;
+                                                                                                                const tPct = tTotal > 0 ? Math.round((tCorrect / tTotal) * 100) : 0;
+                                                                                                                return (
+                                                                                                                    <div key={test.id} className="flex items-center justify-between bg-slate-50 dark:bg-slate-800/50 rounded-md px-2 py-1.5 border border-slate-100 dark:border-slate-800">
+                                                                                                                        <span className="text-[11px] font-semibold site-text-strong truncate max-w-[100px]">{test.name || `File ${i + 1}`}</span>
+                                                                                                                        <div className="flex items-center gap-1.5">
+                                                                                                                            <span className="text-[10px] site-text-muted font-medium">{tCorrect}/{tTotal}</span>
+                                                                                                                            <span className={`text-[10px] font-black ${pct !== null && tPct >= 80 ? 'text-emerald-500' : tPct >= 60 ? 'text-amber-500' : 'text-rose-500'}`}>{tPct}%</span>
+                                                                                                                        </div>
+                                                                                                                    </div>
+                                                                                                                );
+                                                                                                            })}
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                ) : mistakes.length > 0 ? (
+                                                                                                    <div className="mt-2 pt-3 border-t border-slate-100 dark:border-slate-800">
+                                                                                                        <p className="text-[10px] uppercase tracking-wider font-bold site-text-muted mb-2">Results (Legacy)</p>
                                                                                                         <div className="flex flex-wrap gap-1.5">
                                                                                                             {mistakes.map(m => (
                                                                                                                 <span key={m} className="inline-flex items-center justify-center h-6 min-w-[24px] px-1.5 rounded bg-rose-50 dark:bg-rose-900/20 border border-rose-100 dark:border-rose-800 text-rose-600 dark:text-rose-400 text-[11px] font-bold">

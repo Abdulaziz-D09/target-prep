@@ -16,10 +16,15 @@ import {
 export default function StudentMocksPage() {
     const router = useRouter();
     const searchParams = useSearchParams();
-    const { mockSessions, mockResults, joinMock, deleteMockResult, seed } = useClassroomStore();
+    const mockSessions = useClassroomStore(state => state.mockSessions);
+    const mockResults = useClassroomStore(state => state.mockResults);
+    const joinMock = useClassroomStore(state => state.joinMock);
+    const deleteMockResult = useClassroomStore(state => state.deleteMockResult);
+    const seed = useClassroomStore(state => state.seed);
     const [activeTab, setActiveTab] = useState<'available' | 'completed'>(
         searchParams.get('tab') === 'completed' ? 'completed' : 'available'
     );
+    const [searchQuery, setSearchQuery] = useState('');
     const [error, setError] = useState('');
     
     // Auto-fill form state
@@ -50,25 +55,45 @@ export default function StudentMocksPage() {
     }, [seed]);
 
     useEffect(() => {
-        // Auto-refresh the store from local storage so new mocks appear without page refresh
-        const interval = setInterval(() => {
-            useClassroomStore.persist.rehydrate();
-        }, 3000);
-        return () => clearInterval(interval);
+        // Sync once on mount to get fresh data
+        useClassroomStore.getState().syncWithSupabase();
     }, []);
 
-    // Get all session IDs the student already completed
-    const completedSessionIds = new Set(mockResults.map(r => r.mockId));
+    const students = useClassroomStore(state => state.students);
+    const [userId, setUserId] = useState<string | null>(null);
+
+    useEffect(() => {
+        createClient().auth.getUser().then(({ data }) => {
+            if (data?.user) setUserId(data.user.id);
+        });
+    }, []);
+
+    const studentFullName = `${formData.name} ${formData.surname}`.trim();
+    const myStudentRecords = students.filter(s => 
+        (userId && s.user_id === userId) || 
+        (s.name === studentFullName && (!s.school || s.school === formData.school))
+    );
+    const myStudentRecordIds = new Set(myStudentRecords.map(s => s.id));
+
+    // Get completed mocks specific to this user based on store mockResults and user data
+    const myResults = mockResults
+        .filter(r => myStudentRecordIds.has(r.studentId) || r.studentId === 's1')
+        .sort((a, b) => new Date(b.completedAt).getTime() - new Date(a.completedAt).getTime());
+
+    // Get all session IDs the student already completed using myResults
+    const completedSessionIds = new Set(myResults.map(r => r.mockId));
     
     const activeMocks = mockSessions
         .filter(s => s.status === 'active' || s.status === 'upcoming')
         // Hide mocks the student already finished
-        .filter(s => !completedSessionIds.has(s.id));
-    
-    // Get completed mocks specific to this user based on store mockResults and user data
-    // For local dev, we match using student name and school
-    const studentFullName = `${formData.name} ${formData.surname}`.trim();
-    const myResults = mockResults.filter(r => r.studentId === 's1' || r.studentId.startsWith('stu-')).sort((a, b) => new Date(b.completedAt).getTime() - new Date(a.completedAt).getTime());
+        .filter(s => !completedSessionIds.has(s.id))
+        // Filter by search query
+        .filter(s => s.title.toLowerCase().includes(searchQuery.toLowerCase()));
+
+    const filteredMyResults = myResults.filter(r => {
+        const session = mockSessions.find(s => s.id === r.mockId);
+        return session?.title.toLowerCase().includes(searchQuery.toLowerCase());
+    });
 
     const handleRegister = (mockId: string) => {
         setError('');
@@ -141,6 +166,15 @@ export default function StudentMocksPage() {
                 </motion.section>
 
                 <motion.div variants={sectionRevealVariants} className="relative z-10">
+                <div className="mb-6 max-w-md">
+                    <input
+                        type="text"
+                        placeholder="Search mocks..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="w-full px-4 py-3 rounded-2xl bg-white dark:bg-slate-800/80 border-2 border-slate-200 dark:border-slate-700 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/20 outline-none text-slate-800 dark:text-white transition-all font-medium"
+                    />
+                </div>
                 <div className="site-panel rounded-[32px] p-6 sm:p-8">
                 {activeTab === 'available' && (
                     <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -192,14 +226,27 @@ export default function StudentMocksPage() {
                                     </div>
                                 </div>
                                 
-                                <button 
-                                    onClick={() => handleRegister(mock.id)}
-                                    disabled={mock.status === 'upcoming' || mock.joinLocked}
-                                    className={`w-full flex items-center justify-center gap-2 py-3 rounded-full font-bold transition ${(mock.status === 'active' && !mock.joinLocked) ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900 hover:bg-slate-800 dark:hover:bg-slate-200' : 'bg-slate-200 dark:bg-slate-800/50 text-slate-400 dark:text-slate-500 cursor-not-allowed'}`}
-                                >
-                                    {mock.joinLocked ? <AlertCircle className="w-4 h-4" /> : <Play className="w-4 h-4" />} 
-                                    {mock.joinLocked ? 'Locked' : mock.status === 'active' ? 'Join Mock' : 'Not Started'}
-                                </button>
+                                {(() => {
+                                    const isRegistered = myStudentRecords.some(s => s.mockSessionId === mock.id);
+                                    const studentRecord = myStudentRecords.find(s => s.mockSessionId === mock.id);
+
+                                    return (
+                                        <button 
+                                            onClick={() => {
+                                                if (isRegistered && studentRecord) {
+                                                    router.push(`/lobby?mockId=${mock.id}&studentId=${studentRecord.id}`);
+                                                } else {
+                                                    handleRegister(mock.id);
+                                                }
+                                            }}
+                                            disabled={mock.joinLocked}
+                                            className={`w-full flex items-center justify-center gap-2 py-3 rounded-full font-bold transition ${(!mock.joinLocked) ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900 hover:bg-slate-800 dark:hover:bg-slate-200' : 'bg-slate-200 dark:bg-slate-800/50 text-slate-400 dark:text-slate-500 cursor-not-allowed'}`}
+                                        >
+                                            {mock.joinLocked ? <AlertCircle className="w-4 h-4" /> : <Play className="w-4 h-4" />} 
+                                            {mock.joinLocked ? 'Locked' : isRegistered ? 'Enter Lobby' : 'Register'}
+                                        </button>
+                                    );
+                                })()}
                             </motion.div>
                         ))}
                     </div>
@@ -217,14 +264,14 @@ export default function StudentMocksPage() {
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-slate-100 dark:divide-white/5">
-                                {myResults.length === 0 ? (
+                                {filteredMyResults.length === 0 ? (
                                     <tr>
                                         <td colSpan={4} className="px-6 py-16 text-center text-slate-500 dark:text-slate-400">
-                                            You haven't completed any mock exams yet.
+                                            {searchQuery ? 'No completed mocks match your search.' : "You haven't completed any mock exams yet."}
                                         </td>
                                     </tr>
                                 ) : (
-                                    myResults.map((result, idx) => {
+                                    filteredMyResults.map((result, idx) => {
                                         const session = mockSessions.find(s => s.id === result.mockId);
                                         const formattedDate = new Date(result.completedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
                                         return (

@@ -98,6 +98,7 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
         userAnswers, flaggedQuestions, eliminatedAnswers, highlights, timeRemaining, showResults, isTestActive, isIntroScreen,
         startTest, beginTimer, selectAnswer, toggleFlag, toggleElimination,
         addHighlight, removeHighlight, updateHighlight,
+        defaultHighlightColor, setDefaultHighlightColor,
         nextQuestion, prevQuestion, setTimeRemaining, goToModule, endTest, resetTest
     } = useTestStore();
 
@@ -1336,10 +1337,12 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
                                         <PassageRenderer
                                             text={currentQuestion.passage!}
                                             highlights={highlights[questionKey] || []}
-                                            onAddHighlight={(h) => addHighlight(questionKey, { ...h, id: Math.random().toString(36).substring(2, 11) })}
+                                            onAddHighlight={(h) => addHighlight(questionKey, h)}
                                             onRemoveHighlight={(id) => removeHighlight(questionKey, id)}
                                             onUpdateHighlight={(id, updates) => updateHighlight(questionKey, id, updates)}
                                             isHighlightModeActive={isHighlightActive}
+                                            defaultHighlightColor={defaultHighlightColor}
+                                            onChangeDefaultColor={setDefaultHighlightColor}
                                         />
                                     ) : (
                                         <div className="flex flex-col items-center justify-center h-full min-h-[200px] text-center pt-16">
@@ -1424,10 +1427,12 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
                                         <HighlightableText
                                             text={cleanOCR(currentQuestion?.question || '').replace(/^\s*\d+[\.\)]\s*/, '')}
                                             highlights={highlights[`q-${questionKey}`] || []}
-                                            onAddHighlight={(h) => addHighlight(`q-${questionKey}`, { ...h, id: Math.random().toString(36).substring(2, 11) })}
+                                            onAddHighlight={(h) => addHighlight(`q-${questionKey}`, h)}
                                             onRemoveHighlight={(id) => removeHighlight(`q-${questionKey}`, id)}
                                             onUpdateHighlight={(id, updates) => updateHighlight(`q-${questionKey}`, id, updates)}
                                             isHighlightModeActive={isHighlightActive}
+                                            defaultHighlightColor={defaultHighlightColor}
+                                            onChangeDefaultColor={setDefaultHighlightColor}
                                         />
                                     )}
                                 </div>

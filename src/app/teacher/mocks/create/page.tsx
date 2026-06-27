@@ -14,33 +14,60 @@ import {
     pageRevealVariants
 } from '@/components/SiteMotion';
 import Link from 'next/link';
-import { LatexRenderer } from '@/components/LatexRenderer';
-import { PassageRenderer } from '@/components/PassageRenderer';
+import { MockTestFilesEditor } from '@/components/MockTestFilesEditor';
 
 export default function TeacherMocksCreatePage() {
     const router = useRouter();
-    const { createMockSession, seed } = useClassroomStore();
+    const createMockSession = useClassroomStore(state => state.createMockSession);
+    const seed = useClassroomStore(state => state.seed);
 
     // Form state
     const [title, setTitle] = useState('');
+    const [titleError, setTitleError] = useState('');
+    const [isCheckingTitle, setIsCheckingTitle] = useState(false);
     const [date, setDate] = useState('');
     const [place, setPlace] = useState('');
     const [maxStudents, setMaxStudents] = useState('20');
     const [timeLimit, setTimeLimit] = useState('120');
     const [subject, setSubject] = useState<'Full' | 'English' | 'Math'>('Full');
     const [strictMode, setStrictMode] = useState(false);
+    const [strictToleranceSeconds, setStrictToleranceSeconds] = useState(5);
     const [host, setHost] = useState('');
-    const [customTests, setCustomTests] = useState<{ file: File; id: string; name: string; questions: any[] }[]>([]);
+    const [customTests, setCustomTests] = useState<{ file?: File; id: string; name: string; questions: any[] }[]>([]);
     const [distributionMode, setDistributionMode] = useState<'random' | 'manual'>('random');
+
+    useEffect(() => {
+        const saved = localStorage.getItem('create-mock-state');
+        if (saved) {
+            try {
+                const parsed = JSON.parse(saved);
+                if (parsed.title) setTitle(parsed.title);
+                if (parsed.date) setDate(parsed.date);
+                if (parsed.place) setPlace(parsed.place);
+                if (parsed.maxStudents) setMaxStudents(parsed.maxStudents);
+                if (parsed.timeLimit) setTimeLimit(parsed.timeLimit);
+                if (parsed.subject) setSubject(parsed.subject);
+                if (parsed.strictMode !== undefined) setStrictMode(parsed.strictMode);
+                if (parsed.strictToleranceSeconds) setStrictToleranceSeconds(parsed.strictToleranceSeconds);
+                if (parsed.distributionMode) setDistributionMode(parsed.distributionMode);
+                if (parsed.customTests && Array.isArray(parsed.customTests)) {
+                    setCustomTests(parsed.customTests);
+                }
+            } catch (e) {}
+        }
+    }, []);
+
+    useEffect(() => {
+        localStorage.setItem('create-mock-state', JSON.stringify({
+            title, date, place, maxStudents, timeLimit, subject, strictMode, strictToleranceSeconds, distributionMode, customTests: customTests.map(t => ({ ...t, file: undefined }))
+        }));
+    }, [title, date, place, maxStudents, timeLimit, subject, strictMode, strictToleranceSeconds, distributionMode, customTests]);
     
     // Document Scanning & Parsing State
-    const [inputTab, setInputTab] = useState<'upload' | 'paste'>('upload');
-    const [pastedText, setPastedText] = useState('');
     const [isDragging, setIsDragging] = useState(false);
     const [isScanning, setIsScanning] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
     const [scanError, setScanError] = useState('');
-    const [reviewingTest, setReviewingTest] = useState<{ file: File, questions: any[] } | null>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
     const imageInputRef = useRef<HTMLInputElement>(null);
     const [uploadingImageIdx, setUploadingImageIdx] = useState<number | null>(null);
@@ -60,59 +87,40 @@ export default function TeacherMocksCreatePage() {
         });
     }, [seed]);
 
+    useEffect(() => {
+        const checkTitle = async () => {
+            if (!title.trim()) {
+                setTitleError('');
+                setIsCheckingTitle(false);
+                return;
+            }
+            setIsCheckingTitle(true);
+            const supabase = createClient();
+            const { data } = await supabase
+                .from('mock_sessions')
+                .select('id, title')
+                .ilike('title', title.trim())
+                .neq('status', 'completed')
+                .limit(1);
+            
+            if (data && data.length > 0) {
+                setTitleError('This name is already in use by another active session.');
+            } else {
+                setTitleError('');
+            }
+            setIsCheckingTitle(false);
+        };
+
+        const timeoutId = setTimeout(checkTitle, 500);
+        return () => clearTimeout(timeoutId);
+    }, [title]);
+
     const handleDrop = (e: React.DragEvent) => {
         e.preventDefault();
         setIsDragging(false);
         const file = e.dataTransfer.files?.[0];
-        if (file && (file.type === 'application/pdf' || file.type === 'text/plain' || file.name.endsWith('.txt') || file.name.endsWith('.pdf'))) {
+        if (file && (file.type.startsWith('image/') || file.type === 'application/pdf')) {
             scanFile(file);
-        }
-    };
-
-    const scanText = async () => {
-        if (!pastedText.trim()) {
-            setScanError('Please paste some text before scanning.');
-            return;
-        }
-
-        setIsScanning(true);
-        setScanError('');
-        try {
-            const res = await fetch('/api/scan-pdf', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ text: pastedText }),
-            });
-            const data = await res.json();
-            if (!res.ok) {
-                setScanError(data.error || 'Scan failed');
-                return;
-            }
-            if (data.questions) {
-                const qs = data.questions.map((q: any, i: number) => {
-                    const optionsArray = [
-                        q.options?.A || '',
-                        q.options?.B || '',
-                        q.options?.C || '',
-                        q.options?.D || ''
-                    ];
-                    return {
-                        id: `mock-q-${Date.now()}-${i}`,
-                        passage: q.passage || null,
-                        question: q.stem || q.question || '',
-                        options: optionsArray,
-                        answer: null
-                    };
-                });
-                setReviewingTest({ file: new File([pastedText], "Pasted Text Document", { type: "text/plain" }), questions: qs });
-                setPastedText(''); // Clear on success
-            } else {
-                setScanError('No questions found in text.');
-            }
-        } catch (err) {
-            setScanError('An error occurred during scanning. ' + String(err));
-        } finally {
-            setIsScanning(false);
         }
     };
 
@@ -128,11 +136,23 @@ export default function TeacherMocksCreatePage() {
             const fd = new FormData();
             fd.append('file', file);
             const res = await fetch('/api/scan-pdf', { method: 'POST', body: fd });
-            const data = await res.json();
+            
             if (!res.ok) {
-                setScanError(data.error || 'Scan failed');
+                if (res.status === 413) {
+                    setScanError(`File is too large for the server to process. Please compress the PDF or split it into smaller files.`);
+                    return;
+                }
+                
+                try {
+                    const errorData = await res.json();
+                    setScanError(errorData.error || `Server error: ${res.status}`);
+                } catch (e) {
+                    setScanError(`Server error (${res.status}). The server refused the file.`);
+                }
                 return;
             }
+
+            const data = await res.json();
             if (data.questions) {
                 const qs = data.questions.map((q: any, i: number) => {
                     const optionsArray = [
@@ -149,7 +169,7 @@ export default function TeacherMocksCreatePage() {
                         answer: null
                     };
                 });
-                setReviewingTest({ file, questions: qs });
+                setCustomTests(prev => [...prev, { file, id: `mock-test-${Date.now()}`, name: file.name, questions: qs }]);
             } else {
                 setScanError('No questions found in document.');
             }
@@ -160,38 +180,39 @@ export default function TeacherMocksCreatePage() {
         }
     };
 
-    const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
-        if (!file || uploadingImageIdx === null || !reviewingTest) return;
-        
-        try {
-            const formData = new FormData();
-            formData.append('file', file);
-            const res = await fetch('/api/upload-image', { method: 'POST', body: formData });
-            const data = await res.json();
-            if (data.url) {
-                const newQs = [...reviewingTest.questions];
-                newQs[uploadingImageIdx].imageUrl = data.url;
-                newQs[uploadingImageIdx].imagePosition = newQs[uploadingImageIdx].imagePosition || 'after-stem';
-                setReviewingTest({ ...reviewingTest, questions: newQs });
-            }
-        } catch (err) {
-            console.error('Failed to upload image', err);
-        } finally {
-            setUploadingImageIdx(null);
-            if (e.target) e.target.value = '';
-        }
-    };
-
+    
     const handleCreate = async (e: React.FormEvent) => {
         e.preventDefault();
+
+        if (titleError || isCheckingTitle) {
+            setScanError('Please resolve the session title error before creating.');
+            return;
+        }
 
         if (customTests.length === 0) {
             setScanError('Please attach at least one test file before creating a session.');
             return;
         }
 
+        // Validate that all questions have an answer
+        let hasMissingAnswer = false;
+        for (const test of customTests) {
+            for (const q of test.questions) {
+                if (q.answer === null || q.answer === undefined || q.answer === '') {
+                    hasMissingAnswer = true;
+                    break;
+                }
+            }
+            if (hasMissingAnswer) break;
+        }
+
+        if (hasMissingAnswer) {
+            setScanError('Please ensure all questions have a correct answer selected/entered before creating.');
+            return;
+        }
+
         if (isScanning || isSaving) return;
+        
         setIsSaving(true);
         setScanError('');
 
@@ -201,7 +222,28 @@ export default function TeacherMocksCreatePage() {
             formattedDate = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' });
         }
 
-        createMockSession({
+        // Format custom tests mapping exactly to Question type
+        const formattedTests = customTests.length > 0 ? customTests.map(test => ({
+            id: test.id,
+            name: test.name,
+            questions: test.questions.map((q: any) => ({
+                id: q.id,
+                passage: q.passage,
+                stem: q.question,
+                options: {
+                    A: q.options[0] || '',
+                    B: q.options[1] || '',
+                    C: q.options[2] || '',
+                    D: q.options[3] || ''
+                },
+                answer: typeof q.answer === 'number' ? ['A', 'B', 'C', 'D'][q.answer] : q.answer,
+                imageUrl: q.imageUrl,
+                imagePosition: q.imagePosition,
+                type: q.type || 'Multiple Choice'
+            }))
+        })) : undefined;
+
+        useClassroomStore.getState().createMockSession({
             title,
             date: formattedDate,
             place,
@@ -211,19 +253,22 @@ export default function TeacherMocksCreatePage() {
             subject,
             strictMode,
             host,
-            customTests: customTests.length > 0 ? customTests.map(t => ({ id: t.id, name: t.name, questions: t.questions })) : undefined,
+            customTests: formattedTests,
+            strictToleranceSeconds: strictMode ? strictToleranceSeconds : undefined,
             distributionMode: customTests.length > 1 ? distributionMode : 'random'
         });
 
-        await new Promise(r => setTimeout(r, 400));
-        router.push('/teacher/mocks');
+        localStorage.removeItem('create-mock-state');
+        setTimeout(() => {
+            router.push('/teacher/mocks');
+        }, 100);
     };
 
     return (
-        <div className="relative min-h-screen pt-4 pb-12 px-4 sm:px-6 lg:px-8 max-w-[1320px] mx-auto">
+        <div className="relative min-h-screen w-full pt-4 pb-12 px-4 sm:px-6 lg:px-8">
             <FloatingPageShapes theme="home" />
             <motion.div
-                className="relative z-10"
+                className="relative z-10 w-full mx-auto max-w-[1320px]"
                 initial="hidden"
                 animate="visible"
                 variants={pageRevealVariants}
@@ -262,7 +307,12 @@ export default function TeacherMocksCreatePage() {
                             <div className="grid grid-cols-2 gap-5">
                                 <div>
                                     <label className="block text-sm font-bold site-text-strong mb-2">Session Title</label>
-                                    <input required type="text" value={title} onChange={e => setTitle(e.target.value)} className="w-full bg-transparent border-2 border-slate-200 dark:border-slate-800 rounded-xl px-4 py-3 focus:outline-none focus:border-blue-500 font-medium transition site-text-strong" placeholder="e.g. Saturday Grand Mock" />
+                                    <input required type="text" value={title} onChange={e => setTitle(e.target.value)} className={`w-full bg-transparent border-2 rounded-xl px-4 py-3 focus:outline-none font-medium transition site-text-strong ${titleError ? 'border-rose-500 focus:border-rose-600' : 'border-slate-200 dark:border-slate-800 focus:border-blue-500'}`} placeholder="e.g. Saturday Grand Mock" />
+                                    {isCheckingTitle ? (
+                                        <p className="text-[12px] text-blue-500 mt-1.5 font-bold animate-pulse">Checking availability...</p>
+                                    ) : titleError ? (
+                                        <p className="text-[12px] text-rose-500 mt-1.5 font-bold">{titleError}</p>
+                                    ) : null}
                                 </div>
                                 <div>
                                     <label className="block text-sm font-bold site-text-strong mb-2">Host / Teacher Name</label>
@@ -324,73 +374,58 @@ export default function TeacherMocksCreatePage() {
 
                             <div>
                                 <label className="block text-sm font-bold site-text-strong mb-3">Strict Mode</label>
-                                <button
-                                    type="button"
-                                    onClick={() => setStrictMode(!strictMode)}
-                                    className={`w-full flex items-center justify-between px-4 py-3 rounded-xl border-2 transition-all ${strictMode
-                                            ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300'
-                                            : 'border-slate-200 dark:border-slate-700 site-subpanel site-text hover:border-slate-300'
-                                        }`}
-                                >
-                                    <div className="flex flex-col items-start text-left">
-                                        <span className="font-bold text-[14px]">Require Full Screen</span>
-                                        <span className={`text-[12px] mt-0.5 ${strictMode ? 'text-blue-600/80 dark:text-blue-400/80' : 'site-text-muted'}`}>Lock the student's screen and hide exit controls</span>
+                                
+                                <div className="px-4 py-2 rounded-2xl border-2 border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/30 flex items-center h-[84px] gap-4 overflow-hidden">
+                                    <div className="flex flex-1 items-center gap-3">
+                                        <div className="flex flex-col items-start text-left flex-1 min-w-0">
+                                            <span className="font-bold text-[15px] site-text-strong truncate w-full">Require Full Screen</span>
+                                            <span className={`text-[12px] sm:text-[13px] mt-0.5 ${strictMode ? 'text-indigo-600 dark:text-indigo-400' : 'site-text-muted'} leading-snug line-clamp-2`}>Lock the student's screen and hide exit controls</span>
+                                        </div>
+                                        <button
+                                            type="button"
+                                            onClick={() => setStrictMode(!strictMode)}
+                                            className={`w-12 h-7 shrink-0 rounded-full flex items-center px-1 transition-colors duration-300 ${strictMode ? 'bg-indigo-600' : 'bg-slate-300 dark:bg-slate-600'}`}
+                                        >
+                                            <div className={`w-5 h-5 rounded-full bg-white shadow-sm transition-transform duration-300 ${strictMode ? 'translate-x-5' : 'translate-x-0'}`} />
+                                        </button>
                                     </div>
-                                    <div className={`w-11 h-6 rounded-full flex items-center px-1 transition-colors ${strictMode ? 'bg-blue-600' : 'bg-slate-300 dark:bg-slate-600'}`}>
-                                        <div className={`w-4 h-4 rounded-full bg-white shadow-sm transition-transform ${strictMode ? 'translate-x-5' : 'translate-x-0'}`} />
-                                    </div>
-                                </button>
+
+                                    <AnimatePresence>
+                                        {strictMode && (
+                                            <motion.div
+                                                initial={{ width: 0, opacity: 0, scale: 0.95 }}
+                                                animate={{ width: 'auto', opacity: 1, scale: 1 }}
+                                                exit={{ width: 0, opacity: 0, scale: 0.95 }}
+                                                transition={{ duration: 0.25, ease: 'easeInOut' }}
+                                                className="flex-shrink-0 overflow-hidden"
+                                            >
+                                                <div className="flex flex-col items-start px-3 py-1.5 rounded-xl bg-white dark:bg-slate-800 shadow-sm border border-slate-200 dark:border-slate-700 w-[140px] ml-1">
+                                                    <label className="block text-[11px] font-bold uppercase tracking-widest site-text-muted mb-1 whitespace-nowrap">Tolerance Timer</label>
+                                                    <div className="flex items-center gap-2">
+                                                        <input
+                                                            type="number"
+                                                            min={1}
+                                                            value={strictToleranceSeconds || ''}
+                                                            onChange={(e) => {
+                                                                const raw = Number(e.target.value);
+                                                                setStrictToleranceSeconds(Math.max(1, Math.round(raw)));
+                                                            }}
+                                                            className="w-[54px] pl-3 pr-1 py-0.5 rounded-lg bg-transparent outline-none border border-slate-300 dark:border-slate-600 focus:border-indigo-500 transition text-[15px] font-bold site-text-strong text-center"
+                                                        />
+                                                        <span className="text-[12px] font-bold site-text-muted">sec</span>
+                                                    </div>
+                                                </div>
+                                            </motion.div>
+                                        )}
+                                    </AnimatePresence>
+                                </div>
                             </div>
 
                             <div>
                                 <label className="block text-sm font-bold site-text-strong mb-3">Add Questions</label>
                                 
-                                {/* Input Tabs */}
-                                <div className="flex gap-2 mb-4">
-                                    {(['upload', 'paste'] as const).map((tab) => (
-                                        <button
-                                            key={tab}
-                                            type="button"
-                                            onClick={() => { setInputTab(tab); setScanError(''); }}
-                                            className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-bold transition ${
-                                                inputTab === tab
-                                                    ? 'bg-blue-600 text-white shadow'
-                                                    : 'site-subpanel site-text hover:scale-[1.02]'
-                                            }`}
-                                        >
-                                            {tab === 'upload' ? <Upload className="h-4 w-4" /> : <FileText className="h-4 w-4" />}
-                                            {tab === 'upload' ? 'Upload PDF' : 'Paste Text'}
-                                        </button>
-                                    ))}
-                                </div>
-
-                                {/* Paste Tab Content */}
-                                {inputTab === 'paste' && (
-                                    <div className="flex flex-col gap-4">
-                                        <textarea
-                                            placeholder="Paste your questions here — e.g. from a practice test, quiz, or textbook. The AI will extract all multiple-choice questions automatically."
-                                            value={pastedText}
-                                            onChange={(e) => setPastedText(e.target.value)}
-                                            rows={8}
-                                            className="w-full px-4 py-4 rounded-2xl site-subpanel bg-transparent outline-none border-2 border-slate-200 dark:border-slate-800 focus:border-blue-500 transition text-[14px] site-text resize-none placeholder:site-text-muted leading-relaxed"
-                                        />
-                                        <button
-                                            type="button"
-                                            onClick={scanText}
-                                            disabled={isScanning || !pastedText.trim()}
-                                            className="w-full flex items-center justify-center gap-2.5 py-4 rounded-xl bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold text-[15px] shadow-sm transition hover:scale-[1.01]"
-                                        >
-                                            {isScanning ? (
-                                                <><Loader2 className="h-5 w-5 animate-spin" /> Scanning text...</>
-                                            ) : (
-                                                <><Sparkles className="h-5 w-5" /> Scan with AI</>
-                                            )}
-                                        </button>
-                                    </div>
-                                )}
-
-                                {/* Upload Tab Content */}
-                                {inputTab === 'upload' && (
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    {/* Upload Area */}
                                     <div
                                         onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
                                         onDragLeave={() => setIsDragging(false)}
@@ -404,7 +439,7 @@ export default function TeacherMocksCreatePage() {
                                         <input
                                             ref={fileInputRef}
                                             type="file"
-                                            accept=".pdf,.txt"
+                                            accept="image/*,.pdf"
                                             className="hidden"
                                             onChange={(e) => {
                                                 const f = e.target.files?.[0];
@@ -418,46 +453,60 @@ export default function TeacherMocksCreatePage() {
                                                 </div>
                                                 <p className="font-bold site-text-strong text-[15px]">Scanning document...</p>
                                                 <p className="text-[13px] site-text-muted mt-1">Extracting mock test questions</p>
+                                                <div className="mt-4 px-4 py-2 rounded-xl bg-amber-50 dark:bg-amber-500/10 border border-amber-200/50 dark:border-amber-500/20">
+                                                    <p className="text-[12px] font-bold text-amber-700 dark:text-amber-400 text-center">
+                                                        The AI needs about a minute to analyze and extract the questions. Please don't close this page.
+                                                    </p>
+                                                </div>
                                             </>
                                         ) : (
                                             <>
                                                 <div className="h-14 w-14 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center mb-3">
                                                     <Upload className="h-7 w-7 site-text-muted" />
                                                 </div>
-                                                <p className="font-bold site-text-strong text-[15px]">Drop your PDF or TXT files here</p>
-                                                <p className="text-[13px] site-text-muted mt-1 mb-2">Upload multiple files to randomize tests (Max 20MB per file)</p>
-                                                <p className="text-[11px] text-orange-500 font-medium">Note: The AI scanner cannot extract pictures/images from documents.</p>
+                                                <p className="font-bold site-text-strong text-[15px]">Upload or drop your test files here</p>
+                                                <p className="text-[13px] site-text-muted mt-1 mb-2 text-center">Upload picture of a test or PDF to extract questions (Max 20MB per file)</p>
                                             </>
                                         )}
                                     </div>
-                                )}
+
+                                    {/* Create Manually Area */}
+                                    <div 
+                                        onClick={() => {
+                                            const newTest = {
+                                                id: `manual-test-${Date.now()}`,
+                                                name: `Manual Test ${customTests.length + 1}`,
+                                                questions: [{
+                                                    id: `mock-q-${Date.now()}-0`,
+                                                    passage: '',
+                                                    question: '',
+                                                    options: ['', '', '', ''],
+                                                    answer: null
+                                                }]
+                                            };
+                                            setCustomTests(prev => [...prev, newTest]);
+                                        }}
+                                        className="relative flex flex-col items-center justify-center rounded-2xl border-2 border-dashed p-12 cursor-pointer transition-all border-slate-300 dark:border-slate-700 hover:border-blue-400"
+                                    >
+                                        <div className="h-14 w-14 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center mb-3">
+                                            <FileText className="h-7 w-7 site-text-muted" />
+                                        </div>
+                                        <p className="font-bold site-text-strong text-[15px]">Create Manually</p>
+                                        <p className="text-[13px] site-text-muted mt-1 mb-2 text-center">Write questions without uploading</p>
+                                    </div>
+                                </div>
+
                                 {customTests.length > 0 && (
-                                    <div className="mt-4 space-y-3">
-                                        {customTests.map((t, idx) => (
-                                            <div key={t.id} className="flex items-center justify-between p-3 border-2 border-slate-200 dark:border-slate-800 rounded-xl bg-slate-50 dark:bg-slate-900/30">
-                                                <div className="flex items-center gap-3">
-                                                    <div className="h-10 w-10 rounded-lg bg-blue-100 dark:bg-blue-900/40 flex items-center justify-center">
-                                                        <FileText className="h-5 w-5 text-blue-600 dark:text-blue-400" />
-                                                    </div>
-                                                    <div>
-                                                        <p className="font-bold site-text-strong text-[14px]">{t.name}</p>
-                                                        <p className="text-[12px] site-text-muted mt-0.5">{t.questions.length} questions parsed</p>
-                                                    </div>
-                                                </div>
-                                                <button
-                                                    type="button"
-                                                    onClick={(e) => {
-                                                        e.stopPropagation();
-                                                        setCustomTests(prev => prev.filter(test => test.id !== t.id));
-                                                    }}
-                                                    className="p-2 hover:bg-slate-200 dark:hover:bg-slate-800 rounded-lg transition text-rose-500"
-                                                >
-                                                    <X className="h-4 w-4" />
-                                                </button>
-                                            </div>
-                                        ))}
+                                    <div className="mt-6">
+                                        <MockTestFilesEditor 
+                                            initialTests={customTests}
+                                            onSave={() => {}}
+                                            onChange={(updatedTests) => setCustomTests(updatedTests)}
+                                            hideSaveButton={true}
+                                        />
                                     </div>
                                 )}
+                                
 
                                 {customTests.length > 1 && (
                                     <div className="mt-6 p-5 rounded-2xl border-2 border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/30">
@@ -499,186 +548,43 @@ export default function TeacherMocksCreatePage() {
                                     </div>
                                 )}
 
-                                {scanError && (
-                                    <p className="text-red-500 text-sm mt-2 font-bold">{scanError}</p>
-                                )}
                             </div>
                         </form>
                     </div>
 
-                    <div className="p-6 border-t border-slate-100 dark:border-slate-800/60 bg-slate-50 dark:bg-slate-900/50 flex justify-end gap-3">
-                        <Link href="/teacher/mocks" className="px-5 py-3 font-bold site-text-muted hover:site-text-strong transition">Cancel</Link>
-                        <button disabled={isScanning || isSaving} form="create-mock-form" type="submit" className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-full font-bold shadow-md transition disabled:opacity-50 disabled:cursor-not-allowed">
-                            {isSaving ? 'Creating...' : isScanning ? 'Wait for Scan...' : 'Create Session'}
-                        </button>
+                    <div className="p-6 border-t border-slate-100 dark:border-slate-800/60 bg-slate-50 dark:bg-slate-900/50 flex flex-col sm:flex-row justify-between items-center gap-4">
+                        <div className="flex-1">
+                            {scanError && (
+                                <motion.div 
+                                    initial={{ opacity: 0, x: -10 }} 
+                                    animate={{ opacity: 1, x: 0 }}
+                                    className="flex items-center gap-2 text-rose-500 bg-rose-50 dark:bg-rose-500/10 px-4 py-2 rounded-xl border border-rose-200 dark:border-rose-500/20"
+                                >
+                                    <AlertCircle className="w-5 h-5 shrink-0" />
+                                    <p className="text-[14px] font-bold">{scanError}</p>
+                                </motion.div>
+                            )}
+                        </div>
+                        <div className="flex gap-3 items-center shrink-0">
+                            <Link href="/teacher/mocks" className="px-5 py-3 font-bold site-text-muted hover:site-text-strong transition">Cancel</Link>
+                            {(() => {
+                                const isReady = title.trim() && !titleError && !isCheckingTitle && customTests.length > 0 && !isScanning && !isSaving;
+                                return (
+                                    <button 
+                                        disabled={isScanning || isSaving} 
+                                        form="create-mock-form" 
+                                        type="submit" 
+                                        className={`px-8 py-3 rounded-full font-bold transition-all ${isReady ? 'bg-blue-600 hover:bg-blue-500 text-white shadow-[0_0_20px_rgba(37,99,235,0.4)] hover:shadow-[0_0_30px_rgba(37,99,235,0.6)] hover:-translate-y-0.5' : 'bg-slate-800 text-slate-300 disabled:opacity-50 disabled:cursor-not-allowed'}`}
+                                    >
+                                        {isSaving ? 'Creating...' : isScanning ? 'Wait for Scan...' : 'Create Session'}
+                                    </button>
+                                );
+                            })()}
+                        </div>
                     </div>
                 </motion.div>
             </motion.div>
 
-            {/* Answer Key Review Modal */}
-            <AnimatePresence>
-                {reviewingTest && (
-                    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-                        <motion.div
-                            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                            className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm"
-                        />
-                        <motion.div
-                            initial={{ opacity: 0, scale: 0.95, y: 10 }}
-                            animate={{ opacity: 1, scale: 1, y: 0 }}
-                            exit={{ opacity: 0, scale: 0.95, y: 10 }}
-                            className="bg-white dark:bg-slate-900 rounded-[32px] shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col relative z-10 overflow-hidden"
-                        >
-                            <div className="flex justify-between items-center p-6 border-b border-slate-100 dark:border-white/10">
-                                <div>
-                                    <h2 className="text-2xl font-black text-slate-800 dark:text-white">Review Answer Key</h2>
-                                    <p className="text-sm site-text-muted mt-1">Set correct answers for: {reviewingTest.file.name}</p>
-                                </div>
-                                <button onClick={() => setReviewingTest(null)} className="p-2 hover:bg-slate-100 dark:hover:bg-white/10 rounded-full text-slate-400 transition">
-                                    <X className="w-5 h-5" />
-                                </button>
-                            </div>
-
-                            <div className="flex-1 overflow-y-auto p-6 space-y-6">
-                                {reviewingTest.questions.map((q, idx) => (
-                                    <div key={idx} className={`p-5 rounded-xl border-2 ${q.answer === null ? 'border-red-200 bg-red-50 dark:bg-red-900/10 dark:border-red-900/30' : 'border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/30'}`}>
-                                        {/* Question header: number + stem */}
-                                        <div className="flex items-start gap-3 mb-4">
-                                            <div className="h-8 w-8 flex-shrink-0 rounded-lg bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold text-sm">
-                                                {idx + 1}
-                                            </div>
-                                            <div className="w-full">
-                                                {q.passage && (
-                                                    <div className="mb-4 bg-slate-50 dark:bg-slate-900/50 rounded-xl border border-slate-100 dark:border-slate-800/60 overflow-hidden">
-                                                        <PassageRenderer
-                                                            text={q.passage}
-                                                            highlights={[]}
-                                                            onAddHighlight={() => {}}
-                                                            onRemoveHighlight={() => {}}
-                                                            onUpdateHighlight={() => {}}
-                                                            isHighlightModeActive={false}
-                                                        />
-                                                    </div>
-                                                )}
-
-                                                {q.imageUrl && q.imagePosition === 'before-stem' && (
-                                                    <div className="mb-4 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 max-h-64 flex justify-center bg-slate-50 dark:bg-slate-900/50">
-                                                        <img src={q.imageUrl} alt="Question image" className="object-contain max-h-64" />
-                                                    </div>
-                                                )}
-
-                                                <div className="font-semibold site-text-strong text-[15px] leading-relaxed">
-                                                    {q.question ? <LatexRenderer text={q.question} /> : '(No question text)'}
-                                                </div>
-
-                                                {q.imageUrl && q.imagePosition === 'after-stem' && (
-                                                    <div className="mt-4 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 max-h-64 flex justify-center bg-slate-50 dark:bg-slate-900/50">
-                                                        <img src={q.imageUrl} alt="Question image" className="object-contain max-h-64" />
-                                                    </div>
-                                                )}
-
-                                                {/* Image controls */}
-                                                <div className="mt-4 flex flex-wrap items-center gap-3">
-                                                    <button 
-                                                        onClick={() => { setUploadingImageIdx(idx); imageInputRef.current?.click(); }}
-                                                        disabled={uploadingImageIdx !== null}
-                                                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border-2 border-slate-200 dark:border-slate-700 site-subpanel text-[12px] font-bold site-text hover:border-blue-400 dark:hover:border-blue-600 transition disabled:opacity-50"
-                                                    >
-                                                        {uploadingImageIdx === idx ? <Loader2 className="h-4 w-4 animate-spin" /> : <ImageIcon className="h-4 w-4" />}
-                                                        {q.imageUrl ? 'Change Image' : 'Add Image'}
-                                                    </button>
-
-                                                    {q.imageUrl && (
-                                                        <>
-                                                            <select 
-                                                                value={q.imagePosition || 'after-stem'}
-                                                                onChange={(e) => {
-                                                                    const newQs = [...reviewingTest.questions];
-                                                                    newQs[idx].imagePosition = e.target.value;
-                                                                    setReviewingTest({ ...reviewingTest, questions: newQs });
-                                                                }}
-                                                                className="px-2 py-1.5 rounded-lg border-2 border-slate-200 dark:border-slate-700 site-subpanel text-[12px] font-bold site-text focus:outline-none focus:border-blue-500"
-                                                            >
-                                                                <option value="before-stem">Before Question</option>
-                                                                <option value="after-stem">After Question</option>
-                                                            </select>
-                                                            <button 
-                                                                onClick={() => {
-                                                                    const newQs = [...reviewingTest.questions];
-                                                                    newQs[idx].imageUrl = undefined;
-                                                                    setReviewingTest({ ...reviewingTest, questions: newQs });
-                                                                }}
-                                                                className="flex items-center gap-1 px-2 py-1.5 text-[12px] font-bold text-rose-500 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-900/20 rounded-lg transition"
-                                                            >
-                                                                <X className="h-3.5 w-3.5" /> Remove
-                                                            </button>
-                                                        </>
-                                                    )}
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        {/* Answer choices listed vertically — click to mark correct */}
-                                        <div className="space-y-2 ml-11">
-                                            {['A', 'B', 'C', 'D'].map((letter, optIdx) => (
-                                                <button
-                                                    key={letter}
-                                                    type="button"
-                                                    onClick={() => {
-                                                        const newQs = [...reviewingTest.questions];
-                                                        newQs[idx].answer = optIdx;
-                                                        setReviewingTest({ ...reviewingTest, questions: newQs });
-                                                    }}
-                                                    className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl border-2 text-left transition-all ${
-                                                        q.answer === optIdx
-                                                            ? 'bg-emerald-50 border-emerald-500 dark:bg-emerald-900/20 dark:border-emerald-500'
-                                                            : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 hover:border-emerald-400'
-                                                    }`}
-                                                >
-                                                    <span className={`w-8 h-8 flex-shrink-0 rounded-full flex items-center justify-center font-bold text-sm transition-all ${
-                                                        q.answer === optIdx
-                                                            ? 'bg-emerald-500 text-white'
-                                                            : 'bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300'
-                                                    }`}>{letter}</span>
-                                                    <span className={`text-[14px] font-medium ${
-                                                        q.answer === optIdx ? 'text-emerald-700 dark:text-emerald-300' : 'site-text-strong'
-                                                    }`}>
-                                                        <LatexRenderer text={q.options?.[optIdx] || `Option ${letter}`} />
-                                                    </span>
-                                                </button>
-                                            ))}
-                                        </div>
-                                        {q.answer === null && <p className="text-xs text-red-500 font-bold ml-11 mt-2">Please select the correct answer.</p>}
-                                    </div>
-                                ))}
-                            </div>
-
-                            <div className="p-6 border-t border-slate-100 dark:border-white/10 bg-slate-50 dark:bg-slate-900 flex justify-end gap-3">
-                                <button type="button" onClick={() => setReviewingTest(null)} className="px-5 py-3 font-bold site-text-muted hover:site-text-strong transition">Cancel</button>
-                                <button
-                                    type="button"
-                                    disabled={reviewingTest.questions.some(q => q.answer === null)}
-                                    onClick={() => {
-                                        const newTestId = Date.now().toString();
-                                        setCustomTests(prev => [...prev, {
-                                            file: reviewingTest.file,
-                                            id: newTestId,
-                                            name: reviewingTest.file.name,
-                                            questions: reviewingTest.questions
-                                        }]);
-                                        setReviewingTest(null);
-                                    }}
-                                    className="bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-3 rounded-full font-bold shadow-md transition disabled:opacity-50 disabled:cursor-not-allowed"
-                                >
-                                    Save Test File
-                                </button>
-                            </div>
-                        </motion.div>
-                    </div>
-                )}
-            </AnimatePresence>
-            {/* Hidden file input for images */}
-            <input type="file" accept="image/*" className="hidden" ref={imageInputRef} onChange={handleImageUpload} />
         </div>
     );
 }

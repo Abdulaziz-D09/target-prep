@@ -2,7 +2,7 @@
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
-import { GraduationCap, ClipboardList, ArrowRight, Plus, Users, Sparkles, Activity, FileText, BarChart3, Clock } from 'lucide-react';
+import { GraduationCap, ClipboardList, ArrowRight, Plus, Users, Sparkles, Activity, FileText, BarChart3, Clock, Zap, Calendar } from 'lucide-react';
 import {
     FloatingPageShapes, itemRevealVariants, pageRevealVariants, staggerContainerVariants, sectionRevealVariants
 } from '@/components/SiteMotion';
@@ -10,7 +10,11 @@ import { useClassroomStore } from '@/store/classroomStore';
 
 export default function TeacherHomePage() {
     const shouldReduceMotion = useReducedMotion();
-    const { classrooms, students, assignments, seed } = useClassroomStore();
+    const classrooms = useClassroomStore(state => state.classrooms);
+    const students = useClassroomStore(state => state.students);
+    const assignments = useClassroomStore(state => state.assignments);
+    const mockSessions = useClassroomStore(state => state.mockSessions);
+    const seed = useClassroomStore(state => state.seed);
     const [todayLabel, setTodayLabel] = useState('');
 
     useEffect(() => { 
@@ -27,6 +31,7 @@ export default function TeacherHomePage() {
 
     const totalStudents    = students.length;
     const totalAssignments = assignments.length;
+    const activeMocks = mockSessions.filter(m => m.status === 'active');
 
     const quickLinks = [
         {
@@ -129,21 +134,41 @@ export default function TeacherHomePage() {
                             <motion.div className="site-panel flex min-h-[220px] flex-col rounded-[32px] p-6" variants={itemRevealVariants}>
                                 <div className="flex items-start justify-between gap-4">
                                     <div>
-                                        <p className="site-hero-kicker text-[11px] font-bold uppercase tracking-[0.24em]">Live Activity</p>
-                                        <h2 className="site-hero-title mt-2 text-2xl font-black tracking-[-0.03em]">Active Mocks</h2>
+                                        <p className="site-hero-kicker text-[11px] font-bold uppercase tracking-[0.24em]">Productivity</p>
+                                        <h2 className="site-hero-title mt-2 text-2xl font-black tracking-[-0.03em]">Quick Actions</h2>
                                         <p className="site-hero-body mt-2 text-sm leading-6">
-                                            Monitor live test sessions taking place right now.
+                                            Jump straight into your most common tasks.
                                         </p>
                                     </div>
-                                    <div className="site-chip rounded-2xl p-3">
-                                        <Activity className="h-5 w-5 site-text-strong" />
+                                    <div className="site-chip rounded-2xl p-3 bg-indigo-50 dark:bg-indigo-500/10">
+                                        <Zap className="h-5 w-5 text-indigo-500" />
                                     </div>
                                 </div>
-                                <div className="mt-auto pt-6">
-                                    <div className="site-subpanel rounded-[22px] px-6 py-6 text-center flex flex-col items-center justify-center min-h-[90px]">
-                                        <p className="text-sm font-semibold text-indigo-600/80 dark:text-indigo-400/80 uppercase tracking-[0.15em] mb-1">Status</p>
-                                        <p className="text-[17px] font-bold text-slate-700 dark:text-slate-300">No active mocks running</p>
-                                    </div>
+                                <div className="mt-auto pt-6 flex flex-col gap-3">
+                                    <Link 
+                                        href="/teacher/assignments/create"
+                                        className="w-full flex items-center justify-between site-subpanel rounded-xl px-5 py-3.5 hover:scale-[1.02] transition shadow-sm group"
+                                    >
+                                        <div className="flex items-center gap-3">
+                                            <div className="p-2 rounded-lg bg-indigo-500/10 text-indigo-500">
+                                                <Plus className="w-4 h-4" />
+                                            </div>
+                                            <span className="font-bold text-[14px] site-text-strong">Create New Assignment</span>
+                                        </div>
+                                        <ArrowRight className="w-4 h-4 site-text-muted transition group-hover:text-indigo-500 group-hover:translate-x-1" />
+                                    </Link>
+                                    <Link 
+                                        href="/teacher/mocks/create"
+                                        className="w-full flex items-center justify-between site-subpanel rounded-xl px-5 py-3.5 hover:scale-[1.02] transition shadow-sm group"
+                                    >
+                                        <div className="flex items-center gap-3">
+                                            <div className="p-2 rounded-lg bg-emerald-500/10 text-emerald-500">
+                                                <Calendar className="w-4 h-4" />
+                                            </div>
+                                            <span className="font-bold text-[14px] site-text-strong">Schedule Mock Exam</span>
+                                        </div>
+                                        <ArrowRight className="w-4 h-4 site-text-muted transition group-hover:text-emerald-500 group-hover:translate-x-1" />
+                                    </Link>
                                 </div>
                             </motion.div>
 

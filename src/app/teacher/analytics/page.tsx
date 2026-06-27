@@ -104,7 +104,11 @@ function calculateRealEngagementData(progress: any[], mockResults: any[], classr
 
 export default function AnalyticsPage() {
     const shouldReduceMotion = useReducedMotion();
-    const { classrooms, students, progress, mockResults, seed } = useClassroomStore();
+    const classrooms = useClassroomStore(state => state.classrooms);
+    const students = useClassroomStore(state => state.students);
+    const progress = useClassroomStore(state => state.progress);
+    const mockResults = useClassroomStore(state => state.mockResults);
+    const seed = useClassroomStore(state => state.seed);
 
     const [classFilter, setClassFilter] = useState<string>('all');
     const [studentFilter, setStudentFilter] = useState<string>('all');

@@ -9,7 +9,9 @@ import Link from 'next/link';
 import { LatexRenderer } from '@/components/LatexRenderer';
 
 export default function StudentHistoryPage() {
-    const { questionHistory, mockResults, syncWithSupabase } = useClassroomStore();
+    const questionHistory = useClassroomStore(state => state.questionHistory);
+    const mockResults = useClassroomStore(state => state.mockResults);
+    const syncWithSupabase = useClassroomStore(state => state.syncWithSupabase);
     const [userId, setUserId] = useState<string | null>(null);
 
     useEffect(() => {

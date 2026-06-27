@@ -68,7 +68,8 @@ export default function ReviewPage() {
   const mockIdParam = searchParams.get('mockId');
 
   const completedTests = useTestStore((s) => s.completedTests);
-  const { mockResults, mockSessions } = useClassroomStore();
+  const mockResults = useClassroomStore(state => state.mockResults);
+    const mockSessions = useClassroomStore(state => state.mockSessions);
   const [legacyTest, setLegacyTest] = useState<CompletedTest | null>(null);
   const [expandedQ, setExpandedQ] = useState<string | null>(null);
   
@@ -240,10 +241,10 @@ export default function ReviewPage() {
     <div className="relative min-h-screen pt-4 pb-16 px-4 sm:px-6 lg:px-8">
 
       {/* ── HEADER ── */}
-      <div className="mx-auto max-w-[900px]">
-        <Link href="/progress" className="inline-flex items-center gap-2 text-slate-500 hover:text-slate-900 transition-colors mb-6 text-sm font-semibold">
+      <div className="mx-auto max-w-[1320px]">
+        <Link href={mockIdParam ? "/dashboard/mocks/history" : "/progress"} className="inline-flex items-center gap-2 text-slate-500 hover:text-slate-900 transition-colors mb-6 text-sm font-semibold">
           <ArrowLeft className="w-4 h-4" />
-          Back to Progress
+          {mockIdParam ? "Back to Mock History" : "Back to Progress"}
         </Link>
         {/* ── SCORE CARD (College Board style) ── */}
         <div className="site-panel rounded-[32px] overflow-hidden mb-6 shadow-xl">

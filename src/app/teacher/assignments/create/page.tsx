@@ -1,921 +1,540 @@
+
 'use client';
-import { useState, useRef, useEffect, useCallback } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Sparkles, CheckCircle, Upload, FileText, X, Loader2, BookOpen, Calculator, Image as ImageIcon, GraduationCap, Check, AlertCircle } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
+import { useClassroomStore } from '@/store/classroomStore';
+
 import {
-    Upload, FileText, Sparkles, ChevronLeft, ChevronRight, Check,
-    AlertCircle, ArrowLeft, GraduationCap, Loader2, X, Send, Image as ImageIcon
-} from 'lucide-react';
+    FloatingPageShapes,
+    staggerContainerVariants,
+    itemRevealVariants,
+    sectionRevealVariants,
+    pageRevealVariants
+} from '@/components/SiteMotion';
 import Link from 'next/link';
-import { FloatingPageShapes, itemRevealVariants, pageRevealVariants } from '@/components/SiteMotion';
-import { useClassroomStore, seedOnce } from '@/store/classroomStore';
-import { LatexRenderer } from '@/components/LatexRenderer';
-import { CustomSelect } from '@/components/CustomSelect';
-import { PassageRenderer } from '@/components/PassageRenderer';
-
-// Seed before render so classrooms show immediately in the classroom picker
-seedOnce();
-
-
-// ─── Types ────────────────────────────────────────────────────────────────────
-
-type Option = 'A' | 'B' | 'C' | 'D';
-
-type ParsedQuestion = {
-    id: string;
-    passage?: string | null;
-    stem: string;
-    options: { A: string; B: string; C: string; D: string };
-    answer: Option | null;
-    imageUrl?: string;
-    imagePosition?: 'before-stem' | 'after-stem';
-};
-
-type WizardStep = 1 | 2 | 3 | 4;
-
-const OPTION_LABELS: Option[] = ['A', 'B', 'C', 'D'];
-
-// ─── Step indicator ───────────────────────────────────────────────────────────
-
-const STEPS = [
-    { n: 1, label: 'Upload' },
-    { n: 2, label: 'Review' },
-    { n: 3, label: 'Answer Key' },
-    { n: 4, label: 'Save & Send' },
-] as const;
-
-function StepIndicator({ current }: { current: WizardStep }) {
-    return (
-        <div className="relative mb-12 sm:mb-14">
-            <div className="absolute top-[22px] left-[5%] right-[5%] h-1 bg-slate-200 dark:bg-slate-700 rounded-full z-0 hidden sm:block">
-                <div 
-                   className="h-full bg-indigo-500 rounded-full transition-all duration-300"
-                   style={{ width: `${((current - 1) / (STEPS.length - 1)) * 100}%` }}
-                />
-            </div>
-            
-            <div className="flex items-start justify-between relative z-10 px-2 sm:px-0">
-                {STEPS.map(({ n, label }, i) => {
-                    const done   = n < current;
-                    const active = n === current;
-                    return (
-                        <div key={n} className="flex flex-col items-center w-[70px]">
-                            <div className={`h-12 w-12 rounded-[14px] flex items-center justify-center text-[16px] font-black transition-all ${
-                                done   ? 'bg-indigo-600 text-white shadow-md border-2 border-indigo-600'
-                                       : active ? 'bg-indigo-600 text-white shadow-[0_4px_14px_rgba(99,102,241,0.35)] border-2 border-indigo-600 scale-[1.05]'
-                                       : 'bg-white dark:bg-slate-800 border-2 border-slate-300 dark:border-slate-600 text-slate-500 dark:text-slate-300'
-                            }`}>
-                                {done ? <Check className="h-6 w-6 stroke-[3]" /> : n}
-                            </div>
-                            <span className={`mt-3.5 text-[11px] font-bold uppercase tracking-[0.2em] whitespace-nowrap hidden sm:block transition-all ${
-                                active ? 'text-indigo-600 dark:text-indigo-400' : 'site-text-muted'
-                            }`}>{label}</span>
-                        </div>
-                    );
-                })}
-            </div>
-        </div>
-    );
-}
-
-// ─── Answer option card (practice-test style) ─────────────────────────────────
-
-function OptionCard({ letter, text, selected, onSelect }: {
-    letter: Option; text: string; selected: boolean; onSelect: () => void;
-}) {
-    return (
-        <button
-            onClick={onSelect}
-            className={`w-full text-left flex items-center gap-4 px-5 py-4 rounded-2xl border-2 transition-all duration-150 ${
-                selected
-                    ? 'border-indigo-500 bg-indigo-50 dark:bg-indigo-900/20 shadow-[0_0_0_4px_rgba(99,102,241,0.12)]'
-                    : 'border-slate-200 dark:border-slate-700 hover:border-indigo-300 dark:hover:border-indigo-700 site-subpanel'
-            }`}
-        >
-            <span className={`flex-shrink-0 h-9 w-9 rounded-full border-2 flex items-center justify-center text-sm font-black transition-all ${
-                selected
-                    ? 'bg-indigo-600 border-indigo-600 text-white'
-                    : 'border-slate-400 dark:border-slate-600 text-slate-700 dark:text-slate-400'
-            }`}>
-                {letter}
-            </span>
-            <span className={`text-[15px] font-medium leading-relaxed ${
-                selected ? 'text-indigo-800 dark:text-indigo-200 font-bold' : 'site-text-strong'
-            }`}>
-                <LatexRenderer text={text} />
-            </span>
-        </button>
-    );
-}
-
-// ─── Page ─────────────────────────────────────────────────────────────────────
+import { MockTestFilesEditor } from '@/components/MockTestFilesEditor';
 
 export default function CreateAssignmentPage() {
-    const shouldReduceMotion = useReducedMotion();
     const router = useRouter();
-    const { classrooms, addAssignment, seed } = useClassroomStore();
-    useEffect(() => { seed(); }, [seed]);
+    const classrooms = useClassroomStore(state => state.classrooms);
+    const addAssignment = useClassroomStore(state => state.addAssignment);
+    const seed = useClassroomStore(state => state.seed);
 
-    // ── Wizard state ──────────────────────────────────────────────────────────
-    const [step, setStep] = useState<WizardStep>(1);
+    useEffect(() => {
+        seed();
+    }, [seed]);
 
-    // Step 1
-    const [inputTab, setInputTab]         = useState<'paste' | 'upload'>('paste');
-    const [pastedText, setPastedText]     = useState('');
-    const [uploadedFile, setUploadedFile] = useState<File | null>(null);
-    const [isDragging, setIsDragging]     = useState(false);
-    const [isScanning, setIsScanning]     = useState(false);
-    const [scanError, setScanError]       = useState('');
-    const fileInputRef = useRef<HTMLInputElement>(null);
-    const abortControllerRef = useRef<AbortController | null>(null);
 
-    // Step 2
-    const [questions, setQuestions]   = useState<ParsedQuestion[]>([]);
-    const [currentIdx, setCurrentIdx] = useState(0);
-    const [isUploadingImage, setIsUploadingImage] = useState(false);
-    const imageInputRef = useRef<HTMLInputElement>(null);
-
-    // Step 4
-    const [title, setTitle]                           = useState('');
-    const [subject, setSubject]                       = useState<'English' | 'Math' | 'Both'>('English');
+    // Form state
+    const [title, setTitle] = useState('');
+    const [timeLimitMinutes, setTimeLimitMinutes] = useState<number>(60);
+    const [hasDueDate, setHasDueDate] = useState(false);
+    const [dueDate, setDueDate] = useState<string>('');
+    const [subject, setSubject] = useState<'English' | 'Math' | 'Both'>('Both');
     const [selectedClassroomIds, setSelectedClassroomIds] = useState<string[]>([]);
-    const [timeLimitMinutes, setTimeLimitMinutes] = useState(60);
-    const [allowExit, setAllowExit]                   = useState(false);
+    const [allowExit, setAllowExit] = useState(false);
     const [strictToleranceSeconds, setStrictToleranceSeconds] = useState(5);
-    const [isSaving, setIsSaving]                     = useState(false);
+    const [customTests, setCustomTests] = useState<{ file?: File; id: string; name: string; questions: any[] }[]>([]);
 
-    // ── Step 1: Scan ──────────────────────────────────────────────────────────
-
-    const handleScan = useCallback(async () => {
-        setScanError('');
-
-        if (inputTab === 'paste' && !pastedText.trim()) {
-            setScanError('Please paste some text before scanning.');
-            return;
+    useEffect(() => {
+        const saved = localStorage.getItem('create-assignment-state');
+        if (saved) {
+            try {
+                const parsed = JSON.parse(saved);
+                if (parsed.title) setTitle(parsed.title);
+                if (parsed.timeLimitMinutes) setTimeLimitMinutes(parsed.timeLimitMinutes);
+                if (parsed.hasDueDate !== undefined) setHasDueDate(parsed.hasDueDate);
+                if (parsed.dueDate) setDueDate(parsed.dueDate);
+                if (parsed.subject) setSubject(parsed.subject);
+                if (parsed.customTests && Array.isArray(parsed.customTests)) {
+                    setCustomTests(parsed.customTests);
+                }
+            } catch (e) {}
         }
-        if (inputTab === 'upload' && !uploadedFile) {
-            setScanError('Please upload a PDF file before scanning.');
-            return;
+    }, []);
+
+    useEffect(() => {
+        localStorage.setItem('create-assignment-state', JSON.stringify({
+            title, timeLimitMinutes, hasDueDate, dueDate, subject, customTests: customTests.map(t => ({ ...t, file: undefined }))
+        }));
+    }, [title, timeLimitMinutes, hasDueDate, dueDate, subject, customTests]);
+
+    useEffect(() => {
+        if (classrooms.length === 1 && selectedClassroomIds.length === 0) {
+            setSelectedClassroomIds([classrooms[0].id]);
         }
+    }, [classrooms, selectedClassroomIds.length]);
+    
+    // Document Scanning State
+    const [isDragging, setIsDragging] = useState(false);
+    const [isScanning, setIsScanning] = useState(false);
+    const [isSaving, setIsSaving] = useState(false);
+    const [scanError, setScanError] = useState('');
+    const fileInputRef = useRef<HTMLInputElement>(null);
 
-        setIsScanning(true);
-        abortControllerRef.current = new AbortController();
-        const signal = abortControllerRef.current.signal;
-        
-        try {
-            let res: Response;
-
-            if (inputTab === 'upload' && uploadedFile) {
-                const fd = new FormData();
-                fd.append('file', uploadedFile);
-                res = await fetch('/api/scan-pdf', { method: 'POST', body: fd, signal });
-            } else {
-                res = await fetch('/api/scan-pdf', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ text: pastedText }),
-                    signal
-                });
-            }
-
-            const data = await res.json();
-
-            if (!res.ok) {
-                setScanError(data.error ?? 'Scan failed. Please try again.');
-                setIsScanning(false);
-                return;
-            }
-
-            if (!data.questions || data.questions.length === 0) {
-                setScanError('No multiple-choice questions found. Make sure your text contains questions with A/B/C/D options.');
-                setIsScanning(false);
-                return;
-            }
-
-            const parsed: ParsedQuestion[] = data.questions.map(
-                (q: { passage?: string | null; stem: string; options: { A: string; B: string; C: string; D: string } }, i: number) => ({
-                    id: `q-${i}`,
-                    passage: q.passage ?? undefined,
-                    stem: q.stem,
-                    options: q.options,
-                    answer: null,
-                })
-            );
-
-            setQuestions(parsed);
-            setCurrentIdx(0);
-            setTimeLimitMinutes(Math.max(20, Math.ceil(parsed.length * 1.5)));
-            setStep(2);
-        } catch (error: any) {
-            if (error.name === 'AbortError') {
-                return;
-            }
-            setScanError('Network error. Check your connection and try again.');
-        } finally {
-            setIsScanning(false);
-        }
-    }, [inputTab, pastedText, uploadedFile]);
-
-    // ── Step 2: answer selection ──────────────────────────────────────────────
-
-    const handleSelectAnswer = (answer: Option) => {
-        setQuestions((prev) =>
-            prev.map((q, i) => (i === currentIdx ? { ...q, answer } : q))
+    const toggleClassroom = (id: string) => {
+        setSelectedClassroomIds(prev => 
+            prev.includes(id) ? prev.filter(c => c !== id) : [...prev, id]
         );
     };
-
-    const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
-        if (!file) return;
-        
-        setIsUploadingImage(true);
-        try {
-            const formData = new FormData();
-            formData.append('file', file);
-            const res = await fetch('/api/upload-image', { method: 'POST', body: formData });
-            const data = await res.json();
-            if (data.url) {
-                setQuestions(prev => prev.map((q, i) => i === currentIdx ? { ...q, imageUrl: data.url, imagePosition: q.imagePosition || 'after-stem' } : q));
-            }
-        } catch (err) {
-            console.error('Failed to upload image', err);
-        } finally {
-            setIsUploadingImage(false);
-            if (e.target) e.target.value = '';
-        }
-    };
-
-    const currentQ      = questions[currentIdx];
-    const answeredCount = questions.filter((q) => q.answer !== null).length;
-
-    // ── Step 4: save ──────────────────────────────────────────────────────────
-
-    const handleSave = async () => {
-        if (!title.trim()) return;
-        setIsSaving(true);
-        await new Promise((r) => setTimeout(r, 350));
-
-        addAssignment({
-            title: title.trim(),
-            subject,
-            classroomIds: selectedClassroomIds,
-            timeLimitMinutes,
-            allowExit,
-            strictToleranceSeconds,
-            questions: questions.map((q) => ({
-                id: q.id,
-                passage: q.passage ?? undefined,
-                stem: q.stem,
-                options: q.options,
-                answer: q.answer ?? 'A',
-                imageUrl: q.imageUrl,
-                imagePosition: q.imagePosition,
-            })),
-        });
-        router.push('/teacher/assignments');
-    };
-
-    // ── Drag & drop ───────────────────────────────────────────────────────────
 
     const handleDrop = (e: React.DragEvent) => {
         e.preventDefault();
         setIsDragging(false);
         const file = e.dataTransfer.files?.[0];
-        if (file?.type === 'application/pdf') {
-            if (file.size > 4 * 1024 * 1024) {
-                setScanError(`File "${file.name}" is too large. Maximum allowed size is 4MB.`);
-                return;
-            }
-            setUploadedFile(file);
-            setScanError('');
+        if (file && (file.type.startsWith('image/') || file.type === 'application/pdf')) {
+            scanFile(file);
         }
     };
 
-    const toggleClassroom = (id: string) => {
-        setSelectedClassroomIds((prev) =>
-            prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
-        );
+    const scanFile = async (file: File) => {
+        if (file.size > 20 * 1024 * 1024) {
+            setScanError(`File "${file.name}" is too large. Maximum allowed size is 20MB.`);
+            return;
+        }
+
+        setIsScanning(true);
+        setScanError('');
+        try {
+            const fd = new FormData();
+            fd.append('file', file);
+            const res = await fetch('/api/scan-pdf', { method: 'POST', body: fd });
+            
+            if (!res.ok) {
+                if (res.status === 413) {
+                    setScanError(`File is too large for the server to process. Please compress the PDF or split it into smaller files.`);
+                    return;
+                }
+                
+                try {
+                    const errorData = await res.json();
+                    setScanError(errorData.error || `Server error: ${res.status}`);
+                } catch (e) {
+                    setScanError(`Server error (${res.status}). The server refused the file.`);
+                }
+                return;
+            }
+
+            const data = await res.json();
+            if (data.questions) {
+                const qs = data.questions.map((q: any, i: number) => {
+                    const optionsArray = [
+                        q.options?.A || '',
+                        q.options?.B || '',
+                        q.options?.C || '',
+                        q.options?.D || ''
+                    ];
+                    return {
+                        id: `assign-q-${Date.now()}-${i}`,
+                        passage: q.passage || null,
+                        question: q.stem || q.question || '',
+                        options: optionsArray,
+                        answer: null
+                    };
+                });
+                setCustomTests(prev => [...prev, { file, id: `assign-test-${Date.now()}`, name: file.name, questions: qs }]);
+            } else {
+                setScanError('No questions found in document.');
+            }
+        } catch (err) {
+            setScanError('Failed to scan document.');
+        } finally {
+            setIsScanning(false);
+        }
     };
 
-    // ─────────────────────────────────────────────────────────────────────────
+    const handleCreate = async (e: React.FormEvent) => {
+        e.preventDefault();
+
+        if (customTests.length === 0) {
+            setScanError('Please attach at least one test file or create manually before saving.');
+            return;
+        }
+        
+        if (selectedClassroomIds.length === 0) {
+            setScanError('Please select at least one classroom.');
+            return;
+        }
+
+        // Validate that all questions have an answer
+        let hasMissingAnswer = false;
+        for (const test of customTests) {
+            for (const q of test.questions) {
+                if (q.answer === null || q.answer === undefined || q.answer === '') {
+                    hasMissingAnswer = true;
+                    break;
+                }
+            }
+            if (hasMissingAnswer) break;
+        }
+
+        if (hasMissingAnswer) {
+            setScanError('Please ensure all questions have a correct answer selected/entered before creating.');
+            return;
+        }
+
+        if (isScanning || isSaving) return;
+        
+        setIsSaving(true);
+        setScanError('');
+
+        // Format custom tests mapping exactly to Question type
+        const formattedTests = customTests.map(test => ({
+            id: test.id,
+            name: test.name,
+            questions: test.questions.map((q: any) => ({
+                id: q.id,
+                passage: q.passage,
+                stem: q.question,
+                options: {
+                    A: q.options[0] || '',
+                    B: q.options[1] || '',
+                    C: q.options[2] || '',
+                    D: q.options[3] || ''
+                },
+                answer: typeof q.answer === 'number' ? ['A', 'B', 'C', 'D'][q.answer] : q.answer,
+                imageUrl: q.imageUrl,
+                imagePosition: q.imagePosition,
+                type: q.type || 'Multiple Choice'
+            }))
+        }));
+
+        useClassroomStore.getState().addAssignment({
+            title,
+            subject,
+            classroomIds: selectedClassroomIds,
+            timeLimitMinutes,
+            dueDate: hasDueDate && dueDate ? dueDate : undefined,
+            allowExit,
+            strictToleranceSeconds: allowExit ? undefined : strictToleranceSeconds,
+            customTests: formattedTests,
+        });
+
+        localStorage.removeItem('create-assignment-state');
+        setTimeout(() => {
+            router.push('/teacher/assignments');
+        }, 100);
+    };
 
     return (
-        <div className="relative min-h-screen pt-4 pb-12 px-4 sm:px-6 lg:px-8">
+        <div className="relative min-h-screen w-full pt-4 pb-12 px-4 sm:px-6 lg:px-8">
             <FloatingPageShapes theme="home" />
-
             <motion.div
-                className="relative z-10 mx-auto max-w-[780px]"
-                initial={shouldReduceMotion ? undefined : 'hidden'}
-                animate={shouldReduceMotion ? undefined : 'visible'}
+                className="relative z-10 w-full mx-auto max-w-[1320px]"
+                initial="hidden"
+                animate="visible"
                 variants={pageRevealVariants}
             >
-                {/* Back */}
-                <motion.div className="mb-6" variants={itemRevealVariants}>
-                    <Link href="/teacher/assignments" className="inline-flex items-center gap-1.5 text-sm font-semibold site-text-muted hover:site-text transition">
-                        <ArrowLeft className="h-4 w-4" />
-                        Back to Assignments
-                    </Link>
-                </motion.div>
 
-                {classrooms.length === 0 && (
-                    <motion.div className="mb-8 site-panel border-rose-200 bg-rose-50 dark:bg-rose-900/20 dark:border-rose-900/50 p-6 flex items-start gap-4" variants={itemRevealVariants}>
-                        <div className="p-3 bg-rose-100 dark:bg-rose-900/50 rounded-xl text-rose-600 dark:text-rose-400">
-                            <GraduationCap className="h-6 w-6" />
-                        </div>
-                        <div>
-                            <h3 className="text-lg font-black text-rose-900 dark:text-rose-100">No Classes Found</h3>
-                            <p className="mt-1 text-sm text-rose-700 dark:text-rose-300">You need to create at least one class before you can assign work to students.</p>
-                            <Link href="/teacher/classes" className="mt-3 inline-flex items-center gap-2 px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white text-sm font-bold rounded-xl transition shadow-sm">
-                                Create a Class Now
-                            </Link>
-                        </div>
+                {/* Hero */}
+                <motion.section
+                    className="site-hero-shell site-hero--home relative mb-7 overflow-hidden rounded-[36px] px-6 py-8 sm:px-8 lg:px-10"
+                    variants={sectionRevealVariants}
+                    initial="hidden"
+                    animate="visible"
+                >
+                    <div className="absolute -left-16 top-10 h-56 w-56 rounded-full bg-blue-300/10 blur-3xl" />
+                    <div className="absolute bottom-0 right-0 h-48 w-64 translate-x-10 translate-y-10 rounded-full bg-indigo-300/10 blur-3xl" />
+
+                    <motion.div className="relative grid gap-8 xl:grid-cols-[1.15fr_0.85fr] xl:items-center" variants={staggerContainerVariants}>
+                        <motion.div variants={itemRevealVariants}>
+                            <div className="site-hero-chip inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.24em]">
+                                <Sparkles className="h-3.5 w-3.5" />
+                                ASSIGNMENT BUILDER
+                            </div>
+
+                            <h1 className="site-hero-title mt-4 text-4xl font-black leading-[1.04] tracking-[-0.04em] sm:text-5xl">
+                                New Assignment
+                            </h1>
+                            <p className="site-hero-body mt-4 max-w-2xl text-[15px] leading-7 sm:text-[17px]">
+                                Create a new assignment for your students by uploading a test or writing questions manually.
+                            </p>
+                        </motion.div>
                     </motion.div>
-                )}
+                </motion.section>
 
-                {/* Header */}
-                <motion.div className="mb-6" variants={itemRevealVariants}>
-                    <div className="inline-flex items-center gap-2 px-3 py-1 bg-indigo-600 text-white dark:bg-indigo-500/20 dark:text-indigo-400 rounded-full text-xs font-bold uppercase tracking-widest mb-3 shadow-sm border border-transparent dark:border-indigo-500/20">
-                        Assignment Builder
-                    </div>
-                    <h1 className="text-3xl font-black tracking-[-0.03em] site-text-strong">New Assignment</h1>
-                    <p className="mt-1 text-sm site-text-muted">AI scans your text or PDF and extracts every multiple-choice question.</p>
-                </motion.div>
+                <motion.div variants={sectionRevealVariants} className="site-panel rounded-[32px] overflow-hidden">
+                    <div className="p-6">
+                        <form id="create-assignment-form" onSubmit={handleCreate} className="space-y-5">
+                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+                                <div>
+                                    <label className="block text-sm font-bold site-text-strong mb-2">Assignment Title</label>
+                                    <input required type="text" value={title} onChange={e => setTitle(e.target.value)} className="w-full bg-transparent border-2 border-slate-200 dark:border-slate-800 rounded-xl px-4 py-3 focus:outline-none focus:border-indigo-500 font-medium transition site-text-strong" placeholder="e.g. Unit 3 Math Review" />
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-bold site-text-strong mb-2">Time Limit (mins)</label>
+                                    <input required type="number" min={1} value={timeLimitMinutes} onChange={e => setTimeLimitMinutes(Number(e.target.value))} className="w-full bg-transparent border-2 border-slate-200 dark:border-slate-800 rounded-xl px-4 py-3 focus:outline-none focus:border-indigo-500 font-medium transition site-text-strong" />
+                                </div>
+                                <div>
+                                    <div className="flex items-center justify-between mb-2">
+                                        <label className="block text-sm font-bold site-text-strong">Due Date</label>
+                                        <label className="flex items-center gap-2 cursor-pointer text-xs site-text-muted">
+                                            <input 
+                                                type="checkbox" 
+                                                checked={hasDueDate} 
+                                                onChange={e => {
+                                                    setHasDueDate(e.target.checked);
+                                                    if (!e.target.checked) setDueDate('');
+                                                }}
+                                                className="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500"
+                                            />
+                                            Enable Due Date
+                                        </label>
+                                    </div>
+                                    {hasDueDate ? (
+                                        <input required type="datetime-local" value={dueDate} onChange={e => setDueDate(e.target.value)} className="w-full bg-transparent border-2 border-slate-200 dark:border-slate-800 rounded-xl px-4 py-3 focus:outline-none focus:border-indigo-500 font-medium transition site-text-strong" />
+                                    ) : (
+                                        <div className="w-full bg-slate-50 dark:bg-slate-900/50 border-2 border-slate-200 dark:border-slate-800 rounded-xl px-4 py-3 text-slate-400 italic">No due date</div>
+                                    )}
+                                </div>
+                            </div>
 
-                {/* Steps */}
-                <motion.div variants={itemRevealVariants}>
-                    <StepIndicator current={step} />
-                </motion.div>
+                            <div className="mt-6">
+                                <label className="block text-sm font-bold site-text-strong mb-3">Subject Type</label>
+                                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                                    {[
+                                        { id: 'Both', label: 'Full Assignment', desc: 'Both English & Math', icon: <Sparkles className="w-5 h-5" /> },
+                                        { id: 'English', label: 'English Only', desc: 'Reading & Writing only', icon: <BookOpen className="w-5 h-5" /> },
+                                        { id: 'Math', label: 'Math Only', desc: 'Math section only', icon: <Calculator className="w-5 h-5" /> },
+                                    ].map((opt) => {
+                                        const isSelected = subject === opt.id;
+                                        return (
+                                            <button
+                                                key={opt.id}
+                                                type="button"
+                                                onClick={() => setSubject(opt.id as any)}
+                                                className={`flex items-start gap-3 p-4 rounded-xl border-2 text-left transition-all cursor-pointer ${
+                                                    isSelected
+                                                        ? 'border-indigo-500 bg-indigo-500/5 dark:bg-indigo-500/10 shadow-sm'
+                                                        : 'border-slate-200 dark:border-slate-800 site-subpanel hover:border-slate-300 dark:hover:border-slate-700'
+                                                }`}
+                                            >
+                                                <div className={`p-2 rounded-lg transition-colors ${isSelected ? 'bg-indigo-500/20 text-indigo-500' : 'bg-slate-100 dark:bg-slate-800'}`}>
+                                                    {opt.icon}
+                                                </div>
+                                                <div>
+                                                    <p className={`font-bold text-[15px] ${isSelected ? 'text-indigo-600 dark:text-indigo-400' : 'site-text-strong'}`}>{opt.label}</p>
+                                                    <p className="text-[12px] site-text-muted mt-0.5 leading-relaxed">{opt.desc}</p>
+                                                </div>
+                                            </button>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+                            
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-6">
+                                <div>
+                                    <label className="block text-sm font-bold site-text-strong mb-3">Send to Classes</label>
+                                    {classrooms.length > 0 ? (
+                                        classrooms.length === 1 ? (
+                                            <div className="w-full h-[84px] flex items-center gap-3 px-4 py-3 rounded-xl border-2 border-indigo-500 bg-indigo-50 dark:bg-indigo-900/20 text-left">
+                                                <div className="h-8 w-8 rounded-full flex items-center justify-center shrink-0 bg-indigo-600">
+                                                    <GraduationCap className="h-4 w-4 text-white" />
+                                                </div>
+                                                <div>
+                                                    <p className="text-[14px] font-bold text-indigo-700 dark:text-indigo-300">
+                                                        {classrooms[0].name}
+                                                    </p>
+                                                    <p className="text-[12px] site-text-muted">{classrooms[0].grade}</p>
+                                                </div>
+                                            </div>
+                                        ) : (
+                                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                                {classrooms.map((cls) => {
+                                                    const checked = selectedClassroomIds.includes(cls.id);
+                                                    return (
+                                                        <button
+                                                            key={cls.id}
+                                                            type="button"
+                                                            onClick={() => toggleClassroom(cls.id)}
+                                                            className={`w-full h-[84px] flex items-center gap-3 px-4 py-3 rounded-xl border-2 text-left transition-all hover:scale-[1.02] ${
+                                                                checked
+                                                                    ? 'border-indigo-500 bg-indigo-50 dark:bg-indigo-900/20 shadow-md'
+                                                                    : 'border-slate-200 dark:border-slate-700 site-subpanel hover:border-indigo-300 hover:shadow-sm'
+                                                            }`}
+                                                        >
+                                                            <div className={`h-8 w-8 rounded-full flex items-center justify-center shrink-0 transition ${
+                                                                checked ? 'bg-indigo-600' : 'bg-slate-200 dark:bg-slate-700'
+                                                            }`}>
+                                                                {checked
+                                                                    ? <Check className="h-4 w-4 text-white" />
+                                                                    : <GraduationCap className="h-4 w-4 site-text-muted" />}
+                                                            </div>
+                                                            <div>
+                                                                <p className={`text-[14px] font-bold ${checked ? 'text-indigo-700 dark:text-indigo-300' : 'site-text-strong'}`}>
+                                                                    {cls.name}
+                                                                </p>
+                                                                <p className="text-[12px] site-text-muted">{cls.grade}</p>
+                                                            </div>
+                                                        </button>
+                                                    );
+                                                })}
+                                            </div>
+                                        )
+                                    ) : (
+                                        <div className="site-subpanel h-[84px] rounded-[20px] px-5 py-4 flex items-center gap-3">
+                                            <AlertCircle className="h-5 w-5 text-amber-500 shrink-0" />
+                                            <p className="text-[14px] site-text-muted">
+                                                You have no classes yet.{' '}
+                                                <Link href="/teacher/classes" className="text-indigo-500 hover:underline font-semibold">Create a class first.</Link>
+                                            </p>
+                                        </div>
+                                    )}
+                                </div>
+                                
+                                <div>
+                                    <label className="block text-sm font-bold site-text-strong mb-3">Proctoring</label>
+                                    
+                                    <div className="px-4 py-2 rounded-2xl border-2 border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/30 flex items-center h-[84px] gap-4 overflow-hidden">
+                                        <div className="flex flex-1 items-center gap-3">
+                                            <div className="flex flex-col items-start text-left flex-1 min-w-0">
+                                                <span className="font-bold text-[15px] site-text-strong truncate w-full">Require Full Screen</span>
+                                                <span className={`text-[12px] sm:text-[13px] mt-0.5 ${!allowExit ? 'text-indigo-600 dark:text-indigo-400' : 'site-text-muted'} leading-snug line-clamp-2`}>Auto-submit if student exits</span>
+                                            </div>
+                                            <button
+                                                type="button"
+                                                onClick={() => setAllowExit(!allowExit)}
+                                                className={`w-12 h-7 shrink-0 rounded-full flex items-center px-1 transition-colors duration-300 ${!allowExit ? 'bg-indigo-600' : 'bg-slate-300 dark:bg-slate-600'}`}
+                                            >
+                                                <div className={`w-5 h-5 rounded-full bg-white shadow-sm transition-transform duration-300 ${!allowExit ? 'translate-x-5' : 'translate-x-0'}`} />
+                                            </button>
+                                        </div>
 
-                {/* ── STEP 1 ─────────────────────────────────────────────────── */}
-                <AnimatePresence mode="wait">
-                    {step === 1 && (
-                        <motion.div
-                            key="step1"
-                            initial={shouldReduceMotion ? undefined : { opacity: 0, y: 16 }}
-                            animate={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
-                            exit={shouldReduceMotion ? undefined : { opacity: 0, y: -10 }}
-                            transition={{ duration: 0.25 }}
-                        >
-                            <div className="site-panel rounded-[16px] p-6 sm:p-8">
-                                {/* Input tabs */}
-                                <div className="flex gap-2 mb-6">
-                                    {(['paste', 'upload'] as const).map((tab) => (
-                                        <button
-                                            key={tab}
-                                            onClick={() => { setInputTab(tab); setScanError(''); }}
-                                            className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-bold transition ${
-                                                inputTab === tab
-                                                    ? 'bg-indigo-600 text-white shadow'
-                                                    : 'site-subpanel site-text hover:scale-[1.02]'
-                                            }`}
-                                        >
-                                            {tab === 'paste' ? (
-                                                <>
-                                                    <FileText className="h-4 w-4" />
-                                                    Paste Text
-                                                </>
-                                            ) : (
-                                                <>
-                                                    <Upload className="h-4 w-4" />
-                                                    Upload PDF
-                                                    <span className={`ml-1 text-[9px] font-black uppercase tracking-wider px-1.5 py-0.5 rounded ${inputTab === tab ? 'bg-white/20 text-white' : 'bg-emerald-100 text-emerald-600 dark:bg-emerald-900/40 dark:text-emerald-400'}`}>Recommended</span>
-                                                </>
+                                        <AnimatePresence>
+                                            {!allowExit && (
+                                                <motion.div
+                                                    initial={{ width: 0, opacity: 0, scale: 0.95 }}
+                                                    animate={{ width: 'auto', opacity: 1, scale: 1 }}
+                                                    exit={{ width: 0, opacity: 0, scale: 0.95 }}
+                                                    transition={{ duration: 0.25, ease: 'easeInOut' }}
+                                                    className="flex-shrink-0 overflow-hidden"
+                                                >
+                                                    <div className="flex flex-col items-start px-3 py-1.5 rounded-xl bg-white dark:bg-slate-800 shadow-sm border border-slate-200 dark:border-slate-700 w-[140px] ml-1">
+                                                        <label className="block text-[11px] font-bold uppercase tracking-widest site-text-muted mb-1 whitespace-nowrap">Tolerance Timer</label>
+                                                        <div className="flex items-center gap-2">
+                                                            <input
+                                                                type="number"
+                                                                min={1}
+                                                                value={strictToleranceSeconds || ''}
+                                                                onChange={(e) => {
+                                                                    const raw = Number(e.target.value);
+                                                                    setStrictToleranceSeconds(Math.max(1, Math.round(raw)));
+                                                                }}
+                                                                className="w-[54px] pl-3 pr-1 py-0.5 rounded-lg bg-transparent outline-none border border-slate-300 dark:border-slate-600 focus:border-indigo-500 transition text-[15px] font-bold site-text-strong text-center"
+                                                            />
+                                                            <span className="text-[14px] font-medium site-text-strong whitespace-nowrap">sec</span>
+                                                        </div>
+                                                    </div>
+                                                </motion.div>
                                             )}
-                                        </button>
-                                    ))}
+                                        </AnimatePresence>
+                                    </div>
                                 </div>
 
-                                {inputTab === 'paste' && (
-                                    <textarea
-                                        placeholder="Paste your questions here — e.g. from a practice test, quiz, or textbook. The AI will extract all multiple-choice questions automatically."
-                                        value={pastedText}
-                                        onChange={(e) => setPastedText(e.target.value)}
-                                        rows={12}
-                                        className="w-full px-4 py-3 rounded-xl site-subpanel bg-transparent outline-none border-2 border-transparent focus:border-indigo-500 transition text-[14px] site-text resize-none placeholder:site-text-muted leading-relaxed"
-                                    />
-                                )}
+                            </div>
 
-                                {inputTab === 'upload' && (
+                            <div className="pt-6 mt-6 border-t border-slate-100 dark:border-slate-800">
+                                <label className="block text-sm font-bold site-text-strong mb-3">Add Questions</label>
+                                
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    {/* Upload Area */}
                                     <div
                                         onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
                                         onDragLeave={() => setIsDragging(false)}
                                         onDrop={handleDrop}
                                         onClick={() => fileInputRef.current?.click()}
-                                        className={`relative flex flex-col items-center justify-center rounded-2xl border-2 border-dashed p-12 cursor-pointer transition-all ${
-                                            isDragging
+                                        className={`relative flex flex-col items-center justify-center rounded-2xl border-2 border-dashed p-12 cursor-pointer transition-all ${isDragging
                                                 ? 'border-indigo-500 bg-indigo-50 dark:bg-indigo-900/20'
                                                 : 'border-slate-300 dark:border-slate-700 hover:border-indigo-400'
-                                        }`}
+                                            }`}
                                     >
                                         <input
                                             ref={fileInputRef}
                                             type="file"
-                                            accept=".pdf"
+                                            accept="image/*,.pdf"
                                             className="hidden"
                                             onChange={(e) => {
                                                 const f = e.target.files?.[0];
-                                                if (f) {
-                                                    if (f.size > 4 * 1024 * 1024) {
-                                                        setScanError(`File "${f.name}" is too large. Maximum allowed size is 4MB.`);
-                                                    } else {
-                                                        setUploadedFile(f); setScanError('');
-                                                    }
-                                                }
+                                                if (f) { scanFile(f); }
                                             }}
                                         />
-                                        {uploadedFile ? (
+                                        {isScanning ? (
                                             <>
-                                                <div className="h-14 w-14 rounded-2xl bg-indigo-100 dark:bg-indigo-900/40 flex items-center justify-center mb-3">
-                                                    <FileText className="h-7 w-7 text-indigo-600 dark:text-indigo-400" />
+                                                <div className="h-14 w-14 rounded-2xl bg-indigo-50 dark:bg-indigo-900/20 flex items-center justify-center mb-3">
+                                                    <Loader2 className="h-7 w-7 text-indigo-500 animate-spin" />
                                                 </div>
-                                                <p className="font-bold site-text-strong text-[15px]">{uploadedFile.name}</p>
-                                                <p className="text-[13px] site-text-muted mt-1">{(uploadedFile.size / 1024).toFixed(0)} KB</p>
-                                                <button
-                                                    onClick={(e) => { 
-                                                        e.stopPropagation(); 
-                                                        setUploadedFile(null); 
-                                                        if (isScanning && abortControllerRef.current) {
-                                                            abortControllerRef.current.abort();
-                                                            setIsScanning(false);
-                                                        }
-                                                    }}
-                                                    className="mt-3 flex items-center gap-1 text-[12px] text-rose-500 font-semibold hover:underline"
-                                                >
-                                                    <X className="h-3.5 w-3.5" /> Remove
-                                                </button>
+                                                <p className="font-bold site-text-strong text-[15px]">Scanning document...</p>
+                                                <p className="text-[13px] site-text-muted mt-1">Extracting questions...</p>
+                                                <div className="mt-4 px-4 py-2 rounded-xl bg-amber-50 dark:bg-amber-500/10 border border-amber-200/50 dark:border-amber-500/20">
+                                                    <p className="text-[12px] font-bold text-amber-700 dark:text-amber-400 text-center">
+                                                        The AI needs about a minute to analyze and extract the questions. Please don't close this page.
+                                                    </p>
+                                                </div>
                                             </>
                                         ) : (
                                             <>
                                                 <div className="h-14 w-14 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center mb-3">
                                                     <Upload className="h-7 w-7 site-text-muted" />
                                                 </div>
-                                                <p className="font-bold site-text-strong text-[15px]">Drop your PDF here</p>
-                                                <p className="text-[13px] site-text-muted mt-1">or click to browse (Max 4MB)</p>
+                                                <p className="font-bold site-text-strong text-[15px]">Upload or drop your test files here</p>
+                                                <p className="text-[13px] site-text-muted mt-1 mb-2 text-center">Upload picture of a test or PDF to extract questions</p>
                                             </>
                                         )}
                                     </div>
-                                )}
 
-                                {/* Error */}
-                                {scanError && (
-                                    <div className="mt-4 flex items-start gap-2.5 px-4 py-3 rounded-xl bg-rose-50 dark:bg-rose-900/20 border border-rose-200 dark:border-rose-700/50">
-                                        <AlertCircle className="h-4 w-4 text-rose-500 shrink-0 mt-0.5" />
-                                        <div>
-                                            <p className="text-[13px] text-rose-700 dark:text-rose-400 font-medium">{scanError}</p>
-                                        </div>
-                                    </div>
-                                )}
-
-                                <button
-                                    onClick={handleScan}
-                                    disabled={isScanning}
-                                    className="mt-6 w-full flex items-center justify-center gap-2.5 py-4 rounded-xl bg-indigo-600 hover:bg-indigo-700 disabled:opacity-60 disabled:cursor-not-allowed text-white font-bold text-[15px] shadow-md transition hover:scale-[1.01]"
-                                >
-                                    {isScanning
-                                        ? <><Loader2 className="h-5 w-5 animate-spin" /> Scanning with AI…</>
-                                        : <><Sparkles className="h-5 w-5" /> Scan with AI</>}
-                                </button>
-                            </div>
-                        </motion.div>
-                    )}
-
-                    {/* ── STEP 2: Question Review ────────────────────────────── */}
-                    {step === 2 && currentQ && (
-                        <motion.div
-                            key={`step2-${currentIdx}`}
-                            initial={shouldReduceMotion ? undefined : { opacity: 0, x: 24 }}
-                            animate={shouldReduceMotion ? undefined : { opacity: 1, x: 0 }}
-                            exit={shouldReduceMotion ? undefined : { opacity: 0, x: -24 }}
-                            transition={{ duration: 0.22 }}
-                        >
-                            <div className="site-panel rounded-[16px] overflow-hidden">
-                                {/* Progress bar */}
-                                <div className="px-6 pt-6 pb-0">
-                                    <div className="flex items-center justify-between mb-2">
-                                        <span className="text-[12px] font-bold uppercase tracking-wider site-text-muted">
-                                            Question {currentIdx + 1} of {questions.length}
-                                        </span>
-                                        <span className="text-[12px] font-bold site-text-muted">
-                                            {answeredCount} answered
-                                        </span>
-                                    </div>
-                                    <div className="h-1.5 rounded-full bg-slate-200 dark:bg-slate-700 overflow-hidden">
-                                        <div
-                                            className="h-full rounded-full bg-indigo-500 transition-all duration-500"
-                                            style={{ width: `${((currentIdx + 1) / questions.length) * 100}%` }}
-                                        />
-                                    </div>
-                                </div>
-
-                                {/* Question stem */}
-                                <div className="px-6 py-6 border-b border-slate-100 dark:border-slate-800">
-                                    {currentQ.passage && (
-                                        <div className="mb-4 bg-slate-50 dark:bg-slate-900/50 rounded-xl border border-slate-100 dark:border-slate-800/60 overflow-hidden">
-                                            <PassageRenderer
-                                                text={currentQ.passage}
-                                                highlights={[]}
-                                                onAddHighlight={() => {}}
-                                                onRemoveHighlight={() => {}}
-                                                onUpdateHighlight={() => {}}
-                                                isHighlightModeActive={false}
-                                            />
-                                        </div>
-                                    )}
-                                    
-                                    {currentQ.imageUrl && currentQ.imagePosition === 'before-stem' && (
-                                        <div className="mb-4 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 max-h-64 flex justify-center bg-slate-50 dark:bg-slate-900/50">
-                                            <img src={currentQ.imageUrl} alt="Question image" className="object-contain max-h-64" />
-                                        </div>
-                                    )}
-
-                                    <div className="text-[17px] leading-[1.7] site-text-strong font-[450] font-bluebook">
-                                        <LatexRenderer text={currentQ.stem} />
-                                    </div>
-
-                                    {currentQ.imageUrl && currentQ.imagePosition === 'after-stem' && (
-                                        <div className="mt-4 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 max-h-64 flex justify-center bg-slate-50 dark:bg-slate-900/50">
-                                            <img src={currentQ.imageUrl} alt="Question image" className="object-contain max-h-64" />
-                                        </div>
-                                    )}
-
-                                    {/* Image controls */}
-                                    <div className="mt-6 flex flex-wrap items-center gap-3">
-                                        <input type="file" accept="image/*" className="hidden" ref={imageInputRef} onChange={handleImageUpload} />
-                                        <button 
-                                            onClick={() => imageInputRef.current?.click()}
-                                            disabled={isUploadingImage}
-                                            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border-2 border-slate-200 dark:border-slate-700 site-subpanel text-[12px] font-bold site-text hover:border-indigo-400 dark:hover:border-indigo-600 transition disabled:opacity-50"
-                                        >
-                                            {isUploadingImage ? <Loader2 className="h-4 w-4 animate-spin" /> : <ImageIcon className="h-4 w-4" />}
-                                            {currentQ.imageUrl ? 'Change Image' : 'Add Image'}
-                                        </button>
-
-                                        {currentQ.imageUrl && (
-                                            <>
-                                                <select 
-                                                    value={currentQ.imagePosition || 'after-stem'}
-                                                    onChange={(e) => setQuestions(prev => prev.map((q, i) => i === currentIdx ? { ...q, imagePosition: e.target.value as 'before-stem' | 'after-stem' } : q))}
-                                                    className="px-2 py-1.5 rounded-lg border-2 border-slate-200 dark:border-slate-700 site-subpanel text-[12px] font-bold site-text focus:outline-none focus:border-indigo-500"
-                                                >
-                                                    <option value="before-stem">Before Question</option>
-                                                    <option value="after-stem">After Question</option>
-                                                </select>
-                                                <button 
-                                                    onClick={() => setQuestions(prev => prev.map((q, i) => i === currentIdx ? { ...q, imageUrl: undefined } : q))}
-                                                    className="flex items-center gap-1 px-2 py-1.5 text-[12px] font-bold text-rose-500 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-900/20 rounded-lg transition"
-                                                >
-                                                    <X className="h-3.5 w-3.5" /> Remove
-                                                </button>
-                                            </>
-                                        )}
-                                    </div>
-                                </div>
-
-                                {/* Options */}
-                                <div className="px-6 pb-6 pt-4 space-y-3">
-                                    <p className="text-[11px] font-bold uppercase tracking-widest site-text-muted mb-3">
-                                        Mark the correct answer:
-                                    </p>
-                                    {OPTION_LABELS.map((letter) => (
-                                        <OptionCard
-                                            key={letter}
-                                            letter={letter}
-                                            text={currentQ.options[letter]}
-                                            selected={currentQ.answer === letter}
-                                            onSelect={() => handleSelectAnswer(letter)}
-                                        />
-                                    ))}
-                                </div>
-
-                                {/* Navigation */}
-                                <div className="flex items-center justify-between px-6 py-4 border-t border-slate-100 dark:border-slate-800">
-                                    <button
-                                        onClick={() => setCurrentIdx((i) => Math.max(0, i - 1))}
-                                        disabled={currentIdx === 0}
-                                        className="flex items-center gap-1.5 px-4 py-2.5 rounded-full site-subpanel font-bold text-[14px] site-text disabled:opacity-30 transition hover:scale-[1.02]"
+                                    {/* Create Manually Area */}
+                                    <div 
+                                        onClick={() => {
+                                            const newTest = {
+                                                id: `manual-test-${Date.now()}`,
+                                                name: `Manual Test ${customTests.length + 1}`,
+                                                questions: [{
+                                                    id: `assign-q-${Date.now()}-0`,
+                                                    passage: '',
+                                                    question: '',
+                                                    options: ['', '', '', ''],
+                                                    answer: null
+                                                }]
+                                            };
+                                            setCustomTests(prev => [...prev, newTest]);
+                                        }}
+                                        className="relative flex flex-col items-center justify-center rounded-2xl border-2 border-dashed p-12 cursor-pointer transition-all border-slate-300 dark:border-slate-700 hover:border-indigo-400"
                                     >
-                                        <ChevronLeft className="h-4 w-4" /> Prev
-                                    </button>
-
-                                    {/* Numbered navigation */}
-                                    <div className="flex-1 overflow-x-auto custom-scrollbar px-4 pb-1">
-                                        <div className="flex gap-1.5 justify-center min-w-max mx-auto">
-                                            {questions.map((q, i) => (
-                                                <button
-                                                    key={q.id}
-                                                    onClick={() => setCurrentIdx(i)}
-                                                    className={`flex-shrink-0 flex items-center justify-center h-8 w-8 rounded-md text-[13px] font-bold transition-all ${
-                                                        i === currentIdx
-                                                            ? 'bg-indigo-600 text-white shadow-sm ring-1 ring-indigo-600 ring-offset-1 dark:ring-offset-slate-900'
-                                                            : q.answer
-                                                                ? 'bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800/50 hover:bg-indigo-100 dark:hover:bg-indigo-900/50'
-                                                                : 'site-subpanel text-slate-500 dark:text-slate-400 border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800'
-                                                    }`}
-                                                >
-                                                    {i + 1}
-                                                </button>
-                                            ))}
+                                        <div className="h-14 w-14 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center mb-3">
+                                            <FileText className="h-7 w-7 site-text-muted" />
                                         </div>
+                                        <p className="font-bold site-text-strong text-[15px]">Create Manually</p>
+                                        <p className="text-[13px] site-text-muted mt-1 mb-2 text-center">Write questions without uploading</p>
                                     </div>
-
-                                    {currentIdx < questions.length - 1 ? (
-                                        <button
-                                            onClick={() => setCurrentIdx((i) => i + 1)}
-                                            className="flex items-center gap-1.5 px-4 py-2.5 rounded-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-[14px] shadow-sm transition hover:scale-[1.02]"
-                                        >
-                                            Next <ChevronRight className="h-4 w-4" />
-                                        </button>
-                                    ) : (
-                                        <button
-                                            onClick={() => setStep(3)}
-                                            className="flex items-center gap-1.5 px-4 py-2.5 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-[14px] shadow-sm transition hover:scale-[1.02]"
-                                        >
-                                            Done <Check className="h-4 w-4" />
-                                        </button>
-                                    )}
-                                </div>
-                            </div>
-
-                            <div className="mt-4 flex gap-3">
-                                <button onClick={() => { setQuestions([]); setStep(1); }} className="flex items-center gap-1.5 px-4 py-2.5 rounded-full site-subpanel font-bold text-[13px] site-text-muted hover:site-text transition">
-                                    <ArrowLeft className="h-3.5 w-3.5" /> Re-scan
-                                </button>
-                                <button onClick={() => setStep(3)} className="flex items-center gap-1.5 px-4 py-2.5 rounded-full site-subpanel font-bold text-[13px] site-text transition hover:scale-[1.01]">
-                                    Skip to answer key →
-                                </button>
-                            </div>
-                        </motion.div>
-                    )}
-
-                    {/* ── STEP 3: Answer Key Table ─────────────────────────── */}
-                    {step === 3 && (
-                        <motion.div
-                            key="step3"
-                            initial={shouldReduceMotion ? undefined : { opacity: 0, y: 16 }}
-                            animate={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
-                            exit={shouldReduceMotion ? undefined : { opacity: 0, y: -10 }}
-                            transition={{ duration: 0.25 }}
-                        >
-                            <div className="site-panel rounded-[16px] overflow-hidden">
-                                <div className="px-6 py-5 border-b border-slate-100 dark:border-slate-800">
-                                    <h2 className="text-lg font-black site-text-strong">Answer Key</h2>
-                                    <p className="text-[13px] site-text-muted mt-0.5">Review and set the correct answer for each question.</p>
                                 </div>
 
-                                <div className="overflow-x-auto">
-                                    <table className="w-full">
-                                        <thead>
-                                            <tr className="border-b border-slate-200 dark:border-slate-700/50">
-                                                <th className="text-left px-5 py-3.5 text-[11px] uppercase tracking-widest font-bold site-text-muted w-12">#</th>
-                                                <th className="text-left px-5 py-3.5 text-[11px] uppercase tracking-widest font-bold site-text-muted">Question</th>
-                                                <th className="text-center px-5 py-3.5 text-[11px] uppercase tracking-widest font-bold site-text-muted w-28">Answer</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {questions.map((q, idx) => (
-                                                <tr
-                                                    key={q.id}
-                                                    className={`${idx < questions.length - 1 ? 'border-b border-slate-100 dark:border-slate-800' : ''} hover:bg-slate-50 dark:hover:bg-white/[0.02] transition-colors`}
-                                                >
-                                                    <td className="px-5 py-3.5">
-                                                        <span className="text-[13px] font-bold site-text-muted">{idx + 1}</span>
-                                                    </td>
-                                                    <td className="px-5 py-3.5">
-                                                        <div className="text-[13px] site-text leading-snug line-clamp-2">
-                                                            <LatexRenderer text={q.stem} />
-                                                        </div>
-                                                    </td>
-                                                    <td className="px-5 py-3.5 text-center">
-                                                        <CustomSelect
-                                                            value={q.answer ?? ''}
-                                                            onChange={(val) => {
-                                                                const value = val as Option;
-                                                                setQuestions((prev) =>
-                                                                    prev.map((item, i) => i === idx ? { ...item, answer: value } : item)
-                                                                );
-                                                            }}
-                                                            options={[
-                                                                { value: '', label: '–' },
-                                                                ...OPTION_LABELS.map(l => ({ value: l, label: l }))
-                                                            ]}
-                                                            buttonClassName={`px-3 py-1.5 flex items-center justify-between gap-1 rounded-full text-sm font-black border-2 outline-none cursor-pointer transition-all ${
-                                                                q.answer
-                                                                    ? 'bg-indigo-50 dark:bg-indigo-900/20 border-indigo-400 dark:border-indigo-600 text-indigo-700 dark:text-indigo-300'
-                                                                    : 'site-subpanel border-slate-200 dark:border-slate-700 site-text-muted'
-                                                            }`}
-                                                        />
-                                                    </td>
-                                                </tr>
-                                            ))}
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-
-                            <div className="flex justify-between mt-5">
-                                <button
-                                    onClick={() => { setCurrentIdx(0); setStep(2); }}
-                                    className="flex items-center gap-1.5 px-5 py-2.5 rounded-full site-subpanel font-bold text-[14px] site-text transition hover:scale-[1.01]"
-                                >
-                                    <ChevronLeft className="h-4 w-4" /> Back to Review
-                                </button>
-                                <button
-                                    onClick={() => setStep(4)}
-                                    className="flex items-center gap-1.5 px-5 py-2.5 rounded-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-[14px] shadow-md transition hover:scale-[1.01]"
-                                >
-                                    Continue <ChevronRight className="h-4 w-4" />
-                                </button>
-                            </div>
-                        </motion.div>
-                    )}
-
-                    {/* ── STEP 4: Save & Send ──────────────────────────────── */}
-                    {step === 4 && (
-                        <motion.div
-                            key="step4"
-                            initial={shouldReduceMotion ? undefined : { opacity: 0, y: 16 }}
-                            animate={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
-                            exit={shouldReduceMotion ? undefined : { opacity: 0, y: -10 }}
-                            transition={{ duration: 0.25 }}
-                            className="space-y-5"
-                        >
-                            {/* Title */}
-                            <div className="site-panel rounded-[16px] p-6">
-                                <h2 className="text-lg font-black site-text-strong mb-1">Assignment Details</h2>
-                                <p className="text-[13px] site-text-muted mb-5">{questions.length} question{questions.length !== 1 ? 's' : ''} ready.</p>
-
-                                <div className="grid gap-4 sm:grid-cols-2">
-                                    {/* Subject toggle */}
-                                    <div className="sm:col-span-2">
-                                        <label className="block text-[11px] font-bold uppercase tracking-widest site-text-muted mb-2">Subject</label>
-                                        <div className="flex gap-2">
-                                            {(['English', 'Math', 'Both'] as const).map((s) => (
-                                                <button
-                                                    key={s}
-                                                    type="button"
-                                                    onClick={() => setSubject(s)}
-                                                    className={`flex-1 py-2.5 rounded-xl border-2 font-bold text-[14px] transition-all ${
-                                                        subject === s
-                                                            ? s === 'English'
-                                                                ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300'
-                                                                : s === 'Math'
-                                                                    ? 'border-violet-500 bg-violet-50 dark:bg-violet-900/20 text-violet-700 dark:text-violet-300'
-                                                                    : 'border-emerald-500 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-300'
-                                                            : 'border-slate-200 dark:border-slate-700 site-subpanel site-text hover:border-slate-300'
-                                                    }`}
-                                                >
-                                                    {s === 'English' ? '📖 English' : s === 'Math' ? '🔢 Math' : '📚 Both'}
-                                                </button>
-                                            ))}
-                                        </div>
-                                        <p className="mt-1.5 text-[12px] site-text-muted">Determines the test layout students see: split-pane passage view for English, full-width formula view for Math.</p>
-                                    </div>
-
-                                    <div className="sm:col-span-2">
-                                        <label className="block text-[11px] font-bold uppercase tracking-widest site-text-muted mb-2">Assignment Title</label>
-                                        <input
-                                            autoFocus
-                                            type="text"
-                                            placeholder="e.g. Reading Practice — March Week 2"
-                                            value={title}
-                                            onChange={(e) => setTitle(e.target.value)}
-                                            className="w-full px-4 py-3 rounded-xl site-subpanel bg-transparent outline-none border-2 border-transparent focus:border-indigo-500 transition text-[15px] font-semibold site-text-strong placeholder:font-normal placeholder:site-text-muted"
+                                {customTests.length > 0 && (
+                                    <div className="mt-6">
+                                        <MockTestFilesEditor 
+                                            initialTests={customTests}
+                                            onSave={() => {}}
+                                            onChange={(updatedTests) => setCustomTests(updatedTests)}
+                                            hideSaveButton={true}
                                         />
                                     </div>
+                                )}
 
-                                    <div>
-                                        <label className="block text-[11px] font-bold uppercase tracking-widest site-text-muted mb-2">Time Limit (minutes)</label>
-                                        <input
-                                            type="number"
-                                            min={1}
-                                            value={timeLimitMinutes || ''}
-                                            onChange={(e) => {
-                                                if (e.target.value === '') {
-                                                    setTimeLimitMinutes(0);
-                                                    return;
-                                                }
-                                                const raw = Number(e.target.value);
-                                                if (!Number.isFinite(raw)) return;
-                                                setTimeLimitMinutes(Math.max(1, Math.round(raw)));
-                                            }}
-                                            className="w-full px-4 py-3 rounded-xl site-subpanel bg-transparent outline-none border-2 border-transparent focus:border-indigo-500 transition text-[15px] font-semibold site-text-strong"
-                                        />
-                                        <p className="mt-1 text-[12px] site-text-muted">Students will see this before starting.</p>
-                                    </div>
-
-                                    <div>
-                                        <label className="block text-[11px] font-bold uppercase tracking-widest site-text-muted mb-2">Strict Mode</label>
-                                        <button
-                                            onClick={() => setAllowExit(!allowExit)}
-                                            type="button"
-                                            className={`w-full flex items-center justify-between px-4 py-3 rounded-xl border-2 transition-all ${
-                                                !allowExit
-                                                    ? 'border-indigo-500 bg-indigo-50 dark:bg-indigo-900/20 text-indigo-700 dark:text-indigo-300'
-                                                    : 'border-slate-200 dark:border-slate-700 site-subpanel site-text hover:border-slate-300'
-                                            }`}
-                                        >
-                                            <div className="flex flex-col items-start text-left">
-                                                <span className="font-bold text-[14px]">Require Full Screen</span>
-                                                <span className={`text-[12px] mt-0.5 ${!allowExit ? 'text-indigo-600/80 dark:text-indigo-400/80' : 'site-text-muted'}`}>Auto-submit if student exits</span>
-                                            </div>
-                                            <div className={`w-11 h-6 rounded-full flex items-center px-1 transition-colors ${!allowExit ? 'bg-indigo-600' : 'bg-slate-300 dark:bg-slate-600'}`}>
-                                                <div className={`w-4 h-4 rounded-full bg-white shadow-sm transition-transform ${!allowExit ? 'translate-x-5' : 'translate-x-0'}`} />
-                                            </div>
-                                        </button>
-                                        <p className="mt-1.5 text-[12px] site-text-muted">Prevents cheating by locking the student in full screen.</p>
-                                        {!allowExit && (
-                                            <div className="mt-4">
-                                                <label className="block text-[11px] font-bold uppercase tracking-widest site-text-muted mb-2">Tolerance Timer (seconds)</label>
-                                                <input
-                                                    type="number"
-                                                    min={1}
-                                                    value={strictToleranceSeconds || ''}
-                                                    onChange={(e) => {
-                                                        const raw = Number(e.target.value);
-                                                        setStrictToleranceSeconds(Math.max(1, Math.round(raw)));
-                                                    }}
-                                                    className="w-full px-4 py-3 rounded-xl site-subpanel bg-transparent outline-none border-2 border-transparent focus:border-indigo-500 transition text-[15px] font-semibold site-text-strong"
-                                                />
-                                                <p className="mt-1 text-[12px] site-text-muted">Seconds given to return to fullscreen before auto-submitting.</p>
-                                            </div>
-                                        )}
-                                    </div>
-                                </div>
+                                {scanError && (
+                                    <p className="text-red-500 text-sm mt-2 font-bold">{scanError}</p>
+                                )}
                             </div>
+                        </form>
+                    </div>
 
-                            {/* Classroom picker */}
-                            {classrooms.length > 0 ? (
-                                <div className="site-panel rounded-[16px] p-6">
-                                    <h2 className="text-[15px] font-black site-text-strong mb-1">
-                                        {classrooms.length === 1 ? 'Send to Class' : 'Send to Classes'}
-                                    </h2>
-                                    <p className="text-[13px] site-text-muted mb-4">
-                                        {classrooms.length === 1
-                                            ? 'This assignment will be visible to your class.'
-                                            : 'Choose which classes receive this assignment.'}
-                                    </p>
-
-                                    <div className="space-y-2.5">
-                                        {classrooms.map((cls) => {
-                                            const checked = selectedClassroomIds.includes(cls.id);
-                                            return (
-                                                <button
-                                                    key={cls.id}
-                                                    onClick={() => toggleClassroom(cls.id)}
-                                                    className={`w-full flex items-center gap-4 px-4 py-3.5 rounded-2xl border-2 text-left transition-all ${
-                                                        checked
-                                                            ? 'border-indigo-500 bg-indigo-50 dark:bg-indigo-900/20'
-                                                            : 'border-slate-200 dark:border-slate-700 site-subpanel hover:border-indigo-300'
-                                                    }`}
-                                                >
-                                                    <div className={`h-9 w-9 rounded-full flex items-center justify-center shrink-0 transition ${
-                                                        checked ? 'bg-indigo-600' : 'bg-slate-200 dark:bg-slate-700'
-                                                    }`}>
-                                                        {checked
-                                                            ? <Check className="h-4 w-4 text-white" />
-                                                            : <GraduationCap className="h-4 w-4 site-text-muted" />}
-                                                    </div>
-                                                    <div>
-                                                        <p className={`text-[14px] font-bold ${checked ? 'text-indigo-700 dark:text-indigo-300' : 'site-text-strong'}`}>
-                                                            {cls.name}
-                                                        </p>
-                                                        <p className="text-[12px] site-text-muted">{cls.grade}</p>
-                                                    </div>
-                                                </button>
-                                            );
-                                        })}
-                                    </div>
-                                </div>
-                            ) : (
-                                <div className="site-subpanel rounded-[20px] px-5 py-4 flex items-center gap-3">
-                                    <AlertCircle className="h-5 w-5 text-amber-500 shrink-0" />
-                                    <p className="text-[13px] site-text-muted">
-                                        You have no classes yet.{' '}
-                                        <Link href="/teacher/classes" className="text-indigo-500 hover:underline font-semibold">Create a class first.</Link>
-                                    </p>
-                                </div>
-                            )}
-
-                            <div className="flex justify-between">
-                                <button
-                                    onClick={() => setStep(3)}
-                                    className="flex items-center gap-1.5 px-5 py-2.5 rounded-full site-subpanel font-bold text-[14px] site-text transition hover:scale-[1.01]"
-                                >
-                                    <ChevronLeft className="h-4 w-4" /> Back
-                                </button>
-                                <button
-                                    onClick={handleSave}
-                                    disabled={!title.trim() || isSaving || selectedClassroomIds.length === 0}
-                                    className="flex items-center gap-2 px-7 py-3 rounded-full bg-emerald-600 hover:bg-emerald-700 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:scale-100 text-white font-bold text-[15px] shadow-md transition hover:scale-[1.01]"
-                                >
-                                    {isSaving
-                                        ? <><Loader2 className="h-4 w-4 animate-spin" /> Saving…</>
-                                        : <><Send className="h-4 w-4" /> Save Assignment</>}
-                                </button>
-                            </div>
-                        </motion.div>
-                    )}
-                </AnimatePresence>
+                    <div className="p-6 border-t border-slate-100 dark:border-slate-800/60 bg-slate-50 dark:bg-slate-900/50 flex justify-end gap-3">
+                        <Link href="/teacher/assignments" className="px-5 py-3 font-bold site-text-muted hover:site-text-strong transition">Cancel</Link>
+                        <button disabled={isScanning || isSaving || selectedClassroomIds.length === 0} form="create-assignment-form" type="submit" className="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-3 rounded-full font-bold shadow-md transition disabled:opacity-50 disabled:cursor-not-allowed">
+                            {isSaving ? 'Creating...' : isScanning ? 'Wait for Scan...' : 'Create Assignment'}
+                        </button>
+                    </div>
+                </motion.div>
             </motion.div>
         </div>
     );

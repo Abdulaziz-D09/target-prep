@@ -725,17 +725,17 @@ h6 {
 
 /* Custom Highlight Classes */
 .highlight-yellow {
-  background-color: rgba(253, 224, 71, 0.5);
+  background-color: rgba(253, 224, 71, 0.5) !important;
   /* yellow-300 */
 }
 
 .highlight-blue {
-  background-color: rgba(147, 197, 253, 0.5);
+  background-color: rgba(147, 197, 253, 0.5) !important;
   /* blue-300 */
 }
 
 .highlight-pink {
-  background-color: rgba(249, 168, 212, 0.5);
+  background-color: rgba(249, 168, 212, 0.5) !important;
   /* pink-300 */
 }
 

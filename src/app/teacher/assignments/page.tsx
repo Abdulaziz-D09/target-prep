@@ -21,14 +21,18 @@ function scoreColor(pct: number) {
 }
 
 export default function AssignmentsPage() {
-    const { assignments, classrooms, students, progress, deleteAssignment } = useClassroomStore();
+    const assignments = useClassroomStore(state => state.assignments);
+    const classrooms = useClassroomStore(state => state.classrooms);
+    const students = useClassroomStore(state => state.students);
+    const progress = useClassroomStore(state => state.progress);
+    const deleteAssignment = useClassroomStore(state => state.deleteAssignment);
     const [deleteId, setDeleteId] = useState<string | null>(null);
 
     return (
-        <div className="relative min-h-screen pt-4 pb-12 px-4 sm:px-6 lg:px-8">
+        <div className="relative min-h-screen w-full pt-4 pb-12 px-4 sm:px-6 lg:px-8">
             <FloatingPageShapes theme="home" />
             <motion.div
-                className="relative z-10 mx-auto max-w-[1320px]"
+                className="relative z-10 w-full mx-auto max-w-[1320px]"
                 initial="hidden"
                 animate="visible"
                 variants={pageRevealVariants}

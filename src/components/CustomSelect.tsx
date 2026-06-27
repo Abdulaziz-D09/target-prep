@@ -49,37 +49,51 @@ export function CustomSelect({ value, onChange, options, placeholder = "Select..
 
             <AnimatePresence>
                 {isOpen && (
-                    <motion.div
-                        initial={{ opacity: 0, y: -10, scale: 0.95 }}
-                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: -10, scale: 0.95 }}
-                        transition={{ duration: 0.15, ease: "easeOut" }}
-                        className="absolute z-[100] mt-2 w-full min-w-[200px] right-0 rounded-2xl bg-white dark:bg-slate-800 p-2 shadow-xl border border-slate-200/50 dark:border-slate-700/50 overflow-hidden"
-                    >
-                        <div className="max-h-64 overflow-y-auto pr-1 custom-scrollbar">
-                            {options.map((option) => {
-                                const isSelected = String(option.value) === String(value);
-                                return (
-                                    <button
-                                        key={option.value}
-                                        type="button"
-                                        onClick={() => {
-                                            onChange(option.value);
-                                            setIsOpen(false);
-                                        }}
-                                        className={`flex w-full items-center justify-between rounded-xl px-4 py-2.5 text-left text-[14px] font-medium transition-all ${
-                                            isSelected 
-                                                ? 'bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 font-bold' 
-                                                : 'text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700/50'
-                                        }`}
-                                    >
-                                        <span className="truncate mr-3">{option.label}</span>
-                                        {isSelected && <Check className="h-4 w-4 shrink-0" />}
-                                    </button>
-                                );
-                            })}
-                        </div>
-                    </motion.div>
+                    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
+                        <motion.div 
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            transition={{ duration: 0.15 }}
+                            className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm"
+                            onClick={() => setIsOpen(false)}
+                        />
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.95, y: 10 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.95, y: 10 }}
+                            transition={{ type: "spring", duration: 0.3 }}
+                            className="relative w-full max-w-xs rounded-[20px] bg-white dark:bg-slate-800 shadow-2xl border border-slate-200/50 dark:border-slate-700/50 overflow-hidden flex flex-col max-h-[60vh]"
+                            onClick={(e) => e.stopPropagation()}
+                        >
+                            <div className="px-4 pt-4 pb-2">
+                                <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">{placeholder}</p>
+                            </div>
+                            <div className="overflow-y-auto px-2 pb-2 custom-scrollbar">
+                                {options.map((option) => {
+                                    const isSelected = String(option.value) === String(value);
+                                    return (
+                                        <button
+                                            key={option.value}
+                                            type="button"
+                                            onClick={() => {
+                                                onChange(option.value);
+                                                setIsOpen(false);
+                                            }}
+                                            className={`flex w-full items-center justify-between rounded-xl px-4 py-2.5 my-0.5 text-left text-[13px] transition-all ${
+                                                isSelected 
+                                                    ? 'bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 font-black' 
+                                                    : 'text-slate-700 dark:text-slate-300 font-semibold hover:bg-slate-50 dark:hover:bg-slate-700/50'
+                                            }`}
+                                        >
+                                            <span className="truncate mr-3">{option.label}</span>
+                                            {isSelected && <Check className="h-4 w-4 shrink-0" />}
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                        </motion.div>
+                    </div>
                 )}
             </AnimatePresence>
         </div>

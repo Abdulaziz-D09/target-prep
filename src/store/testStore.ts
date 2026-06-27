@@ -16,6 +16,7 @@ interface TestState {
     isTestActive: boolean;
     showResults: boolean;
     highlights: Record<string, Highlight[]>; // Array of highlights per question key
+    defaultHighlightColor: HighlightColor;
     // Progress tracking (persisted via localStorage)
     completedTests: CompletedTest[];
     streak: number;
@@ -45,6 +46,8 @@ export interface Highlight {
     text: string;
 }
 
+export type HighlightColor = 'yellow' | 'blue' | 'pink';
+
 interface TestActions {
     startTest: (testId: number) => void;
     beginTimer: () => void;
@@ -54,6 +57,7 @@ interface TestActions {
     addHighlight: (questionKey: string, highlight: Highlight) => void;
     removeHighlight: (questionKey: string, highlightId: string) => void;
     updateHighlight: (questionKey: string, highlightId: string, updates: Partial<Highlight>) => void;
+    setDefaultHighlightColor: (color: HighlightColor) => void;
     nextQuestion: () => { action: 'next' | 'moduleEnd' | 'sectionEnd' | 'testEnd' };
     prevQuestion: () => void;
     setTimeRemaining: (time: number) => void;
@@ -95,14 +99,19 @@ function loadProgress(): Partial<TestState> {
     return {};
 }
 
+import { createSupabaseStorage } from '@/lib/supabaseStorage';
+const supabaseStorage = createSupabaseStorage('test_state');
+
 function saveProgress(state: Partial<TestState>) {
     if (typeof window === 'undefined') return;
     try {
-        localStorage.setItem(PROGRESS_STORAGE_KEY, JSON.stringify({
+        const value = JSON.stringify({
             completedTests: state.completedTests,
             streak: state.streak,
             totalQuestionsAnswered: state.totalQuestionsAnswered,
-        }));
+        });
+        localStorage.setItem(PROGRESS_STORAGE_KEY, value);
+        supabaseStorage.setItem(PROGRESS_STORAGE_KEY, value);
     } catch { }
 }
 
@@ -121,6 +130,7 @@ export const useTestStore = create<TestStore>((set, get) => ({
     isTestActive: false,
     showResults: false,
     highlights: {},
+    defaultHighlightColor: 'yellow',
     completedTests: initialProgress.completedTests ?? [],
     streak: initialProgress.streak ?? 0,
     totalQuestionsAnswered: initialProgress.totalQuestionsAnswered ?? 0,
@@ -128,7 +138,7 @@ export const useTestStore = create<TestStore>((set, get) => ({
     startTest: (testId) => set({
         currentTestId: testId, currentSectionIndex: 0, currentModuleIndex: 0,
         currentQuestionIndex: 0, userAnswers: {}, flaggedQuestions: {}, eliminatedAnswers: {},
-        highlights: {}, isIntroScreen: true, isTestActive: false, showResults: false,
+        highlights: {}, defaultHighlightColor: 'yellow', isIntroScreen: true, isTestActive: false, showResults: false,
     }),
 
     beginTimer: () => set({ isIntroScreen: false, isTestActive: true }),
@@ -180,6 +190,8 @@ export const useTestStore = create<TestStore>((set, get) => ({
         };
     }),
 
+    setDefaultHighlightColor: (color) => set({ defaultHighlightColor: color }),
+
     nextQuestion: () => {
         set(s => ({ currentQuestionIndex: s.currentQuestionIndex + 1 }));
         return { action: 'next' as const };
@@ -193,7 +205,7 @@ export const useTestStore = create<TestStore>((set, get) => ({
     setTimeRemaining: (time) => set({ timeRemaining: time }),
 
     goToModule: (sectionIndex, moduleIndex) => set({
-        currentSectionIndex: sectionIndex, currentModuleIndex: moduleIndex, currentQuestionIndex: 0,
+        currentSectionIndex: sectionIndex, currentModuleIndex: moduleIndex, currentQuestionIndex: 0, defaultHighlightColor: 'yellow'
     }),
 
     endTest: async (results) => {
@@ -241,53 +253,16 @@ export const useTestStore = create<TestStore>((set, get) => ({
 
     syncWithSupabase: async () => {
         try {
-            const supabase = createClient();
-            const { data: { session } } = await supabase.auth.getSession();
-            if (!session?.user) return;
-
-            const { data, error } = await supabase
-                .from('completed_tests')
-                .select('*')
-                .eq('user_id', session.user.id)
-                .order('date', { ascending: true });
-
-            if (error) throw error;
-
-            if (data && data.length > 0) {
-                const mapped = data.map((t: any) => ({
-                    testId: t.test_id,
-                    testTitle: t.test_title,
-                    date: t.date,
-                    englishScore: t.english_score,
-                    mathScore: t.math_score,
-                    totalScore: t.total_score,
-                    totalCorrect: t.total_correct,
-                    totalQuestions: t.total_questions,
-                    answers: t.answers || {},
-                    eliminated: t.eliminated || {},
-                }));
-
-                const currentLocal = get().completedTests;
-                const merged = [...currentLocal];
-                mapped.forEach((dbTest) => {
-                    const exists = merged.some(localTest => 
-                        localTest.testId === dbTest.testId && 
-                        new Date(localTest.date).getTime() === new Date(dbTest.date).getTime()
-                    );
-                    if (!exists) {
-                        merged.push(dbTest);
-                    }
-                });
-
-                merged.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
-
-                const newState = {
-                    completedTests: merged,
-                    streak: get().streak,
-                    totalQuestionsAnswered: get().totalQuestionsAnswered,
-                };
-                set(newState);
-                saveProgress(newState);
+            const raw = await supabaseStorage.getItem(PROGRESS_STORAGE_KEY);
+            if (raw) {
+                const parsed = JSON.parse(raw);
+                if (parsed && parsed.completedTests) {
+                    set({
+                        completedTests: parsed.completedTests,
+                        streak: parsed.streak || 0,
+                        totalQuestionsAnswered: parsed.totalQuestionsAnswered || 0,
+                    });
+                }
             }
         } catch (err) {
             console.warn('Failed to sync completed tests with Supabase:', err);

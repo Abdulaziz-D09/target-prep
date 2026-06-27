@@ -56,33 +56,33 @@ export function LatexRenderer({ text, className = '', removeBlankLines = false }
       if (rows.length > 0) {
          const isSmallTable = rows[0].some(h => h.includes('Pieces of mail'));
          return segments.push(
-           <div key={`tbl-${tIndex}`} style={{display: 'block', margin: '12px 0', overflow: 'hidden'}}>
-             <table style={{fontSize: '15px', borderCollapse: 'collapse', border: '2px solid #888'}}>
-               <thead>
-                 <tr>
-                   {rows[0].map((h, i) => (
-                     <th key={i} style={{border: '1px solid #888', padding: '8px 24px', textAlign: 'center', fontWeight: 600, background: '#fff', fontStyle: 'italic'}}>
-                       <LatexRenderer text={h.replace(/^\*\*|\*\*$/g, '')} />
-                     </th>
-                   ))}
-                 </tr>
-               </thead>
-               <tbody>
-                 {rows.slice(1).map((row, rIdx) => (
-                   <tr key={rIdx}>
-                     {row.map((cell, cIdx) => {
-                       const isBoldCell = cell.startsWith('**') && cell.endsWith('**');
-                       const cellText = (isBoldCell ? cell.slice(2, -2) : cell).replace(/<i>([\s\S]*?)<\/i>/g, '$1');
-                       return (
-                         <td key={cIdx} style={{border: '1px solid #888', padding: '8px 24px', textAlign: 'center', background: '#fff', color: '#111'}}>
-                           <LatexRenderer text={cellText} />
-                         </td>
-                       );
-                     })}
+             <div key={`tbl-${tIndex}`} style={{display: 'block', margin: '12px 0', overflow: 'hidden'}}>
+               <table className="border-collapse border border-black dark:border-white text-[15px]">
+                 <thead>
+                   <tr>
+                     {rows[0].map((h, i) => (
+                       <th key={i} className="border border-black dark:border-white px-6 py-2 text-center font-semibold italic">
+                         <LatexRenderer text={h.replace(/^\*\*|\*\*$/g, '')} />
+                       </th>
+                     ))}
                    </tr>
-                 ))}
-               </tbody>
-             </table>
+                 </thead>
+                 <tbody>
+                   {rows.slice(1).map((row, rIdx) => (
+                     <tr key={rIdx}>
+                       {row.map((cell, cIdx) => {
+                         const isBoldCell = cell.startsWith('**') && cell.endsWith('**');
+                         const cellText = (isBoldCell ? cell.slice(2, -2) : cell).replace(/<i>([\s\S]*?)<\/i>/g, '$1');
+                         return (
+                           <td key={cIdx} className="border border-black dark:border-white px-6 py-2 text-center">
+                             <LatexRenderer text={cellText} />
+                           </td>
+                         );
+                       })}
+                     </tr>
+                   ))}
+                 </tbody>
+               </table>
            </div>
          );
       }

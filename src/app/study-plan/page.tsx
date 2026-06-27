@@ -169,6 +169,22 @@ export default function StudyPlanPage() {
     setPlanState('active');
   }, []);
 
+  const syncStudyPlanToSupabase = async () => {
+    try {
+      const { createSupabaseStorage } = await import('@/lib/supabaseStorage');
+      const storage = createSupabaseStorage('study_plan_state');
+      await storage.setItem('study_plan_state_payload', JSON.stringify({
+          plan_state: localStorage.getItem('targetprep_plan_state'),
+          exam_date: localStorage.getItem('targetprep_exam_date'),
+          target_score: localStorage.getItem('targetprep_target_score'),
+          mastered_topics: JSON.parse(localStorage.getItem('targetprep_mastered_topics') || '[]'),
+          plan_active: localStorage.getItem('targetprep_plan'),
+      }));
+    } catch (e) {
+      console.error('Failed to sync study plan to Supabase', e);
+    }
+  };
+
   const saveState = (state: string) => {
     setPlanState(state as any);
     localStorage.setItem('targetprep_plan_state', state);
@@ -178,11 +194,13 @@ export default function StudyPlanPage() {
     if (state === 'active') {
       localStorage.setItem('targetprep_plan', 'true');
     }
+    syncStudyPlanToSupabase();
   };
 
   const setAndSaveMastered = (topics: string[]) => {
     setMasteredTopics(topics);
     localStorage.setItem('targetprep_mastered_topics', JSON.stringify(topics));
+    syncStudyPlanToSupabase();
   };
 
   const handleBuildPlan = () => saveState('placement');

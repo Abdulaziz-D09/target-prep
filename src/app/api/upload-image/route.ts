@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { writeFile, mkdir } from 'fs/promises';
-import { join } from 'path';
+import { createClient } from '@supabase/supabase-js';
 
 export async function POST(request: NextRequest) {
   try {
@@ -11,26 +10,39 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'No file uploaded' }, { status: 400 });
     }
 
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+    if (!supabaseUrl || !supabaseServiceKey) {
+      return NextResponse.json({ error: 'Supabase not configured' }, { status: 500 });
+    }
+
+    const supabase = createClient(supabaseUrl, supabaseServiceKey);
+
+    const ext = file.name.split('.').pop() || 'png';
+    const filename = `${Date.now()}-${Math.random().toString(36).substring(2)}.${ext}`;
+    const path = `question-images/${filename}`;
+
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
-    // Create unique filename
-    const ext = file.name.split('.').pop() || 'png';
-    const filename = `${Date.now()}-${Math.random().toString(36).substring(2)}.${ext}`;
-    
-    // Ensure uploads directory exists
-    const uploadsDir = join(process.cwd(), 'public', 'uploads');
-    try {
-      await mkdir(uploadsDir, { recursive: true });
-    } catch (e) {
-      // Ignore if directory already exists
+    const { error } = await supabase.storage
+      .from('uploads')
+      .upload(path, buffer, {
+        contentType: file.type || 'image/png',
+        upsert: false,
+      });
+
+    if (error) {
+      console.error('Supabase storage upload error:', error);
+      return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
-    // Write file
-    const filepath = join(uploadsDir, filename);
-    await writeFile(filepath, buffer);
+    const { data: publicUrlData } = supabase.storage
+      .from('uploads')
+      .getPublicUrl(path);
 
-    return NextResponse.json({ url: `/uploads/${filename}` });
+    return NextResponse.json({ url: publicUrlData.publicUrl });
   } catch (error) {
     console.error('Error uploading image:', error);
     return NextResponse.json({ error: 'Failed to upload image' }, { status: 500 });

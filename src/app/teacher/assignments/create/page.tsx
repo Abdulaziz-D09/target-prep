@@ -2,7 +2,7 @@
 'use client';
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Sparkles, CheckCircle, Upload, FileText, X, Loader2, BookOpen, Calculator, Image as ImageIcon, GraduationCap, Check, AlertCircle } from 'lucide-react';
+import { Sparkles, CheckCircle, Upload, FileText, X, Loader2, BookOpen, Calculator, Image as ImageIcon, GraduationCap, Check, AlertCircle, ChevronDown } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useClassroomStore } from '@/store/classroomStore';
 
@@ -26,6 +26,8 @@ export default function CreateAssignmentPage() {
         seed();
     }, [seed]);
 
+
+    const [classDropdownOpen, setClassDropdownOpen] = useState(false);
 
     // Form state
     const [title, setTitle] = useState('');
@@ -328,53 +330,67 @@ export default function CreateAssignmentPage() {
                                 <div>
                                     <label className="block text-sm font-bold site-text-strong mb-3">Send to Classes</label>
                                     {classrooms.length > 0 ? (
-                                        classrooms.length === 1 ? (
-                                            <div className="w-full h-[84px] flex items-center gap-3 px-4 py-3 rounded-xl border-2 border-indigo-500 bg-indigo-50 dark:bg-indigo-900/20 text-left">
-                                                <div className="h-8 w-8 rounded-full flex items-center justify-center shrink-0 bg-indigo-600">
-                                                    <GraduationCap className="h-4 w-4 text-white" />
+                                        <div className="relative">
+                                            {/* Trigger button */}
+                                            <button
+                                                type="button"
+                                                onClick={() => setClassDropdownOpen(o => !o)}
+                                                className="w-full h-[84px] flex items-center justify-between gap-3 px-4 py-3 rounded-xl border-2 site-subpanel border-slate-200 dark:border-slate-700 hover:border-indigo-400 transition text-left"
+                                            >
+                                                <div className="flex items-center gap-2 min-w-0">
+                                                    <GraduationCap className="h-5 w-5 text-indigo-500 shrink-0" />
+                                                    <span className="text-[15px] font-bold site-text-strong truncate">
+                                                        {selectedClassroomIds.length === 0
+                                                            ? 'Select classes…'
+                                                            : selectedClassroomIds.length === classrooms.length
+                                                                ? 'All classes selected'
+                                                                : `${selectedClassroomIds.length} class${selectedClassroomIds.length > 1 ? 'es' : ''} selected`}
+                                                    </span>
                                                 </div>
-                                                <div>
-                                                    <p className="text-[14px] font-bold text-indigo-700 dark:text-indigo-300">
-                                                        {classrooms[0].name}
-                                                    </p>
-                                                    <p className="text-[12px] site-text-muted">{classrooms[0].grade}</p>
-                                                </div>
-                                            </div>
-                                        ) : (
-                                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                                {classrooms.map((cls) => {
-                                                    const checked = selectedClassroomIds.includes(cls.id);
-                                                    return (
-                                                        <button
-                                                            key={cls.id}
-                                                            type="button"
-                                                            onClick={() => toggleClassroom(cls.id)}
-                                                            className={`w-full h-[84px] flex items-center gap-3 px-4 py-3 rounded-xl border-2 text-left transition-all hover:scale-[1.02] ${
-                                                                checked
-                                                                    ? 'border-indigo-500 bg-indigo-50 dark:bg-indigo-900/20 shadow-md'
-                                                                    : 'border-slate-200 dark:border-slate-700 site-subpanel hover:border-indigo-300 hover:shadow-sm'
-                                                            }`}
-                                                        >
-                                                            <div className={`h-8 w-8 rounded-full flex items-center justify-center shrink-0 transition ${
-                                                                checked ? 'bg-indigo-600' : 'bg-slate-200 dark:bg-slate-700'
-                                                            }`}>
-                                                                {checked
-                                                                    ? <Check className="h-4 w-4 text-white" />
-                                                                    : <GraduationCap className="h-4 w-4 site-text-muted" />}
-                                                            </div>
-                                                            <div>
-                                                                <p className={`text-[14px] font-bold ${checked ? 'text-indigo-700 dark:text-indigo-300' : 'site-text-strong'}`}>
-                                                                    {cls.name}
-                                                                </p>
-                                                                <p className="text-[12px] site-text-muted">{cls.grade}</p>
-                                                            </div>
-                                                        </button>
-                                                    );
-                                                })}
-                                            </div>
-                                        )
+                                                <ChevronDown className={`h-4 w-4 site-text-muted shrink-0 transition-transform duration-200 ${classDropdownOpen ? 'rotate-180' : ''}`} />
+                                            </button>
+
+                                            {/* Dropdown list */}
+                                            <AnimatePresence>
+                                                {classDropdownOpen && (
+                                                    <motion.div
+                                                        initial={{ opacity: 0, y: -6, scaleY: 0.95 }}
+                                                        animate={{ opacity: 1, y: 0, scaleY: 1 }}
+                                                        exit={{ opacity: 0, y: -6, scaleY: 0.95 }}
+                                                        transition={{ duration: 0.15 }}
+                                                        className="absolute z-20 mt-2 w-full site-panel rounded-2xl shadow-xl border border-slate-200 dark:border-slate-700 overflow-hidden"
+                                                    >
+                                                        {classrooms.map((cls) => {
+                                                            const checked = selectedClassroomIds.includes(cls.id);
+                                                            return (
+                                                                <button
+                                                                    key={cls.id}
+                                                                    type="button"
+                                                                    onClick={() => toggleClassroom(cls.id)}
+                                                                    className={`w-full flex items-center gap-3 px-4 py-3 text-left transition hover:bg-indigo-50 dark:hover:bg-indigo-900/20 border-b border-slate-100 dark:border-slate-800 last:border-0`}
+                                                                >
+                                                                    <div className={`h-5 w-5 rounded-md border-2 flex items-center justify-center shrink-0 transition ${
+                                                                        checked
+                                                                            ? 'bg-indigo-600 border-indigo-600'
+                                                                            : 'border-slate-300 dark:border-slate-600'
+                                                                    }`}>
+                                                                        {checked && <Check className="h-3 w-3 text-white" />}
+                                                                    </div>
+                                                                    <div className="min-w-0">
+                                                                        <p className={`text-[14px] font-bold truncate ${checked ? 'text-indigo-700 dark:text-indigo-300' : 'site-text-strong'}`}>
+                                                                            {cls.name}
+                                                                        </p>
+                                                                        <p className="text-[12px] site-text-muted">{cls.grade}</p>
+                                                                    </div>
+                                                                </button>
+                                                            );
+                                                        })}
+                                                    </motion.div>
+                                                )}
+                                            </AnimatePresence>
+                                        </div>
                                     ) : (
-                                        <div className="site-subpanel h-[84px] rounded-[20px] px-5 py-4 flex items-center gap-3">
+                                        <div className="site-subpanel h-[56px] rounded-[20px] px-5 py-4 flex items-center gap-3">
                                             <AlertCircle className="h-5 w-5 text-amber-500 shrink-0" />
                                             <p className="text-[14px] site-text-muted">
                                                 You have no classes yet.{' '}

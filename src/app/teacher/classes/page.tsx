@@ -22,6 +22,7 @@ export default function ClassesPage() {
     const students = useClassroomStore(state => state.students);
     const assignments = useClassroomStore(state => state.assignments);
     const seed = useClassroomStore(state => state.seed);
+    const syncWithSupabase = useClassroomStore(state => state.syncWithSupabase);
     const addClassroom = useClassroomStore(state => state.addClassroom);
     const deleteClassroom = useClassroomStore(state => state.deleteClassroom);
 
@@ -30,8 +31,12 @@ export default function ClassesPage() {
     const [newName, setNewName] = useState('');
     const [newGrade, setNewGrade] = useState('11th Grade');
     const [copiedId, setCopiedId] = useState<string | null>(null);
+    const [isLoading, setIsLoading] = useState(true);
 
-    useEffect(() => { seed(); }, [seed]);
+    useEffect(() => {
+        seed();
+        syncWithSupabase().finally(() => setIsLoading(false));
+    }, [seed, syncWithSupabase]);
 
 
     const handleCreate = () => {
@@ -98,93 +103,114 @@ export default function ClassesPage() {
                     </motion.div>
                 </motion.section>
 
-                {/* List Container */}
-                <motion.section 
-                    className="site-panel rounded-[34px] p-5 sm:p-6 mb-6" 
-                    variants={sectionRevealVariants}
-                    initial="hidden"
-                    animate="visible"
-                >
-                {classrooms.length === 0 ? (
-                    <motion.div variants={itemRevealVariants}>
-                        <div className="site-panel rounded-[24px] p-16 flex flex-col items-center text-center border-2 border-slate-200 dark:border-slate-800">
-                            <GraduationCap className="h-12 w-12 site-text-muted mb-4 opacity-30" />
-                            <p className="font-bold site-text-strong text-lg">No classes yet</p>
-                            <p className="site-text-muted text-sm mt-1 mb-5">Click &ldquo;Create Class&rdquo; to get started.</p>
-                            <button
-                                onClick={() => setIsCreateOpen(true)}
-                                className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 transition hover:scale-[1.02] shadow-md"
-                            >
-                                <Plus className="h-4 w-4" /> Create Class
-                            </button>
+                {/* List — loading, empty state, OR grid */}
+                {isLoading ? (
+                    <motion.section
+                        className="mb-6"
+                        variants={sectionRevealVariants}
+                        initial="hidden"
+                        animate="visible"
+                    >
+                        <div className="site-panel rounded-[34px] p-16 flex flex-col items-center justify-center gap-4">
+                            <div className="h-10 w-10 rounded-full border-4 border-indigo-500 border-t-transparent animate-spin" />
+                            <p className="site-text-muted text-sm font-semibold">Loading your classes…</p>
                         </div>
-                    </motion.div>
+                    </motion.section>
+                ) : classrooms.length === 0 ? (
+                    <motion.section
+                        className="mb-6"
+                        variants={sectionRevealVariants}
+                        initial="hidden"
+                        animate="visible"
+                    >
+                        <motion.div variants={itemRevealVariants}>
+                            <div className="site-panel rounded-[34px] p-16 flex flex-col items-center text-center border-2 border-dashed border-slate-300 dark:border-slate-700">
+                                <GraduationCap className="h-14 w-14 site-text-muted mb-5 opacity-25" />
+                                <p className="font-black site-text-strong text-xl mb-2">No classes yet</p>
+                                <p className="site-text-muted text-sm mb-6 max-w-xs">
+                                    Create your first class and share the join code with your students.
+                                </p>
+                                <button
+                                    onClick={() => setIsCreateOpen(true)}
+                                    className="inline-flex items-center gap-2 rounded-full px-6 py-3 text-[15px] font-bold text-white bg-indigo-600 hover:bg-indigo-700 transition hover:scale-[1.02] shadow-md"
+                                >
+                                    <Plus className="h-4 w-4" /> Create Class
+                                </button>
+                            </div>
+                        </motion.div>
+                    </motion.section>
                 ) : (
-                    <motion.div className="grid gap-5 sm:grid-cols-2" variants={staggerContainerVariants}>
-                        {classrooms.map((cls) => {
-                            const studentCount = students.filter((s) => s.classroomId === cls.id).length;
-                            const assignmentCount = assignments.filter((a) => a.classroomIds.includes(cls.id)).length;
-                            return (
-                                <motion.div key={cls.id} variants={itemRevealVariants}>
-                                    <div
-                                        className="site-panel rounded-[24px] p-6 border-t-4 border-t-indigo-500 cursor-pointer hover:scale-[1.015] transition-transform group"
-                                        onClick={() => router.push(`/teacher/classes/${cls.id}`)}
-                                    >
-                                        {/* Card header */}
-                                        <div className="flex items-start justify-between gap-3 mb-2">
-                                            <div className="flex items-center gap-2 min-w-0">
-                                                <GraduationCap className="h-5 w-5 text-indigo-500 shrink-0" />
-                                                <h2 className="text-[17px] font-bold site-text-strong tracking-tight truncate">{cls.name}</h2>
+                    <motion.section
+                        className="site-panel rounded-[34px] p-5 sm:p-6 mb-6"
+                        variants={sectionRevealVariants}
+                        initial="hidden"
+                        animate="visible"
+                    >
+                        <motion.div className="grid gap-5 sm:grid-cols-2" variants={staggerContainerVariants}>
+                            {classrooms.map((cls) => {
+                                const studentCount = students.filter((s) => s.classroomId === cls.id).length;
+                                const assignmentCount = assignments.filter((a) => a.classroomIds.includes(cls.id)).length;
+                                return (
+                                    <motion.div key={cls.id} variants={itemRevealVariants}>
+                                        <div
+                                            className="site-panel rounded-[24px] p-6 border-t-4 border-t-indigo-500 cursor-pointer hover:scale-[1.015] transition-transform group"
+                                            onClick={() => router.push(`/teacher/classes/${cls.id}`)}
+                                        >
+                                            {/* Card header */}
+                                            <div className="flex items-start justify-between gap-3 mb-2">
+                                                <div className="flex items-center gap-2 min-w-0">
+                                                    <GraduationCap className="h-5 w-5 text-indigo-500 shrink-0" />
+                                                    <h2 className="text-[17px] font-bold site-text-strong tracking-tight truncate">{cls.name}</h2>
+                                                </div>
+                                                <div className="flex items-center gap-1 shrink-0">
+                                                    <button
+                                                        onClick={(e) => handleCopyCode(e, cls.joinCode, cls.id)}
+                                                        className="h-8 w-8 rounded-lg site-subpanel flex items-center justify-center hover:scale-[1.1] transition text-indigo-500"
+                                                        title="Copy Class Code"
+                                                    >
+                                                        <Copy className="h-3.5 w-3.5" />
+                                                    </button>
+                                                    <button
+                                                        onClick={(e) => handleDeleteClick(e, cls.id)}
+                                                        className="h-8 w-8 rounded-lg site-subpanel flex items-center justify-center hover:scale-[1.1] transition text-rose-500"
+                                                        title="Delete Class"
+                                                    >
+                                                        <Trash2 className="h-3.5 w-3.5" />
+                                                    </button>
+                                                </div>
                                             </div>
-                                            <div className="flex items-center gap-1 shrink-0">
-                                                <button
-                                                    onClick={(e) => handleCopyCode(e, cls.joinCode, cls.id)}
-                                                    className="h-8 w-8 rounded-lg site-subpanel flex items-center justify-center hover:scale-[1.1] transition text-indigo-500"
-                                                    title="Copy Class Code"
-                                                >
-                                                    <Copy className="h-3.5 w-3.5" />
-                                                </button>
-                                                <button
-                                                    onClick={(e) => handleDeleteClick(e, cls.id)}
-                                                    className="h-8 w-8 rounded-lg site-subpanel flex items-center justify-center hover:scale-[1.1] transition text-rose-500"
-                                                    title="Delete Class"
-                                                >
-                                                    <Trash2 className="h-3.5 w-3.5" />
-                                                </button>
+
+                                            <p className="text-[13px] site-text-muted mb-4">{cls.grade}</p>
+
+                                            {/* Stats pills */}
+                                            <div className="flex flex-wrap gap-2 mb-5">
+                                                <div className="flex items-center gap-1.5 site-subpanel rounded-full px-3 py-1.5 text-[12px] font-semibold site-text">
+                                                    <Users className="h-3.5 w-3.5 text-blue-500" />
+                                                    {studentCount} student{studentCount !== 1 ? 's' : ''}
+                                                </div>
+                                                <div className="flex items-center gap-1.5 site-subpanel rounded-full px-3 py-1.5 text-[12px] font-semibold site-text">
+                                                    <ClipboardList className="h-3.5 w-3.5 text-emerald-500" />
+                                                    {assignmentCount} assignment{assignmentCount !== 1 ? 's' : ''}
+                                                </div>
+                                            </div>
+
+                                            {/* Join Code footer */}
+                                            <div className="border-t border-slate-200 dark:border-slate-700/50 pt-4 flex items-center justify-between">
+                                                <div>
+                                                    <p className="text-[10px] uppercase tracking-[0.18em] font-bold site-text-muted mb-0.5">Join Code</p>
+                                                    <span className="font-mono font-bold text-xl tracking-[0.18em] site-text-strong">
+                                                        {copiedId === cls.id ? '✓ Copied!' : cls.joinCode}
+                                                    </span>
+                                                </div>
+                                                <ChevronRight className="h-5 w-5 site-text-muted group-hover:translate-x-1 transition-transform" />
                                             </div>
                                         </div>
-
-                                        <p className="text-[13px] site-text-muted mb-4">{cls.grade}</p>
-
-                                        {/* Stats pills */}
-                                        <div className="flex flex-wrap gap-2 mb-5">
-                                            <div className="flex items-center gap-1.5 site-subpanel rounded-full px-3 py-1.5 text-[12px] font-semibold site-text">
-                                                <Users className="h-3.5 w-3.5 text-blue-500" />
-                                                {studentCount} student{studentCount !== 1 ? 's' : ''}
-                                            </div>
-                                            <div className="flex items-center gap-1.5 site-subpanel rounded-full px-3 py-1.5 text-[12px] font-semibold site-text">
-                                                <ClipboardList className="h-3.5 w-3.5 text-emerald-500" />
-                                                {assignmentCount} assignment{assignmentCount !== 1 ? 's' : ''}
-                                            </div>
-                                        </div>
-
-                                        {/* Join Code footer */}
-                                        <div className="border-t border-slate-200 dark:border-slate-700/50 pt-4 flex items-center justify-between">
-                                            <div>
-                                                <p className="text-[10px] uppercase tracking-[0.18em] font-bold site-text-muted mb-0.5">Join Code</p>
-                                                <span className="font-mono font-bold text-xl tracking-[0.18em] site-text-strong">
-                                                    {copiedId === cls.id ? '✓ Copied!' : cls.joinCode}
-                                                </span>
-                                            </div>
-                                            <ChevronRight className="h-5 w-5 site-text-muted group-hover:translate-x-1 transition-transform" />
-                                        </div>
-                                    </div>
-                                </motion.div>
-                            );
-                        })}
-                    </motion.div>
+                                    </motion.div>
+                                );
+                            })}
+                        </motion.div>
+                    </motion.section>
                 )}
-                </motion.section>
             </motion.div>
 
             {/* ── Create Modal ─────────────────────────────────────────────── */}

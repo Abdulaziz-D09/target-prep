@@ -749,9 +749,10 @@ export const useClassroomStore = create<State & Actions>()(
 
       syncWithSupabase: async () => {
         try {
-          // Throttle: skip if synced less than 30 seconds ago
           const now = Date.now();
-          if (now - get().lastSyncedAt < 30_000) return;
+          const last = get().lastSyncedAt;
+          // Always run the first sync; afterwards throttle to once per 10 seconds
+          if (last !== 0 && now - last < 10_000) return;
           set({ lastSyncedAt: now });
 
           const supabase = createClient();

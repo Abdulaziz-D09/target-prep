@@ -13,53 +13,21 @@ import {
 } from '@/components/SiteMotion';
 import { ProgressChart } from '@/components/ProgressChart';
 
-function readLegacyHistoryFromStorage(): CompletedTest[] {
-    if (typeof window === 'undefined') return [];
-
-    try {
-        const raw = localStorage.getItem('targetprep_progress');
-        if (!raw) return [];
-
-        const parsed = JSON.parse(raw) as { completedTests?: CompletedTest[] };
-        const rawTests = Array.isArray(parsed.completedTests) ? parsed.completedTests : [];
-        return rawTests.map(t => {
-            const roundedEnglish = Math.max(200, Math.min(800, Math.round((t.englishScore || 200) / 10) * 10));
-            const roundedMath = Math.max(200, Math.min(800, Math.round((t.mathScore || 200) / 10) * 10));
-            return {
-                ...t,
-                englishScore: roundedEnglish,
-                mathScore: roundedMath,
-                totalScore: roundedEnglish + roundedMath
-            };
-        });
-    } catch {
-        return [];
-    }
-}
+// Legacy storage logic moved completely to testStore's syncWithSupabase
 
 export default function ProgressPage() {
     const shouldReduceMotion = useReducedMotion();
     const completedTests = useTestStore((state) => state.completedTests);
-    const [legacyHistory, setLegacyHistory] = useState<CompletedTest[]>(() => readLegacyHistoryFromStorage());
+    const syncWithSupabase = useTestStore(state => state.syncWithSupabase);
 
     useEffect(() => {
-        if (completedTests.length > 0) return;
-
-        const handleStorageChange = () => {
-            setLegacyHistory(readLegacyHistoryFromStorage());
-        };
-
-        window.addEventListener('storage', handleStorageChange);
-        return () => {
-            window.removeEventListener('storage', handleStorageChange);
-        };
-    }, [completedTests.length]);
+        syncWithSupabase();
+    }, [syncWithSupabase]);
 
     const history = useMemo(() => {
-        const allTests = completedTests.length > 0 ? completedTests : legacyHistory;
         // Filter out tests with 0 answers
-        return allTests.filter((t) => t.answers && Object.keys(t.answers).length > 0);
-    }, [completedTests, legacyHistory]);
+        return completedTests.filter((t) => t.answers && Object.keys(t.answers).length > 0);
+    }, [completedTests]);
 
     const stats = useMemo(() => {
         if (history.length === 0) return { total: 0, avg: 0, highest: 0, readingAvg: 0, mathAvg: 0 };

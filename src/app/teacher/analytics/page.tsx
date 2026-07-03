@@ -113,7 +113,12 @@ export default function AnalyticsPage() {
     const [classFilter, setClassFilter] = useState<string>('all');
     const [studentFilter, setStudentFilter] = useState<string>('all');
 
-    useEffect(() => { seed(); }, [seed]);
+    const syncWithSupabase = useClassroomStore(state => state.syncWithSupabase);
+
+    useEffect(() => { 
+        seed(); 
+        syncWithSupabase();
+    }, [seed, syncWithSupabase]);
 
     const filteredStudents = classFilter === 'all' 
         ? students 

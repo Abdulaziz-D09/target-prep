@@ -5,6 +5,7 @@ export interface Question {
     passage?: string;
     passage_q?: string;
     image?: string; // Path to graph/figure image (math questions)
+    imagePosition?: 'before-stem' | 'after-stem';
     question?: string;
     options: string[];
     answer: any;

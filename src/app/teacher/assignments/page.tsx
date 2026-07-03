@@ -1,6 +1,6 @@
 'use client';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ClipboardList, Plus, ChevronRight, GraduationCap, Trash2, Sparkles } from 'lucide-react';
 import {
     FloatingPageShapes,
@@ -26,7 +26,10 @@ export default function AssignmentsPage() {
     const students = useClassroomStore(state => state.students);
     const progress = useClassroomStore(state => state.progress);
     const deleteAssignment = useClassroomStore(state => state.deleteAssignment);
+    const syncWithSupabase = useClassroomStore(state => state.syncWithSupabase);
     const [deleteId, setDeleteId] = useState<string | null>(null);
+
+    useEffect(() => { syncWithSupabase(); }, [syncWithSupabase]);
 
     return (
         <div className="relative min-h-screen w-full pt-4 pb-12 px-4 sm:px-6 lg:px-8">

@@ -47,3 +47,5 @@ pdf_extractor/venv/
 
 pdf_extractor/node_modules/
 *.pdf
+
+public/uploads/

@@ -17,8 +17,11 @@ export default function TeacherHomePage() {
     const seed = useClassroomStore(state => state.seed);
     const [todayLabel, setTodayLabel] = useState('');
 
+    const syncWithSupabase = useClassroomStore(state => state.syncWithSupabase);
+
     useEffect(() => { 
         seed(); 
+        syncWithSupabase();
         setTodayLabel(
             new Intl.DateTimeFormat('en-US', {
               weekday: 'long',
@@ -27,7 +30,7 @@ export default function TeacherHomePage() {
               year: 'numeric',
             }).format(new Date())
         );
-    }, [seed]);
+    }, [seed, syncWithSupabase]);
 
     const totalStudents    = students.length;
     const totalAssignments = assignments.length;
@@ -259,7 +262,7 @@ export default function TeacherHomePage() {
                                                     <p className="text-[10px] font-bold site-text-muted uppercase tracking-wider">{new Date(a.createdAt).toLocaleDateString()}</p>
                                                 </div>
                                                 <p className="site-text-muted mt-1 text-sm font-medium">
-                                                    {a.subject} &middot; <span className="site-text-strong">{a.questions.length}</span> questions
+                                                    {a.subject} &middot; <span className="site-text-strong">{(a.questions || []).length}</span> questions
                                                 </p>
                                             </div>
                                         </Link>

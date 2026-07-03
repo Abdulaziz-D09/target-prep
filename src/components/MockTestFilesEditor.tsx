@@ -281,7 +281,7 @@ export function MockTestFilesEditor({ initialTests, onSave, onChange, hideSaveBu
                                                                         )}
                                                                         {q.imageUrl && (
                                                                             <>
-                                                                                <img src={q.imageUrl} alt="Question figure" className="max-w-full rounded-lg max-h-48 object-contain mt-3 border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50" />
+                                                                                <img src={q.imageUrl && !q.imageUrl.includes('.') ? q.imageUrl + '.png' : q.imageUrl} alt="Question figure" className="max-w-full rounded-lg max-h-48 object-contain mt-3 border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50" />
                                                                                 <div className="mt-2 flex items-center gap-2">
                                                                                     <span className="text-[11px] font-bold uppercase tracking-wider site-text-muted">Image position:</span>
                                                                                     {(['before-stem', 'after-stem'] as const).map((pos) => (

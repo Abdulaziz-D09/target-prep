@@ -832,50 +832,7 @@ export default function StudyPlanPage() {
                   </div>
                 </section>
 
-                {/* Vault Section: Cheat Sheets */}
-                <section className="site-panel rounded-[24px] p-6 sm:p-8">
-                  <div className="flex items-center gap-3 mb-6">
-                    <div className="rounded-xl bg-amber-100 p-2.5 text-amber-600 dark:bg-amber-900/30 dark:text-amber-400">
-                      <FileText className="h-6 w-6" />
-                    </div>
-                    <h2 className="text-2xl font-black">Cheat Sheets</h2>
-                  </div>
-                  <div className="grid gap-4 sm:grid-cols-2">
-                    {/* Formula Sheet Pack Card */}
-                    <div className="relative p-6 rounded-[20px] border border-slate-200 dark:border-slate-700/60 bg-white dark:bg-[#111827] shadow-sm hover:shadow-md hover:border-amber-500/50 dark:hover:border-amber-500/40 transition-all cursor-pointer group">
-                      <div className="flex items-start justify-between mb-5">
-                        <div className="w-11 h-11 rounded-[14px] bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center">
-                          <Calculator className="w-5 h-5 text-slate-500 dark:text-slate-400" />
-                        </div>
-                      </div>
-                      <h3 className="font-black text-[17px] site-text-strong mb-1.5">Formula Sheet Pack</h3>
-                      <p className="text-[13px] site-text-muted font-medium leading-relaxed">Essential SAT math formulas with quick examples and visual memory cues.</p>
-                      <div className="mt-5">
-                        <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-[11px] font-bold uppercase tracking-[0.12em] text-slate-500 dark:text-slate-400">
-                          <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
-                          Preparing
-                        </span>
-                      </div>
-                    </div>
 
-                    {/* Grammar Rules Card */}
-                    <div className="relative p-6 rounded-[20px] border border-slate-200 dark:border-slate-700/60 bg-white dark:bg-[#111827] shadow-sm hover:shadow-md hover:border-amber-500/50 dark:hover:border-amber-500/40 transition-all cursor-pointer group">
-                      <div className="flex items-start justify-between mb-5">
-                        <div className="w-11 h-11 rounded-[14px] bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center">
-                          <PenLine className="w-5 h-5 text-slate-500 dark:text-slate-400" />
-                        </div>
-                      </div>
-                      <h3 className="font-black text-[17px] site-text-strong mb-1.5">Grammar Rules</h3>
-                      <p className="text-[13px] site-text-muted font-medium leading-relaxed">High-impact grammar rules mapped to Standard English Convention question types.</p>
-                      <div className="mt-5">
-                        <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-[11px] font-bold uppercase tracking-[0.12em] text-slate-500 dark:text-slate-400">
-                          <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
-                          Preparing
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </section>
 
                 {/* Vault Section: Videos */}
                 <section className="site-panel rounded-[24px] p-6 sm:p-8">

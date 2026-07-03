@@ -47,6 +47,7 @@ export type Assignment = {
   subject: 'English' | 'Math' | 'Both';
   classroomIds: string[];
   customTests: { id: string; name: string; questions: Question[] }[];
+  questions?: any[];
   timeLimitMinutes: number;
   dueDate?: string;
   allowExit?: boolean;
@@ -203,10 +204,10 @@ type Actions = {
   addClassroom: (name: string, grade: string) => Classroom;
   deleteClassroom: (id: string) => void;
   addAssignment: (data: Omit<Assignment, 'id' | 'createdAt'>) => void;
-  updateAssignment: (id: string, updates: Partial<Assignment>) => void;
+  updateAssignment: (id: string, updates: Partial<Assignment> & { questions?: any }) => void;
   deleteAssignment: (id: string) => void;
   updateAssignmentQuestion: (assignmentId: string, questionId: string, newQuestion: any) => void;
-  updateMockQuestion: (mockId: string, testId: string, questionId: string, newQuestion: any) => void;
+
   joinClassroom: (code: string) => boolean;
   leaveClassroom: (id: string) => void;
   
@@ -265,8 +266,8 @@ export const useClassroomStore = create<State & Actions>()(
           return;
         }
 
-        // Only clear if we actually have no classes (protect against accidental wiping when seeded is false due to version mismatch)
-        if (current.classrooms.length === 0) {
+        // Only clear if we actually have no classes and no assignments (protect against accidental wiping)
+        if (current.classrooms.length === 0 && current.assignments.length === 0) {
             set({
               classrooms: [],
               students: [],
@@ -375,18 +376,19 @@ export const useClassroomStore = create<State & Actions>()(
         if (asgnIndex === -1) return;
         const newAsgns = [...assignments];
         const asgn = { ...newAsgns[asgnIndex] };
-        const qIndex = asgn.questions.findIndex((q: any) => q.id === questionId);
+        const qIndex = (asgn.questions || []).findIndex((q: any) => q.id === questionId);
         if (qIndex !== -1) {
-          asgn.questions = [...asgn.questions];
+          asgn.questions = [...(asgn.questions || [])];
           asgn.questions[qIndex] = newQuestion;
         } else {
-          asgn.questions = [...asgn.questions, newQuestion];
+          asgn.questions = [...(asgn.questions || []), newQuestion];
         }
         newAsgns[asgnIndex] = asgn;
         set({ assignments: newAsgns });
         // Sync to supabase
         if (typeof window !== 'undefined') {
-          const { supabase } = await import('@/lib/supabase/client');
+          const { createClient } = await import('@/lib/supabase/client');
+          const supabase = createClient();
           const { data: dbClassrooms } = await supabase.from('classrooms').select('id, assignments');
           if (dbClassrooms) {
             for (const c of dbClassrooms) {
@@ -396,22 +398,6 @@ export const useClassroomStore = create<State & Actions>()(
               }
             }
           }
-        }
-      },
-      updateMockQuestion: async (mockId, testId, questionId, newQuestion) => {
-        const { mocks } = get();
-        const mockIndex = mocks.findIndex(m => m.id === mockId);
-        if (mockIndex === -1) return;
-        const newMocks = [...mocks];
-        const mock = { ...newMocks[mockIndex] };
-        mock.customQuestions = { ...(mock.customQuestions || {}) };
-        mock.customQuestions[questionId] = newQuestion;
-        newMocks[mockIndex] = mock;
-        set({ mocks: newMocks });
-        // Sync to supabase
-        if (typeof window !== 'undefined') {
-          const { supabase } = await import('@/lib/supabase/client');
-          await supabase.from('mocks').update({ custom_questions: mock.customQuestions }).eq('id', mockId);
         }
       },
 
@@ -779,7 +765,7 @@ export const useClassroomStore = create<State & Actions>()(
 
           const updates: Partial<State> = {};
 
-          if (classroomsRes.data) {
+          if (classroomsRes.data && classroomsRes.data.length > 0) {
             updates.classrooms = classroomsRes.data.map(c => ({
               id: c.id,
               name: c.name,
@@ -789,7 +775,7 @@ export const useClassroomStore = create<State & Actions>()(
             }));
           }
 
-          if (studentsRes.data) {
+          if (studentsRes.data && studentsRes.data.length > 0) {
             updates.students = studentsRes.data.map(s => ({
               id: s.id,
               name: s.name,
@@ -809,7 +795,7 @@ export const useClassroomStore = create<State & Actions>()(
             updates.joinedClassroomIds = studentProfiles.map(s => s.classroom_id).filter(Boolean);
           }
 
-          if (assignmentsRes.data) {
+          if (assignmentsRes.data && assignmentsRes.data.length > 0) {
             updates.assignments = assignmentsRes.data.map(a => ({
               id: a.id,
               title: a.title,
@@ -823,7 +809,7 @@ export const useClassroomStore = create<State & Actions>()(
             }));
           }
 
-          if (progressRes.data) {
+          if (progressRes.data && progressRes.data.length > 0) {
             updates.progress = progressRes.data.map(p => ({
               studentId: p.student_id,
               assignmentId: p.assignment_id,
@@ -834,7 +820,7 @@ export const useClassroomStore = create<State & Actions>()(
             }));
           }
 
-          if (mockSessionsRes.data) {
+          if (mockSessionsRes.data && mockSessionsRes.data.length > 0) {
             updates.mockSessions = mockSessionsRes.data.map(m => ({
               id: m.id,
               title: m.title,
@@ -857,7 +843,7 @@ export const useClassroomStore = create<State & Actions>()(
             }));
           }
 
-          if (mockResultsRes.data) {
+          if (mockResultsRes.data && mockResultsRes.data.length > 0) {
             updates.mockResults = mockResultsRes.data.map(r => ({
               id: r.id,
               mockId: r.mock_id,
@@ -875,7 +861,7 @@ export const useClassroomStore = create<State & Actions>()(
             }));
           }
 
-          if (questionHistoryRes.data) {
+          if (questionHistoryRes.data && questionHistoryRes.data.length > 0) {
             updates.questionHistory = questionHistoryRes.data.map((q: any) => ({
               id: q.id,
               studentId: q.student_id,

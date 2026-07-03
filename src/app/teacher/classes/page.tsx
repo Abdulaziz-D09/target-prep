@@ -146,12 +146,12 @@ export default function ClassesPage() {
                         initial="hidden"
                         animate="visible"
                     >
-                        <motion.div className="grid gap-5 sm:grid-cols-2" variants={staggerContainerVariants}>
+                        <motion.div className="grid gap-5 sm:grid-cols-2">
                             {classrooms.map((cls) => {
                                 const studentCount = students.filter((s) => s.classroomId === cls.id).length;
                                 const assignmentCount = assignments.filter((a) => a.classroomIds.includes(cls.id)).length;
                                 return (
-                                    <motion.div key={cls.id} variants={itemRevealVariants}>
+                                    <div key={cls.id}>
                                         <div
                                             className="site-panel rounded-[24px] p-6 border-t-4 border-t-indigo-500 cursor-pointer hover:scale-[1.015] transition-transform group"
                                             onClick={() => router.push(`/teacher/classes/${cls.id}`)}
@@ -205,7 +205,7 @@ export default function ClassesPage() {
                                                 <ChevronRight className="h-5 w-5 site-text-muted group-hover:translate-x-1 transition-transform" />
                                             </div>
                                         </div>
-                                    </motion.div>
+                                    </div>
                                 );
                             })}
                         </motion.div>

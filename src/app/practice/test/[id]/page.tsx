@@ -83,7 +83,7 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
     if (test && mockSession && mockSession.customQuestions) {
         // Deep clone to prevent mutating global catalog
         test = JSON.parse(JSON.stringify(test));
-        test.sections.forEach((sec: any) => {
+        test!.sections.forEach((sec: any) => {
             sec.modules.forEach((mod: any) => {
                 mod.questions = mod.questions.map((q: any) => {
                     const override = mockSession.customQuestions?.[q.id];
@@ -525,7 +525,7 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
 
     const finishTest = (kickedOut: boolean = false) => {
         let englishCorrect = 0, mathCorrect = 0, englishTotal = 0, mathTotal = 0;
-        test.sections.forEach((sec, sIdx) => {
+        test!.sections.forEach((sec, sIdx) => {
             sec.modules.forEach((mod, mIdx) => {
                 mod.questions.forEach((q, qIdx) => {
                     const key = `${sIdx}-${mIdx}-${qIdx}`;
@@ -630,7 +630,7 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
                                     <X className="w-6 h-6" />
                                 </button>
                                 <img 
-                                    src={expandedImage} 
+                                    src={expandedImage && !expandedImage.includes('.') ? expandedImage + '.png' : expandedImage} 
                                     alt="Expanded question figure" 
                                     className="max-w-full max-h-[85vh] object-contain bg-white rounded-xl shadow-2xl p-4"
                                 />
@@ -686,7 +686,7 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
                                                         {q.image && (
                                                             <div className="mb-6 flex items-center justify-center">
                                                                 <img 
-                                                                    src={q.image} 
+                                                                    src={q.image && !q.image.includes('.') ? q.image + '.png' : q.image} 
                                                                     alt="Question figure" 
                                                                     className="max-w-full max-h-[350px] object-contain cursor-pointer hover:opacity-90 transition-opacity" 
                                                                     onClick={() => setExpandedImage(q.image || null)}
@@ -708,8 +708,8 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
                                                                 }
 
                                                                 return (
-                                                                    <div key={oIdx} className={`p-4 border-2 rounded-xl flex items-center gap-4 ${bgClass}`}>
-                                                                        <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold border ${isThisCorrect ? 'bg-emerald-500 border-emerald-600 text-white' : isThisSelected ? 'bg-red-500 border-red-600 text-white' : 'bg-slate-100 border-slate-300'}`}>
+                                                                    <div key={oIdx} className={`px-3 py-2 min-h-[46px] border-2 rounded-xl flex items-center gap-4 ${bgClass}`}>
+                                                                        <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold border flex-shrink-0 ${isThisCorrect ? 'bg-emerald-500 border-emerald-600 text-white' : isThisSelected ? 'bg-red-500 border-red-600 text-white' : 'bg-slate-100 border-slate-300'}`}>
                                                                             {String.fromCharCode(65 + oIdx)}
                                                                         </div>
                                                                         <span className="font-medium">{cleanOCR(opt || '')}</span>
@@ -1048,7 +1048,7 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
                             <X className="w-6 h-6" />
                         </button>
                         <img 
-                            src={expandedImage} 
+                            src={expandedImage && !expandedImage.includes('.') ? expandedImage + '.png' : expandedImage} 
                             alt="Expanded question figure" 
                             className="max-w-full max-h-[85vh] object-contain bg-white rounded-xl shadow-2xl p-4"
                         />
@@ -1056,7 +1056,7 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
                 </div>
             )}
             
-            <div className="absolute inset-0 z-50 bg-[#F3F4F6] font-['Verdana',_sans-serif] overflow-hidden flex flex-col">
+            <div className="fixed inset-0 z-50 bg-[#F3F4F6] font-['Verdana',_sans-serif] overflow-hidden flex flex-col">
             {/* Strict Mode Fullscreen Warning */}
             {fsWarningCountdown !== null && !isKickedOut && (
                 <div className="fixed inset-0 z-[100] flex items-center justify-center bg-red-900/90 backdrop-blur-md">
@@ -1281,9 +1281,9 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
             )}
 
             {/* Split Pane Content Area */}
-            <main className="flex-1 flex overflow-hidden bg-white">
+            <main className="flex-1 flex overflow-hidden min-h-0 bg-white">
                 {!showCheckWork ? (
-                    <div className="w-full bg-white flex overflow-hidden relative">
+                    <div className="w-full h-full bg-white flex overflow-hidden relative min-h-0">
 
                         {/* Left Pane (Passage or Desmos) */}
                         {currentSection?.name === 'Math' ? (
@@ -1308,13 +1308,13 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
                                 <DesmosCalculator mode={calcMode} isDragging={isDragging} />
                             </div>
                         ) : (
-                            <div className="overflow-y-auto bg-white" style={{ width: `${leftPanelWidth}%` }}>
+                            <div className="overflow-y-auto h-full bg-white" style={{ width: `${leftPanelWidth}%` }}>
                                 <div className="p-4 lg:p-10 pr-4 lg:pr-8 max-w-[800px] w-full mx-auto">
                                     {/* Reading question: show image above passage in left pane only if no explicit imagePosition is set */}
                                     {currentQuestion?.image && currentSection?.name !== 'Math' && !currentQuestion?.imagePosition && (
                                         <div className="mb-5 flex items-center justify-center">
                                             <img
-                                                src={currentQuestion.image}
+                                                src={currentQuestion.image && !currentQuestion.image.includes('.') ? currentQuestion.image + '.png' : currentQuestion.image}
                                                 alt="Question figure"
                                                 className="max-w-full max-h-[400px] object-contain cursor-pointer hover:opacity-90 transition-opacity"
                                                 onClick={() => setExpandedImage(currentQuestion.image || null)}
@@ -1342,7 +1342,7 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
                                             onUpdateHighlight={(id, updates) => updateHighlight(questionKey, id, updates)}
                                             isHighlightModeActive={isHighlightActive}
                                             defaultHighlightColor={defaultHighlightColor}
-                                            onChangeDefaultColor={setDefaultHighlightColor}
+                                            onChangeDefaultColor={setDefaultHighlightColor as any}
                                         />
                                     ) : (
                                         <div className="flex flex-col items-center justify-center h-full min-h-[200px] text-center pt-16">
@@ -1371,8 +1371,8 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
                         )}
 
                         {/* Right Pane (Question Area) */}
-                        <div className={`overflow-y-auto p-4 lg:p-10 pl-4 lg:pl-8 bg-white ${!isDragging && currentSection?.name === 'Math' ? 'transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]' : ''}`} style={{ width: (currentSection?.name === 'Math' && !isDesmosOpen) ? '100%' : `${100 - leftPanelWidth}%` }}>
-                            <div className="w-full max-w-[800px] mx-auto flex flex-col pb-10">
+                        <div className={`overflow-y-auto h-full p-4 lg:p-10 pl-4 lg:pl-8 bg-white ${!isDragging && currentSection?.name === 'Math' ? 'transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]' : ''}`} style={{ width: (currentSection?.name === 'Math' && !isDesmosOpen) ? '100%' : `${100 - leftPanelWidth}%` }}>
+                            <div className="w-full max-w-[800px] mx-auto flex flex-col pb-40">
 
                                 {/* Header: Connected Question Number & Mark for Review & ABC */}
                                 <div className="flex items-center w-full h-[54px] mb-4 mt-2">
@@ -1394,7 +1394,8 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
                                     <div className="w-[54px] h-[54px] flex-shrink-0 flex items-center justify-center rounded-[10px] border border-[#D1D5DB] bg-white relative z-10 shadow-sm">
                                         <button
                                             onClick={() => setIsEliminationMode(!isEliminationMode)}
-                                            className={`flex items-center justify-center w-full h-full font-bold text-[14px] transition-colors rounded-[10px] ${isEliminationMode ? 'bg-[#111827] text-white' : 'text-slate-700 hover:bg-slate-50'}`}
+                                            disabled={!(currentQuestion?.options && currentQuestion.options.length > 0)}
+                                            className={`flex items-center justify-center w-full h-full font-bold text-[14px] transition-colors rounded-[10px] ${!(currentQuestion?.options && currentQuestion.options.length > 0) ? 'opacity-30 cursor-not-allowed text-slate-400' : isEliminationMode ? 'bg-[#111827] text-white' : 'text-slate-700 hover:bg-slate-50'}`}
                                         >
                                             <span className="line-through decoration-[#ef4444] decoration-[2px]">ABC</span>
                                         </button>
@@ -1404,12 +1405,11 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
                                 {/* Question Content */}
                                 {/* Math question image/graph — or custom positioned image */}
                                 {currentQuestion?.image && (currentQuestion?.imagePosition === 'before-stem' || (!currentQuestion?.imagePosition && currentSection?.name === 'Math')) && (
-                                    <div className="mb-1 flex items-center justify-center overflow-hidden">
+                                    <div className="mb-4 flex justify-center">
                                         <img
-                                            src={currentQuestion.image}
+                                            src={currentQuestion.image && !currentQuestion.image.includes('.') ? currentQuestion.image + '.png' : currentQuestion.image}
                                             alt="Question image"
-                                            className="max-w-[70%] object-contain object-top cursor-pointer hover:opacity-90 transition-opacity"
-                                            style={{maxHeight: '280px'}}
+                                            className="max-w-full max-h-[300px] object-contain cursor-pointer"
                                             onClick={() => setExpandedImage(currentQuestion.image || null)}
                                         />
                                     </div>
@@ -1432,17 +1432,16 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
                                             onUpdateHighlight={(id, updates) => updateHighlight(`q-${questionKey}`, id, updates)}
                                             isHighlightModeActive={isHighlightActive}
                                             defaultHighlightColor={defaultHighlightColor}
-                                            onChangeDefaultColor={setDefaultHighlightColor}
+                                            onChangeDefaultColor={setDefaultHighlightColor as any}
                                         />
                                     )}
                                 </div>
                                 {currentQuestion?.image && currentQuestion?.imagePosition === 'after-stem' && (
-                                    <div className="mt-4 mb-4 flex items-center justify-center overflow-hidden">
+                                    <div className="mt-4 mb-4 flex justify-center">
                                         <img
-                                            src={currentQuestion.image}
+                                            src={currentQuestion.image && !currentQuestion.image.includes('.') ? currentQuestion.image + '.png' : currentQuestion.image}
                                             alt="Question image"
-                                            className="max-w-[70%] object-contain object-top cursor-pointer hover:opacity-90 transition-opacity"
-                                            style={{maxHeight: '280px'}}
+                                            className="max-w-full max-h-[300px] object-contain cursor-pointer"
                                             onClick={() => setExpandedImage(currentQuestion.image || null)}
                                         />
                                     </div>
@@ -1480,7 +1479,7 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
                                                         }
                                                     }}
                                                     htmlFor={`opt-${i}`}
-                                                    className={`relative w-full border h-auto min-h-[56px] rounded-[10px] flex items-stretch cursor-pointer transition-all duration-200 overflow-hidden ${isSelected ? 'border-[#111827] shadow-[inset_0_0_0_1px_#111827] z-10' : 'border-[#E5E7EB] hover:border-slate-400 shadow-sm'}`}
+                                                    className={`relative w-full border h-auto min-h-[46px] rounded-[10px] flex items-stretch cursor-pointer transition-all duration-200 overflow-hidden ${isSelected ? 'border-[#111827] shadow-[inset_0_0_0_1px_#111827] z-10' : 'border-[#E5E7EB] hover:border-slate-400 shadow-sm'}`}
                                                 >
                                                     <input
                                                         type="radio"
@@ -1501,7 +1500,7 @@ export default function TestInterfacePage({ params }: { params: Promise<{ id: st
                                                     </div>
 
                                                     {/* Answer Text */}
-                                                    <div className="flex-1 px-3 py-3 flex items-center bg-transparent">
+                                                    <div className="flex-1 px-3 py-2 flex items-center bg-transparent">
                                                         <span className={`text-[16px] ${isEliminated ? 'text-slate-400' : 'text-[#111827]'}`}>
                                                             <LatexRenderer text={cleanOCR(opt || '').replace(/^\s*[A-D][\.\)]\s*/, '')} />
                                                         </span>

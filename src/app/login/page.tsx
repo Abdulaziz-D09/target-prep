@@ -30,7 +30,7 @@ export default async function LoginPage({
           </div>
 
           <h1 className="text-4xl lg:text-5xl font-extrabold tracking-tight mb-4 leading-tight">
-            Prepare for the SAT <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400">effectively</span>.
+            Prepare for the SAT <span className="text-indigo-400">effectively</span>.
           </h1>
           <p className="text-slate-400 text-base lg:text-lg mb-6 leading-relaxed max-w-md">
             Practice with realistic tests and improve your score with targeted preparation.

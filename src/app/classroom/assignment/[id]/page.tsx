@@ -1,6 +1,6 @@
 'use client';
 
-import { AlertTriangle, useEffect, useState, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import {
     X, Clock, ArrowRight, Check, CheckCircle,
@@ -80,6 +80,7 @@ export default function ClassroomAssignmentDetailPage() {
     const [calcMode, setCalcMode] = useState<'graphing' | 'scientific'>('graphing');
     const [highlights, setHighlights] = useState<Record<string, any[]>>({});
     const [defaultHighlightColor, setDefaultHighlightColor] = useState<string>('yellow');
+    const [expandedImage, setExpandedImage] = useState<string | null>(null);
 
     const addHighlight = (qId: string, h: any) => {
         setHighlights(prev => ({ ...prev, [qId]: [...(prev[qId] || []), h] }));
@@ -113,7 +114,7 @@ export default function ClassroomAssignmentDetailPage() {
         const saved = progressMap[progressId];
 
         if (saved) {
-            const safeIndex = Math.max(0, Math.min(saved.currentIndex ?? 0, Math.max(assignment.questions.length - 1, 0)));
+            const safeIndex = Math.max(0, Math.min(saved.currentIndex ?? 0, Math.max((assignment.questions || []).length - 1, 0)));
             const safeTime = Math.max(0, Number(saved.timeRemaining) || totalTimeSeconds);
             setAnswers(saved.answers ?? {});
             setCurrentIdx(safeIndex);
@@ -156,9 +157,9 @@ export default function ClassroomAssignmentDetailPage() {
         upsertStudentAssignmentSnapshot(progressId, {
             answers,
             currentIndex: currentIdx,
-            completed: mode === 'complete' || mode === 'review',
+            completed: mode === 'complete' || (mode as string) === 'review',
             timeRemaining,
-            hasStarted: mode === 'test' || mode === 'complete' || mode === 'review',
+            hasStarted: mode === 'test' || mode === 'complete' || (mode as string) === 'review',
             updatedAt: new Date().toISOString(),
             highlights
         });
@@ -171,7 +172,7 @@ export default function ClassroomAssignmentDetailPage() {
         const resolvedStudentId = currentStudent?.id || 'guest-student';
         const answeredCount = Object.keys(answers).length;
         const correctCount = questions.filter((q, idx) => answers[String(idx)] === q.answer).length;
-        const isCompleted = mode === 'complete' || mode === 'review';
+        const isCompleted = mode === 'complete' || (mode as string) === 'review';
 
         if (resolvedStudentId !== 'guest-student') {
             submitAssignmentProgress(
@@ -300,14 +301,14 @@ export default function ClassroomAssignmentDetailPage() {
         }
     };
 
-    const handleSelectAnswer = (letter: string) => {
-        if (mode === 'review') return;
+    const handleSelectAnswer = (letter: any) => {
+        if ((mode as string) === 'review') return;
         setAnswers(prev => ({ ...prev, [String(currentIdx)]: letter }));
     };
 
     const toggleElimination = (e: React.MouseEvent, letter: StudentAssignmentOption) => {
         e.stopPropagation();
-        if (mode === 'review') return;
+        if ((mode as string) === 'review') return;
         setEliminatedAnswers(s => {
             const currentElim = s[currentIdx] || [];
             const isElim = currentElim.includes(letter);
@@ -442,13 +443,13 @@ export default function ClassroomAssignmentDetailPage() {
                     <div className="grid grid-cols-2 gap-3">
                         <button
                             onClick={() => router.push('/classroom')}
-                            className="bg-white border-2 border-slate-200 text-slate-700 py-3.5 rounded-xl font-bold hover:bg-slate-50 hover:border-slate-300 transition-all flex items-center justify-center gap-2"
+                            className="bg-white border-2 border-slate-200 text-slate-700 py-3 rounded-lg font-bold hover:bg-slate-50 hover:border-slate-300 transition-all flex items-center justify-center gap-2"
                         >
                             <Home className="w-4 h-4" /> Classroom
                         </button>
                         <button
                             onClick={() => { setCurrentIdx(0); setMode('review'); }}
-                            className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white py-3.5 rounded-xl font-bold transition-all shadow-md shadow-blue-500/20 flex items-center justify-center gap-2"
+                            className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white py-3 rounded-lg font-bold transition-all shadow-md shadow-blue-500/20 flex items-center justify-center gap-2"
                         >
                             <BookOpen className="w-4 h-4" /> Review Answers
                         </button>
@@ -459,7 +460,7 @@ export default function ClassroomAssignmentDetailPage() {
     }
 
     // ── Review Interface ───────────────────────────────────────────────────────
-    if (mode === 'review') {
+    if ((mode as string) === 'review') {
         const totalQ = questions.length;
         const totalCorrect = questions.filter((q, idx) => answers[String(idx)] === q.answer).length;
         const totalWrong = totalQ - totalCorrect;
@@ -547,7 +548,7 @@ export default function ClassroomAssignmentDetailPage() {
                                                     </div>
                                                 )}
                                                 <div className="text-[15px] font-medium leading-relaxed text-slate-900">
-                                                    <LatexRenderer latex={q.prompt} />
+                                                    <LatexRenderer text={q.prompt} />
                                                 </div>
                                             </div>
                                             
@@ -601,7 +602,7 @@ export default function ClassroomAssignmentDetailPage() {
                                                                     isThisOptionSelected ? 'font-semibold text-rose-900' :
                                                                     'text-slate-600'
                                                                 }`}>
-                                                                    <LatexRenderer latex={optionContent} />
+                                                                    <LatexRenderer text={optionContent} />
                                                                 </div>
                                                             </div>
                                                         );
@@ -629,6 +630,27 @@ export default function ClassroomAssignmentDetailPage() {
 
     return (
         <div className="h-[100dvh] flex flex-col bg-slate-50 font-['Verdana',_sans-serif] overflow-hidden fixed inset-0 z-50">
+            {/* Modal for expanded image */}
+            {expandedImage && (
+                <div 
+                    className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 sm:p-8 cursor-pointer"
+                    onClick={() => setExpandedImage(null)}
+                >
+                    <div className="relative max-w-5xl w-full max-h-full flex items-center justify-center cursor-default" onClick={e => e.stopPropagation()}>
+                        <button 
+                            onClick={() => setExpandedImage(null)}
+                            className="absolute -top-12 right-0 md:-right-12 md:top-0 w-10 h-10 bg-white rounded-full flex items-center justify-center text-slate-800 hover:bg-slate-200 transition-colors z-[100] shadow-lg border border-slate-200"
+                        >
+                            <X className="w-6 h-6" />
+                        </button>
+                        <img 
+                            src={expandedImage && !expandedImage.includes('.') ? expandedImage + '.png' : expandedImage} 
+                            alt="Expanded question figure" 
+                            className="max-w-full max-h-[85vh] object-contain bg-white rounded-xl shadow-2xl p-4"
+                        />
+                    </div>
+                </div>
+            )}
             {/* Strict Mode Fullscreen Warning */}
             {fsWarningCountdown !== null && mode === 'test' && (
                 <div className="fixed inset-0 z-[100] flex items-center justify-center bg-red-900/90 backdrop-blur-md">
@@ -700,7 +722,7 @@ export default function ClassroomAssignmentDetailPage() {
                             <Clock className="w-5 h-5 text-slate-400" />
                         </div>
                     )}
-                    {mode !== 'review' && (
+                    {(mode as string) !== 'review' && (
                         <button
                             onClick={() => setIsTimerHidden(!isTimerHidden)}
                             className="text-[11px] font-bold tracking-widest uppercase text-slate-500 hover:text-indigo-600 bg-transparent px-4 py-1.5 rounded-full transition-colors mt-0.5"
@@ -708,14 +730,14 @@ export default function ClassroomAssignmentDetailPage() {
                             {isTimerHidden ? 'Show Timer' : 'Hide Timer'}
                         </button>
                     )}
-                    {mode === 'review' && (
+                    {(mode as string) === 'review' && (
                         <span className="text-[11px] font-bold tracking-widest uppercase text-amber-600 bg-amber-50 px-3 py-1 rounded-full mt-0.5">Review</span>
                     )}
                 </div>
 
                 {/* Right Controls */}
                 <div className="flex items-center justify-end flex-1 gap-2">
-                    {mode === 'review' && (
+                    {(mode as string) === 'review' && (
                         <button
                             onClick={() => setMode('complete')}
                             className="text-sm font-bold text-white bg-slate-900 hover:bg-black px-4 py-2 rounded-full mr-1"
@@ -775,7 +797,7 @@ export default function ClassroomAssignmentDetailPage() {
             </header>
 
             {/* ── Body ── */}
-            <div className="flex-1 flex overflow-hidden relative">
+            <div className="flex-1 flex overflow-hidden relative min-h-0 w-full h-full bg-white">
 
                 
                 {/* ── Left Pane (Passage or Desmos) ── */}
@@ -810,6 +832,7 @@ export default function ClassroomAssignmentDetailPage() {
                                         src={currentQuestion.imageUrl}
                                         alt="Question figure"
                                         className="max-w-full max-h-[400px] object-contain cursor-pointer hover:opacity-90 transition-opacity"
+                                        onClick={() => setExpandedImage(currentQuestion.imageUrl || null)}
                                     />
                                 </div>
                             )}
@@ -835,6 +858,7 @@ export default function ClassroomAssignmentDetailPage() {
                                         src={currentQuestion.imageUrl}
                                         alt="Question figure"
                                         className="max-w-full max-h-[400px] object-contain cursor-pointer hover:opacity-90 transition-opacity"
+                                        onClick={() => setExpandedImage(currentQuestion.imageUrl || null)}
                                     />
                                 </div>
                             )}
@@ -860,7 +884,7 @@ export default function ClassroomAssignmentDetailPage() {
                     className={`overflow-y-auto p-4 lg:p-10 pl-4 lg:pl-8 bg-white ${!isDragging && isMath ? 'transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]' : ''}`}
                     style={{ width: (isMath && !isDesmosOpen) ? '100%' : `${100 - leftPanelWidth}%` }}
                 >
-                    <div className="w-full max-w-[800px] mx-auto flex flex-col">
+                    <div className="w-full max-w-[800px] mx-auto flex flex-col pb-40">
                         {/* Header: Connected Question Number & Mark for Review & ABC */}
                         <div className="flex items-center w-full h-[54px] mb-4 mt-2">
                             {/* Number - standalone rounded square */}
@@ -881,7 +905,8 @@ export default function ClassroomAssignmentDetailPage() {
                             <div className="w-[54px] h-[54px] flex-shrink-0 flex items-center justify-center rounded-[10px] border border-[#D1D5DB] bg-white relative z-10 shadow-sm">
                                 <button
                                     onClick={() => setIsEliminationMode(!isEliminationMode)}
-                                    className={`flex items-center justify-center w-full h-full font-bold text-[14px] transition-colors rounded-[10px] ${isEliminationMode ? 'bg-[#111827] text-white' : 'text-slate-700 hover:bg-slate-50'}`}
+                                    disabled={!(questions[currentIdx]?.options && questions[currentIdx].options.length > 0)}
+                                    className={`flex items-center justify-center w-full h-full font-bold text-[14px] transition-colors rounded-[10px] ${!(questions[currentIdx]?.options && questions[currentIdx].options.length > 0) ? 'opacity-30 cursor-not-allowed text-slate-400' : isEliminationMode ? 'bg-[#111827] text-white' : 'text-slate-700 hover:bg-slate-50'}`}
                                 >
                                     <span className="line-through decoration-[#ef4444] decoration-[2px]">ABC</span>
                                 </button>
@@ -894,7 +919,7 @@ export default function ClassroomAssignmentDetailPage() {
                                 {/* Image before stem */}
                                 {questions[currentIdx]?.imageUrl && questions[currentIdx]?.imagePosition !== 'after-stem' && (
                                     <div className="w-full flex justify-center mb-6">
-                                        <img src={questions[currentIdx].imageUrl} alt="Question figure" className="max-w-full h-auto rounded-lg shadow-sm border border-slate-200" />
+                                        <img src={questions[currentIdx].imageUrl} alt="Question figure" className="max-w-full h-auto rounded-lg shadow-sm border border-slate-200 cursor-pointer hover:opacity-90 transition-opacity" onClick={() => setExpandedImage(questions[currentIdx].imageUrl || null)} />
                                     </div>
                                 )}
 
@@ -914,7 +939,7 @@ export default function ClassroomAssignmentDetailPage() {
                                 {/* Image after stem */}
                                 {questions[currentIdx]?.imageUrl && questions[currentIdx]?.imagePosition === 'after-stem' && (
                                     <div className="w-full flex justify-center mt-6 mb-6">
-                                        <img src={questions[currentIdx].imageUrl} alt="Question figure" className="max-w-full h-auto rounded-lg shadow-sm border border-slate-200" />
+                                        <img src={questions[currentIdx].imageUrl} alt="Question figure" className="max-w-full h-auto rounded-lg shadow-sm border border-slate-200 cursor-pointer hover:opacity-90 transition-opacity" onClick={() => setExpandedImage(questions[currentIdx].imageUrl || null)} />
                                     </div>
                                 )}
                             </div>
@@ -933,10 +958,10 @@ export default function ClassroomAssignmentDetailPage() {
                                         className="w-[280px] h-[52px] border-2 border-[#D1D5DB] rounded-[8px] px-4 text-[17px] font-mono font-bold text-[#111827] text-left focus:outline-none focus:border-[#111827] transition-colors bg-white"
                                         autoComplete="off"
                                         spellCheck={false}
-                                        disabled={mode === 'review'}
+                                        disabled={(mode as string) === 'review'}
                                         placeholder="Enter your answer"
                                     />
-                                    {mode === 'review' && (
+                                    {(mode as string) === 'review' && (
                                         <div className="mt-2 text-[15px] font-medium">
                                             {String(answers[String(currentIdx)] || '').trim() === String(questions[currentIdx]?.answer || '').trim() ? (
                                                 <span className="text-emerald-600">Correct!</span>
@@ -952,8 +977,8 @@ export default function ClassroomAssignmentDetailPage() {
 
                                 const isSelected = answers[String(currentIdx)] === letter;
                                 const isEliminated = currentEliminations.includes(letter);
-                                const isCorrectAnswer = mode === 'review' && currentQuestion.answer === letter;
-                                const isWrongSelection = mode === 'review' && isSelected && !isCorrectAnswer;
+                                const isCorrectAnswer = (mode as string) === 'review' && currentQuestion.answer === letter;
+                                const isWrongSelection = (mode as string) === 'review' && isSelected && !isCorrectAnswer;
 
                                 // If review is allowed to show correct/wrong
                                 let overrideBox = '';
@@ -970,7 +995,7 @@ export default function ClassroomAssignmentDetailPage() {
                                                 }
                                             }}
                                             htmlFor={`opt-${letter}`}
-                                            className={`relative w-full border h-auto min-h-[56px] rounded-[10px] flex items-stretch cursor-pointer transition-all duration-200 overflow-hidden ${isSelected ? 'border-[#111827] shadow-[inset_0_0_0_1px_#111827] z-10' : 'border-[#E5E7EB] hover:border-slate-400 shadow-sm'} ${overrideBox}`}
+                                            className={`relative w-full border h-auto min-h-[46px] rounded-[10px] flex items-stretch cursor-pointer transition-all duration-200 overflow-hidden ${isSelected ? 'border-[#111827] shadow-[inset_0_0_0_1px_#111827] z-10' : 'border-[#E5E7EB] hover:border-slate-400 shadow-sm'} ${overrideBox}`}
                                         >
                                             <input
                                                 type="radio"
@@ -991,7 +1016,7 @@ export default function ClassroomAssignmentDetailPage() {
                                             </div>
 
                                             {/* Answer Text */}
-                                            <div className="flex-1 px-3 py-3 flex items-center bg-transparent">
+                                            <div className="flex-1 px-3 py-2 flex items-center bg-transparent">
                                                 <span className={`text-[16px] ${isEliminated ? 'text-slate-400' : 'text-[#111827]'}`}>
                                                     <HighlightableText
                                                         text={optText}

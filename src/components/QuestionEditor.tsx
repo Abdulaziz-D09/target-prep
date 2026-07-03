@@ -66,7 +66,7 @@ function QuestionEditorCard({
                     </span>
                     <div>
                         <p className="font-bold site-text-strong text-sm line-clamp-1 break-all">
-                            {question.passage ? question.passage.slice(0, 80) + '...' : question.question.slice(0, 80) + '...'}
+                            {question.passage ? question.passage.slice(0, 80) + '...' : (question.question || '').slice(0, 80) + '...'}
                         </p>
                         <p className="text-xs site-text-muted mt-0.5">
                             {question.type} • {question.difficulty}

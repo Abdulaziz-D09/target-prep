@@ -344,7 +344,7 @@ export default function ClassDetailPage() {
                                                                     <div>
                                                                         <p className="font-semibold site-text-strong text-[14px]">{asgn.title}</p>
                                                                         <p className="text-[12px] site-text-muted">
-                                                                            {asgn.questions.length > 0 ? `${asgn.questions.length} questions` : 'No questions added'}
+                                                                            {(asgn.questions || []).length > 0 ? `${(asgn.questions || []).length} questions` : 'No questions added'}
                                                                         </p>
                                                                     </div>
                                                                 </div>
@@ -393,7 +393,7 @@ export default function ClassDetailPage() {
                                                                             <div className="w-px bg-slate-200 dark:bg-slate-800 hidden sm:block" />
                                                                             <div>
                                                                                 <p className="text-[10px] uppercase tracking-widest font-bold site-text-muted mb-1">Questions</p>
-                                                                                <p className="text-[13px] font-bold site-text-strong">{asgn.questions.length}</p>
+                                                                                <p className="text-[13px] font-bold site-text-strong">{(asgn.questions || []).length}</p>
                                                                             </div>
                                                                             <div className="w-px bg-slate-200 dark:bg-slate-800 hidden sm:block" />
                                                                             <div>

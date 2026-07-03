@@ -23,11 +23,11 @@ export const createSupabaseStorage = (columnName: 'classroom_state' | 'test_stat
           .eq('user_id', session.user.id)
           .single();
 
-        if (error || !data || !data[columnName]) {
+        if (error || !data || !(data as any)[columnName]) {
            return window.localStorage.getItem(name);
         }
 
-        return JSON.stringify(data[columnName]);
+        return JSON.stringify((data as any)[columnName]);
       } catch (err) {
         console.error(`Error loading ${name} from Supabase:`, err);
         return window.localStorage.getItem(name);

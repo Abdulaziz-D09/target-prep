@@ -9,22 +9,7 @@ import 'katex/dist/katex.min.css';
 import renderMathInElement from 'katex/contrib/auto-render';
 import { useEffect, useRef } from 'react';
 import { LatexRenderer } from '@/components/LatexRenderer';
-
-// Very basic markdown bold renderer for the rationale
-function formatRationale(text: string) {
-    return text.split('\n').map((line, i) => {
-        const parts = line.split(/(\*\*.*?\*\*|\*.*?\*)/g).map((part, j) => {
-            if (part.startsWith('**') && part.endsWith('**')) {
-                return <strong key={j}>{part.slice(2, -2)}</strong>;
-            }
-            if (part.startsWith('*') && part.endsWith('*')) {
-                return <em key={j}>{part.slice(1, -1)}</em>;
-            }
-            return part;
-        });
-        return <p key={i} className="mb-2">{parts}</p>;
-    });
-}
+import { BeautifulExplanation } from '@/components/BeautifulExplanation';
 
 export interface ReviewModalProps {
     isOpen: boolean;
@@ -126,8 +111,8 @@ export function ReviewModal({ isOpen, onClose, questionKey, testData, userAnswer
                             </div>
                         )}
                         {q.image && (
-                            <div className="mb-4 rounded-xl overflow-hidden border border-slate-200 bg-slate-50 flex items-center justify-center">
-                                <img src={q.image} alt="Question figure" className="max-w-full max-h-[400px] object-contain p-2" />
+                            <div className="mb-4 flex items-center justify-center">
+                                <img src={q.image && !q.image.includes('.') ? q.image + '.png' : q.image} alt="Question figure" className="max-w-full max-h-[400px] object-contain" />
                             </div>
                         )}
                         <h4 className="text-[15px] font-medium text-slate-900 mb-4">
@@ -161,8 +146,8 @@ export function ReviewModal({ isOpen, onClose, questionKey, testData, userAnswer
                         {showExplanation && q.explanation && (
                             <>
                                 <h3 className="font-bold text-[16px] text-slate-900 mb-4">Rationale</h3>
-                                <div className="text-[15px] text-black leading-[1.7] whitespace-pre-wrap">
-                                    {formatRationale(q.explanation)}
+                                <div className="text-[15px] text-black leading-[1.7] whitespace-pre-wrap -mx-2">
+                                    <BeautifulExplanation text={q.explanation} />
                                 </div>
                             </>
                         )}

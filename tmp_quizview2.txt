@@ -1,0 +1,447 @@
+                                                                    </div>
+                                                                )}
+                                                            </button>
+                                                        )}
+                                                </div>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                                ) : (
+                                    <div className="mb-6 w-full max-w-[280px]" style={{ animation: 'qb-slideUp 0.35s ease both' }}>
+                                        <input
+                                            type="text"
+                                            inputMode="decimal"
+                                            value={currentNumericResponse}
+                                            onChange={(event) => handleNumericResponseChange(event.target.value)}
+                                            onKeyDown={(event) => {
+                                                if (event.key === 'Enter' && canCheck) {
+                                                    event.preventDefault();
+                                                    handleCheck();
+                                                }
+                                            }}
+                                            disabled={isChecked}
+                                            className={`w-full h-[48px] rounded-[6px] border bg-white px-4 text-[17px] font-bold shadow-sm outline-none transition disabled:cursor-not-allowed text-left ${
+                                                isChecked 
+                                                    ? 'border-emerald-500 ring-2 ring-emerald-100 disabled:bg-emerald-50 text-emerald-900' 
+                                                    : (wrongAttemptsForCurrent.includes(cleanNumericInput(currentNumericResponse)) && cleanNumericInput(currentNumericResponse).length > 0)
+                                                        ? 'border-red-500 ring-2 ring-red-100 text-red-900 bg-red-50/50' 
+                                                        : 'border-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 disabled:bg-slate-100 text-slate-900'
+                                            }`}
+                                        />
+                                    </div>
+                                )}
+                                
+                            </div>
+                        </div>
+                    </div>
+                ) : (
+                    /* ── ENGLISH LAYOUT: Passage left, Question right (unchanged) ── */
+                    <>
+                        {/* Left Panel — Passage */}
+                        <div className="overflow-y-auto bg-white" style={{ width: `${leftPanelWidth}%` }}>
+                            <div className="p-4 lg:p-10 pr-4 lg:pr-8 max-w-[800px] w-full mx-auto">
+                                {q.passage ? (
+                                    <div className="py-2" style={{ animation: 'qb-slideUp 0.4s ease both' }}>
+                                        <PassageRenderer
+                                            text={q.passage}
+                                            highlights={highlights[`p-${idx}`] || []}
+                                            onAddHighlight={(h) => setHighlights(p => ({ ...p, [`p-${idx}`]: [...(p[`p-${idx}`] || []), h] }))}
+                                            onRemoveHighlight={(id) => setHighlights(p => ({ ...p, [`p-${idx}`]: (p[`p-${idx}`] || []).filter(x => x.id !== id) }))}
+                                            onUpdateHighlight={(id, updates) => setHighlights(p => ({ ...p, [`p-${idx}`]: (p[`p-${idx}`] || []).map(x => x.id === id ? { ...x, ...updates } : x) }))}
+                                            isHighlightModeActive={isHighlightActive}
+                                            defaultHighlightColor={defaultHighlightColor}
+                                            onChangeDefaultColor={setDefaultHighlightColor}
+                                        />
+                                    </div>
+                                ) : showImageOnLeft && q.image ? (
+                                    <div className="rounded-[20px] border border-slate-100 bg-white p-4 shadow-[0_8px_25px_rgba(15,23,42,0.04)]" style={{ animation: 'qb-slideUp 0.4s ease both' }}>
+                                        {q.imageLayout?.stem ? (
+                                            <div onClick={() => setExpandedImage(q.image || null)} className="cursor-pointer hover:opacity-90 transition-opacity w-full">
+                                                <MathImageSlice 
+                                                    src={q.image && !q.image.includes('.') ? q.image + '.png' : q.image} 
+                                                    crop={q.imageLayout.stem} 
+                                                    alt="Question Image"
+                                                />
+                                            </div>
+                                        ) : (
+                                            <img src={q.image && !q.image.includes('.') ? q.image + '.png' : q.image} alt="Question image" className="max-w-full h-auto w-full max-h-[400px] rounded-lg object-contain cursor-pointer hover:opacity-90 transition-opacity" onClick={() => setExpandedImage(q.image || null)} />
+                                        )}
+                                    </div>
+                                ) : (
+                                    <div className="mt-8 rounded-[20px] border border-dashed border-slate-200 bg-slate-50/70 px-6 py-16 text-center text-[17px] italic text-slate-400">
+                                        No passage for this question.
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+
+                        {/* Draggable Divider */}
+                        <div onMouseDown={() => setIsDragging(true)} className="w-[3px] bg-[#E5E7EB] hover:bg-[#D1D5DB] cursor-col-resize flex flex-col items-center justify-center flex-shrink-0 transition-colors z-20 relative group">
+                            <div className="h-[36px] w-[16px] bg-[#111827] rounded-[4px] flex items-center justify-center absolute left-1/2 -translate-x-1/2 pointer-events-none shadow-sm gap-[2px]">
+                                <div className="w-0 h-0 border-t-[4px] border-t-transparent border-b-[4px] border-b-transparent border-r-[4px] border-r-white"></div>
+                                <div className="w-0 h-0 border-t-[4px] border-t-transparent border-b-[4px] border-b-transparent border-l-[4px] border-l-white"></div>
+                            </div>
+                        </div>
+
+                        {/* Right Panel — Question + Answers */}
+                        <div ref={rightPanelRef} className="overflow-y-auto p-4 lg:p-10 pl-4 lg:pl-8 bg-white" style={{ width: `${100 - leftPanelWidth}%` }}>
+                            <div className="w-full max-w-[800px] mx-auto flex flex-col pb-10">
+
+                                {/* Header: Connected Question Number & Mark for Review & ABC */}
+                                <div className="flex items-center w-full h-[54px] mb-4 mt-2">
+                                    {/* Number - standalone rounded square */}
+                                    <div className="bg-[#111827] text-white font-bold text-[16px] w-[54px] h-[54px] rounded-[10px] flex-shrink-0 flex items-center justify-center relative z-10 shadow-sm">
+                                        {idx + 1}
+                                    </div>
+
+                                    {/* Mark for Review (Middle) */}
+                                    <button
+                                        onClick={() => handleToggleReview(idx)}
+                                        className="flex flex-1 items-center gap-2 px-6 h-[54px] text-[#4B5563] transition-colors justify-start bg-white border-t border-b border-[#D1D5DB] group/mfr hover:bg-slate-50 relative z-0 -mx-[12px]"
+                                    >
+                                        <Bookmark className={`w-[14px] h-[14px] transition-colors ${flaggedQuestions[idx] ? 'fill-slate-600 text-slate-600' : 'text-slate-400 group-hover/mfr:text-slate-600'}`} />
+                                        <span className={flaggedQuestions[idx] ? 'font-bold text-[14px]' : 'font-medium text-[14px] group-hover/mfr:font-bold'}>Mark for Review</span>
+                                    </button>
+
+                                    {/* ABC Elimination (Right) */}
+                                    <div className="w-[54px] h-[54px] flex-shrink-0 flex items-center justify-center rounded-[10px] border border-[#D1D5DB] bg-white relative z-10 shadow-sm">
+                                        <button
+                                            onClick={() => setIsEliminationMode(!isEliminationMode)}
+                                            disabled={!isMultipleChoiceQuestion(q)}
+                                            className={`flex items-center justify-center w-full h-full font-bold text-[14px] transition-colors rounded-[10px] ${!isMultipleChoiceQuestion(q) ? 'opacity-30 cursor-not-allowed text-slate-400' : isEliminationMode ? 'bg-[#111827] text-white' : 'text-slate-700 hover:bg-slate-50'}`}
+                                        >
+                                            <span className="line-through decoration-[#ef4444] decoration-[2px]">ABC</span>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                {q.image && !showImageOnLeft && (
+                                    <div className="mb-5 rounded-xl overflow-hidden border border-slate-100 flex justify-center bg-slate-50 p-4" style={{ animation: 'qb-slideUp 0.2s ease both' }}>
+                                        {q.imageLayout?.stem ? (
+                                            <div onClick={() => setExpandedImage(q.image || null)} className="cursor-pointer hover:opacity-90 transition-opacity w-full">
+                                                <MathImageSlice 
+                                                    src={q.image && !q.image.includes('.') ? q.image + '.png' : q.image} 
+                                                    crop={q.imageLayout.stem} 
+                                                    alt="Question Image"
+                                                />
+                                            </div>
+                                        ) : (
+                                            <img src={q.image && !q.image.includes('.') ? q.image + '.png' : q.image} alt="Question image" className="max-w-full h-auto max-h-[400px] object-contain rounded-lg shadow-sm cursor-pointer hover:opacity-90 transition-opacity" onClick={() => setExpandedImage(q.image || null)} />
+                                        )}
+                                    </div>
+                                )}
+
+                                {showQuestionCard && (
+                                    <div className="mb-3" style={{ animation: 'qb-slideUp 0.3s ease both' }}>
+                                        <div className="text-[16px] text-[#111827] leading-[1.7]">
+                                            <HighlightableText
+                                                text={q.question || ''}
+                                                highlights={highlights[`q-${idx}`] || []}
+                                                onAddHighlight={(h) => setHighlights(p => ({ ...p, [`q-${idx}`]: [...(p[`q-${idx}`] || []), h] }))}
+                                                onRemoveHighlight={(id) => setHighlights(p => ({ ...p, [`q-${idx}`]: (p[`q-${idx}`] || []).filter(x => x.id !== id) }))}
+                                                onUpdateHighlight={(id, updates) => setHighlights(p => ({ ...p, [`q-${idx}`]: (p[`q-${idx}`] || []).map(x => x.id === id ? { ...x, ...updates } : x) }))}
+                                                isHighlightModeActive={isHighlightActive}
+                                                defaultHighlightColor={defaultHighlightColor}
+                                                onChangeDefaultColor={setDefaultHighlightColor}
+                                            />
+                                        </div>
+                                    </div>
+                                )}
+
+                                {isMultipleChoiceQuestion(q) ? (
+                                <div className="space-y-2 w-full relative pl-[2px] pt-[2px] mb-6">
+                                    {q.options.map((opt, i) => {
+                                        const isSelected = sel === i;
+                                        const isEliminated = currentEliminations.includes(i);
+                                        const letter = String.fromCharCode(65 + i);
+                                        const isTriedWrong = wrongAttemptsForCurrent.includes(i);
+                                        const isCorrectSelection = isChecked && i === q.answer;
+                                        const optionText = cleanOptionText(opt);
+
+                                        let boxClass = `relative w-full border h-auto min-h-[56px] rounded-[10px] flex items-stretch transition-all duration-200 overflow-hidden ${(isChecked || isTriedWrong) ? 'cursor-default pointer-events-none' : 'cursor-pointer'} select-text group`;
+                                        let circleWrapperClass = 'w-[52px] flex-shrink-0 flex items-center justify-center bg-transparent';
+                                        let circleClass = 'w-[30px] h-[30px] rounded-full flex items-center justify-center font-bold text-[14px] border-[1.5px] transition-all';
+                                        const textTone = isEliminated ? 'text-slate-400' : 'text-[#111827]';
+
+                                        if (isCorrectSelection) {
+                                            boxClass += ' border-emerald-500 bg-emerald-50/60 shadow-[inset_0_0_0_1px_#10b981]';
+                                            circleClass += ' border-emerald-500 bg-emerald-500 text-white';
+                                        } else if (isTriedWrong) {
+                                            boxClass += ' border-red-500 bg-red-50/60 shadow-[inset_0_0_0_1px_#ef4444]';
+                                            circleClass += ' border-red-500 bg-red-500 text-white';
+                                        } else if (isSelected) {
+                                            boxClass += ' border-[#111827] bg-white shadow-[inset_0_0_0_1px_#111827] z-10';
+                                            circleClass += ' border-[#111827] bg-[#111827] text-white shadow-md';
+                                        } else {
+                                            boxClass += ' border-[#E5E7EB] bg-white hover:border-slate-400 shadow-sm';
+                                            circleClass += ' border-[#D1D5DB] text-[#4B5563] bg-white group-hover:border-[#9CA3AF] group-hover:text-[#111827]';
+                                        }
+
+                                        return (
+                                            <div key={i} className="flex items-center gap-4 relative w-full group" style={{ animationDelay: `${i * 0.05}s`, animation: 'qb-slideUp 0.35s ease both' }}>
+                                                <div
+                                                    onClick={(e) => {
+                                                        if (isChecked || isTriedWrong) return;
+                                                        const selectedText = window.getSelection()?.toString();
+                                                        if (selectedText && selectedText.length > 0) return;
+
+                                                        if (isEliminationMode && !isChecked) {
+                                                            e.preventDefault();
+                                                            handleSelect(i);
+                                                        } else if (!isEliminated && !isChecked) {
+                                                            handleSelect(i);
+                                                        }
+                                                    }}
+                                                    className={boxClass}
+                                                >
+                                                    <div className={circleWrapperClass}>
+                                                        <div className={circleClass}>{letter}</div>
+                                                    </div>
+                                                    <div className={`relative z-10 flex-1 ${textTone} p-4 flex items-center bg-transparent`}>
+                                                        <HighlightableText
+                                                            text={optionText || `Option ${letter}`}
+                                                            className="text-[15px] leading-[1.6] text-inherit"
+                                                            highlights={highlights[`opt-${idx}-${i}`] || []}
+                                                            onAddHighlight={(h) => setHighlights(p => ({ ...p, [`opt-${idx}-${i}`]: [...(p[`opt-${idx}-${i}`] || []), h] }))}
+                                                            onRemoveHighlight={(id) => setHighlights(p => ({ ...p, [`opt-${idx}-${i}`]: (p[`opt-${idx}-${i}`] || []).filter(x => x.id !== id) }))}
+                                                            onUpdateHighlight={(id, updates) => setHighlights(p => ({ ...p, [`opt-${idx}-${i}`]: (p[`opt-${idx}-${i}`] || []).map(x => x.id === id ? { ...x, ...updates } : x) }))}
+                                                            isHighlightModeActive={isHighlightActive}
+                                                            defaultHighlightColor={defaultHighlightColor}
+                                                            onChangeDefaultColor={setDefaultHighlightColor}
+                                                        />
+                                                    </div>
+                                                    {isEliminated && !isChecked && !isTriedWrong && (
+                                                        <div className="pointer-events-none absolute left-0 top-1/2 h-[1.5px] w-full -translate-y-[50%] bg-slate-500"></div>
+                                                    )}
+                                                </div>
+
+                                                <div className="flex w-[50px] flex-shrink-0 items-center justify-start">
+                                                    {!isChecked && !isTriedWrong && isEliminationMode && (
+                                                            <button
+                                                                onClick={(e) => {
+                                                                    e.preventDefault();
+                                                                    e.stopPropagation();
+                                                                    handleSelect(i);
+                                                                }}
+                                                                className="group/btn z-20 flex items-center justify-center transition-colors"
+                                                            >
+                                                                {isEliminated ? (
+                                                                    <span className="font-bluebook text-[14px] font-bold text-[#111827] underline decoration-[#111827] decoration-[1.5px] underline-offset-[3px] hover:text-slate-700">Undo</span>
+                                                                ) : (
+                                                                    <div className="relative flex h-[28px] w-[28px] items-center justify-center rounded-full border-[1px] border-slate-900 bg-white opacity-50 transition-colors group-hover/btn:bg-slate-100 hover:opacity-100">
+                                                                        <span className="text-[12px] font-bold text-slate-900">{letter}</span>
+                                                                        <div className="absolute h-[1.5px] w-[38px] bg-slate-900"></div>
+                                                                    </div>
+                                                                )}
+                                                            </button>
+                                                        )}
+                                                </div>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                                ) : (
+                                    <div className="mb-6 w-full max-w-[280px]" style={{ animation: 'qb-slideUp 0.35s ease both' }}>
+                                        <input
+                                            type="text"
+                                            inputMode="decimal"
+                                            value={currentNumericResponse}
+                                            onChange={(event) => handleNumericResponseChange(event.target.value)}
+                                            onKeyDown={(event) => {
+                                                if (event.key === 'Enter' && canCheck) {
+                                                    event.preventDefault();
+                                                    handleCheck();
+                                                }
+                                            }}
+                                            disabled={isChecked}
+                                            className={`w-full h-[48px] rounded-[6px] border bg-white px-4 text-[17px] font-bold shadow-sm outline-none transition disabled:cursor-not-allowed text-left ${
+                                                isChecked 
+                                                    ? 'border-emerald-500 ring-2 ring-emerald-100 disabled:bg-emerald-50 text-emerald-900' 
+                                                    : (wrongAttemptsForCurrent.includes(cleanNumericInput(currentNumericResponse)) && cleanNumericInput(currentNumericResponse).length > 0)
+                                                        ? 'border-red-500 ring-2 ring-red-100 text-red-900 bg-red-50/50' 
+                                                        : 'border-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 disabled:bg-slate-100 text-slate-900'
+                                            }`}
+                                        />
+                                    </div>
+                                )}
+                                
+                            </div>
+                        </div>
+                    </>
+                )}
+            </main>
+
+            {/* Premium Bottom Navigation Bar */}
+            <footer className="bg-white/90 backdrop-blur-xl border-t border-slate-200/80 px-6 h-[72px] flex items-center justify-between shrink-0 absolute bottom-0 left-0 right-0 z-40 shadow-[0_-2px_15px_rgba(0,0,0,0.03)] pb-safe pt-2">
+                {/* Left controls name user panel or empty spacer */}
+                <div className="flex-1 max-w-[200px]"></div>
+
+                {/* Center Question Navigator */}
+                <div className="absolute left-1/2 -translate-x-1/2">
+                    <button
+                        onClick={() => setShowNav(!showNav)}
+                        className="flex items-center justify-center px-4 h-[44px] rounded-[6px] font-bold text-white bg-[#222222] hover:bg-[#333333] transition-all hover:scale-[1.02] shadow-sm"
+                    >
+                        <span className="text-[15px] tracking-wide mr-2">Question {idx + 1} of {questions.length}</span>
+                        <ChevronUp className="w-[18px] h-[18px]" />
+                    </button>
+                </div>
+
+                {/* Right controls */}
+                <div className="flex items-center justify-end flex-1 gap-4 mb-2">
+                    <button
+                        onClick={() => setShowExp(true)}
+                        className="rounded-full border-2 border-slate-200 bg-white px-6 py-2.5 text-[15px] font-bold text-slate-700 transition-all shadow-sm hover:border-slate-300 hover:bg-slate-50 hover:shadow-md hover:scale-[1.02]"
+                    >
+                        Explanation
+                    </button>
+                    <button
+                        onClick={handleCheck}
+                        disabled={!canCheck}
+                        className={`px-8 py-2.5 rounded-full font-bold text-[15px] transition-all flex items-center gap-2 ${!canCheck ? 'bg-slate-200 text-slate-400 cursor-not-allowed opacity-70 font-medium' : 'bg-emerald-500 hover:bg-emerald-600 text-white shadow-md hover:scale-[1.02]'}`}>
+                        Check Answer <CheckCircle className="w-4 h-4" />
+                    </button>
+                    <button
+                        onClick={prev}
+                        disabled={idx === 0}
+                        className="bg-white border-2 border-slate-200 hover:border-slate-300 text-slate-700 px-8 py-2.5 rounded-full font-bold text-[15px] transition-all disabled:opacity-40 disabled:hover:border-slate-200 disabled:cursor-not-allowed shadow-sm hover:shadow-md hover:bg-slate-50 hover:scale-[1.02]"
+                    >
+                        Back
+                    </button>
+                    <button
+                        onClick={next}
+                        className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-9 py-2.5 rounded-full font-bold text-[15px] transition-all shadow-md shadow-blue-500/20 hover:shadow-lg hover:shadow-blue-500/30 hover:scale-[1.02]"
+                    >
+                        {idx === questions.length - 1 ? 'Finish' : 'Next'}
+                    </button>
+                </div>
+            </footer>
+
+            <ReferenceSheet isOpen={isReferenceOpen} onClose={() => setIsReferenceOpen(false)} />
+        </div>
+        </>
+    );
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+//  SUMMARY VIEW
+// ══════════════════════════════════════════════════════════════════════════════
+function SummaryView({ result, onRestart, onBack }: { result: SessionResult; onRestart: () => void; onBack: () => void }) {
+    const pct = Math.round((result.correct / result.total) * 100);
+    const grade = pct >= 90 ? { l: 'Excellent!', g: 'from-emerald-400 to-teal-500', icon: Trophy } : pct >= 70 ? { l: 'Great Job!', g: 'from-blue-400 to-indigo-500', icon: Star } : pct >= 50 ? { l: 'Keep Going!', g: 'from-amber-400 to-orange-500', icon: Zap } : { l: 'Keep Practicing!', g: 'from-rose-400 to-pink-500', icon: BookOpen };
+    const GradeIcon = grade.icon;
+
+    return (
+        <div className="min-h-screen flex items-center justify-center relative bg-transparent">
+            <FloatingPageShapes theme="question-bank" />
+            <div className="relative z-10 max-w-md w-full px-6">
+                <div className="bg-white rounded-2xl shadow-lg border border-slate-100 p-10 text-center" style={{ animation: 'qb-pop 0.5s ease both' }}>
+                    <div className={`w-24 h-24 rounded-2xl bg-gradient-to-br ${grade.g} flex items-center justify-center mx-auto mb-5 shadow-xl`} style={{ animation: 'qb-float 4s ease-in-out infinite' }}>
+                        <GradeIcon className="w-12 h-12 text-white" />
+                    </div>
+                    <p className="text-lg font-black text-[#1565c0] mb-1">{grade.l}</p>
+                    <h2 className="text-5xl font-black text-[#d32f2f]"><AnimCount to={pct} />%</h2>
+                    <p className="text-slate-500 text-[14px] mt-1">Question Bank Session</p>
+
+                    <div className="grid grid-cols-3 gap-4 mt-8">
+                        {[{ n: result.correct, l: 'Correct', c: 'emerald' }, { n: result.wrong, l: 'Wrong', c: 'red' }, { n: result.skipped, l: 'Skipped', c: 'slate' }].map((s, i) => (
+                            <div key={i} className={`bg-${s.c}-50 rounded-2xl p-4 border border-${s.c}-100`} style={{ animation: `qb-slideUp 0.4s ease ${0.2 + i * 0.1}s both` }}>
+                                <p className={`text-2xl font-black text-${s.c}-700`}><AnimCount to={s.n} dur={800} /></p>
+                                <p className={`text-[11px] font-bold text-${s.c}-600 uppercase tracking-wider mt-0.5`}>{s.l}</p>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+                <div className="space-y-3 mt-6" style={{ animation: 'qb-slideUp 0.5s ease 0.4s both' }}>
+                    <button onClick={onRestart} className="w-full bg-[#1565c0] hover:bg-[#1d4ea8] text-white py-4 rounded-xl font-bold text-[15px] transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5 active:scale-[0.98] flex items-center justify-center gap-2">
+                        <RotateCcw className="w-5 h-5" /> Practice Again
+                    </button>
+                    <button onClick={onBack} className="w-full bg-white border border-slate-200 text-[#1565c0] py-3.5 rounded-xl font-bold transition-all hover:bg-slate-50 hover:shadow-sm flex items-center justify-center gap-2">
+                        <Target className="w-5 h-5" /> Choose Another Topic
+                    </button>
+                </div>
+            </div>
+        </div>
+    );
+}
+
+// ── Root ──────────────────────────────────────────────────────────────────────
+export interface QBStat {
+    status: 'correct' | 'incorrect';
+    timeSpentSeconds: number;
+}
+export type QBStats = Record<string, QBStat>;
+const QB_STATS_STORAGE_KEY = 'targetprep_qb_stats';
+
+export default function QuestionBankPage() {
+    const [view, setView] = useState<View>('browse');
+    const [quizQ, setQuizQ] = useState<Question[]>([]);
+    const [label, setLabel] = useState('');
+    const [result, setResult] = useState<SessionResult | null>(null);
+    const [reviewedQuestionIds, setReviewedQuestionIds] = useState<string[]>([]);
+    const [qbStats, setQbStats] = useState<QBStats>({});
+    const router = useRouter();
+    const reviewedIdSet = useMemo(() => new Set(reviewedQuestionIds), [reviewedQuestionIds]);
+
+    useEffect(() => {
+        let frameId = 0;
+
+        try {
+            const rawReview = window.localStorage.getItem(QB_REVIEW_STORAGE_KEY);
+            if (rawReview) {
+                const parsed = JSON.parse(rawReview);
+                if (Array.isArray(parsed)) {
+                    setReviewedQuestionIds(parsed.filter((item): item is string => typeof item === 'string'));
+                }
+            }
+
+            const rawStats = window.localStorage.getItem(QB_STATS_STORAGE_KEY);
+            if (rawStats) {
+                const parsedStats = JSON.parse(rawStats);
+                if (typeof parsedStats === 'object' && parsedStats !== null) {
+                    setQbStats(parsedStats as QBStats);
+                }
+            }
+        } catch {
+            setReviewedQuestionIds([]);
+            setQbStats({});
+        }
+
+        return () => {
+            if (frameId) window.cancelAnimationFrame(frameId);
+        };
+    }, []);
+
+    const toggleReviewedQuestion = useCallback((questionId: string, nextValue: boolean) => {
+        setReviewedQuestionIds(prev => {
+            const nextIds = nextValue
+                ? Array.from(new Set([...prev, questionId]))
+                : prev.filter(id => id !== questionId);
+
+            window.localStorage.setItem(QB_REVIEW_STORAGE_KEY, JSON.stringify(nextIds));
+            return nextIds;
+        });
+    }, []);
+
+    const updateQuestionStat = useCallback((questionId: string, status: 'correct' | 'incorrect', timeSpentSeconds: number) => {
+        setQbStats(prev => {
+            const updated = { ...prev };
+            const existingTime = updated[questionId]?.timeSpentSeconds || 0;
+            updated[questionId] = {
+                status,
+                // Add the new time spent to any previously recorded time spent
+                timeSpentSeconds: existingTime + timeSpentSeconds
+            };
+            window.localStorage.setItem(QB_STATS_STORAGE_KEY, JSON.stringify(updated));
+            return updated;
+        });
+    }, []);
+
+    const start = (qs: Question[], l: string) => {
+        setQuizQ(qs); setLabel(l); setResult(null); setView('quiz');
+        router.push('/question-bank?view=quiz');
+    };
+    const finish = (r: SessionResult) => { setResult(r); setView('summary'); router.replace('/question-bank'); };
+
+    if (view === 'quiz') return <QuizView questions={quizQ} reviewedIds={reviewedIdSet} qbStats={qbStats} onBack={() => { setView('browse'); router.replace('/question-bank'); }} onFinish={finish} onToggleReview={toggleReviewedQuestion} onUpdateStat={updateQuestionStat} />;

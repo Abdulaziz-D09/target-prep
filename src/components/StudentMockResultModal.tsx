@@ -34,8 +34,9 @@ export function StudentMockResultModal({ isOpen, onClose, result, studentName, t
                         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
                             {(() => {
                                 const isCustomTest = !testData.sections;
+                                const testDataAny = testData as any;
                                 const flatQuestions = isCustomTest 
-                                    ? (testData.questions || []).map((q: any, i: number) => ({ q, qKey: String(q.id || i), qIdx: i }))
+                                    ? (testDataAny.questions || []).map((q: any, i: number) => ({ q, qKey: String(q.id || i), qIdx: i }))
                                     : testData.sections.flatMap((sec: any, sIdx: number) => 
                                         sec.modules.flatMap((mod: any, mIdx: number) => 
                                             mod.questions.map((q: any, qIdx: number) => ({ q, qKey: `${sIdx}-${mIdx}-${qIdx}`, qIdx }))

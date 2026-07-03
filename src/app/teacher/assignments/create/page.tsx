@@ -15,6 +15,7 @@ import {
 } from '@/components/SiteMotion';
 import Link from 'next/link';
 import { MockTestFilesEditor } from '@/components/MockTestFilesEditor';
+import { uploadFileToSupabase } from '@/lib/supabaseUpload';
 
 export default function CreateAssignmentPage() {
     const router = useRouter();
@@ -38,7 +39,7 @@ export default function CreateAssignmentPage() {
     const [selectedClassroomIds, setSelectedClassroomIds] = useState<string[]>([]);
     const [allowExit, setAllowExit] = useState(false);
     const [strictToleranceSeconds, setStrictToleranceSeconds] = useState(5);
-    const [customTests, setCustomTests] = useState<{ file?: File; id: string; name: string; questions: any[] }[]>([]);
+    const [customTests, setCustomTests] = useState<{ file?: File; pdfUrl?: string; id: string; name: string; questions: any[] }[]>([]);
 
     useEffect(() => {
         const saved = localStorage.getItem('create-assignment-state');
@@ -100,6 +101,15 @@ export default function CreateAssignmentPage() {
         setIsScanning(true);
         setScanError('');
         try {
+            // 1. First, upload the original PDF to Supabase so students can access it
+            let uploadedPdfUrl = '';
+            try {
+                uploadedPdfUrl = await uploadFileToSupabase(file, 'uploads');
+            } catch (uploadErr) {
+                console.error('Failed to upload PDF to Supabase, but continuing to extract questions...', uploadErr);
+            }
+
+            // 2. Then, send it to the AI to extract questions
             const fd = new FormData();
             fd.append('file', file);
             const res = await fetch('/api/scan-pdf', { method: 'POST', body: fd });
@@ -122,7 +132,9 @@ export default function CreateAssignmentPage() {
             const data = await res.json();
             if (data.questions) {
                 const qs = data.questions.map((q: any, i: number) => {
-                    const optionsArray = [
+                    const isSPR = !q.options || (typeof q.options === 'object' && Object.values(q.options).every(v => !v));
+                    
+                    const optionsArray = isSPR ? [] : [
                         q.options?.A || '',
                         q.options?.B || '',
                         q.options?.C || '',
@@ -130,13 +142,14 @@ export default function CreateAssignmentPage() {
                     ];
                     return {
                         id: `assign-q-${Date.now()}-${i}`,
+                        type: isSPR ? 'Math (SPR)' : 'Math',
                         passage: q.passage || null,
                         question: q.stem || q.question || '',
                         options: optionsArray,
                         answer: null
                     };
                 });
-                setCustomTests(prev => [...prev, { file, id: `assign-test-${Date.now()}`, name: file.name, questions: qs }]);
+                setCustomTests(prev => [...prev, { file, pdfUrl: uploadedPdfUrl, id: `assign-test-${Date.now()}`, name: file.name, questions: qs }]);
             } else {
                 setScanError('No questions found in document.');
             }
@@ -186,6 +199,7 @@ export default function CreateAssignmentPage() {
         const formattedTests = customTests.map(test => ({
             id: test.id,
             name: test.name,
+            pdfUrl: test.pdfUrl,
             questions: test.questions.map((q: any) => ({
                 id: q.id,
                 passage: q.passage,

@@ -41,13 +41,15 @@ export default function TeacherMockDetailPage() {
     const sessionToUse = mockSessions.find(s => s.id === mockId);
     if (sessionToUse) {
         sessionToUse.attachedTestIds.forEach(testId => {
-            const test = practiceTests.find(pt => pt.id === testId);
+            const test = practiceTests.find(pt => String(pt.id) === String(testId));
             if (test) {
-                test.modules.forEach(m => {
-                    m.questions.forEach(q => {
-                        // Override with custom question if exists
-                        const customQ = sessionToUse.customQuestions?.[q.id];
-                        mockQuestions.push(customQ || q);
+                test.sections?.forEach((sec: any) => {
+                    sec.modules?.forEach((m: any) => {
+                        m.questions?.forEach((q: any) => {
+                            // Override with custom question if exists
+                            const customQ = sessionToUse.customQuestions?.[q.id];
+                            mockQuestions.push(customQ || q);
+                        });
                     });
                 });
             }
@@ -314,7 +316,7 @@ export default function TeacherMockDetailPage() {
             ) : (
                 <MockTestFilesEditor 
                     initialTests={session.customTests || []} 
-                    onSave={(tests) => useClassroomStore.getState().updateSession(session.id, { customTests: tests })} 
+                    onSave={(tests) => useClassroomStore.getState().updateMockSession(session.id, { customTests: tests })} 
                 />
             )}
 
@@ -332,7 +334,7 @@ export default function TeacherMockDetailPage() {
                 onClose={() => setViewingResultId(null)}
                 result={sessionResults.find(r => r.id === viewingResultId) || null}
                 studentName={students.find(s => s.id === sessionResults.find(r => r.id === viewingResultId)?.studentId)?.name || 'Unknown'}
-                testData={session.customTests?.find(t => t.id === sessionResults.find(r => r.id === viewingResultId)?.assignedTestId) || practiceCatalog.find(t => t.id.toString() === sessionResults.find(r => r.id === viewingResultId)?.assignedTestId) || null}
+                testData={(session.customTests as any)?.find((t: any) => t.id === sessionResults.find(r => r.id === viewingResultId)?.assignedTestId) || practiceCatalog.find(t => t.id.toString() === sessionResults.find(r => r.id === viewingResultId)?.assignedTestId) || null}
             />
 
             {/* Remove Student Confirmation Modal */}

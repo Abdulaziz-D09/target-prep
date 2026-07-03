@@ -7,8 +7,6 @@ import {
     RotateCcw, Target, Flame, Star, Bookmark, ChevronUp, Maximize2,
     Clock, Highlighter, ArrowLeft, Pause, Play, Calculator, FileText
 } from 'lucide-react';
-import ebrwData from '@/data/ebrw_bank.json';
-import mathData from '@/data/math_bank.json';
 import { proceduralMathQuestions } from '@/data/proceduralMath';
 import { HighlightableText } from '@/components/HighlightableText';
 import { PassageRenderer } from '@/components/PassageRenderer';
@@ -16,6 +14,7 @@ import { Highlight } from '@/store/testStore';
 import { useRouter } from 'next/navigation';
 import DesmosCalculator from '@/components/DesmosCalculator';
 import { ReferenceSheet } from '@/components/ReferenceSheet';
+import { createClient } from '@/lib/supabase/client';
 import {
     FloatingPageShapes,
     itemRevealVariants,
@@ -79,6 +78,9 @@ type RawBankQuestion = {
 
 // ── Skill Detection ──────────────────────────────────────────────────────────
 function detectSkill(q: RawBankQuestion): { domain: string; skill: string } {
+    if (q.domain && q.skill) {
+        return { domain: q.domain, skill: q.skill };
+    }
     const qt = (q.question || '').toLowerCase();
     const pt = (q.passage || '').toLowerCase();
     const combined = qt + ' ' + pt;
@@ -157,8 +159,6 @@ function isGarbled(text: string): boolean {
 
 function isValidMathQuestion(q: RawBankQuestion): boolean {
     if (!q.question || isGarbled(q.question)) return false;
-    // The user explicitly requested to remove all questions that are just an image of the question
-    if (q.image) return false;
     
     const isNumeric = q.answerType === 'numeric' ||
         (q.answerText && !q.options) ||
@@ -186,58 +186,18 @@ function isValidEnglishQuestion(q: RawBankQuestion): boolean {
 }
 
 // Build question list
-const allEnglishQuestions: Question[] = (ebrwData as RawBankQuestion[])
-    .filter(isValidEnglishQuestion)
-    .map((q) => {
-        const { domain, skill } = detectSkill(q);
-        return {
-            id: q.id,
-            type: q.type || 'Reading',
-            passage: q.passage || '',
-            question: q.question || '',
-            options: Array.isArray(q.options) ? q.options : [],
-            answer: typeof q.answer === 'number' ? q.answer : 0,
-            answerType: 'multiple_choice',
-            explanation: q.explanation || '',
-            difficulty: q.difficulty || 'Medium',
-            domain,
-            skill,
-            image: q.image,
-        };
-    });
 
-const allMathQuestions: Question[] = [
-    ...(mathData as RawBankQuestion[]).filter(isValidMathQuestion),
-    ...proceduralMathQuestions,
-].map((q) => ({
-    id: q.id,
-    type: q.type || 'Math',
-    passage: q.passage || '',
-    question: q.question || '',
-    options: Array.isArray(q.options) ? q.options : [],
-    answer: typeof q.answer === 'number' ? q.answer : undefined,
-    answerType: q.answerType || (typeof q.answer === 'number' ? 'multiple_choice' : 'numeric'),
-    answerText: q.answerText,
-    acceptableAnswers: Array.isArray(q.acceptableAnswers) ? q.acceptableAnswers : undefined,
-    explanation: q.explanation || '',
-    difficulty: q.difficulty || 'Medium',
-    domain: q.domain || 'Math',
-    skill: q.skill || 'Math',
-    image: q.image,
-    imageLayout: q.imageLayout,
-}));
-
-const allQuestionBankQuestions = [...allEnglishQuestions, ...allMathQuestions];
+// Questions now fetched dynamically
 
 
 function shuffleArray<T>(a: T[]): T[] { const b = [...a]; for (let i = b.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1));[b[i], b[j]] = [b[j], b[i]]; } return b; }
 
 function cleanOptionText(option: string) {
-    return option.replace(/\s*ID:\s*[a-f0-9]+\s*Answer\s*$/i, '').replace(/\s+/g, ' ').trim();
+    return option.replace(/\s*ID:\s*[a-f0-9]+\s*Answer\s*$/i, '').replace(/[ \t]+/g, ' ').trim();
 }
 
 function compactText(text: string) {
-    return text.replace(/\s+/g, ' ').trim();
+    return text.replace(/[ \t]+/g, ' ').trim();
 }
 
 function splitSentences(text: string) {
@@ -415,7 +375,7 @@ function MathImageSlice({
 // ══════════════════════════════════════════════════════════════════════════════
 //  BROWSE VIEW
 // ══════════════════════════════════════════════════════════════════════════════
-function BrowseView({ onStartQuiz, reviewedIds, qbStats }: { onStartQuiz: (qs: Question[], label: string) => void; reviewedIds: Set<string>; qbStats: QBStats }) {
+function BrowseView({ onStartQuiz, reviewedIds, qbStats, allEnglishQuestions, allMathQuestions }: { onStartQuiz: (qs: Question[], label: string) => void; reviewedIds: Set<string>; qbStats: QBStats; allEnglishQuestions: Question[]; allMathQuestions: Question[]; }) {
     const shouldReduceMotion = useReducedMotion();
     const [diff, setDiff] = useState<Difficulty>('All');
     const [showDiff, setShowDiff] = useState(false);
@@ -485,7 +445,8 @@ function BrowseView({ onStartQuiz, reviewedIds, qbStats }: { onStartQuiz: (qs: Q
     const englishReadyCount = useMemo(() => filter(allEnglishQuestions).length, [filter]);
     const mathReadyCount = useMemo(() => filter(allMathQuestions).length, [filter]);
     const mathQuestionCount = useMemo(() => allMathQuestions.length, []);
-    const reviewedCount = useMemo(() => allQuestionBankQuestions.filter(q => reviewedIds.has(q.id)).length, [reviewedIds]);
+    const allQuestionBankQuestions = useMemo(() => [...allEnglishQuestions, ...allMathQuestions], [allEnglishQuestions, allMathQuestions]);
+    const reviewedCount = useMemo(() => allQuestionBankQuestions.filter(q => reviewedIds.has(q.id)).length, [reviewedIds, allQuestionBankQuestions]);
     const launch = (qs: Question[], label: string) => { const f = filter(qs); if (f.length > 0) onStartQuiz(f, label); };
 
     return (
@@ -673,12 +634,12 @@ function BrowseView({ onStartQuiz, reviewedIds, qbStats }: { onStartQuiz: (qs: Q
                                         <button
                                             onClick={() => launch(Object.values(domainSkills).flat(), domainObj.name)}
                                             disabled={domainQuestions.length === 0}
-                                            className="mb-4 flex w-full items-center justify-between text-left disabled:cursor-not-allowed disabled:opacity-40"
+                                            className="mb-4 flex flex-wrap items-start justify-between gap-x-4 gap-y-2 w-full text-left disabled:cursor-not-allowed disabled:opacity-40"
                                         >
-                                            <span className="site-text-strong text-[1.02rem] font-black tracking-[-0.02em]">
+                                            <span className="site-text-strong text-[1.02rem] font-black tracking-[-0.02em] flex-1 min-w-[min(100%,250px)]">
                                                 {domainObj.name}
                                             </span>
-                                            <span className="site-chip px-3 py-1 text-xs font-bold site-text shadow-sm rounded-full">{domainQuestions.length} questions</span>
+                                            <span className="site-chip shrink-0 whitespace-nowrap px-3 py-1 text-xs font-bold site-text shadow-sm rounded-full">{domainQuestions.length} questions</span>
                                         </button>
 
                                         <div className="space-y-2">
@@ -689,10 +650,10 @@ function BrowseView({ onStartQuiz, reviewedIds, qbStats }: { onStartQuiz: (qs: Q
                                                         key={skill}
                                                         onClick={() => { if (questions.length > 0) onStartQuiz(questions, skill); }}
                                                         disabled={questions.length === 0}
-                                                        className="site-subpanel-soft qb-topic-pill flex w-full items-center justify-between rounded-2xl px-3 py-2.5 text-left transition disabled:cursor-not-allowed disabled:opacity-35"
+                                                        className="site-subpanel-soft qb-topic-pill flex flex-wrap items-start justify-between gap-x-4 gap-y-2 w-full rounded-2xl px-3 py-2.5 text-left transition disabled:cursor-not-allowed disabled:opacity-35"
                                                     >
-                                                        <span className="site-text text-[15px] font-medium">{skill}</span>
-                                                        <span className="site-text-muted text-sm">{questions.length} questions</span>
+                                                        <span className="site-text text-[15px] font-medium flex-1 min-w-[min(100%,250px)]">{skill}</span>
+                                                        <span className="site-text-muted shrink-0 whitespace-nowrap text-sm">{questions.length} questions</span>
                                                     </button>
                                                 );
                                             })}
@@ -734,12 +695,12 @@ function BrowseView({ onStartQuiz, reviewedIds, qbStats }: { onStartQuiz: (qs: Q
                                     <button
                                         onClick={() => launch(domainQuestions, topic.name)}
                                         disabled={domainQuestions.length === 0}
-                                        className="mb-3 flex w-full items-center justify-between text-left disabled:cursor-not-allowed disabled:opacity-40"
+                                        className="mb-3 flex flex-wrap items-start justify-between gap-x-4 gap-y-2 w-full text-left disabled:cursor-not-allowed disabled:opacity-40"
                                     >
-                                        <span className="site-text-strong text-[1.05rem] font-black tracking-[-0.02em]">
+                                        <span className="site-text-strong text-[1.05rem] font-black tracking-[-0.02em] flex-1 min-w-[min(100%,250px)]">
                                             {topic.name}
                                         </span>
-                                        <span className="site-chip px-3 py-1 text-xs font-bold site-text shadow-sm rounded-full">{domainQuestions.length} questions</span>
+                                        <span className="site-chip shrink-0 whitespace-nowrap px-3 py-1 text-xs font-bold site-text shadow-sm rounded-full">{domainQuestions.length} questions</span>
                                     </button>
 
                                     <div className="space-y-2">
@@ -750,10 +711,10 @@ function BrowseView({ onStartQuiz, reviewedIds, qbStats }: { onStartQuiz: (qs: Q
                                                     key={skill}
                                                     onClick={() => launch(questions, skill)}
                                                     disabled={questions.length === 0}
-                                                    className="site-subpanel-soft qb-topic-pill flex w-full items-center justify-between rounded-2xl px-3 py-2.5 text-left transition disabled:cursor-not-allowed disabled:opacity-35"
+                                                    className="site-subpanel-soft qb-topic-pill flex flex-wrap items-start justify-between gap-x-4 gap-y-2 w-full rounded-2xl px-3 py-2.5 text-left transition disabled:cursor-not-allowed disabled:opacity-35"
                                                 >
-                                                    <span className="site-text text-[15px] font-medium">{skill}</span>
-                                                    <span className="site-text-muted text-sm">{questions.length} questions</span>
+                                                    <span className="site-text text-[15px] font-medium flex-1 min-w-[min(100%,250px)]">{skill}</span>
+                                                    <span className="site-text-muted shrink-0 whitespace-nowrap text-sm">{questions.length} questions</span>
                                                 </button>
                                             );
                                         })}
@@ -905,7 +866,7 @@ function QuizView({
     const q = questions[idx];
     const globalIdx = allQuestionBankQuestions.findIndex(x => x.id === q?.id);
     const displayNum = globalIdx >= 0 ? globalIdx + 1 : idx + 1;
-    const isMathQuestion = q?.type === 'Math';
+    const isMathQuestion = q?.type?.startsWith('Math');
     const isChecked = !!resolvedQuestions[idx];
     const wrongAttemptsForCurrent = incorrectAttempts[idx] || [];
     const currentNumericResponse = numericResponses[idx] || '';
@@ -1047,7 +1008,7 @@ function QuizView({
                             <X className="w-6 h-6" />
                         </button>
                         <img 
-                            src={expandedImage} 
+                            src={expandedImage && !expandedImage.includes('.') ? expandedImage + '.png' : expandedImage} 
                             alt="Expanded question figure" 
                             className="max-w-full max-h-[85vh] object-contain bg-white rounded-xl shadow-2xl p-4"
                         />
@@ -1124,13 +1085,15 @@ function QuizView({
                             </button>
                         </>
                     )}
-                    <button
-                        onClick={() => setIsHighlightActive(!isHighlightActive)}
-                        className={`flex flex-col items-center justify-center gap-1.5 w-[80px] h-[64px] rounded-lg transition-colors border border-transparent ${isHighlightActive ? 'bg-slate-200 text-slate-900 shadow-inner' : 'hover:bg-black/5 text-slate-700'}`}
-                    >
-                        <Highlighter className="w-[24px] h-[24px]" />
-                        <span className="font-bold text-[12px] leading-none">Highlight</span>
-                    </button>
+                    {!isMathQuestion && (
+                        <button
+                            onClick={() => setIsHighlightActive(!isHighlightActive)}
+                            className={`flex flex-col items-center justify-center gap-1.5 w-[80px] h-[64px] rounded-lg transition-colors border border-transparent ${isHighlightActive ? 'bg-slate-200 text-slate-900 shadow-inner' : 'hover:bg-black/5 text-slate-700'}`}
+                        >
+                            <Highlighter className="w-[24px] h-[24px]" />
+                            <span className="font-bold text-[12px] leading-none">Highlight</span>
+                        </button>
+                    )}
                     <button
                         onClick={() => {
                             if (!document.fullscreenElement) {
@@ -1303,10 +1266,10 @@ function QuizView({
             </div>
 
             {/* Split pane */}
-            <main className="flex-1 flex overflow-hidden">
+            <main className="flex-1 flex overflow-hidden min-h-0">
                 {/* ── MATH LAYOUT: Single centered column / split with Desmos ── */}
                 {isMathQuestion ? (
-                    <div className="flex-1 flex overflow-hidden">
+                    <div className="flex-1 flex overflow-hidden min-h-0">
                         {/* Desmos Calculator (left side) — slides in */}
                         <div
                             className={`overflow-hidden bg-[#FAFAFA] border-r border-slate-200 flex flex-col ${!isDragging ? 'transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]' : ''} ${isDesmosOpen ? '' : 'pointer-events-none'}`}
@@ -1349,7 +1312,7 @@ function QuizView({
                         {/* Math Question + Answers (centered, moves right when Desmos opens) */}
                         <div
                             ref={rightPanelRef}
-                            className={`overflow-y-auto bg-white flex justify-center p-4 lg:p-10 pl-4 lg:pl-8 ${!isDragging ? 'transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]' : ''}`}
+                            className={`overflow-y-auto h-full bg-white flex justify-center p-4 lg:p-10 pl-4 lg:pl-8 ${!isDragging ? 'transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]' : ''}`}
                             style={{ width: isDesmosOpen ? `${100 - leftPanelWidth}%` : '100%' }}
                         >
                             <div className="w-full max-w-[800px] mx-auto flex flex-col pb-10">
@@ -1372,21 +1335,20 @@ function QuizView({
 
                                     {/* ABC Elimination (Right) */}
                                     <div className="w-[54px] h-[54px] flex-shrink-0 flex items-center justify-center rounded-[10px] border border-[#D1D5DB] bg-white relative z-10 shadow-sm">
-                                        {isMultipleChoiceQuestion(q) && (
                                         <button
                                             onClick={() => setIsEliminationMode(!isEliminationMode)}
-                                            className={`flex items-center justify-center w-full h-full font-bold text-[14px] transition-colors rounded-[10px] ${isEliminationMode ? 'bg-[#111827] text-white' : 'text-slate-700 hover:bg-slate-50'}`}
+                                            disabled={!isMultipleChoiceQuestion(q)}
+                                            className={`flex items-center justify-center w-full h-full font-bold text-[14px] transition-colors rounded-[10px] ${!isMultipleChoiceQuestion(q) ? 'opacity-30 cursor-not-allowed text-slate-400' : isEliminationMode ? 'bg-[#111827] text-white' : 'text-slate-700 hover:bg-slate-50'}`}
                                         >
                                             <span className="line-through decoration-[#ef4444] decoration-[2px]">ABC</span>
                                         </button>
-                                        )}
                                     </div>
                                 </div>
 
                                 {q.image && (
-                                    <div className="mb-5 rounded-xl overflow-hidden border border-slate-100 flex justify-center bg-slate-50 p-4" style={{ animation: 'qb-slideUp 0.2s ease both' }}>
+                                    <div className="mb-5 flex justify-center" style={{ animation: 'qb-slideUp 0.2s ease both' }}>
                                         {/* eslint-disable-next-line @next/next/no-img-element */}
-                                        <img src={q.image} alt="Question image" className="max-w-full h-auto max-h-[400px] object-contain rounded-lg shadow-sm cursor-pointer hover:opacity-90 transition-opacity" onClick={() => setExpandedImage(q.image || null)} />
+                                        <img src={q.image && !q.image.includes('.') ? q.image + '.png' : q.image} alt="Question image" className="max-w-full max-h-[300px] object-contain cursor-pointer" onClick={() => setExpandedImage(q.image || null)} />
                                     </div>
                                 )}
 
@@ -1420,7 +1382,7 @@ function QuizView({
                                         const isCorrectSelection = isChecked && i === q.answer;
                                         const optionText = cleanOptionText(opt);
 
-                                        let boxClass = `relative w-full border h-auto min-h-[56px] rounded-[10px] flex items-stretch transition-all duration-200 overflow-hidden ${(isChecked || isTriedWrong) ? 'cursor-default pointer-events-none' : 'cursor-pointer'} select-text group`;
+                                        let boxClass = `relative w-full border h-auto min-h-[46px] rounded-[10px] flex items-stretch transition-all duration-200 overflow-hidden ${(isChecked || isTriedWrong) ? 'cursor-default pointer-events-none' : 'cursor-pointer'} select-text group`;
                                         let circleWrapperClass = 'w-[52px] flex-shrink-0 flex items-center justify-center bg-transparent';
                                         let circleClass = 'w-[30px] h-[30px] rounded-full flex items-center justify-center font-bold text-[14px] border-[1.5px] transition-all';
                                         const textTone = isEliminated ? 'text-slate-400' : 'text-[#111827]';
@@ -1459,7 +1421,7 @@ function QuizView({
                                                     <div className={circleWrapperClass}>
                                                         <div className={circleClass}>{letter}</div>
                                                     </div>
-                                                    <div className={`relative z-10 flex-1 ${textTone} p-4 flex items-center bg-transparent`}>
+                                                    <div className={`relative z-10 flex-1 ${textTone} px-3 py-2 flex items-center bg-transparent`}>
                                                         <HighlightableText
                                                             text={optionText || `Option ${letter}`}
                                                             className="text-[15px] leading-[1.6] text-inherit"
@@ -1541,7 +1503,7 @@ function QuizView({
                                         <PassageRenderer
                                             text={q.passage}
                                             highlights={highlights[`p-${idx}`] || []}
-                                            onAddHighlight={(h) => setHighlights(p => ({ ...p, [`p-${idx}`]: [...(p[`p-${idx}`] || []), h] }))}
+                                            onAddHighlight={(h) => setHighlights(p => ({ ...p, [`p-${idx}`]: [...(p[`p-${idx}`] || []), h as any] }))}
                                             onRemoveHighlight={(id) => setHighlights(p => ({ ...p, [`p-${idx}`]: (p[`p-${idx}`] || []).filter(x => x.id !== id) }))}
                                             onUpdateHighlight={(id, updates) => setHighlights(p => ({ ...p, [`p-${idx}`]: (p[`p-${idx}`] || []).map(x => x.id === id ? { ...x, ...updates } : x) }))}
                                             isHighlightModeActive={isHighlightActive}
@@ -1554,13 +1516,13 @@ function QuizView({
                                         {q.imageLayout?.stem ? (
                                             <div onClick={() => setExpandedImage(q.image || null)} className="cursor-pointer hover:opacity-90 transition-opacity w-full">
                                                 <MathImageSlice 
-                                                    src={q.image} 
+                                                    src={q.image && !q.image.includes('.') ? q.image + '.png' : q.image} 
                                                     crop={q.imageLayout.stem} 
                                                     alt="Question Image"
                                                 />
                                             </div>
                                         ) : (
-                                            <img src={q.image} alt="Question image" className="max-w-full h-auto w-full max-h-[400px] rounded-lg object-contain cursor-pointer hover:opacity-90 transition-opacity" onClick={() => setExpandedImage(q.image || null)} />
+                                            <img src={q.image && !q.image.includes('.') ? q.image + '.png' : q.image} alt="Question image" className="max-w-full h-auto w-full max-h-[400px] rounded-lg object-contain cursor-pointer hover:opacity-90 transition-opacity" onClick={() => setExpandedImage(q.image || null)} />
                                         )}
                                     </div>
                                 ) : (
@@ -1601,29 +1563,28 @@ function QuizView({
 
                                     {/* ABC Elimination (Right) */}
                                     <div className="w-[54px] h-[54px] flex-shrink-0 flex items-center justify-center rounded-[10px] border border-[#D1D5DB] bg-white relative z-10 shadow-sm">
-                                        {isMultipleChoiceQuestion(q) && (
                                         <button
                                             onClick={() => setIsEliminationMode(!isEliminationMode)}
-                                            className={`flex items-center justify-center w-full h-full font-bold text-[14px] transition-colors rounded-[10px] ${isEliminationMode ? 'bg-[#111827] text-white' : 'text-slate-700 hover:bg-slate-50'}`}
+                                            disabled={!isMultipleChoiceQuestion(q)}
+                                            className={`flex items-center justify-center w-full h-full font-bold text-[14px] transition-colors rounded-[10px] ${!isMultipleChoiceQuestion(q) ? 'opacity-30 cursor-not-allowed text-slate-400' : isEliminationMode ? 'bg-[#111827] text-white' : 'text-slate-700 hover:bg-slate-50'}`}
                                         >
                                             <span className="line-through decoration-[#ef4444] decoration-[2px]">ABC</span>
                                         </button>
-                                        )}
                                     </div>
                                 </div>
 
                                 {q.image && !showImageOnLeft && (
-                                    <div className="mb-5 rounded-xl overflow-hidden border border-slate-100 flex justify-center bg-slate-50 p-4" style={{ animation: 'qb-slideUp 0.2s ease both' }}>
+                                    <div className="mb-5 flex justify-center" style={{ animation: 'qb-slideUp 0.2s ease both' }}>
                                         {q.imageLayout?.stem ? (
                                             <div onClick={() => setExpandedImage(q.image || null)} className="cursor-pointer hover:opacity-90 transition-opacity w-full">
                                                 <MathImageSlice 
-                                                    src={q.image} 
+                                                    src={q.image && !q.image.includes('.') ? q.image + '.png' : q.image} 
                                                     crop={q.imageLayout.stem} 
                                                     alt="Question Image"
                                                 />
                                             </div>
                                         ) : (
-                                            <img src={q.image} alt="Question image" className="max-w-full h-auto max-h-[400px] object-contain rounded-lg shadow-sm cursor-pointer hover:opacity-90 transition-opacity" onClick={() => setExpandedImage(q.image || null)} />
+                                            <img src={q.image && !q.image.includes('.') ? q.image + '.png' : q.image} alt="Question image" className="max-w-full h-auto max-h-[400px] object-contain rounded-lg shadow-sm cursor-pointer hover:opacity-90 transition-opacity" onClick={() => setExpandedImage(q.image || null)} />
                                         )}
                                     </div>
                                 )}
@@ -1769,7 +1730,7 @@ function QuizView({
             </main>
 
             {/* Premium Bottom Navigation Bar */}
-            <footer className="bg-white/90 backdrop-blur-xl border-t border-slate-200/80 px-6 h-[72px] flex items-center justify-between shrink-0 absolute bottom-0 left-0 right-0 z-40 shadow-[0_-2px_15px_rgba(0,0,0,0.03)] pb-safe pt-2">
+            <footer className="bg-white/90 backdrop-blur-xl border-t border-slate-200/80 px-6 h-[72px] flex items-center justify-between shrink-0 relative z-40 shadow-[0_-2px_15px_rgba(0,0,0,0.03)] pb-safe pt-2">
                 {/* Left controls name user panel or empty spacer */}
                 <div className="flex-1 max-w-[200px]"></div>
 
@@ -1871,6 +1832,87 @@ export type QBStats = Record<string, QBStat>;
 const QB_STATS_STORAGE_KEY = 'targetprep_qb_stats';
 
 export default function QuestionBankPage() {
+
+  const [dbEnglishQuestions, setDbEnglishQuestions] = useState<Question[]>([]);
+  const [dbMathQuestions, setDbMathQuestions] = useState<Question[]>([]);
+  const [isDbLoading, setIsDbLoading] = useState(true);
+
+  useEffect(() => {
+    async function loadData() {
+      const supabase = createClient();
+      
+      const [{ data: mathData }, { data: ebrwData }] = await Promise.all([
+        supabase.from('question_bank').select('*').eq('subject', 'Math').limit(5000),
+        supabase.from('question_bank').select('*').eq('subject', 'EBRW').limit(5000)
+      ]);
+      
+      const mathQ: Question[] = (mathData || []).map(row => {
+          const q = row.question_data || {};
+          return {
+              id: row.id,
+              type: q.type || 'Math',
+              passage: q.passage || '',
+              question: q.question || '',
+              options: Array.isArray(q.options) ? q.options : [],
+              answer: typeof q.answer === 'number' ? q.answer : undefined,
+              answerType: q.answerType || (typeof q.answer === 'number' ? 'multiple_choice' : 'numeric'),
+              answerText: q.answerText,
+              acceptableAnswers: Array.isArray(q.acceptableAnswers) ? q.acceptableAnswers : undefined,
+              explanation: q.explanation || '',
+              difficulty: row.difficulty || 'Medium',
+              domain: row.domain || 'Math',
+              skill: row.skill || 'Math',
+              image: q.image,
+              imageLayout: q.imageLayout,
+          };
+      });
+      // also include procedural math
+      const proceduralM = proceduralMathQuestions.map(q => ({
+        id: q.id,
+        type: q.type || 'Math',
+        passage: q.passage || '',
+        question: q.question || '',
+        options: Array.isArray(q.options) ? q.options : [],
+        answer: typeof q.answer === 'number' ? q.answer : undefined,
+        answerType: q.answerType || (typeof q.answer === 'number' ? 'multiple_choice' : 'numeric'),
+        answerText: q.answerText,
+        acceptableAnswers: Array.isArray(q.acceptableAnswers) ? q.acceptableAnswers : undefined,
+        explanation: q.explanation || '',
+        difficulty: q.difficulty || 'Medium',
+        domain: q.domain || 'Math',
+        skill: q.skill || 'Math',
+        image: q.image,
+        imageLayout: q.imageLayout,
+      }));
+      setDbMathQuestions([...mathQ, ...proceduralM]);
+
+      const ebrwQ: Question[] = (ebrwData || []).map(row => {
+          const q = row.question_data || {};
+          return {
+              id: row.id,
+              type: q.type || 'Reading',
+              passage: q.passage || '',
+              question: q.question || '',
+              options: Array.isArray(q.options) ? q.options : [],
+              answer: typeof q.answer === 'number' ? q.answer : 0,
+              answerType: 'multiple_choice',
+              explanation: q.explanation || '',
+              difficulty: row.difficulty || 'Medium',
+              domain: row.domain || 'Reading',
+              skill: row.skill || 'Reading',
+              image: q.image,
+          };
+      });
+      setDbEnglishQuestions(ebrwQ);
+      setIsDbLoading(false);
+    }
+    loadData();
+  }, []);
+
+
+  const allEnglishQuestions = dbEnglishQuestions;
+  const allMathQuestions = dbMathQuestions;
+  const allQuestionBankQuestions = [...allEnglishQuestions, ...allMathQuestions];
     const [view, setView] = useState<View>('browse');
     const [quizQ, setQuizQ] = useState<Question[]>([]);
     const [label, setLabel] = useState('');
@@ -1940,7 +1982,18 @@ export default function QuestionBankPage() {
     };
     const finish = (r: SessionResult) => { setResult(r); setView('summary'); router.replace('/question-bank'); };
 
-    if (view === 'quiz') return <QuizView questions={quizQ} reviewedIds={reviewedIdSet} qbStats={qbStats} onBack={() => { setView('browse'); router.replace('/question-bank'); }} onFinish={finish} onToggleReview={toggleReviewedQuestion} onUpdateStat={updateQuestionStat} />;
+    if (isDbLoading) {
+        return (
+          <div className="min-h-screen bg-slate-50 flex items-center justify-center text-slate-500">
+             <div className="flex flex-col items-center">
+                <div className="w-10 h-10 border-4 border-slate-200 border-t-blue-500 rounded-full animate-spin mb-4"></div>
+                <p>Loading Question Bank from database...</p>
+             </div>
+          </div>
+        );
+    }
+
+    if (view === 'quiz') return <QuizView questions={quizQ} reviewedIds={reviewedIdSet} qbStats={qbStats} onBack={() => { setView('browse'); router.replace('/question-bank'); }} onFinish={finish} onToggleReview={toggleReviewedQuestion} onUpdateStat={updateQuestionStat} allQuestionBankQuestions={allQuestionBankQuestions} />;
     if (view === 'summary' && result) return <SummaryView result={result} onRestart={() => start(quizQ, label)} onBack={() => { setView('browse'); router.replace('/question-bank'); }} />;
-    return <BrowseView onStartQuiz={start} reviewedIds={reviewedIdSet} qbStats={qbStats} />;
+    return <BrowseView onStartQuiz={start} reviewedIds={reviewedIdSet} qbStats={qbStats} allEnglishQuestions={allEnglishQuestions} allMathQuestions={allMathQuestions} />;
 }

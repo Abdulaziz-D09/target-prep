@@ -1,0 +1,501 @@
+        setFlaggedQuestions(prev => {
+            const updated = { ...prev };
+            if (nextValue) updated[questionIndex] = true;
+            else delete updated[questionIndex];
+            return updated;
+        });
+        onToggleReview(questionId, nextValue);
+    };
+
+    const next = () => {
+        if (idx < questions.length - 1) { load(idx + 1); rightPanelRef.current?.scrollTo({ top: 0, behavior: 'smooth' }); }
+        else {
+            let c = 0, w = 0, s = 0;
+            questions.forEach((_, i) => {
+                const solved = !!resolvedQuestions[i];
+                const wrongs = incorrectAttempts[i] || [];
+                if (solved && wrongs.length === 0) c++;
+                else if (solved || wrongs.length > 0) w++;
+                else s++;
+            });
+            onFinish({ total: questions.length, correct: c, wrong: w, skipped: s });
+        }
+    };
+    const prev = () => { if (idx > 0) load(idx - 1); };
+
+    if (!q) return null;
+
+    const formatTime = (totalSeconds: number) => {
+        const m = Math.floor(totalSeconds / 60);
+        const s = totalSeconds % 60;
+        return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+    };
+
+    const currentEliminations = eliminatedAnswers[idx] || [];
+    const explanation = buildExplanationDetails(q);
+    const canCheck = isNumericQuestion(q) ? !!cleanNumericInput(currentNumericResponse) && !isChecked : sel !== null && !isChecked;
+
+    return (
+        <>
+            {/* Modal for expanded image */}
+            {expandedImage && (
+                <div 
+                    className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 sm:p-8 cursor-pointer"
+                    onClick={() => setExpandedImage(null)}
+                >
+                    <div className="relative max-w-5xl w-full max-h-full flex items-center justify-center cursor-default" onClick={e => e.stopPropagation()}>
+                        <button 
+                            onClick={() => setExpandedImage(null)}
+                            className="absolute -top-12 right-0 md:-right-12 md:top-0 w-10 h-10 bg-white rounded-full flex items-center justify-center text-slate-800 hover:bg-slate-200 transition-colors z-[100] shadow-lg border border-slate-200"
+                        >
+                            <X className="w-6 h-6" />
+                        </button>
+                        <img 
+                            src={expandedImage && !expandedImage.includes('.') ? expandedImage + '.png' : expandedImage} 
+                            alt="Expanded question figure" 
+                            className="max-w-full max-h-[85vh] object-contain bg-white rounded-xl shadow-2xl p-4"
+                        />
+                    </div>
+                </div>
+            )}
+            <div className="absolute inset-0 flex flex-col overflow-hidden bg-slate-50 font-['Verdana',_sans-serif]">
+            {/* Bluebook Official Header */}
+            <header className="bg-white/90 backdrop-blur-xl border-b border-slate-200/80 px-6 py-2.5 flex items-center justify-between z-30 shrink-0 relative shadow-[0_2px_10px_rgba(0,0,0,0.02)]">
+                {/* Left: Back */}
+                <div className="flex flex-1 items-center">
+                    <button
+                        onClick={onBack}
+                        className="ml-2 inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-bold text-slate-700 transition hover:border-slate-300 hover:bg-slate-50 font-['Verdana',_sans-serif]"
+                    >
+                        <ArrowLeft className="h-4 w-4" />
+                        Go Back
+                    </button>
+                </div>
+
+                {/* Center: Stopwatch Timer */}
+                <div className="flex flex-col items-center justify-center flex-1 w-[260px]">
+                    {!isTimerHidden ? (
+                        <div 
+                            className="font-bold text-[17px] tracking-wide text-slate-800 flex items-center justify-center gap-2 bg-slate-100/80 backdrop-blur-sm px-5 py-1.5 rounded-full border border-slate-200 shadow-inner cursor-pointer"
+                            onClick={(e) => {
+                                if (e.detail === 3) {
+                                    setQuestionTimes(prev => ({ ...prev, [idx]: 0 }));
+                                }
+                            }}
+                            title="Triple-click to reset timer"
+                        >
+                            {formatTime(questionTimes[idx] || 0)}
+                        </div>
+                    ) : (
+                        <div className="font-bold text-[22px] tracking-tight flex items-center justify-center gap-2 opacity-50 mb-1">
+                            <Clock className="w-5 h-5 text-slate-400" />
+                        </div>
+                    )}
+                    <div className="mt-0.5 flex items-center gap-2">
+                        <button
+                            onClick={() => setIsTimerHidden(!isTimerHidden)}
+                            className="text-[11px] font-bold tracking-widest uppercase text-slate-500 hover:text-indigo-600 bg-transparent px-4 py-1.5 rounded-full transition-colors"
+                        >
+                            {isTimerHidden ? 'Show Timer' : 'Hide Timer'}
+                        </button>
+                        <button
+                            onClick={() => setIsPaused(!isPaused)}
+                            className="inline-flex items-center gap-1.5 text-[11px] font-bold tracking-widest uppercase text-slate-500 hover:text-indigo-600 bg-transparent px-4 py-1.5 rounded-full transition-colors"
+                        >
+                            {isPaused ? <Play className="h-3.5 w-3.5" /> : <Pause className="h-3.5 w-3.5" />}
+                            {isPaused ? 'Resume' : 'Pause'}
+                        </button>
+                    </div>
+                </div>
+
+                {/* Right Controls */}
+                <div className="flex items-center justify-end flex-1 gap-2">
+                    {isMathQuestion && (
+                        <>
+                            <button
+                                onClick={() => setIsDesmosOpen(!isDesmosOpen)}
+                                className={`flex flex-col items-center justify-center gap-1.5 w-[80px] h-[64px] rounded-lg transition-colors border border-transparent ${isDesmosOpen ? 'bg-slate-200 text-slate-900 shadow-inner' : 'hover:bg-black/5 text-slate-700'}`}
+                            >
+                                <Calculator className="w-[24px] h-[24px]" />
+                                <span className="font-bold text-[12px] leading-none">Calculator</span>
+                            </button>
+                            <button
+                                onClick={() => setIsReferenceOpen(!isReferenceOpen)}
+                                className={`flex flex-col items-center justify-center gap-1.5 w-[80px] h-[64px] rounded-lg transition-colors border border-transparent ${isReferenceOpen ? 'bg-slate-200 text-slate-900 shadow-inner' : 'hover:bg-black/5 text-slate-700'}`}
+                            >
+                                <FileText className="w-[24px] h-[24px]" />
+                                <span className="font-bold text-[12px] leading-none">Reference</span>
+                            </button>
+                        </>
+                    )}
+                    {!isMathQuestion && (
+                        <button
+                            onClick={() => setIsHighlightActive(!isHighlightActive)}
+                            className={`flex flex-col items-center justify-center gap-1.5 w-[80px] h-[64px] rounded-lg transition-colors border border-transparent ${isHighlightActive ? 'bg-slate-200 text-slate-900 shadow-inner' : 'hover:bg-black/5 text-slate-700'}`}
+                        >
+                            <Highlighter className="w-[24px] h-[24px]" />
+                            <span className="font-bold text-[12px] leading-none">Highlight</span>
+                        </button>
+                    )}
+                    <button
+                        onClick={() => {
+                            if (!document.fullscreenElement) {
+                                document.documentElement.requestFullscreen().catch(() => { });
+                            } else {
+                                if (document.exitFullscreen) {
+                                    document.exitFullscreen();
+                                }
+                            }
+                        }}
+                        className="flex flex-col items-center justify-center gap-1.5 w-[80px] h-[64px] rounded-lg hover:bg-black/5 text-slate-700 transition-colors"
+                    >
+                        <Maximize2 className="w-[24px] h-[24px]" />
+                        <span className="font-bold text-[12px] leading-none">Fullscreen</span>
+                    </button>
+                </div>
+            </header>
+
+            {/* Nav overlay */}
+            {showNav && (
+                <div className="fixed inset-0 z-50 flex items-end justify-center sm:items-center p-4 bg-black/40 backdrop-blur-sm" onClick={() => setShowNav(false)}>
+                        <div
+                            className="bg-white w-full max-w-3xl rounded-xl shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200"
+                            onClick={e => e.stopPropagation()}
+                        >
+                        <div className="border-b border-[#E5E7EB] p-6 flex justify-between items-center bg-[#F9FAFB]">
+                            <div>
+                                <h3 className="font-bold text-lg text-[#111827]">Question Navigator</h3>
+                                <p className="text-[14px] text-slate-500 font-medium mt-1">
+                                    Current Question Difficulty: <span className="font-bold text-slate-700">{questions[idx]?.difficulty}</span>
+                                </p>
+                            </div>
+                            <button onClick={() => setShowNav(false)} className="p-2 rounded-md hover:bg-[#E5E7EB] text-[#4B5563] transition-colors">
+                                <X className="w-5 h-5" />
+                            </button>
+                        </div>
+
+                        <div className="p-6 max-h-[60vh] overflow-y-auto">
+                            {/* Legend */}
+                            <div className="flex flex-wrap gap-6 mb-8 mt-2 justify-center bg-[#F3F4F6] py-3 rounded-md">
+                                <div className="flex items-center gap-2">
+                                    <div className="w-4 h-4 rounded-sm bg-emerald-500"></div>
+                                    <span className="text-sm font-semibold text-[#6B7280]">Easy</span>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                    <div className="w-4 h-4 rounded-sm bg-amber-500"></div>
+                                    <span className="text-sm font-semibold text-[#6B7280]">Medium</span>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                    <div className="w-4 h-4 rounded-sm bg-rose-500"></div>
+                                    <span className="text-sm font-semibold text-[#6B7280]">Hard</span>
+                                </div>
+                                <div className="w-px h-5 bg-slate-300"></div>
+                                <div className="flex items-center gap-2">
+                                    <div className="w-4 h-4 border-2 border-dashed border-amber-400 rounded-sm"></div>
+                                    <span className="text-sm font-semibold text-[#6B7280]">Unanswered</span>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                    <div className="w-4 h-4 bg-amber-500 rounded-sm"></div>
+                                    <span className="text-sm font-semibold text-[#4B5563]">Answered</span>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                    <Bookmark className="w-4 h-4 fill-red-500 text-red-500" />
+                                    <span className="text-sm font-semibold text-[#4B5563]">For Review</span>
+                                </div>
+                            </div>
+
+                            {/* Grid */}
+                            <div className="grid grid-cols-5 sm:grid-cols-7 md:grid-cols-10 gap-3">
+                                {questions.map((_, k) => {
+                                    const isAnswered = !!resolvedQuestions[k] || (incorrectAttempts[k] || []).length > 0;
+                                    const isFlagged = flaggedQuestions[k];
+                                    const isActive = k === idx;
+
+                                    let boxClass = 'border-2 cursor-pointer font-bold text-[14px] w-12 h-12 flex items-center justify-center relative transition-all rounded-md ';
+
+                                    const d = questions[k].difficulty;
+                                    // Difficulty colors for every question
+                                    if (isActive) {
+                                        // Active: bold colored border + light bg + inset ring
+                                        if (d === 'Easy') boxClass += 'border-emerald-500 bg-emerald-50 text-emerald-800 shadow-[inset_0_0_0_2px_#10B981]';
+                                        else if (d === 'Hard') boxClass += 'border-rose-500 bg-rose-50 text-rose-800 shadow-[inset_0_0_0_2px_#F43F5E]';
+                                        else boxClass += 'border-amber-500 bg-amber-50 text-amber-800 shadow-[inset_0_0_0_2px_#F59E0B]';
+                                    } else if (isAnswered) {
+                                        // Answered: solid colored background
+                                        if (d === 'Easy') boxClass += 'border-emerald-500 bg-emerald-500 text-white hover:bg-emerald-600';
+                                        else if (d === 'Hard') boxClass += 'border-rose-500 bg-rose-500 text-white hover:bg-rose-600';
+                                        else boxClass += 'border-amber-500 bg-amber-500 text-white hover:bg-amber-600';
+                                    } else {
+                                        // Unanswered: colored dashed border + white bg
+                                        if (d === 'Easy') boxClass += 'border-dashed border-emerald-400 text-emerald-600 bg-white hover:bg-emerald-50';
+                                        else if (d === 'Hard') boxClass += 'border-dashed border-rose-400 text-rose-600 bg-white hover:bg-rose-50';
+                                        else boxClass += 'border-dashed border-amber-400 text-amber-600 bg-white hover:bg-amber-50';
+                                    }
+
+                                    return (
+                                        <button
+                                            key={k}
+                                            onClick={() => load(k)}
+                                            className={boxClass}
+                                        >
+                                            {k + 1}
+                                            {isFlagged && (
+                                                <div className="absolute -top-2 -right-2 bg-white rounded-full">
+                                                    <Bookmark className="w-4 h-4 fill-red-500 text-red-500" />
+                                                </div>
+                                            )}
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            <div className={`fixed inset-0 z-[70] transition ${showExp ? 'pointer-events-auto' : 'pointer-events-none'}`}>
+                <button
+                    type="button"
+                    aria-label="Close explanation"
+                    onClick={() => setShowExp(false)}
+                    className={`absolute inset-0 bg-slate-950/20 transition-opacity ${showExp ? 'opacity-100' : 'opacity-0'}`}
+                />
+                <aside className={`absolute right-0 top-0 flex h-full w-full max-w-[420px] flex-col border-l border-slate-200 bg-white shadow-[-24px_0_60px_rgba(15,23,42,0.12)] transition-transform duration-300 ${showExp ? 'translate-x-0' : 'translate-x-full'}`}>
+                    <div className="flex items-center justify-between border-b border-slate-200 px-5 py-4">
+                        <div>
+                            <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-slate-400">Explanation</p>
+                            <h3 className="mt-1 text-lg font-black tracking-[-0.03em] text-slate-950">Why this answer works</h3>
+                        </div>
+                        <button
+                            type="button"
+                            onClick={() => setShowExp(false)}
+                            className="rounded-full border border-slate-200 p-2 text-slate-500 transition hover:bg-slate-50 hover:text-slate-900"
+                        >
+                            <X className="h-4 w-4" />
+                        </button>
+                    </div>
+
+                    <div className="flex-1 space-y-6 overflow-y-auto px-5 py-5">
+                        <div className="rounded-[20px] border border-slate-200 bg-slate-50/80 p-4">
+                            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-slate-400">Answer</p>
+                            <div className="mt-3 flex items-start gap-3">
+                                <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full bg-[#111827] text-sm font-black text-white">
+                                    {explanation.answerLabel}
+                                </div>
+                                <p className="text-[14px] leading-6 text-slate-700">{explanation.answerText}</p>
+                            </div>
+                        </div>
+
+                        <div className="rounded-[20px] border border-sky-100 bg-sky-50/70 p-4">
+                            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-sky-700/70">Short explanation</p>
+                            <p className="mt-3 text-[14px] leading-6 text-slate-700">{explanation.summary}</p>
+                        </div>
+
+                        <div className="rounded-[20px] border border-rose-100 bg-rose-50/70 p-4">
+                            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-rose-700/70">Steps to solve</p>
+                            <div className="mt-3 space-y-3">
+                                {explanation.steps.map((step, stepIndex) => (
+                                    <div key={stepIndex} className="flex items-start gap-3">
+                                        <div className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-white text-[12px] font-black text-rose-700 shadow-sm">
+                                            {stepIndex + 1}
+                                        </div>
+                                        <p className="pt-0.5 text-[14px] leading-6 text-slate-700">{step}</p>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+
+            {/* Split pane */}
+            <main className="flex-1 flex overflow-hidden min-h-0">
+                {/* ── MATH LAYOUT: Single centered column / split with Desmos ── */}
+                {isMathQuestion ? (
+                    <div className="flex-1 flex overflow-hidden min-h-0">
+                        {/* Desmos Calculator (left side) — slides in */}
+                        <div
+                            className={`overflow-hidden bg-[#FAFAFA] border-r border-slate-200 flex flex-col ${!isDragging ? 'transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]' : ''} ${isDesmosOpen ? '' : 'pointer-events-none'}`}
+                            style={{ width: isDesmosOpen ? `${leftPanelWidth}%` : '0%', opacity: isDesmosOpen ? 1 : 0 }}
+                        >
+                            <div className="h-[46px] bg-[#F9FAFB] border-b border-[#D1D5DB] flex items-center justify-between px-4 shrink-0 relative z-20">
+                                <div className="w-[140px] flex items-center gap-2 text-slate-700 font-bold text-[14px]">
+                                    <Calculator className="w-4 h-4 text-indigo-500" />
+                                    Desmos Calculator
+                                </div>
+                                <div className="flex bg-[#F3F4F6] rounded-[6px] p-[2px] border border-[#E5E7EB]">
+                                    <button
+                                        onClick={() => setCalcMode('graphing')}
+                                        className={`px-5 py-1 text-[13px] font-bold rounded-[4px] transition-colors ${calcMode === 'graphing' ? 'bg-[#111827] text-white shadow-sm' : 'text-[#6B7280] hover:text-[#374151]'}`}
+                                    >
+                                        Graphing
+                                    </button>
+                                    <button
+                                        onClick={() => setCalcMode('scientific')}
+                                        className={`px-5 py-1 text-[13px] font-bold rounded-[4px] transition-colors ${calcMode === 'scientific' ? 'bg-[#111827] text-white shadow-sm' : 'text-[#6B7280] hover:text-[#374151]'}`}
+                                    >
+                                        Scientific
+                                    </button>
+                                </div>
+                                <div className="w-[140px]" />
+                            </div>
+                            <DesmosCalculator mode={calcMode} isDragging={isDragging} />
+                        </div>
+
+                        {/* Resizable Divider — only visible when Desmos is open */}
+                        {isDesmosOpen && (
+                            <div onMouseDown={() => setIsDragging(true)} className="w-[3px] bg-[#E5E7EB] hover:bg-[#D1D5DB] cursor-col-resize flex flex-col items-center justify-center flex-shrink-0 transition-colors z-20 relative group">
+                                <div className="h-[36px] w-[16px] bg-[#111827] rounded-[4px] flex items-center justify-center absolute left-1/2 -translate-x-1/2 pointer-events-none shadow-sm gap-[2px]">
+                                    <div className="w-0 h-0 border-t-[4px] border-t-transparent border-b-[4px] border-b-transparent border-r-[4px] border-r-white"></div>
+                                    <div className="w-0 h-0 border-t-[4px] border-t-transparent border-b-[4px] border-b-transparent border-l-[4px] border-l-white"></div>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* Math Question + Answers (centered, moves right when Desmos opens) */}
+                        <div
+                            ref={rightPanelRef}
+                            className={`overflow-y-auto h-full bg-white flex justify-center p-4 lg:p-10 pl-4 lg:pl-8 ${!isDragging ? 'transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]' : ''}`}
+                            style={{ width: isDesmosOpen ? `${100 - leftPanelWidth}%` : '100%' }}
+                        >
+                            <div className="w-full max-w-[800px] mx-auto flex flex-col pb-10">
+
+                                {/* Header: Connected Question Number & Mark for Review & ABC */}
+                                <div className="flex items-center w-full h-[54px] mb-4 mt-2">
+                                    {/* Number - standalone rounded square */}
+                                    <div className="bg-[#111827] text-white font-bold text-[16px] w-[54px] h-[54px] rounded-[10px] flex-shrink-0 flex items-center justify-center relative z-10 shadow-sm">
+                                        {idx + 1}
+                                    </div>
+
+                                    {/* Mark for Review (Middle) */}
+                                    <button
+                                        onClick={() => handleToggleReview(idx)}
+                                        className="flex flex-1 items-center gap-2 px-6 h-[54px] text-[#4B5563] transition-colors justify-start bg-white border-t border-b border-[#D1D5DB] group/mfr hover:bg-slate-50 relative z-0 -mx-[12px]"
+                                    >
+                                        <Bookmark className={`w-[14px] h-[14px] transition-colors ${flaggedQuestions[idx] ? 'fill-slate-600 text-slate-600' : 'text-slate-400 group-hover/mfr:text-slate-600'}`} />
+                                        <span className={flaggedQuestions[idx] ? 'font-bold text-[14px]' : 'font-medium text-[14px] group-hover/mfr:font-bold'}>Mark for Review</span>
+                                    </button>
+
+                                    {/* ABC Elimination (Right) */}
+                                    <div className="w-[54px] h-[54px] flex-shrink-0 flex items-center justify-center rounded-[10px] border border-[#D1D5DB] bg-white relative z-10 shadow-sm">
+                                        <button
+                                            onClick={() => setIsEliminationMode(!isEliminationMode)}
+                                            disabled={!isMultipleChoiceQuestion(q)}
+                                            className={`flex items-center justify-center w-full h-full font-bold text-[14px] transition-colors rounded-[10px] ${!isMultipleChoiceQuestion(q) ? 'opacity-30 cursor-not-allowed text-slate-400' : isEliminationMode ? 'bg-[#111827] text-white' : 'text-slate-700 hover:bg-slate-50'}`}
+                                        >
+                                            <span className="line-through decoration-[#ef4444] decoration-[2px]">ABC</span>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                {q.image && (
+                                    <div className="mb-5 rounded-xl overflow-hidden border border-slate-100 flex justify-center bg-slate-50 p-4" style={{ animation: 'qb-slideUp 0.2s ease both' }}>
+                                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                                        <img src={q.image && !q.image.includes('.') ? q.image + '.png' : q.image} alt="Question image" className="max-w-full h-auto max-h-[400px] object-contain rounded-lg shadow-sm cursor-pointer hover:opacity-90 transition-opacity" onClick={() => setExpandedImage(q.image || null)} />
+                                    </div>
+                                )}
+
+                                {/* Question text */}
+                                {showQuestionCard && (
+                                    <div className="mb-3" style={{ animation: 'qb-slideUp 0.3s ease both' }}>
+                                        <div className="text-[16px] text-[#111827] leading-[1.7]">
+                                            <HighlightableText
+                                                text={q.question || ''}
+                                                className="text-[16px] leading-[1.7] text-[#111827]"
+                                                highlights={highlights[`q-${idx}`] || []}
+                                                onAddHighlight={(h) => setHighlights(p => ({ ...p, [`q-${idx}`]: [...(p[`q-${idx}`] || []), h] }))}
+                                                onRemoveHighlight={(id) => setHighlights(p => ({ ...p, [`q-${idx}`]: (p[`q-${idx}`] || []).filter(x => x.id !== id) }))}
+                                                onUpdateHighlight={(id, updates) => setHighlights(p => ({ ...p, [`q-${idx}`]: (p[`q-${idx}`] || []).map(x => x.id === id ? { ...x, ...updates } : x) }))}
+                                                isHighlightModeActive={isHighlightActive}
+                                                defaultHighlightColor={defaultHighlightColor}
+                                                onChangeDefaultColor={setDefaultHighlightColor}
+                                            />
+                                        </div>
+                                    </div>
+                                )}
+
+                                {/* Answer options or numeric input */}
+                                {isMultipleChoiceQuestion(q) ? (
+                                <div className="space-y-2 w-full relative pl-[2px] pt-[2px] mb-6">
+                                    {q.options.map((opt, i) => {
+                                        const isSelected = sel === i;
+                                        const isEliminated = currentEliminations.includes(i);
+                                        const letter = String.fromCharCode(65 + i);
+                                        const isTriedWrong = wrongAttemptsForCurrent.includes(i);
+                                        const isCorrectSelection = isChecked && i === q.answer;
+                                        const optionText = cleanOptionText(opt);
+
+                                        let boxClass = `relative w-full border h-auto min-h-[56px] rounded-[10px] flex items-stretch transition-all duration-200 overflow-hidden ${(isChecked || isTriedWrong) ? 'cursor-default pointer-events-none' : 'cursor-pointer'} select-text group`;
+                                        let circleWrapperClass = 'w-[52px] flex-shrink-0 flex items-center justify-center bg-transparent';
+                                        let circleClass = 'w-[30px] h-[30px] rounded-full flex items-center justify-center font-bold text-[14px] border-[1.5px] transition-all';
+                                        const textTone = isEliminated ? 'text-slate-400' : 'text-[#111827]';
+
+                                        if (isCorrectSelection) {
+                                            boxClass += ' border-emerald-500 bg-emerald-50/60 shadow-[inset_0_0_0_1px_#10b981]';
+                                            circleClass += ' border-emerald-500 bg-emerald-500 text-white';
+                                        } else if (isTriedWrong) {
+                                            boxClass += ' border-red-500 bg-red-50/60 shadow-[inset_0_0_0_1px_#ef4444]';
+                                            circleClass += ' border-red-500 bg-red-500 text-white';
+                                        } else if (isSelected) {
+                                            boxClass += ' border-[#111827] bg-white shadow-[inset_0_0_0_1px_#111827] z-10';
+                                            circleClass += ' border-[#111827] bg-[#111827] text-white shadow-md';
+                                        } else {
+                                            boxClass += ' border-[#E5E7EB] bg-white hover:border-slate-400 shadow-sm';
+                                            circleClass += ' border-[#D1D5DB] text-[#4B5563] bg-white group-hover:border-[#9CA3AF] group-hover:text-[#111827]';
+                                        }
+
+                                        return (
+                                            <div key={i} className="flex items-center gap-4 relative w-full group" style={{ animationDelay: `${i * 0.05}s`, animation: 'qb-slideUp 0.35s ease both' }}>
+                                                <div
+                                                    onClick={(e) => {
+                                                        if (isChecked || isTriedWrong) return;
+                                                        const selectedText = window.getSelection()?.toString();
+                                                        if (selectedText && selectedText.length > 0) return;
+
+                                                        if (isEliminationMode && !isChecked) {
+                                                            e.preventDefault();
+                                                            handleSelect(i);
+                                                        } else if (!isEliminated && !isChecked) {
+                                                            handleSelect(i);
+                                                        }
+                                                    }}
+                                                    className={boxClass}
+                                                >
+                                                    <div className={circleWrapperClass}>
+                                                        <div className={circleClass}>{letter}</div>
+                                                    </div>
+                                                    <div className={`relative z-10 flex-1 ${textTone} p-4 flex items-center bg-transparent`}>
+                                                        <HighlightableText
+                                                            text={optionText || `Option ${letter}`}
+                                                            className="text-[15px] leading-[1.6] text-inherit"
+                                                            highlights={highlights[`opt-${idx}-${i}`] || []}
+                                                            onAddHighlight={(h) => setHighlights(p => ({ ...p, [`opt-${idx}-${i}`]: [...(p[`opt-${idx}-${i}`] || []), h] }))}
+                                                            onRemoveHighlight={(id) => setHighlights(p => ({ ...p, [`opt-${idx}-${i}`]: (p[`opt-${idx}-${i}`] || []).filter(x => x.id !== id) }))}
+                                                            onUpdateHighlight={(id, updates) => setHighlights(p => ({ ...p, [`opt-${idx}-${i}`]: (p[`opt-${idx}-${i}`] || []).map(x => x.id === id ? { ...x, ...updates } : x) }))}
+                                                            isHighlightModeActive={isHighlightActive}
+                                                            defaultHighlightColor={defaultHighlightColor}
+                                                            onChangeDefaultColor={setDefaultHighlightColor}
+                                                        />
+                                                    </div>
+                                                    {isEliminated && !isChecked && !isTriedWrong && (
+                                                        <div className="pointer-events-none absolute left-0 top-1/2 h-[1.5px] w-full -translate-y-[50%] bg-slate-500"></div>
+                                                    )}
+                                                </div>
+
+                                                <div className="flex w-[50px] flex-shrink-0 items-center justify-start">
+                                                    {!isChecked && !isTriedWrong && isEliminationMode && (
+                                                            <button
+                                                                onClick={(e) => {
+                                                                    e.preventDefault();
+                                                                    e.stopPropagation();
+                                                                    handleSelect(i);
+                                                                }}
+                                                                className="group/btn z-20 flex items-center justify-center transition-colors"
+                                                            >
+                                                                {isEliminated ? (
+                                                                    <span className="font-bluebook text-[14px] font-bold text-[#111827] underline decoration-[#111827] decoration-[1.5px] underline-offset-[3px] hover:text-slate-700">Undo</span>
+                                                                ) : (
+                                                                    <div className="relative flex h-[28px] w-[28px] items-center justify-center rounded-full border-[1px] border-slate-900 bg-white opacity-50 transition-colors group-hover/btn:bg-slate-100 hover:opacity-100">
+                                                                        <span className="text-[12px] font-bold text-slate-900">{letter}</span>
+                                                                        <div className="absolute h-[1.5px] w-[38px] bg-slate-900"></div>
+                                                                    </div>

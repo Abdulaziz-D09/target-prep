@@ -9,6 +9,7 @@ import DesmosCalculator from '@/components/DesmosCalculator';
 import { ReferenceSheet } from '@/components/ReferenceSheet';
 import { cleanOCR, PassageRenderer } from '@/components/PassageRenderer';
 import { LatexRenderer } from '@/components/LatexRenderer';
+import { TestReviewBoard } from '@/components/TestReviewBoard';
 import Link from 'next/link';
 import { AnimatePresence, motion } from 'framer-motion';
 
@@ -411,105 +412,13 @@ export default function BaselineTestPage() {
 
         if (isReviewing || isExternalReview) {
             return (
-                <div className="h-full flex flex-col bg-[#fafafa]">
-                    <header className="bg-white border-b border-black/5 px-6 sm:px-10 py-4 flex items-center justify-between shadow-sm sticky top-0 z-20">
-                        <div className="flex items-center gap-4">
-                            <button onClick={() => {
-                                if (isExternalReview) router.push('/progress');
-                                else setIsReviewing(false);
-                            }} className="text-slate-500 hover:text-slate-900 flex items-center gap-2 font-medium bg-slate-50 px-3 py-1.5 rounded-md transition-colors">
-                                <ArrowLeft className="w-4 h-4" /> Back
-                            </button>
-                            <h2 className="font-bold text-slate-900 text-lg">Test Review</h2>
-                        </div>
-                    </header>
-                    <main className="flex-1 overflow-y-auto p-4 sm:p-8">
-                        <div className="max-w-4xl mx-auto space-y-12 pb-24">
-                            {test.sections.map((sec, sIdx) => (
-                                <div key={sIdx} className="space-y-8">
-                                    <h3 className="text-2xl font-bold border-b border-slate-200 pb-2 text-slate-800">{sec.name}</h3>
-                                    {sec.modules.map((mod, mIdx) => (
-                                        <div key={mIdx} className="space-y-6">
-                                            <h4 className="text-lg font-semibold text-slate-600 bg-slate-100 px-4 py-2 rounded-md">Module {mIdx + 1}</h4>
-                                            {mod.questions.map((q, qIdx) => {
-                                                const key = `${sIdx}-${mIdx}-${qIdx}`;
-                                                const userAnswer = r.answers[key];
-                                                const isCorrect = userAnswer === q.answer;
-                                                const isOmitted = userAnswer === undefined;
-
-                                                return (
-                                                    <div key={q.id} className={`bg-white rounded-2xl border-2 p-6 sm:p-8 shadow-sm ${isCorrect ? 'border-emerald-100' : 'border-red-100'}`}>
-                                                        <div className="flex justify-between items-start mb-4">
-                                                            <div className="flex items-center gap-3">
-                                                                <span className="bg-slate-100 text-slate-600 font-bold px-3 py-1 rounded-md text-sm">Question {qIdx + 1}</span>
-                                                                {isCorrect ? (
-                                                                    <span className="flex items-center gap-1 text-emerald-600 font-bold text-sm bg-emerald-50 px-2 py-1 rounded-md"><Check className="w-4 h-4" /> Correct</span>
-                                                                ) : isOmitted ? (
-                                                                    <span className="flex items-center gap-1 text-red-600 font-bold text-sm bg-red-50 px-2 py-1 rounded-md"><X className="w-4 h-4" /> Omitted</span>
-                                                                ) : (
-                                                                    <span className="flex items-center gap-1 text-red-600 font-bold text-sm bg-red-50 px-2 py-1 rounded-md"><X className="w-4 h-4" /> Incorrect</span>
-                                                                )}
-                                                            </div>
-                                                            <span className="text-xs font-bold uppercase tracking-wider text-slate-400">{q.difficulty}</span>
-                                                        </div>
-
-                                                        {q.passage && (
-                                                            <div className="mb-6 p-5 bg-slate-50 border-l-4 border-slate-300 text-slate-700 italic">
-                                                                {q.passage}
-                                                            </div>
-                                                        )}
-                                                        {q.image && (
-                                                            <div className="mb-6 border border-slate-200 rounded-xl overflow-hidden bg-slate-50 flex items-center justify-center p-4">
-                                                                <img src={q.image} alt="Question figure" className="max-w-full max-h-[250px] object-contain cursor-pointer hover:opacity-90 transition-opacity" onClick={() => setExpandedImage(q.image || null)} />
-                                                            </div>
-                                                        )}
-                                                        <h4 className="text-lg font-medium text-slate-900 mb-6">{cleanOCR(q.question || '')}</h4>
-
-                                                        <div className="space-y-3 mb-6">
-                                                            {q.options.map((opt, oIdx) => {
-                                                                const isThisCorrect = oIdx === q.answer;
-                                                                const isThisSelected = oIdx === userAnswer;
-                                                                let bgClass = "bg-white border-slate-200 text-slate-600";
-
-                                                                if (isThisCorrect) {
-                                                                    bgClass = "bg-emerald-50 border-emerald-500 text-emerald-900 shadow-[0_0_10px_rgba(16,185,129,0.1)]";
-                                                                } else if (isThisSelected || isOmitted) {
-                                                                    bgClass = "bg-red-50 border-red-400 text-red-900";
-                                                                }
-
-                                                                return (
-                                                                    <div key={oIdx} className={`p-4 border-2 rounded-xl flex items-center gap-4 ${bgClass}`}>
-                                                                        <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold border ${isThisCorrect ? 'bg-emerald-500 border-emerald-600 text-white' : isThisSelected ? 'bg-red-500 border-red-600 text-white' : 'bg-slate-100 border-slate-300'}`}>
-                                                                            {String.fromCharCode(65 + oIdx)}
-                                                                        </div>
-                                                                        <span className="font-medium">{cleanOCR(opt || '')}</span>
-                                                                        {isThisCorrect && (
-                                                                            <span className="ml-auto flex items-center gap-1 text-emerald-600 text-sm font-bold">
-                                                                                <Check className="w-5 h-5" /> {isCorrect ? '' : 'Correct Answer'}
-                                                                            </span>
-                                                                        )}
-                                                                        {(isThisSelected || (isOmitted && !isThisCorrect)) && <X className="ml-auto text-red-500 w-5 h-5" />}
-                                                                    </div>
-                                                                );
-                                                            })}
-                                                        </div>
-
-                                                        <div className="bg-blue-50/50 border border-blue-100 rounded-xl p-5">
-                                                            <h5 className="flex items-center gap-2 text-blue-800 font-bold mb-2">
-                                                                <BookOpen className="w-4 h-4" /> Explanation
-                                                            </h5>
-                                                            <p className="text-blue-900/80 leading-relaxed text-sm">{cleanOCR(q.explanation || '')}</p>
-                                                        </div>
-                                                    </div>
-                                                );
-                                            })}
-                                        </div>
-                                    ))}
-                                </div>
-                            ))}
-                        </div>
-                    </main>
-                </div>
+                <TestReviewBoard 
+                    test={r} 
+                    onExit={() => {
+                        if (isExternalReview) router.push('/progress');
+                        else setIsReviewing(false);
+                    }} 
+                />
             );
         }
 
@@ -951,7 +860,7 @@ export default function BaselineTestPage() {
                     <div className="w-full bg-white flex overflow-hidden relative">
 
                         {/* Left Pane (Passage or Desmos) */}
-                        {currentSection?.name === 'Math' ? (
+                        {currentSection?.name === 'Math' && !currentQuestion?.passage && !currentQuestion?.image ? (
                             <div className={`overflow-hidden bg-[#FAFAFA] border-r border-[#E5E7EB] flex flex-col ${!isDragging ? 'transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]' : ''} ${isDesmosOpen ? '' : 'pointer-events-none'}`} style={{ width: isDesmosOpen ? `${leftPanelWidth}%` : '0%', opacity: isDesmosOpen ? 1 : 0 }}>
                                 {/* Custom Calculator Header */}
                                 <div className="h-[46px] bg-[#F9FAFB] border-b border-[#D1D5DB] flex items-center justify-between px-4 shrink-0 relative z-20">
@@ -975,6 +884,17 @@ export default function BaselineTestPage() {
                         ) : (
                             <div className="overflow-y-auto p-4 lg:p-10 pr-4 lg:pr-6 flex justify-center bg-white" style={{ width: `${leftPanelWidth}%` }}>
                                 <div className="w-full max-w-[800px] relative mt-2">
+                                    {/* Show image above passage in left pane */}
+                                    {currentQuestion?.image && (
+                                        <div className="mb-5 w-full flex items-center justify-center">
+                                            <img
+                                                src={currentQuestion.image}
+                                                alt="Question figure"
+                                                className="max-w-full max-h-[500px] object-contain cursor-pointer hover:opacity-90 transition-opacity"
+                                                onClick={() => setExpandedImage(currentQuestion.image || null)}
+                                            />
+                                        </div>
+                                    )}
                                     {currentQuestion?.passage ? (
                                         <PassageRenderer
                                             text={currentQuestion.passage}
@@ -984,7 +904,7 @@ export default function BaselineTestPage() {
                                             onUpdateHighlight={(id, updates) => updateHighlight(questionKey, id, updates)}
                                             isHighlightModeActive={isHighlightActive}
                                             defaultHighlightColor={defaultHighlightColor}
-                                            onChangeDefaultColor={setDefaultHighlightColor}
+                                            onChangeDefaultColor={setDefaultHighlightColor as any}
                                         />
                                     ) : (
                                         <div className="text-[17px] text-[#6B7280] leading-[1.8] font-serif italic text-center mt-20">
@@ -1041,17 +961,6 @@ export default function BaselineTestPage() {
                                 </div>
 
                                 {/* Question Content */}
-                                {/* Math question image/graph */}
-                                {currentQuestion?.image && (
-                                    <div className="mb-5 flex items-center justify-center">
-                                        <img
-                                            src={currentQuestion.image}
-                                            alt="Question image"
-                                            className="max-w-full max-h-[400px] object-contain cursor-pointer hover:opacity-90 transition-opacity"
-                                            onClick={() => setExpandedImage(currentQuestion.image || null)}
-                                        />
-                                    </div>
-                                )}
                                 <div className="text-[17px] text-[#111827] mb-6 leading-[1.9]">
                                     {currentQuestion?.type === 'Math' || currentQuestion?.type === 'Math (SPR)' ? (
                                         <LatexRenderer
@@ -1069,7 +978,7 @@ export default function BaselineTestPage() {
                                             onUpdateHighlight={(id, updates) => updateHighlight(`q-${questionKey}`, id, updates)}
                                             isHighlightModeActive={isHighlightActive}
                                             defaultHighlightColor={defaultHighlightColor}
-                                            onChangeDefaultColor={setDefaultHighlightColor}
+                                            onChangeDefaultColor={setDefaultHighlightColor as any}
                                         />
                                     )}
                                 </div>

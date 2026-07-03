@@ -18,6 +18,7 @@ import {
   Map,
 } from 'lucide-react';
 import { satDates } from '@/data/questions';
+import { useTestStore } from '@/store/testStore';
 import {
   FloatingPageShapes,
   itemRevealVariants,
@@ -167,14 +168,28 @@ export default function HomePage() {
   const [todayLabel, setTodayLabel] = useState('');
   const [countdown, setCountdown] = useState<Countdown>(EMPTY_COUNTDOWN);
   const [scoreCountdown, setScoreCountdown] = useState<Countdown>(EMPTY_COUNTDOWN);
-  const [stats, setStats] = useState({
-    streak: 0,
-    avgScore: 0,
-    completed: 0,
-    answered: 0,
-  });
   const [hasPlan, setHasPlan] = useState(false);
   const [todayPlanDay, setTodayPlanDay] = useState<typeof STUDY_PLAN_DAYS[0] | null>(null);
+  const [isMounted, setIsMounted] = useState(false);
+
+  const completedTests = useTestStore(s => s.completedTests);
+  const streak = useTestStore(s => s.streak);
+  const totalQuestionsAnswered = useTestStore(s => s.totalQuestionsAnswered);
+  const syncWithSupabase = useTestStore(s => s.syncWithSupabase);
+
+  const stats = useMemo(() => {
+    const rawAvgScore =
+      completedTests.length > 0
+        ? completedTests.reduce((sum, test) => sum + (test.totalScore ?? 0), 0) / completedTests.length
+        : 0;
+    const avgScore = Math.round(rawAvgScore / 10) * 10;
+    return {
+      streak: streak || 0,
+      avgScore,
+      completed: completedTests.length,
+      answered: totalQuestionsAnswered || 0,
+    };
+  }, [completedTests, streak, totalQuestionsAnswered]);
 
   const nextTest = useMemo(() => {
     return satDates.find((date) => new Date(date.target).getTime() > PAGE_LOAD_TIME) ?? satDates[satDates.length - 1];
@@ -203,6 +218,7 @@ export default function HomePage() {
   );
 
   useEffect(() => {
+    setIsMounted(true);
     const frame = window.requestAnimationFrame(() => {
       setTodayLabel(
         new Intl.DateTimeFormat('en-US', {
@@ -213,52 +229,18 @@ export default function HomePage() {
         }).format(new Date())
       );
 
-      // Always show a random study plan focus day
+      // Map current day of week to 1-7 (Monday = 1 ... Sunday = 7)
+      let currentDayIndex = new Date().getDay();
+      if (currentDayIndex === 0) currentDayIndex = 7;
+      
+      const planDay = STUDY_PLAN_DAYS.find(d => d.day === currentDayIndex) || STUDY_PLAN_DAYS[0];
       setHasPlan(true);
-      const randomIndex = Math.floor(Math.random() * STUDY_PLAN_DAYS.length);
-      setTodayPlanDay(STUDY_PLAN_DAYS[randomIndex]);
+      setTodayPlanDay(planDay);
 
-      try {
-        const raw = localStorage.getItem('targetprep_progress');
-        if (!raw) return;
-
-        const progress = JSON.parse(raw) as ProgressSnapshot;
-        const rawTests = progress.completedTests ?? [];
-        const completedTests = rawTests.map(t => {
-            const roundedEnglish = Math.max(200, Math.min(800, Math.round(((t as any).englishScore || 200) / 10) * 10));
-            const roundedMath = Math.max(200, Math.min(800, Math.round(((t as any).mathScore || 200) / 10) * 10));
-            return {
-                ...t,
-                englishScore: roundedEnglish,
-                mathScore: roundedMath,
-                totalScore: roundedEnglish + roundedMath
-            };
-        });
-
-        const rawAvgScore =
-          completedTests.length > 0
-            ? completedTests.reduce((sum, test) => sum + (test.totalScore ?? 0), 0) / completedTests.length
-            : 0;
-        const avgScore = Math.round(rawAvgScore / 10) * 10;
-
-        setStats({
-          streak: progress.streak ?? 0,
-          avgScore,
-          completed: completedTests.length,
-          answered: progress.totalQuestionsAnswered ?? 0,
-        });
-      } catch {
-        setStats({
-          streak: 0,
-          avgScore: 0,
-          completed: 0,
-          answered: 0,
-        });
-      }
+      syncWithSupabase();
     });
-
     return () => window.cancelAnimationFrame(frame);
-  }, []);
+  }, [syncWithSupabase]);
 
   useEffect(() => {
     const targetMs = new Date(nextTest.target).getTime();
@@ -362,17 +344,17 @@ export default function HomePage() {
                 <div className="grid gap-4 sm:grid-cols-3">
                   <motion.div className="site-hero-stat rounded-[26px] p-4" variants={itemRevealVariants}>
                     <p className="site-hero-kicker text-[11px] font-bold uppercase tracking-[0.22em]">Completed</p>
-                    <p className="site-hero-title mt-3 text-3xl font-black tracking-[-0.04em]">{stats.completed}</p>
+                    <p className="site-hero-title mt-3 text-3xl font-black tracking-[-0.04em]">{isMounted ? stats.completed : 0}</p>
                     <p className="site-hero-body mt-1 text-sm">Finished tests stored in progress.</p>
                   </motion.div>
                   <motion.div className="site-hero-stat rounded-[26px] p-4" variants={itemRevealVariants}>
                     <p className="site-hero-kicker text-[11px] font-bold uppercase tracking-[0.22em]">Average score</p>
-                    <p className="site-hero-title mt-3 text-3xl font-black tracking-[-0.04em]">{stats.avgScore || '--'}</p>
+                    <p className="site-hero-title mt-3 text-3xl font-black tracking-[-0.04em]">{isMounted ? (stats.avgScore || '--') : '--'}</p>
                     <p className="site-hero-body mt-1 text-sm">Based on saved completed tests.</p>
                   </motion.div>
                   <motion.div className="site-hero-stat rounded-[26px] p-4" variants={itemRevealVariants}>
                     <p className="site-hero-kicker text-[11px] font-bold uppercase tracking-[0.22em]">Questions logged</p>
-                    <p className="site-hero-title mt-3 text-3xl font-black tracking-[-0.04em]">{stats.answered}</p>
+                    <p className="site-hero-title mt-3 text-3xl font-black tracking-[-0.04em]">{isMounted ? stats.answered : 0}</p>
                     <p className="site-hero-body mt-1 text-sm">All answered reps tracked in progress.</p>
                   </motion.div>
                 </div>
@@ -383,20 +365,20 @@ export default function HomePage() {
                     <p className="site-hero-kicker text-[11px] font-bold uppercase tracking-[0.22em] text-blue-600 dark:text-blue-400">Score Predictor</p>
                     <Sparkles className="h-3.5 w-3.5 text-blue-500" />
                   </div>
-                  {stats.completed > 0 ? (
+                  {isMounted && stats.completed > 0 ? (
                     <div className="mt-3 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                       <p className="text-3xl font-black tracking-[-0.04em] text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-400">
-                        {predictedScoreRange}
+                        {isMounted ? predictedScoreRange : '--'}
                       </p>
                       <div className="flex items-center gap-6">
                         <div className="text-right">
                           <p className="text-[10px] font-bold uppercase tracking-widest site-text-muted mb-1">Math</p>
-                          <p className="text-lg font-bold text-blue-700 dark:text-blue-400">{mathRange}</p>
+                          <p className="text-lg font-bold text-blue-700 dark:text-blue-400">{isMounted ? mathRange : ''}</p>
                         </div>
                         <div className="w-px h-8 bg-blue-500/20" />
                         <div>
                           <p className="text-[10px] font-bold uppercase tracking-widest site-text-muted mb-1">English</p>
-                          <p className="text-lg font-bold text-blue-700 dark:text-blue-400">{engRange}</p>
+                          <p className="text-lg font-bold text-blue-700 dark:text-blue-400">{isMounted ? engRange : ''}</p>
                         </div>
                       </div>
                     </div>
@@ -564,7 +546,9 @@ export default function HomePage() {
                           />
                         ))}
                       </div>
-                      <p className="text-[10px] site-text-muted font-semibold mt-1.5">Day {todayPlanDay.day} of 7</p>
+                      <p className="text-[10px] site-text-muted font-semibold mt-1.5">
+                        Day {todayPlanDay.day} of 7
+                      </p>
                     </>
                   ) : (
                     <p className="site-hero-body mt-2 text-sm leading-6">
@@ -624,7 +608,7 @@ export default function HomePage() {
                     </div>
                     <div>
                       <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-slate-400">Streak</p>
-                      <h3 className="site-text-strong text-lg font-black tracking-[-0.03em]">{stats.streak} day run</h3>
+                      <h3 className="site-text-strong text-lg font-black tracking-[-0.03em]">{isMounted ? stats.streak : 0} day run</h3>
                     </div>
                   </div>
                   <p className="site-text mt-4 text-sm leading-6">

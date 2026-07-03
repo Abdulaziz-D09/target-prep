@@ -13,13 +13,13 @@ const CW=VW-ML-MR, CH=VH-MT-MB;
 
 /* ── types ──────────────────────────────────────────────── */
 interface Props {
-  text:string; highlights:Highlight[];
-  onAddHighlight:(h:Omit<Highlight,'id'>)=>void;
-  onRemoveHighlight:(id:string)=>void;
-  onUpdateHighlight:(id:string,u:Partial<Highlight>)=>void;
-  isHighlightModeActive:boolean; className?:string;
+  text:string; highlights?:Highlight[];
+  onAddHighlight?:(h:Omit<Highlight,'id'>)=>void;
+  onRemoveHighlight?:(id:string)=>void;
+  onUpdateHighlight?:(id:string,u:Partial<Highlight>)=>void;
+  isHighlightModeActive?:boolean; className?:string;
   defaultHighlightColor?:string;
-  onChangeDefaultColor?:(color:string)=>void;
+  onChangeDefaultColor?:(color:any)=>void;
 }
 interface S { name:string; values:(number|null)[]; color:string }
 type Seg =
@@ -40,7 +40,9 @@ export function cleanOCR(text: string): string {
   let out = text
     .replace(/ﬁ/g, 'fi').replace(/ﬀ/g, 'ff').replace(/ﬃ/g, 'ffi')
     .replace(/ﬄ/g, 'ffl').replace(/ﬂ/g, 'fl').replace(/ﬅ/g, 'st')
-    .replace(/\xa0/g, ' ');
+    .replace(/\xa0/g, ' ')
+    .replace(/(?:\\_){4,}/g, '_______') // Fix LlamaParse escaped blanks
+    .replace(/^#{1,6}\s+/gm, ''); // Remove markdown heading artifacts like ###
 
   // 0b. Bullet/list markers that commonly appear as OCR artifacts
   // Replace ¢ (cent sign used as bullet) at start of line with •
@@ -239,9 +241,42 @@ function bulletBar(title:string,lines:string[]):Seg{
 }
 
 function parsePassage(raw:string):Seg[]{
+  // Decode HTML entities that might come from escaped database storage
+  let decoded = raw
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&amp;/g, '&');
+
   // Clean OCR artifacts before parsing
-  let cleaned = cleanOCR(raw);
+  let cleaned = cleanOCR(decoded);
   
+  // Convert any raw HTML <table> tags into Markdown-style tables before parsing
+  const tableRegex = /<table[^>]*>([\s\S]*?)<\/table>/gi;
+  cleaned = cleaned.replace(tableRegex, (match, inner) => {
+      const rows: string[][] = [];
+      const rowRegex = /<tr[^>]*>([\s\S]*?)<\/tr>/gi;
+      let trMatch;
+      while ((trMatch = rowRegex.exec(inner)) !== null) {
+          const trInner = trMatch[1];
+          const cellRegex = /<t[hd][^>]*>([\s\S]*?)<\/t[hd]>/gi;
+          const cells: string[] = [];
+          let cellMatch;
+          while ((cellMatch = cellRegex.exec(trInner)) !== null) {
+              cells.push(cellMatch[1].replace(/<[^>]+>/g, '').trim().replace(/\n/g, ' '));
+          }
+          if (cells.length > 0) rows.push(cells);
+      }
+      if (rows.length === 0) return match;
+      let md = '\n__TABLE__\n';
+      for (let i = 0; i < rows.length; i++) {
+          md += '| ' + rows[i].join(' | ') + ' |\n';
+      }
+      md += '__ENDTABLE__\n';
+      return md;
+  });
+
   // Auto-wrap markdown tables if not already wrapped.
   // A markdown table starts with a | row, followed by a |---| separator row.
   cleaned = cleaned.replace(
@@ -475,15 +510,17 @@ function PremiumTable({seg}:{seg:Extract<Seg,{kind:'table'}>}){
   const{title,header,rows}=seg;
   if(!header.length&&!rows.length)return null;
   return(
-    <div style={{display: 'block', margin: '16px 0', overflow: 'hidden'}}>
+    <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', margin: '24px 0', overflowX: 'auto', width: '100%'}}>
       {title&&(
-        <div className="mb-2 text-[13px] font-semibold text-slate-700">{title}</div>
+        <div style={{marginBottom: '8px', fontSize: '15px', fontWeight: 'bold', color: 'black', textAlign: 'center'}}>
+          {title}
+        </div>
       )}
-      <table className="border-collapse border border-black dark:border-white text-[15px]">
+      <table style={{ borderCollapse: 'collapse', width: 'max-content', minWidth: '50%', border: '2px solid black', color: 'black', fontSize: '15px' }}>
         <thead>
           <tr>
             {header.map((c,i)=>(
-              <th key={i} className="border border-black dark:border-white px-6 py-2 text-center font-semibold italic">
+              <th key={i} style={{ border: '1px solid black', padding: '8px 12px', textAlign: 'center', fontWeight: 'bold' }}>
                 {c}
               </th>
             ))}
@@ -493,7 +530,7 @@ function PremiumTable({seg}:{seg:Extract<Seg,{kind:'table'}>}){
           {rows.map((row,ri)=>(
             <tr key={ri}>
               {row.map((cell,ci)=>(
-                <td key={ci} className="border border-black dark:border-white px-6 py-2 text-center">
+                <td key={ci} style={{ border: '1px solid black', padding: '6px 10px', textAlign: ci === 0 ? 'left' : 'center', fontWeight: ci === 0 ? 'bold' : 'normal', fontStyle: 'normal' }}>
                   {cell}
                 </td>
               ))}
@@ -771,7 +808,7 @@ function TextBlock({
 }
 
 /* ── MAIN EXPORT ────────────────────────────────────────── */
-export function PassageRenderer({text,highlights,onAddHighlight,onRemoveHighlight,onUpdateHighlight,isHighlightModeActive,className,defaultHighlightColor,onChangeDefaultColor}:Props){
+export function PassageRenderer({text,highlights=[],onAddHighlight,onRemoveHighlight,onUpdateHighlight,isHighlightModeActive=false,className,defaultHighlightColor,onChangeDefaultColor}:Props){
   const segs=useMemo(()=>parsePassage(text),[text]);
   return(
     <div className={className}>
@@ -784,9 +821,9 @@ export function PassageRenderer({text,highlights,onAddHighlight,onRemoveHighligh
             key={i}
             seg={seg}
             highlights={highlights}
-            onAddHighlight={onAddHighlight}
-            onRemoveHighlight={onRemoveHighlight}
-            onUpdateHighlight={onUpdateHighlight}
+            onAddHighlight={onAddHighlight || (() => {})}
+            onRemoveHighlight={onRemoveHighlight || (() => {})}
+            onUpdateHighlight={onUpdateHighlight || (() => {})}
             isHighlightModeActive={isHighlightModeActive}
             defaultHighlightColor={defaultHighlightColor}
             onChangeDefaultColor={onChangeDefaultColor}

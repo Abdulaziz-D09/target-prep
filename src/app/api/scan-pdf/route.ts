@@ -2,26 +2,27 @@ import { NextRequest, NextResponse } from 'next/server';
 
 // ─── Prompt ───────────────────────────────────────────────────────────────────
 
-const SYSTEM_PROMPT = `You are an expert at extracting multiple-choice questions from educational texts, such as SAT practice tests.
+const SYSTEM_PROMPT = `You are an expert at extracting questions from educational texts, such as SAT practice tests.
 
-Extract ALL multiple-choice questions from the provided text or document. Each question should have exactly 4 answer choices labeled A, B, C, D.
+Extract ALL questions from the provided text or document. This includes both Multiple-Choice questions (which have exactly 4 answer choices labeled A, B, C, D) AND Student-Produced Response (SPR) math questions (which are grid-ins and have NO options).
 
 MOST CRITICAL INSTRUCTION — PASSAGE vs STEM SEPARATION:
 There are exactly TWO distinct pieces of content per question:
-  1. "passage": The reading material — any text, paragraph, poem, excerpt, or notes that the student READS. This goes in the "passage" field.
-  2. "stem": The actual question being asked — a single sentence like "Which choice best completes the text?", "What is the main purpose of the passage?", or a math problem. This goes in the "stem" field.
+  1. "passage": The reading material — any text, paragraph, poem, excerpt, or notes that the student READS. This goes in the "passage" field. 
+     RULE: If a sentence ends with a period (.), it belongs in the passage.
+  2. "stem": The actual question being asked. This goes in the "stem" field.
+     RULE: The stem MUST end with a question mark (?). If it ends with a period, it is not the stem.
 
-THE STEM FIELD MUST NEVER CONTAIN THE READING TEXT OR PASSAGE. The stem must be ONLY the question prompt sentence itself — typically 1-2 sentences. If the reading material (passage) accidentally ends up in the stem field, that is WRONG.
-THE PASSAGE FIELD MUST NEVER CONTAIN THE QUESTION PROMPT. If there is genuinely no reading passage (e.g., a pure math equation question with no text to read), set "passage" to null.
+THE STEM FIELD MUST NEVER CONTAIN THE READING TEXT OR PASSAGE. 
+THE PASSAGE FIELD MUST NEVER CONTAIN THE QUESTION PROMPT. If there is genuinely no reading passage, set "passage" to null.
 
 CRITICAL INSTRUCTION FOR MATHEMATICAL FORMULAS (LaTeX):
-If a question, passage, or option contains algebraic equations, numbers, variables, exponents, or mathematical formulas, you MUST write them in standard inline LaTeX enclosed in single dollar signs (e.g., $x^2 + 5x + 6 = 0$) or block LaTeX enclosed in double dollar signs ($$y = mx + b$$) so they render correctly in the LaTeX component.
+If a question, passage, or option contains algebraic equations, numbers, fractions, square roots, variables, exponents, or mathematical formulas, you MUST write them in standard inline LaTeX enclosed in single dollar signs (e.g., $x^2 + 5x + 6 = 0$) or block LaTeX enclosed in double dollar signs ($$y = mx + b$$).
+Make SURE to correctly scan numerical signs such as fractions (\\frac{a}{b}), square roots (\\sqrt{x}), inequalities (>, <, \\le, \\ge), and equal signs (=).
 
-CRITICAL INSTRUCTION FOR TABLES:
-If a question contains a data grid or table, you MUST reconstruct it as a clean Markdown table (e.g., using | Column 1 | Column 2 | and separators like |---|---|) directly inside the "passage" or "stem" field. Do not ignore tables.
-
-CRITICAL INSTRUCTION FOR GRAPHS, CHARTS, AND DIAGRAMS:
-If a question contains a graph, chart, diagram, or geometric figure, you MUST write a highly detailed textual paragraph describing all key details of the visual data (such as the axes, labels, data trends, points of intersection, coordinates, geometric parameters, or angles) and place it directly inside the "passage" or "stem" field. For example: "[Graph details: A coordinate plane showing y = f(x) intersecting the x-axis at (2,0) and y-axis at (0,4)...]". This ensures students have full visual context.
+CRITICAL INSTRUCTION FOR TABLES AND GRAPHS:
+1. TABLES: If a question contains a data grid or table, you MUST reconstruct it as a clean Markdown table (e.g., using | Column 1 | Column 2 | and separators like |---|---|) directly inside the "passage" or "stem" field.
+2. GRAPHS, CHARTS, AND DIAGRAMS: Do NOT try to scan, describe, or extract pictures, graphs, charts, or geometric diagrams. COMPLETELY IGNORE THEM. Teachers will manually upload these images later. Only scan text and tables.
 
 CRITICAL INSTRUCTION FOR MESSY AND OCR TEXT:
 If the source text is messy due to copy-pasting from a PDF (e.g. erratic gaps between words, broken sentences, missing question numbers, unaligned columns, or merged options), YOU MUST CLEAN IT UP. 
@@ -35,7 +36,7 @@ Return ONLY a valid JSON object with this EXACT structure (no markdown fences, n
     {
       "passage": "The COMPLETE reading text/passage the student reads. Must NEVER include the question prompt. Set to null if there is no reading passage (e.g., pure math).",
       "stem": "ONLY the question being asked — one or two sentences max. Example: 'Which choice best completes the text?' or 'What is the value of x?'. MUST NOT contain reading material.",
-      "options": {
+      "options": { // For Multiple-Choice questions only. For SPR questions, set this to null or an empty object.
         "A": "First option text (use LaTeX $...$ for math if needed)",
         "B": "Second option text (use LaTeX $...$ for math if needed)",
         "C": "Third option text (use LaTeX $...$ for math if needed)",
@@ -48,7 +49,7 @@ Return ONLY a valid JSON object with this EXACT structure (no markdown fences, n
 Rules:
 1. Include the COMPLETE passage and question stem — do not truncate them.
 2. Keep all option text complete and accurate
-3. Skip questions that do not have exactly 4 labeled options
+3. Do NOT skip math questions without options! If it is an SPR (grid-in) question, extract it and set options to null.
 4. Do NOT include the correct answer — the teacher will mark answers manually
 5. Output raw JSON only — no surrounding commentary or code blocks
 6. DOUBLE-CHECK before outputting: confirm that the "stem" field contains ONLY the question sentence, and "passage" contains ONLY the reading text.

@@ -16,9 +16,13 @@ import {
 export default function TeacherMocksPage() {
     const mockSessions = useClassroomStore(state => state.mockSessions);
     const seed = useClassroomStore(state => state.seed);
+    const syncWithSupabase = useClassroomStore(state => state.syncWithSupabase);
     const [searchQuery, setSearchQuery] = useState('');
     
-    useEffect(() => { seed(); }, [seed]);
+    useEffect(() => { 
+        seed(); 
+        syncWithSupabase();
+    }, [seed, syncWithSupabase]);
 
     return (
         <div className="relative min-h-screen w-full pt-4 pb-12 px-4 sm:px-6 lg:px-8">

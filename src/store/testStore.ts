@@ -42,6 +42,7 @@ export interface Highlight {
     end: number;
     color: string;
     isUnderline?: boolean;
+    underlineStyle?: 'solid' | 'dashed' | 'dotted' | string;
     note?: string;
     text: string;
 }
@@ -54,7 +55,7 @@ interface TestActions {
     selectAnswer: (questionKey: string, answerIndex: number | string) => void;
     toggleFlag: (questionKey: string) => void;
     toggleElimination: (questionKey: string, answerIndex: number) => void;
-    addHighlight: (questionKey: string, highlight: Highlight) => void;
+    addHighlight: (questionKey: string, highlight: Omit<Highlight, 'id'>) => void;
     removeHighlight: (questionKey: string, highlightId: string) => void;
     updateHighlight: (questionKey: string, highlightId: string, updates: Partial<Highlight>) => void;
     setDefaultHighlightColor: (color: HighlightColor) => void;
@@ -172,7 +173,8 @@ export const useTestStore = create<TestStore>((set, get) => ({
 
     addHighlight: (questionKey, highlight) => set(s => {
         const current = s.highlights[questionKey] || [];
-        return { highlights: { ...s.highlights, [questionKey]: [...current, highlight] } };
+        const newHighlight = { ...highlight, id: `h-${Date.now()}-${Math.random().toString(36).substring(2, 9)}` };
+        return { highlights: { ...s.highlights, [questionKey]: [...current, newHighlight] } };
     }),
 
     removeHighlight: (questionKey, highlightId) => set(s => {

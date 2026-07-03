@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Sparkles, CheckCircle, Upload, FileText, X, Loader2, BookOpen, Calculator, Image as ImageIcon } from 'lucide-react';
+import { Sparkles, CheckCircle, AlertCircle, Upload, FileText, X, Loader2, BookOpen, Calculator, Image as ImageIcon } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useClassroomStore } from '@/store/classroomStore';
 import { createClient } from '@/lib/supabase/client';
@@ -15,6 +15,7 @@ import {
 } from '@/components/SiteMotion';
 import Link from 'next/link';
 import { MockTestFilesEditor } from '@/components/MockTestFilesEditor';
+import { uploadFileToSupabase } from '@/lib/supabaseUpload';
 
 export default function TeacherMocksCreatePage() {
     const router = useRouter();
@@ -33,7 +34,7 @@ export default function TeacherMocksCreatePage() {
     const [strictMode, setStrictMode] = useState(false);
     const [strictToleranceSeconds, setStrictToleranceSeconds] = useState(5);
     const [host, setHost] = useState('');
-    const [customTests, setCustomTests] = useState<{ file?: File; id: string; name: string; questions: any[] }[]>([]);
+    const [customTests, setCustomTests] = useState<{ file?: File; pdfUrl?: string; id: string; name: string; questions: any[] }[]>([]);
     const [distributionMode, setDistributionMode] = useState<'random' | 'manual'>('random');
 
     useEffect(() => {
@@ -133,6 +134,15 @@ export default function TeacherMocksCreatePage() {
         setIsScanning(true);
         setScanError('');
         try {
+            // 1. First, upload the original PDF to Supabase so students can access it
+            let uploadedPdfUrl = '';
+            try {
+                uploadedPdfUrl = await uploadFileToSupabase(file, 'uploads');
+            } catch (uploadErr) {
+                console.error('Failed to upload PDF to Supabase, but continuing to extract questions...', uploadErr);
+            }
+
+            // 2. Then, send it to the AI to extract questions
             const fd = new FormData();
             fd.append('file', file);
             const res = await fetch('/api/scan-pdf', { method: 'POST', body: fd });
@@ -155,7 +165,9 @@ export default function TeacherMocksCreatePage() {
             const data = await res.json();
             if (data.questions) {
                 const qs = data.questions.map((q: any, i: number) => {
-                    const optionsArray = [
+                    const isSPR = !q.options || (typeof q.options === 'object' && Object.values(q.options).every(v => !v));
+                    
+                    const optionsArray = isSPR ? [] : [
                         q.options?.A || '',
                         q.options?.B || '',
                         q.options?.C || '',
@@ -163,13 +175,14 @@ export default function TeacherMocksCreatePage() {
                     ];
                     return {
                         id: `mock-q-${Date.now()}-${i}`,
+                        type: isSPR ? 'Math (SPR)' : 'Math',
                         passage: q.passage || null,
                         question: q.stem || q.question || '',
                         options: optionsArray,
                         answer: null
                     };
                 });
-                setCustomTests(prev => [...prev, { file, id: `mock-test-${Date.now()}`, name: file.name, questions: qs }]);
+                setCustomTests(prev => [...prev, { file, pdfUrl: uploadedPdfUrl, id: `mock-test-${Date.now()}`, name: file.name, questions: qs }]);
             } else {
                 setScanError('No questions found in document.');
             }
@@ -226,6 +239,7 @@ export default function TeacherMocksCreatePage() {
         const formattedTests = customTests.length > 0 ? customTests.map(test => ({
             id: test.id,
             name: test.name,
+            pdfUrl: test.pdfUrl,
             questions: test.questions.map((q: any) => ({
                 id: q.id,
                 passage: q.passage,

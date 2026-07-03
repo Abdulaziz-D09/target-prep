@@ -401,13 +401,13 @@ function BrowseView({ onStartQuiz, reviewedIds, qbStats, allEnglishQuestions, al
         const g: Record<string, Record<string, Question[]>> = {};
         allEnglishQuestions.forEach(q => { if (!g[q.domain]) g[q.domain] = {}; if (!g[q.domain][q.skill]) g[q.domain][q.skill] = []; g[q.domain][q.skill].push(q); });
         return g;
-    }, []);
+    }, [allEnglishQuestions]);
 
     const mathGroups = useMemo(() => {
         const g: Record<string, Record<string, Question[]>> = {};
         allMathQuestions.forEach(q => { if (!g[q.domain]) g[q.domain] = {}; if (!g[q.domain][q.skill]) g[q.domain][q.skill] = []; g[q.domain][q.skill].push(q); });
         return g;
-    }, []);
+    }, [allMathQuestions]);
 
     const filter = useCallback((qs: Question[]) => {
         let f = qs;
@@ -442,9 +442,9 @@ function BrowseView({ onStartQuiz, reviewedIds, qbStats, allEnglishQuestions, al
         return f;
     }, [diff, reviewFilter, completedFilter, statusFilter, timeRange, reviewedIds, qbStats, shuffled]);
 
-    const englishReadyCount = useMemo(() => filter(allEnglishQuestions).length, [filter]);
-    const mathReadyCount = useMemo(() => filter(allMathQuestions).length, [filter]);
-    const mathQuestionCount = useMemo(() => allMathQuestions.length, []);
+    const englishReadyCount = useMemo(() => filter(allEnglishQuestions).length, [filter, allEnglishQuestions]);
+    const mathReadyCount = useMemo(() => filter(allMathQuestions).length, [filter, allMathQuestions]);
+    const mathQuestionCount = useMemo(() => allMathQuestions.length, [allMathQuestions]);
     const allQuestionBankQuestions = useMemo(() => [...allEnglishQuestions, ...allMathQuestions], [allEnglishQuestions, allMathQuestions]);
     const reviewedCount = useMemo(() => allQuestionBankQuestions.filter(q => reviewedIds.has(q.id)).length, [reviewedIds, allQuestionBankQuestions]);
     const launch = (qs: Question[], label: string) => { const f = filter(qs); if (f.length > 0) onStartQuiz(f, label); };
@@ -782,6 +782,7 @@ function QuizView({
     onFinish,
     onToggleReview,
     onUpdateStat,
+    allQuestionBankQuestions,
 }: {
     questions: Question[];
     reviewedIds: Set<string>;
@@ -790,6 +791,7 @@ function QuizView({
     onFinish: (r: SessionResult) => void;
     onToggleReview: (questionId: string, nextValue: boolean) => void;
     onUpdateStat: (questionId: string, status: 'correct' | 'incorrect', timeSpentSeconds: number) => void;
+    allQuestionBankQuestions: Question[];
 }) {
     const [idx, setIdx] = useState(0);
     const [sel, setSel] = useState<number | null>(null);
@@ -1982,16 +1984,7 @@ export default function QuestionBankPage() {
     };
     const finish = (r: SessionResult) => { setResult(r); setView('summary'); router.replace('/question-bank'); };
 
-    if (isDbLoading) {
-        return (
-          <div className="min-h-screen bg-slate-50 flex items-center justify-center text-slate-500">
-             <div className="flex flex-col items-center">
-                <div className="w-10 h-10 border-4 border-slate-200 border-t-blue-500 rounded-full animate-spin mb-4"></div>
-                <p>Loading Question Bank from database...</p>
-             </div>
-          </div>
-        );
-    }
+
 
     if (view === 'quiz') return <QuizView questions={quizQ} reviewedIds={reviewedIdSet} qbStats={qbStats} onBack={() => { setView('browse'); router.replace('/question-bank'); }} onFinish={finish} onToggleReview={toggleReviewedQuestion} onUpdateStat={updateQuestionStat} allQuestionBankQuestions={allQuestionBankQuestions} />;
     if (view === 'summary' && result) return <SummaryView result={result} onRestart={() => start(quizQ, label)} onBack={() => { setView('browse'); router.replace('/question-bank'); }} />;

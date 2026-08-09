@@ -53,6 +53,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        <meta name="google-site-verification" content="7zD3xNkiOQ-jMcV-PHN2YGYoNTeBFlXPp7XZY205X1w" />
         <script id="targetprep-site-tone-init" dangerouslySetInnerHTML={{ __html: siteToneInitScript }} />
       </head>
       <body className="flex h-screen overflow-hidden bg-[var(--site-shell-bg)] transition-colors duration-300">

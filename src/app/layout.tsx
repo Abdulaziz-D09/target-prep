@@ -7,11 +7,24 @@ import SupabaseSyncProvider from "@/components/SupabaseSyncProvider";
 import { Suspense } from "react";
 
 export const metadata: Metadata = {
-  title: "Target Prep - SAT Preparation",
-  description: "Master the Digital SAT with interactive practice tests.",
+  title: "Target Prep: Free Digital SAT Prep, Practice Tests & Questions",
+  description: "Master the Digital SAT with full-length adaptive practice tests, thousands of realistic questions, instant score analytics, and targeted skill building.",
+  applicationName: "Target Prep",
+  authors: [{ name: "Target Prep" }],
+  keywords: ["Digital SAT", "SAT Prep", "Practice Tests", "SAT Math", "SAT Reading", "Target Prep"],
   icons: {
     icon: '/logo.jpg',
-  }
+    shortcut: '/logo.jpg',
+    apple: '/logo.jpg',
+  },
+  openGraph: {
+    title: "Target Prep: Free Digital SAT Prep, Practice Tests & Questions",
+    description: "Master the Digital SAT with full-length adaptive practice tests, thousands of realistic questions, instant score analytics, and targeted skill building.",
+    url: 'https://www.targetprep.uz',
+    siteName: 'Target Prep',
+    locale: 'en_US',
+    type: 'website',
+  },
 };
 
 const siteToneInitScript = `

@@ -25,9 +25,6 @@ export const metadata: Metadata = {
     locale: 'en_US',
     type: 'website',
   },
-  verification: {
-    google: '7zD3xNkiOQ-jMcV-PHN2YGYoNTeBFlXPp7XZY205X1w',
-  },
 };
 
 const siteToneInitScript = `

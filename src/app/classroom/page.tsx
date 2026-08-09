@@ -61,6 +61,7 @@ export default function ClassroomPage() {
     const [isJoinModalOpen, setIsJoinModalOpen] = useState(false);
     const [viewMembersClassroomId, setViewMembersClassroomId] = useState<string | null>(null);
     const [joinCode, setJoinCode] = useState('');
+    const [joinError, setJoinError] = useState('');
     const [activeTab, setActiveTab] = useState<'pending' | 'completed'>('pending');
     const [selectedAssignment, setSelectedAssignment] = useState<any>(null);
     const [studentProgressMap, setStudentProgressMap] = useState<StudentAssignmentProgressMap>({});
@@ -426,9 +427,15 @@ export default function ClassroomPage() {
                                     type="text"
                                     placeholder="Enter join code (e.g., ABC123)"
                                     value={joinCode}
-                                    onChange={(e) => setJoinCode(e.target.value.toUpperCase())}
+                                    onChange={(e) => {
+                                        setJoinCode(e.target.value.toUpperCase());
+                                        setJoinError('');
+                                    }}
                                     className={`w-full text-center text-lg tracking-widest font-mono p-4 rounded-xl site-subpanel bg-transparent border-2 outline-none transition uppercase placeholder:text-slate-400 placeholder:normal-case placeholder:tracking-normal placeholder:font-sans ${joinCode ? 'border-indigo-600' : 'border-transparent'}`}
                                 />
+                                {joinError && (
+                                    <p className="text-red-500 text-sm font-medium mt-2 text-center">{joinError}</p>
+                                )}
                             </div>
 
                             <button
@@ -438,8 +445,9 @@ export default function ClassroomPage() {
                                         if (success) {
                                             setIsJoinModalOpen(false);
                                             setJoinCode('');
+                                            setJoinError('');
                                         } else {
-                                            alert('Invalid join code or class not found.');
+                                            setJoinError('Invalid join code or class not found.');
                                         }
                                     }
                                 }}

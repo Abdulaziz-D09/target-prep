@@ -64,6 +64,7 @@ export default function ClassroomAssignmentDetailPage() {
     const [hasHydrated, setHasHydrated] = useState(false);
     const [fsWarningCountdown, setFsWarningCountdown] = useState<number | null>(null);
     const [isKickedOut, setIsKickedOut] = useState(false);
+    const [fullscreenError, setFullscreenError] = useState('');
     const fsCountdownRef = useRef<NodeJS.Timeout | null>(null);
 
     // UI state — identical to practice test
@@ -296,8 +297,9 @@ export default function ClassroomAssignmentDetailPage() {
         try {
             await document.documentElement.requestFullscreen();
             setMode('test');
+            setFullscreenError('');
         } catch (e) {
-            alert('Full screen is required to start this assignment.');
+            setFullscreenError('Full screen is required to start this assignment. Please try again or check your browser permissions.');
         }
     };
 
@@ -409,7 +411,10 @@ export default function ClassroomAssignmentDetailPage() {
                     </div>
                 </div>
 
-                <div className="absolute bottom-0 left-0 right-0 bg-white border-t border-slate-200 p-6 flex justify-end px-12 z-10 shadow-[0_-4px_20px_rgba(0,0,0,0.03)]">
+                <div className="absolute bottom-0 left-0 right-0 bg-white border-t border-slate-200 p-6 flex justify-end px-12 z-10 shadow-[0_-4px_20px_rgba(0,0,0,0.03)] gap-4 items-center">
+                    {fullscreenError && (
+                        <p className="text-red-500 font-medium text-sm animate-pulse">{fullscreenError}</p>
+                    )}
                     <button
                         onClick={() => {
                             if (assignment.allowExit === false) {

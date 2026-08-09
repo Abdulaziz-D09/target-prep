@@ -7,6 +7,12 @@ export default function SiteAtmosphereWrapper() {
 
   let modifier = 'site-atmosphere--home';
 
+  const isAuthRoute = ['/login', '/signup', '/verify-code', '/forgot-password', '/update-password'].some(route => pathname.startsWith(route));
+
+  if (isAuthRoute) {
+    return null;
+  }
+
   if (pathname.startsWith('/practice')) {
     modifier = 'site-atmosphere--practice';
   } else if (pathname.startsWith('/question-bank')) {

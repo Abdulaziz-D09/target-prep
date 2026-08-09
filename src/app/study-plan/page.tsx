@@ -802,7 +802,7 @@ export default function StudyPlanPage() {
                       
                       <div className="flex flex-col items-center gap-3 px-6 pb-8 pt-6">
                         <div className="w-24 h-24 rounded-[22px] overflow-hidden shadow-xl">
-                          <img src="/logo.jpg" alt="TargetPrep" className="w-full h-full object-cover" />
+                          <img src="/logo.jpg" alt="TargetPrep" className="w-full h-full object-cover rounded-full" />
                         </div>
                         <p className="text-sm text-blue-200 text-center leading-relaxed">
                           Based on your scores, you'd be in approximately the{' '}

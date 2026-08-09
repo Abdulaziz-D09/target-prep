@@ -186,8 +186,8 @@ export default function Sidebar() {
                     whileHover={shouldReduceMotion ? undefined : { scale: 1.02 }}
                     transition={shouldReduceMotion ? undefined : { type: 'spring', stiffness: 260, damping: 20 }}
                 >
-                    <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center overflow-hidden rounded-xl border-0 bg-transparent">
-                        <Image src="/logo.jpg" alt="Target Prep Logo" width={48} height={48} className="h-full w-full object-cover" />
+                    <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center overflow-hidden rounded-full border-0 bg-transparent shadow-[0_0_15px_rgba(37,99,235,0.2)]">
+                        <Image src="/logo.jpg" alt="Target Prep Logo" width={48} height={48} className="h-full w-full object-cover rounded-full" />
                     </div>
                     <div>
                         <h1 className={`mb-0.5 text-[1.05rem] font-black leading-none tracking-tight ${isLightTone ? 'text-slate-900' : 'text-[#eef2f7]'}`}>Target Prep</h1>

@@ -24,7 +24,7 @@ export default async function LoginPage({
         <div className="hidden lg:flex flex-col justify-center w-full max-w-xl mx-auto lg:ml-auto lg:mr-12">
           <div className="flex items-center gap-4 mb-8">
             <div className="h-16 w-16 flex items-center justify-center rounded-2xl overflow-hidden shadow-lg shadow-indigo-500/20">
-              <img src="/logo.jpg" alt="Target Prep Icon" className="w-full h-full object-cover" />
+              <img src="/logo.jpg" alt="Target Prep Icon" className="w-full h-full object-cover rounded-full" />
             </div>
             <span className="text-4xl font-extrabold tracking-tight text-white">Target Prep</span>
           </div>
@@ -45,7 +45,7 @@ export default async function LoginPage({
             
             <div className="md:hidden flex items-center justify-center gap-4 mb-6">
               <div className="h-14 w-14 flex items-center justify-center rounded-2xl overflow-hidden shadow-lg shadow-indigo-500/20">
-                <img src="/logo.jpg" alt="Target Prep Icon" className="w-full h-full object-cover" />
+                <img src="/logo.jpg" alt="Target Prep Icon" className="w-full h-full object-cover rounded-full" />
               </div>
               <span className="text-3xl font-extrabold tracking-tight text-white">Target Prep</span>
             </div>

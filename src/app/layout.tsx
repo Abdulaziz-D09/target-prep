@@ -8,6 +8,9 @@ import SupabaseSyncProvider from "@/components/SupabaseSyncProvider";
 export const metadata: Metadata = {
   title: "Target Prep - SAT Preparation",
   description: "Master the Digital SAT with interactive practice tests.",
+  icons: {
+    icon: '/logo.jpg',
+  }
 };
 
 const siteToneInitScript = `

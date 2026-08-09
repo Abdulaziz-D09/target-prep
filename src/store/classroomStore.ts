@@ -756,60 +756,75 @@ export const useClassroomStore = create<State & Actions>()(
           ] = await Promise.all([
             supabase.from('classrooms').select('*'),
             supabase.from('students').select('*'),
-            supabase.from('assignments').select('*'),
-            supabase.from('student_progress').select('*'),
+            supabase.from('assignments').select('id, title, subject, classroom_ids, time_limit_minutes, allow_exit, created_at, questions, custom_tests'),
+            supabase.from('student_progress').select('*').limit(500),
             supabase.from('mock_sessions').select('*'),
-            supabase.from('mock_results').select('*'),
-            supabase.from('question_history').select('*'),
+            supabase.from('mock_results').select('*').limit(200),
+            supabase.from('question_history').select('*').limit(100),
           ]);
 
           const updates: Partial<State> = {};
 
-          if (classroomsRes.data && classroomsRes.data.length > 0) {
-            updates.classrooms = classroomsRes.data.map(c => ({
-              id: c.id,
-              name: c.name,
-              grade: c.grade,
-              joinCode: c.join_code,
-              createdAt: c.created_at,
-            }));
+          if (classroomsRes.data) {
+            const serverIds = new Set(classroomsRes.data.map(c => c.id));
+            const recentLocal = get().classrooms.filter(c => !serverIds.has(c.id) && (now - new Date(c.createdAt).getTime() < 60000));
+            updates.classrooms = [
+              ...classroomsRes.data.map(c => ({
+                id: c.id,
+                name: c.name,
+                grade: c.grade,
+                joinCode: c.join_code,
+                createdAt: c.created_at,
+              })),
+              ...recentLocal
+            ];
           }
 
-          if (studentsRes.data && studentsRes.data.length > 0) {
-            updates.students = studentsRes.data.map(s => ({
-              id: s.id,
-              name: s.name,
-              classroomId: s.classroom_id,
-              joinedAt: s.joined_at,
-              avatar: s.avatar,
-              school: s.school,
-              gradeLevel: s.grade_level,
-              plannedExamDate: s.planned_exam_date,
-              scorePredictor: s.score_predictor,
-              history: s.history || [],
-              mockSessionId: s.mock_session_id,
-              user_id: s.user_id,
-            }));
+          if (studentsRes.data) {
+            const serverIds = new Set(studentsRes.data.map(s => s.id));
+            const recentLocal = get().students.filter(s => !serverIds.has(s.id) && (now - new Date(s.joinedAt).getTime() < 60000));
+            updates.students = [
+              ...studentsRes.data.map(s => ({
+                id: s.id,
+                name: s.name,
+                classroomId: s.classroom_id,
+                joinedAt: s.joined_at,
+                avatar: s.avatar,
+                school: s.school,
+                gradeLevel: s.grade_level,
+                plannedExamDate: s.planned_exam_date,
+                scorePredictor: s.score_predictor,
+                history: s.history || [],
+                mockSessionId: s.mock_session_id,
+                user_id: s.user_id,
+              })),
+              ...recentLocal
+            ];
 
             const studentProfiles = studentsRes.data.filter(s => s.user_id === session.user.id);
             updates.joinedClassroomIds = studentProfiles.map(s => s.classroom_id).filter(Boolean);
           }
 
-          if (assignmentsRes.data && assignmentsRes.data.length > 0) {
-            updates.assignments = assignmentsRes.data.map(a => ({
-              id: a.id,
-              title: a.title,
-              subject: a.subject,
-              classroomIds: a.classroom_ids || [],
-              questions: Array.isArray(a.questions) && !a.questions[0]?.questions ? a.questions : [], // fallback for old format
-              customTests: (Array.isArray(a.questions) && a.questions[0]?.questions) ? a.questions : (a.custom_tests || []), // Extract customTests from questions if stored there
-              timeLimitMinutes: a.time_limit_minutes,
-              allowExit: a.allow_exit,
-              createdAt: a.created_at,
-            }));
+          if (assignmentsRes.data) {
+            const serverIds = new Set(assignmentsRes.data.map(a => a.id));
+            const recentLocal = get().assignments.filter(a => !serverIds.has(a.id) && (now - new Date(a.createdAt).getTime() < 60000));
+            updates.assignments = [
+              ...assignmentsRes.data.map(a => ({
+                id: a.id,
+                title: a.title,
+                subject: a.subject,
+                classroomIds: a.classroom_ids || [],
+                questions: Array.isArray(a.questions) && !a.questions[0]?.questions ? a.questions : [],
+                customTests: (Array.isArray(a.questions) && a.questions[0]?.questions) ? a.questions : (a.custom_tests || []),
+                timeLimitMinutes: a.time_limit_minutes,
+                allowExit: a.allow_exit,
+                createdAt: a.created_at,
+              })),
+              ...recentLocal
+            ];
           }
 
-          if (progressRes.data && progressRes.data.length > 0) {
+          if (progressRes.data) {
             updates.progress = progressRes.data.map(p => ({
               studentId: p.student_id,
               assignmentId: p.assignment_id,
@@ -820,30 +835,35 @@ export const useClassroomStore = create<State & Actions>()(
             }));
           }
 
-          if (mockSessionsRes.data && mockSessionsRes.data.length > 0) {
-            updates.mockSessions = mockSessionsRes.data.map(m => ({
-              id: m.id,
-              title: m.title,
-              place: m.place,
-              date: m.date,
-              timeLimitMinutes: m.time_limit_minutes,
-              maxStudents: m.max_students,
-              attachedTestIds: m.attached_test_ids || [],
-              joinCode: m.join_code,
-              createdAt: m.created_at,
-              status: m.status,
-              strictMode: m.strict_mode,
-              host: m.host,
-              customTests: m.custom_tests || [],
-              subject: m.subject,
-              distributionMode: m.distribution_mode,
-              studentAssignments: m.student_assignments || {},
-              joinLocked: m.join_locked,
-              joinDeadline: m.join_deadline,
-            }));
+          if (mockSessionsRes.data) {
+            const serverIds = new Set(mockSessionsRes.data.map(m => m.id));
+            const recentLocal = get().mockSessions.filter(m => !serverIds.has(m.id) && (now - new Date(m.createdAt).getTime() < 60000));
+            updates.mockSessions = [
+              ...mockSessionsRes.data.map(m => ({
+                id: m.id,
+                title: m.title,
+                place: m.place,
+                date: m.date,
+                timeLimitMinutes: m.time_limit_minutes,
+                maxStudents: m.max_students,
+                attachedTestIds: m.attached_test_ids || [],
+                joinCode: m.join_code,
+                createdAt: m.created_at,
+                status: m.status,
+                strictMode: m.strict_mode,
+                host: m.host,
+                customTests: m.custom_tests || [],
+                subject: m.subject,
+                distributionMode: m.distribution_mode,
+                studentAssignments: m.student_assignments || {},
+                joinLocked: m.join_locked,
+                joinDeadline: m.join_deadline,
+              })),
+              ...recentLocal
+            ];
           }
 
-          if (mockResultsRes.data && mockResultsRes.data.length > 0) {
+          if (mockResultsRes.data) {
             updates.mockResults = mockResultsRes.data.map(r => ({
               id: r.id,
               mockId: r.mock_id,

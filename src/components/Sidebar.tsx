@@ -63,10 +63,7 @@ export default function Sidebar() {
     const [user, setUser] = useState<any>(null);
     const [profileForm, setProfileForm] = useState({
         first_name: '',
-        last_name: '',
-        birthdate: '',
-        school: '',
-        graduation_date: ''
+        last_name: ''
     });
     const [updateMessage, setUpdateMessage] = useState({ text: '', type: '' });
     const [isSaving, setIsSaving] = useState(false);
@@ -81,10 +78,7 @@ export default function Sidebar() {
                 const metadata = data.user.user_metadata;
                 setProfileForm({
                     first_name: metadata?.first_name || '',
-                    last_name: metadata?.last_name || metadata?.surname || '',
-                    birthdate: metadata?.birthdate || '',
-                    school: metadata?.school || '',
-                    graduation_date: metadata?.graduation_date || ''
+                    last_name: metadata?.last_name || metadata?.surname || ''
                 });
                 
                 if (metadata?.site_tone && metadata.site_tone !== readSiteTone()) {
@@ -501,38 +495,7 @@ export default function Sidebar() {
                                                 </div>
                                             </div>
                                             
-                                            {user?.user_metadata?.role !== 'teacher' && (
-                                                <>
-                                                    <div className={`rounded-2xl p-4 border ${isLightTone ? 'bg-slate-50 border-slate-100' : 'bg-white/[0.02] border-white/5'}`}>
-                                                        <label className="text-[11px] font-bold uppercase tracking-widest text-slate-400 mb-2 block">Birthdate</label>
-                                                        <input 
-                                                            type="date" required
-                                                            value={profileForm.birthdate} 
-                                                            onChange={e => setProfileForm({...profileForm, birthdate: e.target.value})}
-                                                            className={`w-full rounded-xl border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/50 ${isLightTone ? 'bg-white border-slate-200 text-slate-900' : 'bg-black/20 border-white/10 text-white [&::-webkit-calendar-picker-indicator]:invert-[0.8]'}`}
-                                                        />
-                                                    </div>
-                                                    <div className={`rounded-2xl p-4 border ${isLightTone ? 'bg-slate-50 border-slate-100' : 'bg-white/[0.02] border-white/5'}`}>
-                                                        <label className="text-[11px] font-bold uppercase tracking-widest text-slate-400 mb-2 block">Current School</label>
-                                                        <input 
-                                                            type="text" required
-                                                            value={profileForm.school} 
-                                                            onChange={e => setProfileForm({...profileForm, school: e.target.value})}
-                                                            className={`w-full rounded-xl border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/50 ${isLightTone ? 'bg-white border-slate-200 text-slate-900' : 'bg-black/20 border-white/10 text-white'}`}
-                                                        />
-                                                    </div>
 
-                                                    <div className={`rounded-2xl p-4 border ${isLightTone ? 'bg-slate-50 border-slate-100' : 'bg-white/[0.02] border-white/5'}`}>
-                                                        <label className="text-[11px] font-bold uppercase tracking-widest text-slate-400 mb-2 block">Graduation Date</label>
-                                                        <input 
-                                                            type="month" required
-                                                            value={profileForm.graduation_date} 
-                                                            onChange={e => setProfileForm({...profileForm, graduation_date: e.target.value})}
-                                                            className={`w-full rounded-xl border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/50 ${isLightTone ? 'bg-white border-slate-200 text-slate-900' : 'bg-black/20 border-white/10 text-white [&::-webkit-calendar-picker-indicator]:invert-[0.8]'}`}
-                                                        />
-                                                    </div>
-                                                </>
-                                            )}
                                         </div>
                                         
                                         {updateMessage.text && (
@@ -557,22 +520,7 @@ export default function Sidebar() {
                                                 <p className="text-[11px] font-bold uppercase tracking-widest text-slate-400 mb-1">Role</p>
                                                 <p className={`text-sm font-semibold capitalize ${isLightTone ? 'text-slate-700' : 'text-slate-200'}`}>{user?.user_metadata?.role || 'Student'}</p>
                                             </div>
-                                            {user?.user_metadata?.role !== 'teacher' && (
-                                                <>
-                                                    <div className={`rounded-2xl p-4 border ${isLightTone ? 'bg-slate-50 border-slate-100' : 'bg-white/[0.02] border-white/5'}`}>
-                                                        <p className="text-[11px] font-bold uppercase tracking-widest text-slate-400 mb-1">Birthdate</p>
-                                                        <p className={`text-sm font-semibold ${isLightTone ? 'text-slate-700' : 'text-slate-200'}`}>{user?.user_metadata?.birthdate || 'Not specified'}</p>
-                                                    </div>
-                                                    <div className={`rounded-2xl p-4 border ${isLightTone ? 'bg-slate-50 border-slate-100' : 'bg-white/[0.02] border-white/5'}`}>
-                                                        <p className="text-[11px] font-bold uppercase tracking-widest text-slate-400 mb-1">Current School</p>
-                                                        <p className={`text-sm font-semibold ${isLightTone ? 'text-slate-700' : 'text-slate-200'}`}>{user?.user_metadata?.school || 'Not specified'}</p>
-                                                    </div>
-                                                    <div className={`rounded-2xl p-4 border ${isLightTone ? 'bg-slate-50 border-slate-100' : 'bg-white/[0.02] border-white/5'}`}>
-                                                        <p className="text-[11px] font-bold uppercase tracking-widest text-slate-400 mb-1">Graduation Date</p>
-                                                        <p className={`text-sm font-semibold ${isLightTone ? 'text-slate-700' : 'text-slate-200'}`}>{user?.user_metadata?.graduation_date || 'Not specified'}</p>
-                                                    </div>
-                                                </>
-                                            )}
+
                                         </div>
 
                                         {updateMessage.text && updateMessage.type === 'success' && (

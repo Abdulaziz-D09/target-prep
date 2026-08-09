@@ -4,6 +4,32 @@ import { use, useState, useRef, useEffect, KeyboardEvent, ClipboardEvent } from 
 import { verifyOtp, resendOtp } from '../login/actions'
 import { ArrowRight, ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
+import { useFormStatus } from 'react-dom'
+
+function VerifyButton({ disabled }: { disabled: boolean }) {
+  const { pending } = useFormStatus();
+  return (
+    <button 
+      formAction={verifyOtp}
+      disabled={disabled || pending}
+      className="w-full bg-[#5A67FF] hover:bg-[#4c58df] disabled:bg-slate-800 disabled:text-slate-500 disabled:cursor-not-allowed text-white font-bold rounded-[12px] px-4 py-[14px] transition-all flex items-center justify-center gap-2 group text-[15px]"
+    >
+      {pending ? (
+        <>
+          <svg className="w-5 h-5 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+          </svg>
+          Verifying...
+        </>
+      ) : (
+        <>
+          Verify Account <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+        </>
+      )}
+    </button>
+  );
+}
 
 export default function VerifyCodePage({
   searchParams,
@@ -182,13 +208,7 @@ export default function VerifyCodePage({
               </div>
 
               <div className="w-full">
-                <button 
-                  formAction={verifyOtp}
-                  disabled={combinedCode.length !== 6}
-                  className="w-full bg-[#5A67FF] hover:bg-[#4c58df] disabled:bg-slate-800 disabled:text-slate-500 disabled:cursor-not-allowed text-white font-bold rounded-[12px] px-4 py-[14px] transition-all flex items-center justify-center gap-2 group text-[15px]"
-                >
-                  Verify Account <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </button>
+                <VerifyButton disabled={combinedCode.length !== 6} />
               </div>
               
               <div className="text-sm text-slate-400 font-medium pt-2">

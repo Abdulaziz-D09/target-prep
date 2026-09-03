@@ -1842,10 +1842,9 @@ export default function QuestionBankPage() {
   useEffect(() => {
     async function loadData() {
       const supabase = createClient();
-      
       const [{ data: mathData }, { data: ebrwData }] = await Promise.all([
-        supabase.from('question_bank').select('*').eq('subject', 'Math').limit(5000),
-        supabase.from('question_bank').select('*').eq('subject', 'EBRW').limit(5000)
+        supabase.from('question_bank').select('id, difficulty, domain, skill, subject').eq('subject', 'Math').limit(5000),
+        supabase.from('question_bank').select('id, difficulty, domain, skill, subject').eq('subject', 'EBRW').limit(5000)
       ]);
       
       const mathQ: Question[] = (mathData || []).map(row => {
@@ -1916,6 +1915,7 @@ export default function QuestionBankPage() {
   const allMathQuestions = dbMathQuestions;
   const allQuestionBankQuestions = [...allEnglishQuestions, ...allMathQuestions];
     const [view, setView] = useState<View>('browse');
+    const [isFetchingQuizData, setIsFetchingQuizData] = useState(false);
     const [quizQ, setQuizQ] = useState<Question[]>([]);
     const [label, setLabel] = useState('');
     const [result, setResult] = useState<SessionResult | null>(null);
@@ -1978,9 +1978,53 @@ export default function QuestionBankPage() {
         });
     }, []);
 
-    const start = (qs: Question[], l: string) => {
-        setQuizQ(qs); setLabel(l); setResult(null); setView('quiz');
-        router.push('/question-bank?view=quiz');
+    const start = async (qs: Question[], l: string) => {
+        setIsFetchingQuizData(true);
+        try {
+            // Cap to 50 questions max
+            let qsToFetch = qs;
+            if (qsToFetch.length > 50) {
+                // Shuffle and pick 50
+                qsToFetch = [...qsToFetch].sort(() => 0.5 - Math.random()).slice(0, 50);
+            }
+
+            const idsToFetch = qsToFetch.filter(q => !q.question).map(q => q.id);
+            let fetchedQs = [...qsToFetch];
+
+            if (idsToFetch.length > 0) {
+                const supabase = createClient();
+                const { data } = await supabase.from('question_bank').select('id, question_data').in('id', idsToFetch);
+
+                const dataMap = new Map();
+                data?.forEach(d => dataMap.set(d.id, d.question_data));
+
+                fetchedQs = qsToFetch.map(q => {
+                    const qd = dataMap.get(q.id);
+                    if (qd) {
+                        return {
+                            ...q,
+                            type: qd.type || q.type,
+                            passage: qd.passage || '',
+                            question: qd.question || '',
+                            options: Array.isArray(qd.options) ? qd.options : [],
+                            answer: typeof qd.answer === 'number' ? qd.answer : undefined,
+                            answerType: qd.answerType || (typeof qd.answer === 'number' ? 'multiple_choice' : 'numeric'),
+                            answerText: qd.answerText,
+                            acceptableAnswers: Array.isArray(qd.acceptableAnswers) ? qd.acceptableAnswers : undefined,
+                            explanation: qd.explanation || '',
+                            image: qd.image,
+                            imageLayout: qd.imageLayout,
+                        };
+                    }
+                    return q;
+                });
+            }
+
+            setQuizQ(fetchedQs); setLabel(l); setResult(null); setView('quiz');
+            router.push('/question-bank?view=quiz');
+        } finally {
+            setIsFetchingQuizData(false);
+        }
     };
     const finish = (r: SessionResult) => { setResult(r); setView('summary'); router.replace('/question-bank'); };
 
@@ -1988,5 +2032,15 @@ export default function QuestionBankPage() {
 
     if (view === 'quiz') return <QuizView questions={quizQ} reviewedIds={reviewedIdSet} qbStats={qbStats} onBack={() => { setView('browse'); router.replace('/question-bank'); }} onFinish={finish} onToggleReview={toggleReviewedQuestion} onUpdateStat={updateQuestionStat} allQuestionBankQuestions={allQuestionBankQuestions} />;
     if (view === 'summary' && result) return <SummaryView result={result} onRestart={() => start(quizQ, label)} onBack={() => { setView('browse'); router.replace('/question-bank'); }} />;
-    return <BrowseView onStartQuiz={start} reviewedIds={reviewedIdSet} qbStats={qbStats} allEnglishQuestions={allEnglishQuestions} allMathQuestions={allMathQuestions} />;
+    return (
+        <>
+            {isFetchingQuizData && (
+                <div className="fixed inset-0 z-[9999] bg-white/80 backdrop-blur-sm flex flex-col items-center justify-center">
+                    <div className="w-12 h-12 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin"></div>
+                    <p className="mt-4 text-emerald-700 font-bold">Preparing your quiz...</p>
+                </div>
+            )}
+            <BrowseView onStartQuiz={start} reviewedIds={reviewedIdSet} qbStats={qbStats} allEnglishQuestions={allEnglishQuestions} allMathQuestions={allMathQuestions} />
+        </>
+    );
 }

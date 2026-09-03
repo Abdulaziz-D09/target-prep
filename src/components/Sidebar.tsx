@@ -514,13 +514,12 @@ export default function Sidebar() {
                                         </div>
                                     </form>
                                 ) : (
-                                    <div className="space-y-4">
+                                    <div className="space-y-3">
                                         <div className="space-y-3 max-h-[40vh] overflow-y-auto pr-2 custom-scrollbar">
-                                            <div className={`rounded-2xl p-4 border ${isLightTone ? 'bg-slate-50 border-slate-100' : 'bg-white/[0.02] border-white/5'}`}>
-                                                <p className="text-[11px] font-bold uppercase tracking-widest text-slate-400 mb-1">Role</p>
+                                            <div className={`rounded-xl px-4 py-2.5 border flex items-center justify-between ${isLightTone ? 'bg-slate-50 border-slate-100' : 'bg-white/[0.02] border-white/5'}`}>
+                                                <p className="text-[11px] font-bold uppercase tracking-widest text-slate-400">Role</p>
                                                 <p className={`text-sm font-semibold capitalize ${isLightTone ? 'text-slate-700' : 'text-slate-200'}`}>{user?.user_metadata?.role || 'Student'}</p>
                                             </div>
-
                                         </div>
 
                                         {updateMessage.text && updateMessage.type === 'success' && (
@@ -535,9 +534,9 @@ export default function Sidebar() {
                                     </div>
                                 )}
 
-                                <div className="pt-2">
+                                <div>
                                     <form action={signOut}>
-                                        <button className="flex w-full items-center justify-center gap-2 rounded-xl bg-red-500/10 px-4 py-3.5 text-sm font-bold text-red-600 dark:text-red-500 transition-colors hover:bg-red-500/20">
+                                        <button className="flex w-full items-center justify-center gap-2 rounded-xl bg-red-500/10 px-4 py-3 text-sm font-bold text-red-600 dark:text-red-500 transition-colors hover:bg-red-500/20">
                                             <LogOut className="h-4 w-4" />
                                             Sign Out
                                         </button>

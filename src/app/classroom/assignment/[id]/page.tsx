@@ -829,7 +829,7 @@ export default function ClassroomAssignmentDetailPage() {
                     </div>
                 ) : (
                     <div className="overflow-y-auto p-4 lg:p-10 pr-4 lg:pr-6 flex justify-center bg-white border-r border-[#E5E7EB]" style={{ width: `${leftPanelWidth}%` }}>
-                        <div className="w-full max-w-[800px] relative mt-2">
+                        <div className="w-full max-w-[1000px] relative mt-2">
                             {/* English question: show image above passage in left pane only if no explicit imagePosition is set */}
                             {currentQuestion?.imageUrl && !isMath && (!currentQuestion?.imagePosition || currentQuestion?.imagePosition === 'before-stem') && (
                                 <div className="mb-5 flex items-center justify-center">
@@ -889,7 +889,7 @@ export default function ClassroomAssignmentDetailPage() {
                     className={`overflow-y-auto p-4 lg:p-10 pl-4 lg:pl-8 bg-white ${!isDragging && isMath ? 'transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]' : ''}`}
                     style={{ width: (isMath && !isDesmosOpen) ? '100%' : `${100 - leftPanelWidth}%` }}
                 >
-                    <div className="w-full max-w-[800px] mx-auto flex flex-col pb-40">
+                    <div className="w-full max-w-[1000px] mx-auto flex flex-col pb-40">
                         {/* Header: Connected Question Number & Mark for Review & ABC */}
                         <div className="flex items-center w-full h-[54px] mb-4 mt-2">
                             {/* Number - standalone rounded square */}

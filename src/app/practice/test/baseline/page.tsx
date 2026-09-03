@@ -883,7 +883,7 @@ export default function BaselineTestPage() {
                             </div>
                         ) : (
                             <div className="overflow-y-auto p-4 lg:p-10 pr-4 lg:pr-6 flex justify-center bg-white" style={{ width: `${leftPanelWidth}%` }}>
-                                <div className="w-full max-w-[800px] relative mt-2">
+                                <div className="w-full max-w-[1000px] relative mt-2">
                                     {/* Show image above passage in left pane */}
                                     {currentQuestion?.image && (
                                         <div className="mb-5 w-full flex items-center justify-center">
@@ -931,7 +931,7 @@ export default function BaselineTestPage() {
 
                         {/* Right Pane (Question Area) */}
                         <div className={`overflow-y-auto p-4 lg:p-10 pl-4 lg:pl-8 bg-white ${!isDragging && currentSection?.name === 'Math' ? 'transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]' : ''}`} style={{ width: (currentSection?.name === 'Math' && !isDesmosOpen) ? '100%' : `${100 - leftPanelWidth}%` }}>
-                            <div className="w-full max-w-[800px] mx-auto flex flex-col pb-10" ref={contentRef}>
+                            <div className="w-full max-w-[1000px] mx-auto flex flex-col pb-10" ref={contentRef}>
 
                                 {/* Header: Connected Question Number & Mark for Review & ABC */}
                                 <div className="flex items-center mb-6 mt-4 w-full bg-white border border-[#E5E7EB] rounded-[12px] shadow-sm h-[44px]">

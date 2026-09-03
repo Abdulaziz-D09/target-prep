@@ -11,7 +11,16 @@ export async function GET(request: Request) {
   if (code) {
     const supabase = await createClient()
     const { error, data } = await supabase.auth.exchangeCodeForSession(code)
+    
     if (!error) {
+      // If a role was provided (e.g. from Google Sign Up), update the user's metadata
+      const roleParam = searchParams.get('role')
+      if (roleParam && (roleParam === 'student' || roleParam === 'teacher')) {
+        await supabase.auth.updateUser({
+          data: { role: roleParam }
+        })
+      }
+
       // Determine redirect based on role
       const { data: { user } } = await supabase.auth.getUser()
       const role = user?.user_metadata?.role || 'student'

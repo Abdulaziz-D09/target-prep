@@ -1317,7 +1317,7 @@ function QuizView({
                             className={`overflow-y-auto h-full bg-white flex justify-center p-4 lg:p-10 pl-4 lg:pl-8 ${!isDragging ? 'transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]' : ''}`}
                             style={{ width: isDesmosOpen ? `${100 - leftPanelWidth}%` : '100%' }}
                         >
-                            <div className="w-full max-w-[800px] mx-auto flex flex-col pb-10">
+                            <div className="w-full max-w-[1000px] mx-auto flex flex-col pb-10">
 
                                 {/* Header: Connected Question Number & Mark for Review & ABC */}
                                 <div className="flex items-center w-full h-[54px] mb-4 mt-2">
@@ -1499,7 +1499,7 @@ function QuizView({
                     <>
                         {/* Left Panel — Passage */}
                         <div className="overflow-y-auto bg-white" style={{ width: `${leftPanelWidth}%` }}>
-                            <div className="p-4 lg:p-10 pr-4 lg:pr-8 max-w-[800px] w-full mx-auto">
+                            <div className="p-4 lg:p-10 pr-4 lg:pr-8 max-w-[1000px] w-full mx-auto">
                                 {q.passage ? (
                                     <div className="py-2" style={{ animation: 'qb-slideUp 0.4s ease both' }}>
                                         <PassageRenderer
@@ -1545,7 +1545,7 @@ function QuizView({
 
                         {/* Right Panel — Question + Answers */}
                         <div ref={rightPanelRef} className="overflow-y-auto p-4 lg:p-10 pl-4 lg:pl-8 bg-white" style={{ width: `${100 - leftPanelWidth}%` }}>
-                            <div className="w-full max-w-[800px] mx-auto flex flex-col pb-10">
+                            <div className="w-full max-w-[1000px] mx-auto flex flex-col pb-10">
 
                                 {/* Header: Connected Question Number & Mark for Review & ABC */}
                                 <div className="flex items-center w-full h-[54px] mb-4 mt-2">

@@ -2,6 +2,7 @@
 
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
+import { headers } from 'next/headers'
 import { createClient } from '@/lib/supabase/server'
 
 export async function login(formData: FormData) {
@@ -176,4 +177,32 @@ export async function updatePassword(formData: FormData) {
   await supabase.auth.signOut()
   
   redirect('/login?message=Password updated successfully. Please log in with your new password.')
+}
+
+export async function signInWithGoogle(formData?: FormData) {
+  const supabase = await createClient()
+  const headersList = await headers()
+  const host = headersList.get('host')
+  const protocol = process.env.NODE_ENV === 'development' ? 'http' : 'https'
+  const origin = `${protocol}://${host}`
+  
+  let callbackUrl = `${origin}/auth/callback`
+  
+  if (formData) {
+    const role = formData.get('role') as string
+    if (role) {
+      callbackUrl += `?role=${role}`
+    }
+  }
+
+  const { data, error } = await supabase.auth.signInWithOAuth({
+    provider: 'google',
+    options: {
+      redirectTo: callbackUrl,
+    },
+  })
+
+  if (data.url) {
+    redirect(data.url)
+  }
 }

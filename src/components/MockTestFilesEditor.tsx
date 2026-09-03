@@ -201,7 +201,6 @@ export function MockTestFilesEditor({ initialTests, onSave, onChange, hideSaveBu
                                             
                                             return (
                                                 <motion.div 
-                                                    layout
                                                     key={q.id} 
                                                     onClick={() => setExpandedQuestionId(isExpanded ? null : `${test.id}-${q.id}`)}
                                                     className={`flex flex-col bg-slate-50 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 overflow-hidden cursor-pointer transition-shadow hover:shadow-md ${isExpanded ? 'col-span-full' : ''}`}

@@ -458,6 +458,7 @@ export default function TeacherMocksCreatePage() {
                                             onChange={(e) => {
                                                 const f = e.target.files?.[0];
                                                 if (f) { scanFile(f); }
+                                                e.target.value = ''; // Reset to allow selecting the same file again
                                             }}
                                         />
                                         {isScanning ? (

@@ -464,9 +464,14 @@ export default function Sidebar() {
                                         <CircleUserRound className="h-8 w-8 text-blue-500" />
                                     </div>
                                     <div>
-                                        <h3 className={`text-xl font-black tracking-tight ${isLightTone ? 'text-slate-900' : 'text-white'}`}>
-                                            {user?.user_metadata?.first_name} {user?.user_metadata?.last_name}
-                                        </h3>
+                                        <div className="flex items-center gap-2">
+                                            <h3 className={`text-xl font-black tracking-tight ${isLightTone ? 'text-slate-900' : 'text-white'}`}>
+                                                {user?.user_metadata?.first_name} {user?.user_metadata?.last_name}
+                                            </h3>
+                                            <span className={`px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider ${isLightTone ? 'bg-blue-100 text-blue-700' : 'bg-blue-500/20 text-blue-400'}`}>
+                                                {user?.user_metadata?.role || 'Student'}
+                                            </span>
+                                        </div>
                                         <p className="text-sm font-medium text-slate-500 dark:text-slate-400">{user?.email}</p>
                                     </div>
                                 </div>
@@ -515,13 +520,6 @@ export default function Sidebar() {
                                     </form>
                                 ) : (
                                     <div className="space-y-3">
-                                        <div className="space-y-3 max-h-[40vh] overflow-y-auto pr-2 custom-scrollbar">
-                                            <div className={`rounded-xl px-4 py-2.5 border flex items-center justify-between ${isLightTone ? 'bg-slate-50 border-slate-100' : 'bg-white/[0.02] border-white/5'}`}>
-                                                <p className="text-[11px] font-bold uppercase tracking-widest text-slate-400">Role</p>
-                                                <p className={`text-sm font-semibold capitalize ${isLightTone ? 'text-slate-700' : 'text-slate-200'}`}>{user?.user_metadata?.role || 'Student'}</p>
-                                            </div>
-                                        </div>
-
                                         {updateMessage.text && updateMessage.type === 'success' && (
                                             <div className="rounded-xl p-3 text-sm font-semibold bg-emerald-500/10 text-emerald-500">
                                                 {updateMessage.text}
@@ -531,17 +529,14 @@ export default function Sidebar() {
                                         <button onClick={() => setIsEditingProfile(true)} className={`flex w-full items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-bold transition-colors ${isLightTone ? 'bg-blue-50 text-blue-600 hover:bg-blue-100' : 'bg-blue-500/10 text-blue-400 hover:bg-blue-500/20'}`}>
                                             Edit Profile
                                         </button>
+                                        <form action={signOut}>
+                                            <button className="flex w-full items-center justify-center gap-2 rounded-xl bg-red-500/10 px-4 py-3 text-sm font-bold text-red-600 dark:text-red-500 transition-colors hover:bg-red-500/20">
+                                                <LogOut className="h-4 w-4" />
+                                                Sign Out
+                                            </button>
+                                        </form>
                                     </div>
                                 )}
-
-                                <div>
-                                    <form action={signOut}>
-                                        <button className="flex w-full items-center justify-center gap-2 rounded-xl bg-red-500/10 px-4 py-3 text-sm font-bold text-red-600 dark:text-red-500 transition-colors hover:bg-red-500/20">
-                                            <LogOut className="h-4 w-4" />
-                                            Sign Out
-                                        </button>
-                                    </form>
-                                </div>
                             </div>
                         </motion.div>
                     </div>

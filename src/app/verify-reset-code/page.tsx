@@ -115,7 +115,7 @@ export default function VerifyResetCodePage({
             
             <div className="flex items-center justify-center gap-4 mb-6">
               <div className="h-14 w-14 flex items-center justify-center rounded-2xl overflow-hidden shadow-lg shadow-indigo-500/20">
-                <img src="/logo.png" alt="Target Prep Icon" className="w-full h-full object-cover rounded-full" />
+                <img src="/logo.png" alt="Target Prep Icon" className="w-full h-full object-cover rounded-2xl" />
               </div>
             </div>
 

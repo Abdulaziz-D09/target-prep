@@ -140,7 +140,7 @@ export default function VerifyCodePage({
             
             <div className="flex items-center justify-center gap-4 mb-8">
               <div className="h-16 w-16 flex items-center justify-center rounded-[16px] overflow-hidden bg-[#1A1D24]">
-                <img src="/logo.png" alt="Target Prep Icon" className="w-10 h-10 object-contain rounded-full" />
+                <img src="/logo.png" alt="Target Prep Icon" className="w-10 h-10 object-contain rounded-xl" />
               </div>
             </div>
 

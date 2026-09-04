@@ -203,7 +203,8 @@ export function MockTestFilesEditor({ initialTests, onSave, onChange, hideSaveBu
                                                 <motion.div 
                                                     key={q.id} 
                                                     onClick={() => setExpandedQuestionId(isExpanded ? null : `${test.id}-${q.id}`)}
-                                                    className={`flex flex-col bg-slate-50 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 overflow-hidden cursor-pointer transition-shadow hover:shadow-md ${isExpanded ? 'col-span-full' : ''}`}
+                                                    className={`flex flex-col bg-slate-50 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 overflow-hidden cursor-pointer transition-shadow hover:shadow-md self-start`}
+                                                    style={{ alignSelf: 'start' }}
                                                 >
                                                     <div className="flex items-center justify-between px-4 py-3">
                                                         <span className="font-bold text-sm site-text-muted">Q{idx + 1}</span>

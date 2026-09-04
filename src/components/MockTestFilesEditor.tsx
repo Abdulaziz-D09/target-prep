@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronDown, ChevronUp, Save, X } from 'lucide-react';
+import { ChevronDown, ChevronUp, Save } from 'lucide-react';
 
 export function MockTestFilesEditor({ initialTests, onSave, onChange, hideSaveButton }: { initialTests: any[], onSave: (tests: any[]) => void, onChange?: (tests: any[]) => void, hideSaveButton?: boolean }) {
     const [customTests, setCustomTests] = useState(initialTests || []);
@@ -141,23 +141,6 @@ export function MockTestFilesEditor({ initialTests, onSave, onChange, hideSaveBu
         handleUpdate(prev => prev.filter(test => test.id !== testId));
     };
 
-    let expandedTestData: any = null;
-    let expandedQuestionData: any = null;
-    let expandedQuestionIdx = -1;
-
-    if (expandedQuestionId) {
-        for (const test of customTests) {
-            if (!test.questions) continue;
-            const qIdx = test.questions.findIndex((q: any) => `${test.id}-${q.id}` === expandedQuestionId);
-            if (qIdx !== -1) {
-                expandedTestData = test;
-                expandedQuestionData = test.questions[qIdx];
-                expandedQuestionIdx = qIdx;
-                break;
-            }
-        }
-    }
-
     if (customTests.length === 0) {
         return (
             <div className="p-12 text-center border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-3xl text-slate-500">
@@ -218,9 +201,10 @@ export function MockTestFilesEditor({ initialTests, onSave, onChange, hideSaveBu
                                             
                                             return (
                                                 <motion.div 
+                                                    layout
                                                     key={q.id} 
                                                     onClick={() => setExpandedQuestionId(isExpanded ? null : `${test.id}-${q.id}`)}
-                                                    className={`flex flex-col bg-slate-50 dark:bg-slate-800 rounded-lg border overflow-hidden cursor-pointer transition-all hover:shadow-md self-start ${isExpanded ? 'border-blue-500 ring-2 ring-blue-500 shadow-blue-500/20' : 'border-slate-200 dark:border-slate-700 hover:border-blue-400'}`}
+                                                    className={`flex flex-col bg-slate-50 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 overflow-hidden cursor-pointer transition-shadow hover:shadow-md self-start ${isExpanded ? 'ring-2 ring-blue-500 border-blue-500' : ''}`}
                                                     style={{ alignSelf: 'start' }}
                                                 >
                                                     <div className="flex items-center justify-between px-4 py-3">
@@ -247,7 +231,141 @@ export function MockTestFilesEditor({ initialTests, onSave, onChange, hideSaveBu
                                                         </div>
                                                     </div>
                                                     
-                                                    
+                                                    <AnimatePresence>
+                                                        {isExpanded && (
+                                                            <motion.div
+                                                                initial={{ opacity: 0, height: 0 }}
+                                                                animate={{ opacity: 1, height: 'auto' }}
+                                                                exit={{ opacity: 0, height: 0 }}
+                                                                transition={{ duration: 0.2 }}
+                                                                className="px-4 pb-4 border-t border-slate-200 dark:border-slate-700 pt-3 cursor-default"
+                                                                onClick={e => e.stopPropagation()}
+                                                            >
+                                                                <div className="space-y-4 site-text text-sm">
+                                                                    <div className="bg-white dark:bg-slate-900 p-3 rounded-lg border border-slate-200 dark:border-slate-800 focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-500 transition-colors">
+                                                                        <h4 className="font-bold text-[10px] uppercase tracking-wider site-text-muted mb-2">Passage</h4>
+                                                                        <textarea 
+                                                                            value={q.passage || ''} 
+                                                                            onChange={e => updateQuestionContent(test.id, q.id, 'passage', e.target.value)}
+                                                                            placeholder="Enter passage text here..."
+                                                                            className="w-full bg-transparent resize-y min-h-[80px] focus:outline-none site-text-strong leading-relaxed"
+                                                                        />
+                                                                    </div>
+                                                                    
+                                                                    <div className="bg-white dark:bg-slate-900 p-3 rounded-lg border border-slate-200 dark:border-slate-800 transition-colors">
+                                                                        <div className="flex items-center justify-between mb-2">
+                                                                            <h4 className="font-bold text-[10px] uppercase tracking-wider site-text-muted">Image (Optional)</h4>
+                                                                        </div>
+                                                                        <div className="flex items-center gap-4">
+                                                                            <label className="cursor-pointer relative overflow-hidden px-4 py-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-sm font-bold rounded-lg transition-colors site-text-strong inline-block">
+                                                                                {uploadingImageId === `${test.id}-${q.id}` ? 'Uploading...' : 'Upload Image'}
+                                                                                <input 
+                                                                                    type="file" 
+                                                                                    accept="image/*"
+                                                                                    onChange={e => handleImageUpload(e, test.id, q.id)}
+                                                                                    className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
+                                                                                    disabled={uploadingImageId === `${test.id}-${q.id}`}
+                                                                                />
+                                                                            </label>
+                                                                            {q.imageUrl && (
+                                                                                <button 
+                                                                                    type="button"
+                                                                                    onClick={() => updateQuestionContent(test.id, q.id, 'imageUrl', null)}
+                                                                                    className="text-xs font-bold text-red-500 hover:text-red-600 transition-colors"
+                                                                                >
+                                                                                    Remove Image
+                                                                                </button>
+                                                                            )}
+                                                                        </div>
+                                                                        {uploadError && uploadingImageId === null && (
+                                                                            <p className="mt-2 text-xs font-bold text-red-500 bg-red-50 dark:bg-red-500/10 px-3 py-2 rounded-lg border border-red-200 dark:border-red-500/20">{uploadError}</p>
+                                                                        )}
+                                                                        {q.imageUrl && (
+                                                                            <>
+                                                                                <img src={q.imageUrl && !q.imageUrl.includes('.') ? q.imageUrl + '.png' : q.imageUrl} alt="Question figure" className="max-w-full rounded-lg max-h-48 object-contain mt-3 border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50" />
+                                                                                <div className="mt-2 flex items-center gap-2">
+                                                                                    <span className="text-[11px] font-bold uppercase tracking-wider site-text-muted">Image position:</span>
+                                                                                    {(['before-stem', 'after-stem'] as const).map((pos) => (
+                                                                                        <button
+                                                                                            key={pos}
+                                                                                            type="button"
+                                                                                            onClick={() => updateQuestionContent(test.id, q.id, 'imagePosition', pos)}
+                                                                                            className={`text-xs px-3 py-1.5 rounded-lg font-bold transition-colors ${
+                                                                                                (q.imagePosition || 'before-stem') === pos
+                                                                                                    ? 'bg-blue-600 text-white'
+                                                                                                    : 'bg-slate-100 dark:bg-slate-700 site-text-muted hover:bg-slate-200 dark:hover:bg-slate-600'
+                                                                                            }`}
+                                                                                        >
+                                                                                            {pos === 'before-stem' ? 'Before Question' : 'After Question'}
+                                                                                        </button>
+                                                                                    ))}
+                                                                                </div>
+                                                                            </>
+                                                                        )}
+                                                                    </div>
+                                                                    
+                                                                    <div className="bg-white dark:bg-slate-900 p-3 rounded-lg border border-slate-200 dark:border-slate-800 focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-500 transition-colors">
+                                                                        <h4 className="font-bold text-[10px] uppercase tracking-wider site-text-muted mb-2">Question</h4>
+                                                                        <textarea 
+                                                                            value={q.question || q.stem || ''} 
+                                                                            onChange={e => updateQuestionContent(test.id, q.id, 'question', e.target.value)}
+                                                                            placeholder="Enter question text here..."
+                                                                            className="w-full bg-transparent resize-y min-h-[60px] focus:outline-none site-text-strong leading-relaxed"
+                                                                        />
+                                                                    </div>
+                                                                    <div className="flex items-center justify-between mt-4 mb-2">
+                                                                        <label className="flex items-center gap-2 cursor-pointer text-sm site-text-muted">
+                                                                            <input 
+                                                                                type="checkbox" 
+                                                                                checked={q.type === 'Math (SPR)'}
+                                                                                onChange={(e) => updateQuestionContent(test.id, q.id, 'type', e.target.checked ? 'Math (SPR)' : 'Multiple Choice')}
+                                                                                className="rounded border-slate-300 text-blue-600 focus:ring-blue-500"
+                                                                            />
+                                                                            Student-Produced Response (Grid-in)
+                                                                        </label>
+                                                                    </div>
+                                                                    
+                                                                    {q.type === 'Math (SPR)' ? (
+                                                                        <div className="mt-4">
+                                                                            <input 
+                                                                                type="text"
+                                                                                value={q.answer !== null && typeof q.answer !== 'number' ? q.answer : ''}
+                                                                                onChange={e => updateQuestionContent(test.id, q.id, 'answer', e.target.value)}
+                                                                                placeholder="Enter correct answer (e.g. 5, 1/2, 3.14)"
+                                                                                className="w-full sm:w-1/2 p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono font-bold"
+                                                                            />
+                                                                            <p className="text-xs text-slate-500 mt-2">Students will type this answer instead of choosing options.</p>
+                                                                        </div>
+                                                                    ) : (
+                                                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4">
+                                                                            {(Array.isArray(q.options) ? q.options : ['', '', '', '']).map((opt: string, optIdx: number) => (
+                                                                                <div key={optIdx} className={`p-3 rounded-xl border text-sm flex gap-3 transition-colors ${q.answer === optIdx ? 'border-blue-500 bg-blue-50 dark:bg-blue-500/10 text-blue-800 dark:text-blue-300 ring-1 ring-blue-500' : 'border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 focus-within:border-slate-400 focus-within:ring-1 focus-within:ring-slate-400'}`}>
+                                                                                    <span className={`font-bold shrink-0 w-7 h-7 flex items-center justify-center rounded-lg cursor-pointer ${q.answer === optIdx ? 'bg-blue-600 text-white shadow-md shadow-blue-500/20' : 'bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700'}`} onClick={() => updateQuestionAnswer(test.id, q.id, optIdx)}>
+                                                                                        {String.fromCharCode(65 + optIdx)}
+                                                                                    </span>
+                                                                                    <textarea 
+                                                                                        value={opt || ''} 
+                                                                                        onChange={e => updateQuestionOption(test.id, q.id, optIdx, e.target.value)}
+                                                                                        placeholder={`Option ${String.fromCharCode(65 + optIdx)} text...`}
+                                                                                        className="w-full bg-transparent resize-none focus:outline-none pt-1"
+                                                                                        rows={2}
+                                                                                    />
+                                                                                </div>
+                                                                            ))}
+                                                                        </div>
+                                                                    )}
+
+                                                                    <button 
+                                                                        type="button"
+                                                                        onClick={() => deleteQuestion(test.id, q.id)}
+                                                                        className="w-full mt-4 py-2 bg-red-500 hover:bg-red-600 text-white text-sm font-bold rounded-lg transition-colors shadow-sm"
+                                                                    >
+                                                                        Delete Question
+                                                                    </button>
+                                                                </div>
+                                                            </motion.div>
+                                                        )}
+                                                    </AnimatePresence>
                                                 </motion.div>
                                             );
                                         })}
@@ -267,161 +385,6 @@ export function MockTestFilesEditor({ initialTests, onSave, onChange, hideSaveBu
                 );
                 })}
             </div>
-
-            {/* Expanded Question Modal Overlay */}
-            <AnimatePresence>
-                {expandedQuestionData && expandedTestData && (
-                    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6">
-                        <motion.div 
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                            className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"
-                            onClick={() => setExpandedQuestionId(null)}
-                        />
-                        <motion.div
-                            initial={{ opacity: 0, scale: 0.95, y: 20 }}
-                            animate={{ opacity: 1, scale: 1, y: 0 }}
-                            exit={{ opacity: 0, scale: 0.95, y: 20 }}
-                            className="relative w-full max-w-3xl bg-white dark:bg-slate-900 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh] border border-slate-200 dark:border-slate-800"
-                        >
-                            <div className="px-6 py-4 border-b border-slate-200 dark:border-slate-800 flex justify-between items-center bg-slate-50 dark:bg-slate-900 shrink-0">
-                                <h3 className="font-black text-lg site-text-strong">
-                                    Edit Question {expandedQuestionIdx + 1}
-                                </h3>
-                                <button onClick={() => setExpandedQuestionId(null)} className="p-2 hover:bg-slate-200 dark:hover:bg-slate-800 rounded-full transition-colors">
-                                    <X className="w-5 h-5 site-text-muted" />
-                                </button>
-                            </div>
-                            <div className="p-6 overflow-y-auto">
-<div className="space-y-4 site-text text-sm">
-                                                                    <div className="bg-white dark:bg-slate-900 p-3 rounded-lg border border-slate-200 dark:border-slate-800 focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-500 transition-colors">
-                                                                        <h4 className="font-bold text-[10px] uppercase tracking-wider site-text-muted mb-2">Passage</h4>
-                                                                        <textarea 
-                                                                            value={expandedQuestionData.passage || ''} 
-                                                                            onChange={e => updateQuestionContent(expandedTestData.id, expandedQuestionData.id, 'passage', e.target.value)}
-                                                                            placeholder="Enter passage text here..."
-                                                                            className="w-full bg-transparent resize-y min-h-[80px] focus:outline-none site-text-strong leading-relaxed"
-                                                                        />
-                                                                    </div>
-                                                                    
-                                                                    <div className="bg-white dark:bg-slate-900 p-3 rounded-lg border border-slate-200 dark:border-slate-800 transition-colors">
-                                                                        <div className="flex items-center justify-between mb-2">
-                                                                            <h4 className="font-bold text-[10px] uppercase tracking-wider site-text-muted">Image (Optional)</h4>
-                                                                        </div>
-                                                                        <div className="flex items-center gap-4">
-                                                                            <label className="cursor-pointer relative overflow-hidden px-4 py-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-sm font-bold rounded-lg transition-colors site-text-strong inline-block">
-                                                                                {uploadingImageId === `${expandedTestData.id}-${expandedQuestionData.id}` ? 'Uploading...' : 'Upload Image'}
-                                                                                <input 
-                                                                                    type="file" 
-                                                                                    accept="image/*"
-                                                                                    onChange={e => handleImageUpload(e, expandedTestData.id, expandedQuestionData.id)}
-                                                                                    className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
-                                                                                    disabled={uploadingImageId === `${expandedTestData.id}-${expandedQuestionData.id}`}
-                                                                                />
-                                                                            </label>
-                                                                            {expandedQuestionData.imageUrl && (
-                                                                                <button 
-                                                                                    type="button"
-                                                                                    onClick={() => updateQuestionContent(expandedTestData.id, expandedQuestionData.id, 'imageUrl', null)}
-                                                                                    className="text-xs font-bold text-red-500 hover:text-red-600 transition-colors"
-                                                                                >
-                                                                                    Remove Image
-                                                                                </button>
-                                                                            )}
-                                                                        </div>
-                                                                        {uploadError && uploadingImageId === null && (
-                                                                            <p className="mt-2 text-xs font-bold text-red-500 bg-red-50 dark:bg-red-500/10 px-3 py-2 rounded-lg border border-red-200 dark:border-red-500/20">{uploadError}</p>
-                                                                        )}
-                                                                        {expandedQuestionData.imageUrl && (
-                                                                            <>
-                                                                                <img src={expandedQuestionData.imageUrl && !expandedQuestionData.imageUrl.includes('.') ? expandedQuestionData.imageUrl + '.png' : expandedQuestionData.imageUrl} alt="Question figure" className="max-w-full rounded-lg max-h-48 object-contain mt-3 border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50" />
-                                                                                <div className="mt-2 flex items-center gap-2">
-                                                                                    <span className="text-[11px] font-bold uppercase tracking-wider site-text-muted">Image position:</span>
-                                                                                    {(['before-stem', 'after-stem'] as const).map((pos) => (
-                                                                                        <button
-                                                                                            key={pos}
-                                                                                            type="button"
-                                                                                            onClick={() => updateQuestionContent(expandedTestData.id, expandedQuestionData.id, 'imagePosition', pos)}
-                                                                                            className={`text-xs px-3 py-1.5 rounded-lg font-bold transition-colors ${
-                                                                                                (expandedQuestionData.imagePosition || 'before-stem') === pos
-                                                                                                    ? 'bg-blue-600 text-white'
-                                                                                                    : 'bg-slate-100 dark:bg-slate-700 site-text-muted hover:bg-slate-200 dark:hover:bg-slate-600'
-                                                                                            }`}
-                                                                                        >
-                                                                                            {pos === 'before-stem' ? 'Before Question' : 'After Question'}
-                                                                                        </button>
-                                                                                    ))}
-                                                                                </div>
-                                                                            </>
-                                                                        )}
-                                                                    </div>
-                                                                    
-                                                                    <div className="bg-white dark:bg-slate-900 p-3 rounded-lg border border-slate-200 dark:border-slate-800 focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-500 transition-colors">
-                                                                        <h4 className="font-bold text-[10px] uppercase tracking-wider site-text-muted mb-2">Question</h4>
-                                                                        <textarea 
-                                                                            value={expandedQuestionData.question || expandedQuestionData.stem || ''} 
-                                                                            onChange={e => updateQuestionContent(expandedTestData.id, expandedQuestionData.id, 'question', e.target.value)}
-                                                                            placeholder="Enter question text here..."
-                                                                            className="w-full bg-transparent resize-y min-h-[60px] focus:outline-none site-text-strong leading-relaxed"
-                                                                        />
-                                                                    </div>
-                                                                    <div className="flex items-center justify-between mt-4 mb-2">
-                                                                        <label className="flex items-center gap-2 cursor-pointer text-sm site-text-muted">
-                                                                            <input 
-                                                                                type="checkbox" 
-                                                                                checked={expandedQuestionData.type === 'Math (SPR)'}
-                                                                                onChange={(e) => updateQuestionContent(expandedTestData.id, expandedQuestionData.id, 'type', e.target.checked ? 'Math (SPR)' : 'Multiple Choice')}
-                                                                                className="rounded border-slate-300 text-blue-600 focus:ring-blue-500"
-                                                                            />
-                                                                            Student-Produced Response (Grid-in)
-                                                                        </label>
-                                                                    </div>
-                                                                    
-                                                                    {expandedQuestionData.type === 'Math (SPR)' ? (
-                                                                        <div className="mt-4">
-                                                                            <input 
-                                                                                type="text"
-                                                                                value={expandedQuestionData.answer !== null && typeof expandedQuestionData.answer !== 'number' ? expandedQuestionData.answer : ''}
-                                                                                onChange={e => updateQuestionContent(expandedTestData.id, expandedQuestionData.id, 'answer', e.target.value)}
-                                                                                placeholder="Enter correct answer (e.g. 5, 1/2, 3.14)"
-                                                                                className="w-full sm:w-1/2 p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono font-bold"
-                                                                            />
-                                                                            <p className="text-xs text-slate-500 mt-2">Students will type this answer instead of choosing options.</p>
-                                                                        </div>
-                                                                    ) : (
-                                                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4">
-                                                                            {(Array.isArray(expandedQuestionData.options) ? expandedQuestionData.options : ['', '', '', '']).map((opt: string, optIdx: number) => (
-                                                                                <div key={optIdx} className={`p-3 rounded-xl border text-sm flex gap-3 transition-colors ${expandedQuestionData.answer === optIdx ? 'border-blue-500 bg-blue-50 dark:bg-blue-500/10 text-blue-800 dark:text-blue-300 ring-1 ring-blue-500' : 'border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 focus-within:border-slate-400 focus-within:ring-1 focus-within:ring-slate-400'}`}>
-                                                                                    <span className={`font-bold shrink-0 w-7 h-7 flex items-center justify-center rounded-lg cursor-pointer ${expandedQuestionData.answer === optIdx ? 'bg-blue-600 text-white shadow-md shadow-blue-500/20' : 'bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700'}`} onClick={() => updateQuestionAnswer(expandedTestData.id, expandedQuestionData.id, optIdx)}>
-                                                                                        {String.fromCharCode(65 + optIdx)}
-                                                                                    </span>
-                                                                                    <textarea 
-                                                                                        value={opt || ''} 
-                                                                                        onChange={e => updateQuestionOption(expandedTestData.id, expandedQuestionData.id, optIdx, e.target.value)}
-                                                                                        placeholder={`Option ${String.fromCharCode(65 + optIdx)} text...`}
-                                                                                        className="w-full bg-transparent resize-none focus:outline-none pt-1"
-                                                                                        rows={2}
-                                                                                    />
-                                                                                </div>
-                                                                            ))}
-                                                                        </div>
-                                                                    )}
-
-                                                                    <button 
-                                                                        type="button"
-                                                                        onClick={() => deleteQuestion(expandedTestData.id, expandedQuestionData.id)}
-                                                                        className="w-full mt-4 py-2 bg-red-500 hover:bg-red-600 text-white text-sm font-bold rounded-lg transition-colors shadow-sm"
-                                                                    >
-                                                                        Delete Question
-                                                                    </button>
-                                                                </div>
-                            </div>
-                        </motion.div>
-                    </div>
-                )}
-            </AnimatePresence>
         </div>
     );
 }
-

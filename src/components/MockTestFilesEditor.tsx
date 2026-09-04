@@ -201,10 +201,14 @@ export function MockTestFilesEditor({ initialTests, onSave, onChange, hideSaveBu
                                             
                                             return (
                                                 <motion.div 
+                                                    layout
                                                     key={q.id} 
                                                     onClick={() => setExpandedQuestionId(isExpanded ? null : `${test.id}-${q.id}`)}
-                                                    className={`flex flex-col bg-slate-50 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 overflow-hidden cursor-pointer transition-shadow hover:shadow-md self-start ${isExpanded ? 'col-span-full ring-2 ring-blue-500 border-blue-500' : ''}`}
-                                                    style={{ alignSelf: 'start' }}
+                                                    className={`flex flex-col bg-slate-50 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 overflow-hidden cursor-pointer transition-shadow hover:shadow-md ${isExpanded ? 'ring-2 ring-blue-500 border-blue-500 shadow-blue-500/20' : ''}`}
+                                                    style={{ 
+                                                        alignSelf: 'start',
+                                                        gridColumn: isExpanded ? '1 / -1' : undefined
+                                                    }}
                                                 >
                                                     <div className="flex items-center justify-between px-4 py-3">
                                                         <span className="font-bold text-sm site-text-muted">Q{idx + 1}</span>

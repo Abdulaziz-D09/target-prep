@@ -195,7 +195,7 @@ export function MockTestFilesEditor({ initialTests, onSave, onChange, hideSaveBu
                                 transition={{ duration: 0.2 }}
                                 className="overflow-hidden bg-white dark:bg-slate-900"
                             >
-                                <div className="p-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 border-t border-slate-200 dark:border-slate-700">
+                                <div className="p-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 items-start border-t border-slate-200 dark:border-slate-700">
                                         {test.questions.map((q: any, idx: number) => {
                                             const isExpanded = expandedQuestionId === `${test.id}-${q.id}`;
                                             

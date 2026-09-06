@@ -439,9 +439,9 @@ export default function ClassroomPage() {
                             </div>
 
                             <button
-                                onClick={() => {
+                                onClick={async () => {
                                     if (joinCode) {
-                                        const success = joinClassroom(joinCode);
+                                        const success = await joinClassroom(joinCode);
                                         if (success) {
                                             setIsJoinModalOpen(false);
                                             setJoinCode('');

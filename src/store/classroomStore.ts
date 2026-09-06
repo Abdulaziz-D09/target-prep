@@ -208,7 +208,7 @@ type Actions = {
   deleteAssignment: (id: string) => void;
   updateAssignmentQuestion: (assignmentId: string, questionId: string, newQuestion: any) => void;
 
-  joinClassroom: (code: string) => boolean;
+  joinClassroom: (code: string) => Promise<boolean>;
   leaveClassroom: (id: string) => void;
   
   createMockSession: (data: Omit<MockSession, 'id' | 'joinCode' | 'createdAt' | 'status'>) => MockSession;
@@ -401,11 +401,33 @@ export const useClassroomStore = create<State & Actions>()(
         }
       },
 
-      joinClassroom: (code) => {
+      joinClassroom: async (code) => {
         const s = get();
-        const cls = s.classrooms.find(c => c.joinCode === code.trim().toUpperCase());
-        if (!cls) return false;
+        let cls = s.classrooms.find(c => c.joinCode === code.trim().toUpperCase());
+        
+        if (!cls) {
+          const res = await fetch(`/api/classrooms/join?code=${encodeURIComponent(code.trim().toUpperCase())}`);
+          if (!res.ok) {
+            console.error('joinClassroom fetch error:', await res.text());
+            return false;
+          }
+          const { classroom: data } = await res.json();
+          
+          if (!data) return false;
+          
+          cls = {
+            id: data.id,
+            name: data.name,
+            grade: data.grade,
+            joinCode: data.join_code,
+            createdAt: data.created_at,
+          };
+          
+          set((state) => ({ classrooms: [...state.classrooms, cls!] }));
+        }
+
         if (s.joinedClassroomIds.includes(cls.id)) return true; // Already joined
+        
         const newStudent: Student = {
             id: `stu-${Date.now()}`,
             name: "New Student",
@@ -413,37 +435,37 @@ export const useClassroomStore = create<State & Actions>()(
             joinedAt: new Date().toISOString(),
             avatar: "blue",
         };
-        set((s) => ({ 
-            joinedClassroomIds: [...s.joinedClassroomIds, cls.id],
-            students: [...s.students, newStudent]
+        set((state) => ({ 
+            joinedClassroomIds: [...state.joinedClassroomIds, cls!.id],
+            students: [...state.students, newStudent]
         }));
 
-        createClient().auth.getSession().then(({ data: { session } }) => {
-          const userId = session?.user?.id;
-          const metadata = session?.user?.user_metadata;
-          const fullName = metadata?.first_name ? `${metadata.first_name} ${metadata.last_name || ''}`.trim() : "Unknown Student";
-          
-          if (userId) {
-            set((s) => ({
-              students: s.students.map(stu => stu.id === newStudent.id ? { ...stu, user_id: userId, name: fullName } : stu)
-            }));
-          } else {
-            set((s) => ({
-              students: s.students.map(stu => stu.id === newStudent.id ? { ...stu, name: fullName } : stu)
-            }));
-          }
-          
-          createClient().from('students').insert({
-            id: newStudent.id,
-            name: fullName,
-            classroom_id: newStudent.classroomId,
-            joined_at: newStudent.joinedAt,
-            avatar: newStudent.avatar,
-            user_id: userId
-          }).then(({ error }) => {
-            if (error) console.error('Error syncing joinClassroom:', error);
-          });
+        const { createClient: createClientInner } = await import('@/lib/supabase/client');
+        const { data: { session } } = await createClientInner().auth.getSession();
+        const userId = session?.user?.id;
+        const metadata = session?.user?.user_metadata;
+        const fullName = metadata?.first_name ? `${metadata.first_name} ${metadata.last_name || ''}`.trim() : "Unknown Student";
+        
+        if (userId) {
+          set((state) => ({
+            students: state.students.map(stu => stu.id === newStudent.id ? { ...stu, user_id: userId, name: fullName } : stu)
+          }));
+        } else {
+          set((state) => ({
+            students: state.students.map(stu => stu.id === newStudent.id ? { ...stu, name: fullName } : stu)
+          }));
+        }
+        
+        const { error } = await createClientInner().from('students').insert({
+          id: newStudent.id,
+          name: fullName,
+          classroom_id: newStudent.classroomId,
+          joined_at: newStudent.joinedAt,
+          avatar: newStudent.avatar,
+          user_id: userId
         });
+        
+        if (error) console.error('Error syncing joinClassroom:', error);
 
         return true;
       },
@@ -765,11 +787,23 @@ export const useClassroomStore = create<State & Actions>()(
 
           const updates: Partial<State> = {};
 
-          if (classroomsRes.data) {
-            const serverIds = new Set(classroomsRes.data.map(c => c.id));
+          const teacherClassroomsRes = await fetch(`/api/classrooms/teacher?teacherId=${session.user.id}`)
+            .then(res => res.json())
+            .catch(() => ({ classrooms: [] }));
+            
+          const combinedClassrooms = [
+            ...(classroomsRes.data || []),
+            ...(teacherClassroomsRes.classrooms || [])
+          ];
+          
+          // Deduplicate by ID
+          const uniqueClassrooms = Array.from(new Map(combinedClassrooms.map(c => [c.id, c])).values());
+
+          if (uniqueClassrooms.length > 0) {
+            const serverIds = new Set(uniqueClassrooms.map((c: any) => c.id));
             const recentLocal = get().classrooms.filter(c => !serverIds.has(c.id) && (now - new Date(c.createdAt).getTime() < 60000));
             updates.classrooms = [
-              ...classroomsRes.data.map(c => ({
+              ...uniqueClassrooms.map((c: any) => ({
                 id: c.id,
                 name: c.name,
                 grade: c.grade,
